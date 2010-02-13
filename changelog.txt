@@ -1,4 +1,15 @@
 PyWright Beta 10.95
+    - add ability to supply information with a game, such as author or icon
+         beta10.95 game has an icon, the format of display and metadata
+         supported is subject to change. All metadata is stored in the 
+         .pwv file located in a game directory. Each row of the file has
+         a field name, a space, followed by the field data. 
+         Currently supported fields:
+            * version - should start at 0, and grow by 1 for each release
+            * author - the name of the game creator. Displayed next to 
+                    title on the game list.
+            * title - the game name, displayed on the game list
+            * icon - part from game/art to an image to use as the icon
     - (todo) nametag images instead of (in addition to) automatic
             (need to add overlapping pixels, also use the better graphics for textbox from
             http://pywright.dawnsoft.org/wordpress/?page_id=19/release-news/release-beta1094/)
