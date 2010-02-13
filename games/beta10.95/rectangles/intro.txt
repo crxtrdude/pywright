@@ -1,0 +1,48 @@
+set rect_index 0
+
+macro add_rectangle
+setvar _index $rect_index
+addvar rect_index 1
+joinvar s rectangle_ $_index .x
+setvar $s $1
+joinvar s rectangle_ $_index .y
+setvar $s $2
+joinvar s rectangle_ $_index .w
+setvar $s $3
+joinvar s rectangle_ $_index .h
+setvar $s $4
+endmacro
+
+macro get_x
+getvar x rectangle_ $1 .x
+endmacro
+
+macro get_y
+getvar y rectangle_ $1 .y
+endmacro
+
+macro get_r
+{get_x $1}
+getvar r rectangle_ $1 .w
+addvar r $x
+endmacro
+
+macro get_b
+{get_y $1}
+getvar b rectangle_ $1 .h
+addvar b $y
+endmacro
+
+{add_rectangle 0 0 100 100}
+{add_rectangle 10 0 100 100}
+
+
+set index 0
+label each_rectangle
+is index >= $rect_index next
+{get_x $index}
+"rectangle {$index}.x = {$x}"
+addvar index 1
+goto each_rectangle
+label next
+"All rectangles visited"

@@ -1,0 +1,3 @@
+set _debug true
+set _nt_image general/bb
+"Hello, my name is the blue badger!"
