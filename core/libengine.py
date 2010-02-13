@@ -1624,7 +1624,14 @@ def make_start_script(logo=True):
                     assets.game = "games/"+f
                     s = sprite().load(d["icon"])
                     assets.game = og
-                    item.graphic = s.base[0]
+                    graphic = s.base[0]
+                    txt = item.font.render(f+" by "+d["author"],1,[0,0,0])
+                    image = pygame.Surface([graphic.get_width()+txt.get_width()+2,max(graphic.get_height(),txt.get_height())+2])
+                    image.fill([255,255,255])
+                    pygame.draw.rect(image,[0,0,0],[[0,0],image.get_size()],1)
+                    image.blit(graphic,[1,1])
+                    image.blit(txt,[image.get_width()-txt.get_width()-1,image.get_height()-txt.get_height()-1])
+                    item.graphic = image
         list.add_child(item)
         def _play_game(func=f):
             #~ item.rpos = [0,other_screen(0)]
