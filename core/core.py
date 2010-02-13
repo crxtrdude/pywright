@@ -938,9 +938,8 @@ class sprite(gui.button):
         self.offsety = m.offsety
         self.blipsound = m.blipsound
         self.delays = m.delays
-    def load(self,name,key=[255,0,255],scale=1.0):
+    def load(self,name,key=[255,0,255]):
         self.key = key
-        self.scale = scale
         if type(name)==type(""):
             path = ""
             if name[-4:] in [".jpg",".gif",".png"]:
@@ -1336,7 +1335,7 @@ class evidence(fadesprite):
             self.img = assets.Surface([16,16])
             self.img.fill([255,255,255])
         self.small = pygame.transform.scale(self.img,[35,35])
-        self.scale = pygame.transform.scale(self.img,[70,70])
+        self.scaled = pygame.transform.scale(self.img,[70,70])
         self.setfade()
         self.name = assets.variables.get(self.id+"_name",self.id.replace("$",""))
         self.desc = assets.variables.get(self.id+"_desc",self.id.replace("$",""))
@@ -3137,7 +3136,7 @@ class evidence_menu(fadesprite,gui.widget):
             if assets.gbamode:
                 newsurf.blit(font.render(name,[255,255,0]),[103,65])
             tb = textblock(icon.desc,[tbpos[0],tbpos[1]],tbsize,[1,1,1])
-            newsurf.blit(icon.scale,[back_pos[0],back_pos[1]])
+            newsurf.blit(icon.scaled,[back_pos[0],back_pos[1]])
             tb.pos = [tbpos[0],tbpos[1]]
             tb.draw(newsurf)
             setattr(self,icon.id+"_zoom_"+str(assets.gbamode),newsurf)

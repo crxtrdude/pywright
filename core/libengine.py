@@ -174,7 +174,7 @@ class Script(gui.widget):
         obs = []
         for ob in self.obs:
             oprops = {}
-            if isinstance(ob,sprite):
+            if isinstance(ob,sprite) or isinstance(ob,portrait):
                 for k in ["pos","z","rot","x","id_name","scale","name","pri","fade"]:
                     if hasattr(ob,k):
                         oprops[k] = getattr(ob,k)
@@ -183,6 +183,7 @@ class Script(gui.widget):
             if isinstance(ob,fg):
                 obs.append(["fg",[],oprops])
             if isinstance(ob,evidence):
+                oprops["id"] = ob.id
                 obs.append(["evidence",[],oprops])
             if isinstance(ob,portrait):
                 for k in ["clicksound","nametag","charname","emoname","modename"]:
@@ -206,12 +207,14 @@ class Script(gui.widget):
                 if cls == "fg":
                     o = fg()
                 if cls == "evidence":
-                    o = evidence()
+                    o = evidence(props["id"])
+                    for p in props:
+                        setattr(o,p,props[p])
                 if cls == "char":
                     o = portrait(*args)
                     for p in props:
                         setattr(o,p,props[p])
-                if cls in ["bg","fg","evidence"]:
+                if cls in ["bg","fg"]:
                     for p in props:
                         setattr(o,p,props[p])
                     o.load(o.name)
@@ -219,6 +222,7 @@ class Script(gui.widget):
                         setattr(o,p,props[p])
                 self.obs.append(o)
             except:
+                raise
                 print "error loading",o
     def load(self,s):
         vals = pickle.loads(s)

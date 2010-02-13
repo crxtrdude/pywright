@@ -1,0 +1,2 @@
+"It's just the begining."
+script scene1
