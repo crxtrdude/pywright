@@ -190,6 +190,12 @@ class Script(gui.widget):
                     if hasattr(ob,k):
                         oprops[k] = getattr(ob,k)
                 obs.append(["char",[ob.name,ob.hide],oprops])
+            if isinstance(ob,evidence_menu):
+                for k in ["page","sx","sy","mode","pri","z","item_set"]:
+                    if hasattr(ob,k):
+                        oprops[k] = getattr(ob,k)
+                oprops["items"] = [x.id for x in ob.items]
+                obs.append(["ev_menu",[],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -198,6 +204,7 @@ class Script(gui.widget):
         self.si = remember_si-1
         if hasattr(self,"_parent_index"):
             self.parent = assets.stack[self._parent_index]
+        obs = []
         for o in getattr(self,"_objects",[]):
             print "try to load",o
             try:
@@ -206,24 +213,30 @@ class Script(gui.widget):
                     o = bg()
                 if cls == "fg":
                     o = fg()
+                if cls == "ev_menu":
+                    items = [evidence(x) for x in props["items"]]
+                    del props["items"]
+                    o = evidence_menu(items)
+                    for p in props:
+                        setattr(o,p,props[p])
+                    o.layout()
                 if cls == "evidence":
                     o = evidence(props["id"])
-                    for p in props:
-                        setattr(o,p,props[p])
                 if cls == "char":
                     o = portrait(*args)
-                    for p in props:
-                        setattr(o,p,props[p])
                 if cls in ["bg","fg"]:
                     for p in props:
                         setattr(o,p,props[p])
                     o.load(o.name)
+                if 1:
                     for p in props:
                         setattr(o,p,props[p])
-                self.obs.append(o)
+                obs.append(o)
+                o.cur_script = self
             except:
                 raise
                 print "error loading",o
+        self.world.all = obs
     def load(self,s):
         vals = pickle.loads(s)
         self.scene,self.si,self.cross,self.statement,self.instatement,self.lastline,self.pri = vals[:7]
