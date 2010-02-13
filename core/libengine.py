@@ -1607,6 +1607,24 @@ def make_start_script(logo=True):
     for f in os.listdir("games"):
         if f in [".svn"]: continue
         item = gui.button(make_start_script,f)
+        if os.path.exists("games/"+f+"/.pwv"):
+            t = open("games/"+f+"/.pwv").read()
+            lines = t.replace("\r\n","\n").replace("\r","\n").split("\n")
+            g = 1
+            if len(lines)==1:
+                if " " not in lines[0].strip():
+                    g = 0
+            if g:
+                d = {}
+                for l in lines:
+                    l = l.split(" ",1)
+                    d[l[0]] = l[1]
+                if d["icon"]:
+                    og = assets.game
+                    assets.game = "games/"+f
+                    s = sprite().load(d["icon"])
+                    assets.game = og
+                    item.graphic = s.base[0]
         list.add_child(item)
         def _play_game(func=f):
             #~ item.rpos = [0,other_screen(0)]
