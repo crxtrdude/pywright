@@ -8,8 +8,12 @@ pygame.font.init()
 import random
 import pickle
 import pygame.movie
-import audiere
-aud = audiere.open_device()
+try:
+    import audiere
+    aud = audiere.open_device()
+except:
+    audiere = None
+
 Numeric = False
 try:
     import Numeric
@@ -464,7 +468,7 @@ class Assets(object):
             snd = self.snds[name]
         else:
             try:
-                if name.endswith(".mp3"):
+                if name.endswith(".mp3") and audiere:
                     snd = aud.open_file(pre+name)
                 else:
                     snd = pygame.mixer.Sound(pre+name)
