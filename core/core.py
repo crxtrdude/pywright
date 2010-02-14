@@ -3257,21 +3257,20 @@ class scroll(effect):
         if self.amtx<=0 and self.amty<=0:
             self.kill = 1
             return False
-        for o in self.obs:
-            if getattr(o,"kill",0): continue
-            if hasattr(o,"pos") and (not self.filter or self.filter=="top" and o.pos[1]<192 or self.filter=="bottom" and o.pos[1]>=192):
-                if self.amtx:
-                    o.pos[0]+=self.dx
-                if self.amty:
-                    o.pos[1]+=self.dy
+        ndx,ndy = self.dx,self.dy
         self.amtx-=abs(self.dx)
         if self.amtx<0: 
-            o.pos[0]+=self.amtx
+            ndx+=self.amtx
             self.amtx=0
         self.amty-=abs(self.dy)
         if self.amty<0:
-            o.pos[1]+=self.amty
+            ndy+=self.amty
             self.amty=0
+        for o in self.obs:
+            if getattr(o,"kill",0): continue
+            if hasattr(o,"pos") and (not self.filter or self.filter=="top" and o.pos[1]<192 or self.filter=="bottom" and o.pos[1]>=192):
+                o.pos[0]+=ndx
+                o.pos[1]+=ndy
         if self.wait:
             return True
     def control_last(self):
