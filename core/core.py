@@ -3569,7 +3569,7 @@ class saved(sprite):
         super(saved,self).__init__()
         self.text = text
         self.ticks = abs(ticks)
-        self.pri = -1000
+        self.pri = -5000
         self.pos[0]=sw
         self.pos[1]=30
         self.block = block
