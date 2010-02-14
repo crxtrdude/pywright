@@ -32,13 +32,16 @@ PyWright Beta 10.95
             variable name. If $index were equal to 0, this would be like "getvar x rectangle_0.x",
             and whatever was stored in the rectangle_0.x variable would be copied into the "x"
             variable.
-    - (todo) save fix
+    - reworked saving system. Very careful about what can be saved and what cannot.
+        Logic behind it is still to record the state of every object currently in memory to
+        a file, and then recreate it when loading, but method is different. 
+        What cannot be saved:
+            - position in currently playing song
+            - position of a movie file (it will start the movie from the beginning)
     - (todo) examine - clicking check button with mouse doesn't break
     - (todo) dissapearing present button
     - cache fades so they will be faster after one run
-    - (todo) change games view into icons with meta information
     - scrolling objects on bottom screen works
-    - (todo) documentation moved online
     - (todo) sort options for games
     - psyche5
     - (todo) mp3 support with pyaudiere - figure out packaging for this
