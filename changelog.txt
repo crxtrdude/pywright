@@ -9,7 +9,10 @@ PyWright Beta 10.95
             * author - the name of the game creator. Displayed next to 
                     title on the game list.
             * title - the game name, displayed on the game list
-            * icon - part from game/art to an image to use as the icon
+            * icon - part from game/art to an image to use as the icon. The game
+                    folder itself must contain the icon, and the path must be correct
+                    (i.e., if icon equals "general/icon" there should be a
+                    "games/my_game/art/general/icon.png" present)
     - (todo) nametag images instead of (in addition to) automatic
             (need to add overlapping pixels, also use the better graphics for textbox from
             http://pywright.dawnsoft.org/wordpress/?page_id=19/release-news/release-beta1094/)
