@@ -175,7 +175,7 @@ class Script(gui.widget):
         for ob in self.obs:
             oprops = {}
             if isinstance(ob,sprite) or isinstance(ob,portrait):
-                for k in ["pos","z","rot","x","id_name","scale","name","pri","fade"]:
+                for k in ["pos","z","rot","x","id_name","scale","name","pri","fade","wait"]:
                     if hasattr(ob,k):
                         oprops[k] = getattr(ob,k)
             if isinstance(ob,bg):
@@ -201,12 +201,18 @@ class Script(gui.widget):
                     if hasattr(ob,k):
                         oprops[k] = getattr(ob,k)
                 obs.append(["scroll",[],oprops])
+            if isinstance(ob,textbox):
+                for k in ["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound"]:
+                    if hasattr(ob,k):
+                        oprops[k] = getattr(ob,k)
+                oprops["text"] = getattr(ob,"text").split("\n",1)[1]
+                obs.append(["textbox",[oprops["text"],ob.color,ob.delay,ob.speed,ob.rightp,ob.leftp,ob.nametag],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
         remember_si = getattr(self,"si",0)
         self.init(self.scene)
-        self.si = remember_si-1
+        self.si = remember_si
         if hasattr(self,"_parent_index"):
             self.parent = assets.stack[self._parent_index]
         obs = []
@@ -215,6 +221,8 @@ class Script(gui.widget):
             print "try to load",o
             try:
                 cls,args,props = o
+                if cls == "textbox":
+                    o = textbox()
                 if cls == "scroll":
                     o = scroll()
                     def f(o=o):
