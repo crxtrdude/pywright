@@ -1,3 +1,20 @@
 "It's just the begining."
 addev bus
+
+list save_menu
+li graphics
+li scrolling
+li penalty
+showlist
+
+label graphics
+script scene1
+goto save_menu
+
+label scrolling
 script scene2
+goto save_menu
+
+label penalty
+script scene3
+goto save_menu

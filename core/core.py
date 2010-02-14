@@ -645,7 +645,8 @@ class Assets(object):
         #Collect *things* to save
         stuff = [self.save()]
         for script in self.stack:
-            stuff.append(script.save())
+            if script.save_me:
+                stuff.append(script.save())
         f = open(self.game+"/"+filename,"w")
         f.write(repr(stuff))
         f.close()
@@ -1047,31 +1048,6 @@ class sprite(gui.button):
             self.loops = 0
         if self.base:
             self.img = self.base[self.x]
-
-class mesh(sprite):
-    autoclear = True
-    def __init__(self,meshname="",**kwargs):
-        super(mesh,self).__init__(**kwargs)
-        self.mesh = None
-        if meshname:
-            self.load(meshname)
-    def setfade(self,*args):
-        pass
-    def load(self,name):
-        if not pygame.USE_GL: return
-        path = assets.search_locations("art/3d",name+".dae")
-        if not path: raise art_error(name+" does not exist")
-        if 1:#try:
-            import gl
-            self.mesh = gl.Collada([0,0],path)
-        else:#except:
-            raise script_error("no opengl available")
-    def draw(self,dest):
-        if self.mesh:
-            self.mesh.ori = self.rot
-            dest.blit(self.mesh,self.pos)
-    def update(self):
-        pass
         
 class fadesprite(sprite):
     def setfade(self,val=255):
@@ -1128,11 +1104,6 @@ class fadesprite(sprite):
         sprite.restore(self,s)
     def update(self):
         sprite.update(self)
-        
-class graphic(fadesprite):
-    def __init__(self,name,*args,**kwargs):
-        fadesprite.__init__(self,*args,**kwargs)
-        self.load(name)
 
 class portrait(object):
     autoclear = True
@@ -1878,7 +1849,7 @@ class textbox(gui.widget):
         return
         
 class uglyarrow(fadesprite):
-    def __init__(self,button=None):
+    def __init__(self):
         fadesprite.__init__(self,x=0,y=sh)
         self.load("bg/main")
         self.arrow = sprite(0,0).load("general/arrow_big.png")

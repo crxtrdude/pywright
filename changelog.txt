@@ -38,6 +38,12 @@ PyWright Beta 10.95
         What cannot be saved:
             - position in currently playing song
             - position of a movie file (it will start the movie from the beginning)
+        * Be aware of these limitations, you can control when it is allowed to save the game or
+        not by setting the _allow_saveload variable on or off. It might be a good idea to turn
+        it off before starting a movie for instance.
+        * Also remember that there is a command to force the game to save, it might be a good
+        idea to use this for checkpoints to control where saves occur. A save at the start
+        of each scene might work.
     - (todo) examine - clicking check button with mouse doesn't break
     - (todo) dissapearing present button
     - cache fades so they will be faster after one run
