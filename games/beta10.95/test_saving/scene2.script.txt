@@ -1,0 +1,4 @@
+"test scrolling"
+bg judgestand
+char ben nametag=ben1
+scroll x=150 speed=1
