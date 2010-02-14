@@ -11,6 +11,8 @@ joinvar s rectangle_ $_index .w
 setvar $s $3
 joinvar s rectangle_ $_index .h
 setvar $s $4
+joinvar s rectangle_ $_index .type
+setvar $s $5
 endmacro
 
 macro get_x
@@ -33,16 +35,156 @@ getvar b rectangle_ $1 .h
 addvar b $y
 endmacro
 
-{add_rectangle 0 0 100 100}
-{add_rectangle 10 0 100 100}
+macro get_type
+getvar type rectangle_ $1 .type
+endmacro
 
 
+macro check_collide
 set index 0
-label each_rectangle
-is index >= $rect_index next
+set collide 0
+set types $1
+
+
+#rectangle loop
+label each_rectangle$0
+is index >= $rect_index end$0
+
+{get_type $index}
+is type != $types next$0
+
 {get_x $index}
-"rectangle {$index}.x = {$x}"
+is cx < $x next$0
+
+{get_y $index}
+is cy < $y next$0
+
+{get_r $index}
+is cx > $r next$0
+
+{get_b $index}
+is cy > $b next$0
+
+set collide 1
+goto end$0
+
+label next$0
 addvar index 1
-goto each_rectangle
-label next
-"All rectangles visited"
+goto each_rectangle$0
+#end rectangle loop
+
+
+label end$0
+endmacro
+
+
+
+
+macro walk_left
+addvar cx -1
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cx 1
+goto end$0
+label doscroll$0
+scroll name=$1 x=-1
+label end$0
+endmacro
+
+macro walk_right
+addvar cx 1
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cx -1
+goto end$0
+label doscroll$0
+scroll name=$1 x=1
+label end$0
+endmacro
+
+macro walk_up
+addvar cy -1
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cy 1
+goto end$0
+label doscroll$0
+scroll name=$1 y=-1
+label end$0
+endmacro
+
+macro walk_down
+addvar cy 1
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cy -1
+goto end$0
+label doscroll$0
+scroll name=$1 y=1
+label end$0
+endmacro
+
+
+
+label game_start
+#Add some collision rectangles
+{add_rectangle 0 0 100 100 collide}
+{add_rectangle 10 0 100 100 collide}
+{add_rectangle 20 0 50 50 info}
+#Set up something we can move around, and position it
+ev bus name=c x=113
+set cx 113
+set cy 0
+"start movement"
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_right c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_down c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+{walk_left c}
+"finish"
