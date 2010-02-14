@@ -2991,6 +2991,7 @@ class evidence_menu(fadesprite,gui.widget):
         return True
     def k_x(self):
         if not self.can_present(): return
+        assets.variables["_selected"] = self.chosen
         assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip())
         self.kill = 1
         for o in assets.cur_script.obs:
