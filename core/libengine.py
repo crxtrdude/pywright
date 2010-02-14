@@ -196,6 +196,11 @@ class Script(gui.widget):
                         oprops[k] = getattr(ob,k)
                 oprops["items"] = [x.id for x in ob.items]
                 obs.append(["ev_menu",[],oprops])
+            if isinstance(ob,scroll):
+                for k in ["dx","dy","amtx","amty","speed","wait","filter","kill"]:
+                    if hasattr(ob,k):
+                        oprops[k] = getattr(ob,k)
+                obs.append(["scroll",[],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -205,10 +210,19 @@ class Script(gui.widget):
         if hasattr(self,"_parent_index"):
             self.parent = assets.stack[self._parent_index]
         obs = []
+        after_after = []
         for o in getattr(self,"_objects",[]):
             print "try to load",o
             try:
                 cls,args,props = o
+                if cls == "scroll":
+                    o = scroll()
+                    def f(o=o):
+                        o.obs = self.obs
+                        print "obs:",o.obs
+                        print o.dx
+                        print o.amtx
+                    after_after.append(f)
                 if cls == "bg":
                     o = bg()
                 if cls == "fg":
@@ -237,6 +251,8 @@ class Script(gui.widget):
                 raise
                 print "error loading",o
         self.world.all = obs
+        for of in after_after:
+            of()
     def load(self,s):
         vals = pickle.loads(s)
         self.scene,self.si,self.cross,self.statement,self.instatement,self.lastline,self.pri = vals[:7]
