@@ -1105,6 +1105,11 @@ class fadesprite(sprite):
     def update(self):
         sprite.update(self)
 
+class graphic(fadesprite):
+    def __init__(self,name,*args,**kwargs):
+        fadesprite.__init__(self,*args,**kwargs)
+        self.load(name)
+
 class portrait(object):
     autoclear = True
     def get_self_image(self):

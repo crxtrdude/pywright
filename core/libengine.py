@@ -181,7 +181,9 @@ class Script(gui.widget):
                 cp(["pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
             if isinstance(ob,bg):
                 obs.append(["bg",[],oprops])
-            if isinstance(ob,fg):
+            if isinstance(ob,testimony_blink):
+                obs.append(["testimony_blink",[],oprops])
+            elif isinstance(ob,fg):
                 obs.append(["fg",[],oprops])
             if isinstance(ob,evidence):
                 oprops["id"] = ob.id
@@ -219,6 +221,8 @@ class Script(gui.widget):
             print "try to load",o
             try:
                 cls,args,props = o
+                if cls == "testimony_blink":
+                    o = testimony_blink(*args)
                 if cls == "penalty":
                     o = penalty(*args)
                 if cls == "textbox":
@@ -248,7 +252,7 @@ class Script(gui.widget):
                     o = evidence(props["id"])
                 if cls == "char":
                     o = portrait(*args)
-                if cls in ["bg","fg"]:
+                if cls in ["bg","fg","testimony_blink"]:
                     for p in props:
                         setattr(o,p,props[p])
                     o.load(o.name)
@@ -318,7 +322,7 @@ class Script(gui.widget):
             except:
                 pass
             if not args: continue
-            if args[0] not in ["bg","char","fg","ev","mesh"]: continue
+            if args[0] not in ["bg","char","fg","ev"]: continue
             func = getattr(self,"_"+args[0],None)
             if func:
                 try:
@@ -896,7 +900,7 @@ class Script(gui.widget):
         self.si = 0
     @category("graphics")
     def _obj(self,command,*args):
-        func = {"bg":bg,"fg":fg,"ev":evidence,"mesh":mesh,"obj":graphic}[command]
+        func = {"bg":bg,"fg":fg,"ev":evidence,"obj":graphic}[command]
         wait = {"fg":1}.get(command,0)
         clear = 1
         x = 0
@@ -957,9 +961,6 @@ class Script(gui.widget):
         self._obj(*args)
     @category("graphics")
     def _ev(self,*args):
-        self._obj(*args)
-    @category("graphics")
-    def _mesh(self,*args):
         self._obj(*args)
     @category("graphics")
     def _gui(self,command,guitype,*args):
