@@ -967,6 +967,7 @@ class sprite(gui.button):
         self.loopmode = ""
         self.next = self.spd
         self.pos = [x,y]
+        self.dim = 1
         self.z = zlayers.index(self.__class__.__name__)
         self.rot = [0,0,0]
         if kwargs.get("rotx",None): self.rot[0]=int(kwargs.get("rotx"))
@@ -1018,6 +1019,12 @@ class sprite(gui.button):
                 img = pygame.transform.rotate(img,self.rot[2]).convert_alpha()
                 pos[0]-=img.get_width()//2
                 pos[1]-=img.get_height()//2
+        if self.dim != 1:
+            os = img.get_size()
+            img = pygame.transform.rotozoom(img,0,self.dim)
+            ns = img.get_size()
+            pos[0]+=os[0]//2-ns[0]//2
+            pos[1]+=os[1]//2-ns[1]//2
         dest.blit(img,pos)
     def update(self):
         if self.next>0:
@@ -2625,7 +2632,9 @@ class examine_menu(sprite,gui.widget):
             assets.cur_script.obs.append(self.scrollbut)
         return self.blocking
     def enter_down(self):
-        print self.selected,self.regions
+        print self.selected,self.regions,self.mx,self.my
+        assets.variables["_examine_clickx"] = str(self.mx)
+        assets.variables["_examine_clicky"] = str(self.my)
         assets.cur_script.goto_result(self.selected[-1])
         self.die()
         self.kill = 1
@@ -2964,6 +2973,7 @@ class evidence_menu(fadesprite,gui.widget):
                 self.do_check()
     def do_check(self):
         if not self.chosen: return
+        assets.variables["_selected"] = self.chosen
         chk = assets.variables.get(self.chosen+"_check",None)
         if chk:
             assets.addscene(chk)
@@ -3280,15 +3290,29 @@ class zoomanim(effect):
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
+        print self.frames
         self.frames -= 1
         if self.frames <= 0:
             self.kill = 1
         for o in self.obs:
             if getattr(o,"kill",0): continue
-            if hasattr(o,"scale"):
-                o.scale *= self.mag_per_frame
+            if hasattr(o,"dim"):
+                print "old dim",o.dim
+                o.dim += self.mag_per_frame
+                print "new dim",o.dim
         if self.wait:
             return True
+    def control_last(self):
+        for o in reversed(assets.cur_script.obs):
+            if hasattr(o,"pos") and not getattr(o,"kill",0):
+                self.obs = [o]
+                return
+    def control(self,name):
+        self.filter = None
+        for o in reversed(assets.cur_script.obs):
+            if getattr(o,"id_name",None)==name:
+                self.obs = [o]
+                return
 
 class rotateanim(effect):
     def __init__(self,axis="z",degrees=90,speed=1,wait=1,name=None,obs=[]):

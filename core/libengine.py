@@ -178,7 +178,7 @@ class Script(gui.widget):
         for ob in self.world.all:
             oprops = {}
             if isinstance(ob,sprite) or isinstance(ob,portrait):
-                cp(["pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
+                cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
             if isinstance(ob,bg):
                 obs.append(["bg",[],oprops])
             if isinstance(ob,testimony_blink):
@@ -1061,6 +1061,31 @@ class Script(gui.widget):
                                                 setzero={"nowait":"wait"})
         self.obs.append(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    def _zoom(self,command,*args):
+        mag = 1
+        frames = 1
+        wait = 1
+        last = 0
+        name = None
+        filter = "top"
+        for a in args:
+            if a.startswith("mag="):
+                mag=int(a[4:])
+            if a.startswith("frames="):
+                frames=int(a[7:])
+            if a.startswith("last"):
+                last = 1
+            if a.startswith("nowait"):
+                wait = 0
+            if a.startswith("name="):
+                name = a[5:]
+        zzzooom = zoomanim(mag,frames,wait)
+        if last:
+            zzzooom.control_last()
+        if name:
+            zzzooom.control(name)
+        self.obs.append(zzzooom)
+        if wait: self.buildmode = False
     @category("event")
     def _scroll(self,command,*args):
         x=0
