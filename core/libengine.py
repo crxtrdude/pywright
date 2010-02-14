@@ -175,7 +175,7 @@ class Script(gui.widget):
         if self.parent:
             props["_parent_index"] = assets.stack.index(self.parent)
         obs = []
-        for ob in self.obs:
+        for ob in self.world.all:
             oprops = {}
             if isinstance(ob,sprite) or isinstance(ob,portrait):
                 cp(["pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
@@ -199,11 +199,14 @@ class Script(gui.widget):
                 cp(["dx","dy","amtx","amty","speed","wait","filter","kill"],ob,oprops)
                 obs.append(["scroll",[],oprops])
             if isinstance(ob,textbox):
-                cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound"],ob,oprops)
+                cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
                 oprops["text"] = getattr(ob,"text").split("\n",1)[1]
                 obs.append(["textbox",[oprops["text"],ob.color,ob.delay,ob.speed,ob.rightp,ob.leftp,ob.nametag],oprops])
             if isinstance(ob,uglyarrow):
-                obs.append(["uglyarrow",[],{}])
+                cp(["showleft","width","height","high"],ob,oprops)
+                if ob.textbox:
+                    oprops["_tb"] = True
+                obs.append(["uglyarrow",[],oprops])
             if isinstance(ob,penalty):
                 cp(["pos","delay"],ob,oprops)
                 obs.append(["penalty",[ob.end,ob.var],oprops])
@@ -229,13 +232,17 @@ class Script(gui.widget):
                     o = textbox()
                 if cls == "uglyarrow":
                     o = uglyarrow()
+                    def f(o=o,props=props):
+                        for tb in self.world.all:
+                            if isinstance(tb,textbox):
+                                o.textbox = tb
+                        o.update()
+                    if props["_tb"]:
+                        after_after.append(f)
                 if cls == "scroll":
                     o = scroll()
                     def f(o=o):
                         o.obs = self.obs
-                        print "obs:",o.obs
-                        print o.dx
-                        print o.amtx
                     after_after.append(f)
                 if cls == "bg":
                     o = bg()
