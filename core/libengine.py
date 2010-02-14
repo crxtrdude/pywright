@@ -1632,18 +1632,20 @@ def make_start_script(logo=True):
                 for l in lines:
                     l = l.split(" ",1)
                     d[l[0]] = l[1]
-                if d["icon"]:
+                if d.get("icon",""):
                     og = assets.game
                     assets.game = "games/"+f
                     s = sprite().load(d["icon"])
                     assets.game = og
                     graphic = s.base[0]
-                    txt = item.font.render(d.get("title",f)+" by "+d["author"],1,[0,0,0])
-                    image = pygame.Surface([max(graphic.get_width(),txt.get_width()),graphic.get_height()+txt.get_height()])
-                    image.fill([255,255,255])
-                    image.blit(graphic,[0,0])
-                    image.blit(txt,[0,graphic.get_height()])
-                    item.graphic = image
+                else:
+                    graphic = pygame.Surface([1,1])
+                txt = item.font.render(d.get("title",f)+" by "+d["author"],1,[0,0,0])
+                image = pygame.Surface([max(graphic.get_width(),txt.get_width()),graphic.get_height()+txt.get_height()])
+                image.fill([200,200,255])
+                image.blit(graphic,[0,0])
+                image.blit(txt,[0,graphic.get_height()])
+                item.graphic = image
         list.add_child(item)
         def _play_game(func=f):
             #~ item.rpos = [0,other_screen(0)]
