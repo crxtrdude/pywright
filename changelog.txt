@@ -55,6 +55,13 @@ PyWright Beta 10.95
     - color variable substitution (use {c variable} to set the color to "color_variable")
     - if "intro.txt" not found in a game, looks for "[game].txt" instead
     - fixed court record buttons from investigation menu
+    - added "zoomanim" command, to zoom into the screen or scale objects
+        zoomanim mag=magnitude to zoom; frames=number of frames for zoom to happen; last to
+        only scale the last object; name=somename to only scale the named object; nowait to
+        continue script while zooming.
+    - some more feedback variables: _examine_clickx, _examine_clicky are set to x and y after
+        clicking a spot in the examine screen; _selected is set to the evidence id when running
+        an evidence check script
     - Show investigation menu without having to use multiple scripts:
         A new command "localmenu" was added, allowing you to set up the 
         investigation menu manually, and letting you organize your scripts how you please. The syntax is
