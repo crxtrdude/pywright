@@ -10,3 +10,7 @@ class markup_error(Exception):
     def __init__(self,value): self.value = value
     def __str__(self): return self.value
     __repr__ = __str__
+class file_error(Exception):
+    def __init__(self,value): self.value = value
+    def __str__(self): return self.value
+    __repr__ = __str__

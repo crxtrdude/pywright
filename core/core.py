@@ -231,7 +231,10 @@ class Assets(object):
     def raw_lines(self,name,ext=".txt",start="game"):
         if start=="game":
             start = self.game
-        return open(start+"/"+name+ext).read().replace("\r\n","\n").split("\n")
+        try:
+            return open(start+"/"+name+ext).read().replace("\r\n","\n").split("\n")
+        except IOError:
+            raise file_error("File named "+start+"/"+name+ext+" could not be read.")
     def parse_macros(self,lines):
         """Alters lines to not include macro definitions, and returns macros"""
         macros = {}

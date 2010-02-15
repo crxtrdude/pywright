@@ -290,7 +290,13 @@ class Script(gui.widget):
             self.scriptlines = scriptlines
         self.macros = {}
         if scene:
-            self.scriptlines = assets.open_script(scene,macros,ext)
+            try:
+                self.scriptlines = assets.open_script(scene,macros,ext)
+            except Exception,e:
+                self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
+                import traceback
+                traceback.print_exc()
+                return
             self.macros = assets.macros
         self.labels = []
         for i,line in enumerate(self.scriptlines):
