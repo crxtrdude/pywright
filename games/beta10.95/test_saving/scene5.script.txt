@@ -1,0 +1,29 @@
+label lobby
+bg lobby
+localmenu examine=true move=true talk=true present=true
+
+label move
+list movements
+li place 1
+li place 2
+showlist
+label none
+goto lobby
+
+label examine
+examine
+label none
+goto lobby
+
+label talk
+list talking
+li line 1
+li line 2
+showlist
+label none
+goto lobby
+
+label present
+present
+label none
+goto lobby

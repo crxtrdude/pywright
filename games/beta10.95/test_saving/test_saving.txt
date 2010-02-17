@@ -5,6 +5,7 @@ li graphics
 li scrolling
 li zoom
 li penalty
+li investigate
 showlist
 
 label graphics
@@ -21,4 +22,8 @@ goto save_menu
 
 label zoom
 script scene4
+goto save_menu
+
+label investigate
+script scene5
 goto save_menu
