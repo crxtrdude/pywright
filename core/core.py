@@ -2093,6 +2093,11 @@ class menu(fadesprite,gui.widget):
             self.options.append(opt)
         if not self.selected:
             self.selected = opt
+    def delm(self,opt):
+        if opt in self.options:
+            self.options.remove(opt)
+            if self.selected == opt:
+                self.selected = None
     def draw(self,dest):
         if not self.bg:
             for o in reversed(assets.cur_script.obs):

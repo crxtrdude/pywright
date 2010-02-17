@@ -881,7 +881,7 @@ class Script(gui.widget):
     def _exit(self,command):
         del assets.stack[-1]
     @category("control")
-    def _menu(self,command,ascene):
+    def _menu(self,command,ascene,*args):
         self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
@@ -891,6 +891,11 @@ class Script(gui.widget):
         for scr in assets.list_casedir():
             if scr.startswith(m.scene+".") and scr not in [m.scene+".script.txt"]:
                 m.addm(scr[scr.find(".")+1:scr.rfind(".")])
+        for a in args:
+            if "=" in a:
+                arg,val = a.split("=")
+                if not vtrue(val):
+                    m.delm(arg)
         self.scriptlines = []
         self.si = 0
         self.obs.append(m)
