@@ -24,6 +24,12 @@ goto lobby
 
 label b
 examine
+region 0 0 50 50 x
+region 260 0 50 50 y
+label x
+"x"
+label y
+"y"
 label none
 goto lobby
 

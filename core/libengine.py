@@ -218,6 +218,10 @@ class Script(gui.widget):
             if isinstance(ob,menu):
                 cp(["options","scene","open_script","selected"],ob,oprops)
                 obs.append(["menu",[],oprops])
+            if isinstance(ob,examine_menu):
+                cp(["hide","regions","blocking","xscroll","xscrolling","mx","my","selected"],ob,oprops)
+                oprops["bg_ids"] = [o.id_name for o in ob.bg if hasattr(o,"id_name")]
+                obs.append(["examinemenu",[],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -253,6 +257,14 @@ class Script(gui.widget):
                         o.update()
                     if props["_tb"]:
                         after_after.append(f)
+                if cls == "examinemenu":
+                    o = examine_menu(props["hide"])
+                    o.bg = []
+                    def f(o=o):
+                        for o2 in self.obs:
+                            if getattr(o2,"id_name",None) in props["bg_ids"]:
+                                o.bg.append(o2)
+                    after_after.append(f)
                 if cls == "scroll":
                     o = scroll()
                     def f(o=o):
