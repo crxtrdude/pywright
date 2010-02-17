@@ -1,9 +1,9 @@
-"It's just the begining."
 addev bus
 
 list save_menu
 li graphics
 li scrolling
+li zoom
 li penalty
 showlist
 
@@ -17,4 +17,8 @@ goto save_menu
 
 label penalty
 script scene3
+goto save_menu
+
+label zoom
+script scene4
 goto save_menu

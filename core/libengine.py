@@ -197,7 +197,12 @@ class Script(gui.widget):
                 obs.append(["ev_menu",[],oprops])
             if isinstance(ob,scroll):
                 cp(["dx","dy","amtx","amty","speed","wait","filter","kill"],ob,oprops)
+                oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
                 obs.append(["scroll",[],oprops])
+            if isinstance(ob,zoomanim):
+                cp(["mag_per_frame","frames","wait","kill"],ob,oprops)
+                oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
+                obs.append(["zoomanim",[],oprops])
             if isinstance(ob,textbox):
                 cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
                 oprops["text"] = getattr(ob,"text").split("\n",1)[1]
@@ -242,7 +247,18 @@ class Script(gui.widget):
                 if cls == "scroll":
                     o = scroll()
                     def f(o=o):
-                        o.obs = self.obs
+                        o.obs = []
+                        for o2 in self.obs:
+                            if getattr(o2,"id_name",None) in props["ob_ids"]:
+                                o.obs.append(o2)
+                    after_after.append(f)
+                if cls == "zoomanim":
+                    o = zoomanim()
+                    def f(o=o):
+                        o.obs = []
+                        for o2 in self.obs:
+                            if getattr(o2,"id_name",None) in props["ob_ids"]:
+                                o.obs.append(o2)
                     after_after.append(f)
                 if cls == "bg":
                     o = bg()
