@@ -215,6 +215,9 @@ class Script(gui.widget):
             if isinstance(ob,penalty):
                 cp(["pos","delay"],ob,oprops)
                 obs.append(["penalty",[ob.end,ob.var],oprops])
+            if isinstance(ob,menu):
+                cp(["options","scene","open_script","selected"],ob,oprops)
+                obs.append(["menu",[],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -229,6 +232,12 @@ class Script(gui.widget):
             print "try to load",o
             try:
                 cls,args,props = o
+                if cls == "menu":
+                    o = menu()
+                    def f(o=o):
+                        if o.options and not getattr(o,"selected",""):
+                            o.selected = o.options[0]
+                    after_after.append(f)
                 if cls == "testimony_blink":
                     o = testimony_blink(*args)
                 if cls == "penalty":

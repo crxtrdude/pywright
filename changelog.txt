@@ -77,7 +77,7 @@ PyWright Beta 10.95
         When a user chooses one of the options in localmenu, instead of running a separate script, it will
         jump to a label for "examine", "talk", "move", or "present". If a localmenu is shown with every
         item set to off, it will skip the localmenu line.
-    - Can turn OFF menu items from the regular menu command
+    - (todo) need test. Can turn OFF menu items from the regular menu command
             menu scene examine=off
         will show the menu, and leave examine out of the selectable items, even if scene.examine.txt
         exists.
