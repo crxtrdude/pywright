@@ -13,9 +13,12 @@ goto d
 
 label a
 list movements
+li externalscene
 li place 1
 li place 2
 showlist
+label externalscene
+menu scene6 examine=false
 label none
 goto lobby
 
