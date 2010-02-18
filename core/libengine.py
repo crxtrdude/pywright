@@ -877,10 +877,8 @@ class Script(gui.widget):
         else:
             pass
     def fail(self,label=None,dest=None):
-        print "fail",label,dest
         if label == "?": label = None
         if dest:
-            print "going to",dest
             return self.goto_result(dest)
         if label:
             pass
