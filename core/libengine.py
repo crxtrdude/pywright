@@ -1292,10 +1292,18 @@ class Script(gui.widget):
             if isinstance(o,listmenu):
                 o.options.append([label,result])
     @category("list")
-    def _showlist(self,command):
+    def _showlist(self,command,*args):
+        fail = None
+        for a in args:
+            if "=" in a:
+                k,v = a.split("=",1)
+                if k == "fail":
+                    fail = v
+        print fail
         for o in self.obs:
             if isinstance(o,listmenu):
                 o.hidden = False
+                o.fail = fail
         self.buildmode = False
     @category("list")
     def _forgetlist(self,command,tag):

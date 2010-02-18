@@ -1,6 +1,7 @@
+"If game quits unexpectedly, that's an error"
 goto lobby2 fail=is_flag
 
-"this is not run"
+exit
 
 label is_flag
 set is_1 1
@@ -8,59 +9,45 @@ set is_2 2
 
 #standard checks
 is is_1 = 1 good
-"bad"
+exit
 label good
 isnot is_1 = 1 bad
-"good1"
 goto good
-"bad"
+exit
 label good
 is is_1 = 1?
-"good2"
 is is_1 = 2?
-"bad"
+exit
 isnot is_1 = 1?
-"bad"
+exit
 isnot is_1 = 2?
-"good3"
 
-"is is_1 = 1 good fail=bad"
 is is_1 = 1 good fail=bad
-"not printed"
+exit
 label bad
-"bad (is_1 != 1)"
+exit
 label good
-"good4"
-"isnot is_1 = 1 good fail=bad"
 isnot is_1 = 1 good fail=bad
 label good
-"bad !is_1 = 1"
+exit
 label bad
-"good5"
-"is is_1 = $is_2 bad fail=good"
 is is_1 = $is_2 bad fail=good
-"not printed after is is_1 = {$is_2} bad fail=good"
+exit
 label bad
-"bad (is_1 = {is_2}"
+exit
 label good
-"good6"
-"flag x bad fail=good"
 flag x bad fail=good
-"not printed after flag x bad fail=good"
+exit
 label good
-"good7"
-"noflag is_1 bad fail=good"
 noflag is_1 bad fail=good
-"not printed after noflag is_1 bad fail=good"
+exot
 label bad
-"bad noflag is_1"
+exit
 label good
-"good8"
 
 addev bus
 label lobby
 bg lobby
-"move goes to 'label mfail'"
 localmenu examine=on talk=on present=on move=on fail=mfail
 
 label examine
@@ -80,7 +67,7 @@ goto lobby
 
 
 label mfail
-"No movement option is actually available."
+"No movement option is actually available. (Used fail= correctly!)"
 list nothing
 li Ok then. (goto none)
 showlist
@@ -100,4 +87,4 @@ goto lobby
 
 label none
 "at actual label none"
-goto lobby
+exit
