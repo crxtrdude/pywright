@@ -1302,7 +1302,8 @@ class Script(gui.widget):
         for o in self.obs:
             if isinstance(o,listmenu):
                 o.hidden = False
-                o.fail = fail
+                if fail:
+                    o.fail = fail
         self.buildmode = False
     @category("list")
     def _forgetlist(self,command,tag):
