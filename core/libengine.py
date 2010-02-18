@@ -1299,7 +1299,6 @@ class Script(gui.widget):
                 k,v = a.split("=",1)
                 if k == "fail":
                     fail = v
-        print fail
         for o in self.obs:
             if isinstance(o,listmenu):
                 o.hidden = False
