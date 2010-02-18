@@ -39,7 +39,9 @@ def addob(ob):
                 o2.kill = 1
     assets.cur_script.obs.append(ob)
 def addevmenu():
-    addob(evidence_menu(assets.items))
+    em = evidence_menu(assets.items)
+    addob(em)
+    return em
 def add_s(scene):
     s = Script()
     s.init(scene)
@@ -1365,10 +1367,15 @@ class Script(gui.widget):
                     em.fail = v
     @category("cross")
     def _cross(self,command,*args):
+        assets.variables["_court_fail_label"] = "none"
         self.statement = ""
         for a in args:
             if a=="start":
                 self.cross = "proceed"
+            if "=" in a:
+                k,v = a.split("=",1)
+                if k == "fail":
+                    assets.variables["_court_fail_label"] = v
         if self.cross is None:
             self.cross = self.si
         else:

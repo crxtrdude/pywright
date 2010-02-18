@@ -70,6 +70,7 @@ label mfail
 "No movement option is actually available. (Used fail= correctly!)"
 list nothing
 li Ok then. (goto none)
+li crossexam
 showlist
 goto lobby
 
@@ -85,6 +86,31 @@ label pfail
 "I don't know what that is."
 goto lobby
 
+label crossexam
+goto crossexam
+
 label none
 "at actual label none, shouldnt be here unless last option said so"
 goto lobby
+
+
+label crossexam
+cross x fail=cefail
+statement s1
+"This is the first statement"
+statement s2
+"There is no result for this, but present the bus"
+endcross
+"restart"
+goto crossexam
+label none
+exit
+label press_s1
+"pressing first statement"
+resume
+label bus s2
+"it's a bus"
+resume
+label cefail
+"no result found. yay!"
+resume

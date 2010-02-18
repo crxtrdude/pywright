@@ -1486,7 +1486,6 @@ class record_button(fadesprite,gui.widget):
         assets.addevmenu()
         
 class textbox(gui.widget):
-    fail = "none"
     pri = 30
     def click_down_over(self,pos):
         if not hasattr(self,"rpos1"): return
@@ -1676,13 +1675,14 @@ class textbox(gui.widget):
                 self.pressing -= 1
                 if self.pressing == 0:
                     self.pressb.highlight = False
-                    assets.cur_script.goto_result("press "+self.statement,backup=self.fail)
+                    assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
                     self.forward()
             if self.presenting:
                 self.presenting -= 1
                 if self.presenting == 0:
                     self.presentb.highlight = False
-                    assets.addevmenu()
+                    em = assets.addevmenu()
+                    em.fail = assets.variables.get("_court_fail_label",None)
         self.rpi.update()
         self.nextline = 0
         if self.kill: return
