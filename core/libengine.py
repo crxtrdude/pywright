@@ -222,6 +222,9 @@ class Script(gui.widget):
                 cp(["hide","regions","blocking","xscroll","xscrolling","mx","my","selected"],ob,oprops)
                 oprops["bg_ids"] = [o.id_name for o in ob.bg if hasattr(o,"id_name")]
                 obs.append(["examinemenu",[],oprops])
+            if isinstance(ob,guiWait):
+                cp(["run"],ob,oprops)
+                obs.append(["guiWait",[],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -239,6 +242,9 @@ class Script(gui.widget):
             print "try to load",o
             try:
                 cls,args,props = o
+                if cls == "guiWait":
+                    o = guiWait()
+                    o.script = self
                 if cls == "menu":
                     o = menu()
                     def f(o=o,props=props):
