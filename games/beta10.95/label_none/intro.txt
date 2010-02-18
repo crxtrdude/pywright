@@ -86,5 +86,5 @@ label pfail
 goto lobby
 
 label none
-"at actual label none"
-exit
+"at actual label none, shouldnt be here unless last option said so"
+goto lobby
