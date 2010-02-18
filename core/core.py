@@ -1676,7 +1676,7 @@ class textbox(gui.widget):
                 self.pressing -= 1
                 if self.pressing == 0:
                     self.pressb.highlight = False
-                    assets.cur_script.goto_result("press "+self.statement,self.fail)
+                    assets.cur_script.goto_result("press "+self.statement,backup=self.fail)
                     self.forward()
             if self.presenting:
                 self.presenting -= 1
@@ -2227,7 +2227,7 @@ class listmenu(fadesprite,gui.widget):
             self.bck.kill = 1
         if self.selected[1] != "Back":
             assets.variables["_selected"] = self.selected[1]
-            assets.cur_script.goto_result(self.selected[1],self.fail)
+            assets.cur_script.goto_result(self.selected[1],backup=self.fail)
         else:
             assets.variables["_selected"] = "Back"
     def draw(self,dest):
@@ -2650,7 +2650,7 @@ class examine_menu(sprite,gui.widget):
         print self.selected,self.regions,self.mx,self.my
         assets.variables["_examine_clickx"] = str(self.mx)
         assets.variables["_examine_clicky"] = str(self.my)
-        assets.cur_script.goto_result(self.selected[-1],self.fail)
+        assets.cur_script.goto_result(self.selected[-1],backup=self.fail)
         self.die()
         self.kill = 1
     def k_space(self):
@@ -3016,7 +3016,7 @@ class evidence_menu(fadesprite,gui.widget):
     def k_x(self):
         if not self.can_present(): return
         assets.variables["_selected"] = self.chosen
-        assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),self.fail)
+        assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),backup=self.fail)
         self.kill = 1
         for o in assets.cur_script.obs:
             if isinstance(o,textbox):
