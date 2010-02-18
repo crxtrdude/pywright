@@ -827,7 +827,7 @@ class ImgFont(object):
                 if which == left and width+self.width.get(c,8)>max_width:
                     r = which.pop(-1)
                     which = right
-                    right.insert(0,r)
+                    right.insert(0,r[1:])
                 width+=self.width.get(c,8)
             if c== "}":
                 parse = True
