@@ -834,11 +834,9 @@ class Script(gui.widget):
         if label.endswith("?"):
             args.append(label[:-1])
             label = "?"
-        print "args:",args
         args = " ".join(args).split(" AND ")
         args = [x.split(" OR ") for x in args]
         args = [OR(x) for x in args]
-        print args
         if False in args: return self.fail(label,fail)
         self.succeed(label)
     @category("control")
@@ -852,13 +850,10 @@ class Script(gui.widget):
         if label.endswith("?"):
             args.append(label[:-1])
             label = "?"
-        print "args:",args
         args = " ".join(args).split(" AND ")
         args = [x.split(" OR ") for x in args]
         args = [OR(x) for x in args]
-        print args
         if False in args: return self.succeed(label)
-        print "failing"
         self.fail(label,fail)
     @category("control")
     def _isempty(self,command,variable,label=None):
