@@ -1975,6 +1975,7 @@ class uglyarrow(fadesprite):
             
 class menu(fadesprite,gui.widget):
     z = 5
+    fail = "none"
     def over(self,mp):
         oy = other_screen(0)
         for o in self.options:
@@ -2085,7 +2086,7 @@ class menu(fadesprite,gui.widget):
         if self.open_script:
             assets.cur_script.init(self.scene+"."+self.selected)
         else:
-            assets.cur_script.goto_result(self.selected)
+            assets.cur_script.goto_result(self.selected,backup=self.fail)
         self.kill = 1
     def addm(self,opt):
         if opt:

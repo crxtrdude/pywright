@@ -1,0 +1,44 @@
+addev bus
+label lobby
+bg lobby
+"move goes to 'label mfail'"
+localmenu examine=on talk=on present=on move=on fail=mfail
+
+label examine
+examine fail=efail
+goto lobby
+
+label talk
+list talk
+li something
+li something else
+showlist fail=lfail
+goto lobby
+
+label present
+present fail=pfail
+goto lobby
+
+
+label mfail
+"No movement option is actually available."
+list nothing
+li Ok then. (goto none)
+showlist
+goto lobby
+
+label lfail
+"Yes, that is interesting."
+goto lobby
+
+label efail
+"Wow, look at that thing."
+goto lobby
+
+label pfail
+"I don't know what that is."
+goto lobby
+
+label none
+"at actual label none"
+goto lobby

@@ -177,6 +177,8 @@ class Script(gui.widget):
         obs = []
         for ob in self.world.all:
             oprops = {}
+            if hasattr(ob,"fail"):
+                oprops["fail"] = ob.fail
             if isinstance(ob,sprite) or isinstance(ob,portrait):
                 cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
             if isinstance(ob,bg):
@@ -924,7 +926,9 @@ class Script(gui.widget):
         for a in args:
             if "=" in a:
                 arg,val = a.split("=")
-                if not vtrue(val):
+                if arg=="fail":
+                    m.fail = val
+                elif not vtrue(val):
                     m.delm(arg)
         self.scriptlines = []
         self.si = 0
@@ -939,7 +943,9 @@ class Script(gui.widget):
         for a in args:
             if "=" in a:
                 arg,val = a.split("=")
-                if vtrue(val):
+                if arg=="fail":
+                    m.fail = val
+                elif vtrue(val):
                     m.addm(arg)
         m.open_script = False
         self.obs.append(m)
