@@ -238,7 +238,7 @@ class Script(gui.widget):
                 cls,args,props = o
                 if cls == "menu":
                     o = menu()
-                    def f(o=o):
+                    def f(o=o,props=props):
                         if o.options and not getattr(o,"selected",""):
                             o.selected = o.options[0]
                     after_after.append(f)
@@ -260,14 +260,14 @@ class Script(gui.widget):
                 if cls == "examinemenu":
                     o = examine_menu(props["hide"])
                     o.bg = []
-                    def f(o=o):
+                    def f(o=o,props=props):
                         for o2 in self.obs:
                             if getattr(o2,"id_name",None) in props["bg_ids"]:
                                 o.bg.append(o2)
                     after_after.append(f)
                 if cls == "scroll":
                     o = scroll()
-                    def f(o=o):
+                    def f(o=o,props=props):
                         o.obs = []
                         for o2 in self.obs:
                             if getattr(o2,"id_name",None) in props["ob_ids"]:
@@ -275,7 +275,7 @@ class Script(gui.widget):
                     after_after.append(f)
                 if cls == "zoomanim":
                     o = zoomanim()
-                    def f(o=o):
+                    def f(o=o,props=props):
                         o.obs = []
                         for o2 in self.obs:
                             if getattr(o2,"id_name",None) in props["ob_ids"]:
