@@ -24,7 +24,7 @@ PyWright Beta 10.95
             goto, showlist, menu, localmenu
             also: flag, noflag, is, isnot - note that the fail= argument must be at the end of these
                     commands. Also, in these cases, it only goes to the fail label if the expression
-                    is FALSE.
+                    is FALSE, as opposed to stopping if it reaches this label
     - (todo) nametag images instead of (in addition to) automatic
             (need to add overlapping pixels, also use the better graphics for textbox from
             http://pywright.dawnsoft.org/wordpress/?page_id=19/release-news/release-beta1094/)
