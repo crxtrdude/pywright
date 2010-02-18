@@ -1,3 +1,7 @@
+goto lobby2 fail=lobby
+
+"this is not run"
+
 addev bus
 label lobby
 bg lobby

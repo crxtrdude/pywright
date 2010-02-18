@@ -645,8 +645,14 @@ class Script(gui.widget):
         #assets.addscene(scene)
         self.init(scene)
     @category("control")
-    def _goto(self,command,place):
-        self.goto_result(place,wrap=True,backup=None)
+    def _goto(self,command,place,*args):
+        fail = None
+        for x in args:
+            if "=" in x:
+                k,v = x.split("=",1)
+                if k == "fail":
+                    fail = v
+        self.goto_result(place,wrap=True,backup=fail)
     def flag_logic(self,value,*args):
         args = list(args)
         label = args.pop(-1)
