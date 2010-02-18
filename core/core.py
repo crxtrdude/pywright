@@ -821,7 +821,7 @@ class ImgFont(object):
         for i,c in enumerate(text):
             if c == "{":
                 parse = False
-            if c == " ":
+            if parse and c == " ":
                 which.append("")
             if parse:
                 if which == left and width+self.width.get(c,8)>max_width:
@@ -1715,7 +1715,6 @@ class textbox(gui.widget):
                         if len(macroargs)==1: macroargs+=[""]
                         macro,args = macroargs
                         if assets.cur_script.macros.get(macro,None):
-                            pass
                             assets.variables["_return"] = ""
                             this = assets.cur_script
                             ns = assets.cur_script.execute_macro(macro,args)
