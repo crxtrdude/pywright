@@ -1,6 +1,61 @@
-goto lobby2 fail=lobby
+goto lobby2 fail=is_flag
 
 "this is not run"
+
+label is_flag
+set is_1 1
+set is_2 2
+
+#standard checks
+is is_1 = 1 good
+"bad"
+label good
+isnot is_1 = 1 bad
+"good1"
+goto good
+"bad"
+label good
+is is_1 = 1?
+"good2"
+is is_1 = 2?
+"bad"
+isnot is_1 = 1?
+"bad"
+isnot is_1 = 2?
+"good3"
+
+"is is_1 = 1 good fail=bad"
+is is_1 = 1 good fail=bad
+"not printed"
+label bad
+"bad (is_1 != 1)"
+label good
+"good4"
+"isnot is_1 = 1 good fail=bad"
+isnot is_1 = 1 good fail=bad
+label good
+"bad !is_1 = 1"
+label bad
+"good5"
+"is is_1 = $is_2 bad fail=good"
+is is_1 = $is_2 bad fail=good
+"not printed after is is_1 = {$is_2} bad fail=good"
+label bad
+"bad (is_1 = {is_2}"
+label good
+"good6"
+"flag x bad fail=good"
+flag x bad fail=good
+"not printed after flag x bad fail=good"
+label good
+"good7"
+"noflag is_1 bad fail=good"
+noflag is_1 bad fail=good
+"not printed after noflag is_1 bad fail=good"
+label bad
+"bad noflag is_1"
+label good
+"good8"
 
 addev bus
 label lobby

@@ -124,6 +124,36 @@ class World:
         self.all.remove(ob)
 assets.World = World
 
+
+def EVAL(stuff):
+    stuff = stuff.split(" ",2)
+    if len(stuff)==2:
+        stuff = stuff[0],"=",stuff[1]
+    current,op,check = stuff
+    if op not in ["<",">","=","<=",">="]:
+        check = op+" "+check
+        op = "="
+    current = assets.variables.get(current)
+    if op=="=":op="=="
+    if op!="==":
+        current = int(current)
+        check = int(check)
+    if op == ">":
+        return current > check
+    elif op == "<":
+        return current < check
+    elif op == "==":
+        return current == check
+    elif op == "<=":
+        return current <= check
+    elif op == ">=":
+        return current >= check
+def OR(stuff):
+    for line in stuff:
+        if EVAL(line):
+            return True
+    return False
+
 class Script(gui.widget):
     save_me = True
     def __init__(self,parent=None):
@@ -654,8 +684,12 @@ class Script(gui.widget):
                     fail = v
         self.goto_result(place,wrap=True,backup=fail)
     def flag_logic(self,value,*args):
+        fail=None
         args = list(args)
         label = args.pop(-1)
+        if label.startswith("fail="):
+            fail=label.split("=",1)[1]
+            label = args.pop(-1)
         if label.endswith("?"):
             args.append(label[:-1])
             label = "?"
@@ -669,7 +703,7 @@ class Script(gui.widget):
                 elif a=="OR": sentance+=" or "
                 else: raise script_error("Logic must be AND or OR")
             mode = 1-mode
-        if not eval(sentance)==value: return self.fail(label)
+        if not eval(sentance)==value: return self.fail(label,fail)
         self.succeed(label)
     @category("control")
     def _noflag(self,command,*args):
@@ -791,66 +825,41 @@ class Script(gui.widget):
             raise script_error("Could not delete save file, file in use or protected")
     @category("control")
     def _is(self,command,*args):
+        fail = None
         args = list(args)
         label = args.pop(-1)
+        if label.startswith("fail="):
+            fail = label.split("=",1)[1]
+            label = args.pop(-1)
         if label.endswith("?"):
             args.append(label[:-1])
             label = "?"
-        def EVAL(stuff):
-            stuff = stuff.split(" ",2)
-            if len(stuff)==2:
-                stuff = stuff[0],"=",stuff[1]
-            current,op,check = stuff
-            if op not in ["<",">","=","<=",">=","="]:
-                check = op+" "+check
-                op = "="
-            current = assets.variables.get(current)
-            if op=="=":op="=="
-            if op!="==":
-                current = int(current)
-                check = int(check)
-            return eval(repr(current)+op+repr(check))
-        def OR(stuff):
-            for line in stuff:
-                if EVAL(line):
-                    return True
-            return False
+        print "args:",args
         args = " ".join(args).split(" AND ")
         args = [x.split(" OR ") for x in args]
         args = [OR(x) for x in args]
-        if False in args: return self.fail(label)
+        print args
+        if False in args: return self.fail(label,fail)
         self.succeed(label)
     @category("control")
     def _isnot(self,command,*args):
+        fail = None
         args = list(args)
         label = args.pop(-1)
+        if label.startswith("fail="):
+            fail = label.split("=",1)[1]
+            label = args.pop(-1)
         if label.endswith("?"):
             args.append(label[:-1])
             label = "?"
-        def EVAL(stuff):
-            stuff = stuff.split(" ",2)
-            if len(stuff)==2:
-                stuff = stuff[0],"=",stuff[1]
-            current,op,check = stuff
-            if op not in ["<",">","=","<=",">=","="]:
-                check = op+" "+check
-                op = "="
-            current = assets.variables.get(current)
-            if op=="=":op="=="
-            if op!="==":
-                current = int(current)
-                check = int(check)
-            return eval(repr(current)+op+repr(check))
-        def OR(stuff):
-            for line in stuff:
-                if EVAL(line):
-                    return True
-            return False
+        print "args:",args
         args = " ".join(args).split(" AND ")
         args = [x.split(" OR ") for x in args]
         args = [OR(x) for x in args]
+        print args
         if False in args: return self.succeed(label)
-        self.fail(label)
+        print "failing"
+        self.fail(label,fail)
     @category("control")
     def _isempty(self,command,variable,label=None):
         if variable.endswith("?"):
@@ -865,15 +874,19 @@ class Script(gui.widget):
             label = "?"
         if assets.variables.get(variable,None): return self.succeed(label)
         self.fail(label)
-    def succeed(self,label=None):
+    def succeed(self,label=None,dest=None):
         """What happens when a test succeeds?"""
         if label == "?": label = None
         if label:
             self._goto(None,label)
         else:
             pass
-    def fail(self,label=None):
+    def fail(self,label=None,dest=None):
+        print "fail",label,dest
         if label == "?": label = None
+        if dest:
+            print "going to",dest
+            return self.goto_result(dest)
         if label:
             pass
         else:
