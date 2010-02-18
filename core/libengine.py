@@ -225,9 +225,12 @@ class Script(gui.widget):
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
-        remember_si = getattr(self,"si",0)
+        p = {}
+        for k in ["si","cross","statement","instatement","lastline","pri","viewed"]:
+            p[k] = getattr(self,k,"")
         self.init(self.scene)
-        self.si = remember_si
+        for k in p:
+            setattr(self,k,p[k])
         if hasattr(self,"_parent_index"):
             self.parent = assets.stack[self._parent_index]
         obs = []

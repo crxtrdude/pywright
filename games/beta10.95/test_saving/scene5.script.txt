@@ -43,5 +43,7 @@ goto lobby
 
 label d
 present
+label bus
+"you presented the bus"
 label none
 goto lobby

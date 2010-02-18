@@ -2991,14 +2991,22 @@ class evidence_menu(fadesprite,gui.widget):
             assets.addscene(chk)
     def can_present(self):
         if not vtrue(assets.variables.get("_"+self.item_set+"_present","true")):
+            #print "_"+self.item_set+"_present","is false"
             return
-        if not self.chosen: return
-        if self.back or self.switch: return
-        #if not assets.cur_script.instatement: return
-        if not assets.cur_script.cross=="proceed": return
+        if not self.chosen: 
+            #print "nothing chosen"
+            return
+        if self.back or self.switch: 
+            #print "have back or switch",self.back,self.switch
+            return
+        if not assets.cur_script.cross=="proceed": 
+            #print "no cur_script.cross"
+            return
         if not vtrue(assets.variables.get("_allow_present_"+self.item_set,"true")):
+            #print "_allow_present_"+self.item_set,"is false"
             return
         if not vtrue(assets.variables.get(self.chosen+"_presentable","true")):
+            #print self.chosen+"_presentable","is false"
             return
         return True
     def k_x(self):
