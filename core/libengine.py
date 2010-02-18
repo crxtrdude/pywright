@@ -1330,10 +1330,16 @@ class Script(gui.widget):
                 o.kill = 1
                 break
     @category("present")
-    def _present(self,command):
+    def _present(self,command,*args):
         self.statement = ""
         self.cross = "proceed"
-        addob(evidence_menu(assets.items))
+        ob = evidence_menu(assets.items)
+        for a in args:
+            if "=" in a:
+                k,v = a.split("=",1)
+                if k == "fail":
+                    ob.fail = v
+        addob(ob)
         self.buildmode = False
     @category("examine")
     def _examine(self,command,*args):
