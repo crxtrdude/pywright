@@ -1,4 +1,5 @@
 PyWright Beta 10.95
+    - better text wrapping
     - add ability to supply information with a game, such as author or icon
          beta10.95 game has an icon, the format of display and metadata
          supported is subject to change. All metadata is stored in the 
