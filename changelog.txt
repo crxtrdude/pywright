@@ -21,7 +21,7 @@ PyWright Beta 10.95
             there. It used to be that the only supported "fail label" was "none", which caused
             many problems with various parts of the script affecting each other. No longer the case.
             Commands that support fail= argument:
-            goto, showlist, menu, localmenu
+                    goto, showlist, menu, localmenu, cross, present, examine
             also: flag, noflag, is, isnot - note that the fail= argument must be at the end of these
                     commands. Also, in these cases, it only goes to the fail label if the expression
                     is FALSE, as opposed to stopping if it reaches this label
