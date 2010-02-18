@@ -1358,6 +1358,11 @@ class Script(gui.widget):
             self.si+=1
         self.si-=1
         self.buildmode = False
+        for a in args:
+            if "=" in a:
+                k,v = a.split("=",1)
+                if k == "fail":
+                    em.fail = v
     @category("cross")
     def _cross(self,command,*args):
         self.statement = ""
