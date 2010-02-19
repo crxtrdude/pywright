@@ -1,4 +1,4 @@
-VERSION = "Beta 10.95"
+VERSION = "Version 0.95"
 
 from errors import script_error
 

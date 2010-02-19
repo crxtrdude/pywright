@@ -1,7 +1,7 @@
-PyWright Beta 10.95
+PyWright Version 0.95
     - better text wrapping
     - add ability to supply information with a game, such as author or icon
-         beta10.95 game has an icon, the format of display and metadata
+         0.95 game has an icon, the format of display and metadata
          supported is subject to change. All metadata is stored in the 
          .pwv file located in a game directory. Each row of the file has
          a field name, a space, followed by the field data. 
