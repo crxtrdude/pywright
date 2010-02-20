@@ -1474,10 +1474,6 @@ class screen_settings(gui.pane):
         self.children.append(gui.button(self,"quit game",[100,sh-17]))
         self.children.append(gui.button(self,"quit pywright",[sw-74,sh-17]))
         self.children.append(gui.button(self,"view",[0,0]))
-        if pygame.USE_GL:
-            self.children.append(gui.button(self,"opengl",[40,0]))
-        else:
-            self.children.append(gui.label("no opengl",[30,0]))
         self.children.append(gui.button(self,"resolution",[100,0]))
         self.children.append(gui.button(self,"sound",[170,0]))
     def sound(self):
@@ -1607,18 +1603,6 @@ class screen_settings(gui.pane):
             guiline.children[-2].checked = True
         elif assets.gbamode==1:
             guiline.children[-1].checked = True
-    def opengl(self):
-        self.base()
-        screen_settings.firstpane = "opengl"
-        glLine = gui.pane([0,30],[sw,20])
-        glLine.align = "horiz"
-        self.children.append(glLine)
-        glLine.children.append(gui.label("Might affect fps"))
-        glLine.children.append(gui.checkbox("displaylists"))
-        glLine.children[-1].click_down_over = self.setdl
-        self.dislis = glLine.children[-1]
-        if pygame.DISPLAY_LIST:
-            self.dislis.checked = True
     def resolution(self):
         self.base()
         screen_settings.firstpane = "resolution"
