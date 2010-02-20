@@ -2039,7 +2039,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         o.enter_hold()
             for e in pygame.event.get():
                 if e.type==150:
-                    if assets.variables["_music_loop"]:
+                    if assets.variables.get("_music_loop",None):
                         assets.play_music(assets.variables["_music_loop"])
                 if e.type==pygame.KEYDOWN and \
                 e.key==pygame.K_ESCAPE:
