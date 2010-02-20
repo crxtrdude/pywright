@@ -1553,47 +1553,42 @@ class screen_settings(gui.pane):
         line = gui.pane([0,90],[sw,20])
         line.align = "horiz"
         self.children.append(line)
-        class newr(gui.radiobutton):
-            def click_down_over(s,*args):
+
+        self.snd_line = gui.label("SoundVolume: %d"%assets.sound_volume)
+        def mod(amt,min,max,var,play):
+            def modit():
                 ermsg.text = ""
-                gui.radiobutton.click_down_over(s,*args)
                 if not assets.init_sound(): 
                     ermsg.text = "Sound not initialized"
                 else:
-                    assets.sound_volume = int(s.text)
-                    assets.play_sound("phoenix/objection.ogg")
+                    n = getattr(assets,var) + amt
+                    if n>max:
+                        n = max
+                    if n<min:
+                        n=min
+                    setattr(assets,var,n)
+                    self.snd_line.text = "SoundVolume: %d"%assets.sound_volume
+                    self.mv_line.text = "MusicVolume: %d"%assets.music_volume
+                    play()
                     wini()
-        line.children.append(gui.label("SoundVolume:"))
-        line.children.append(newr("0","sndvol"))
-        line.children.append(newr("25","sndvol"))
-        line.children.append(newr("50","sndvol"))
-        line.children.append(newr("100","sndvol"))
-        for t in line.children:
-            if t.text==str(int(assets.sound_volume)):
-                t.checked = True
+            return modit
+        line.children.append(self.snd_line)
+        line.children.append(gui.button(None,"less"))
+        line.children[-1].less = mod(-10,0,100,"sound_volume",lambda:assets.play_sound("phoenix/objection.ogg"))
+        line.children.append(gui.button(None,"more"))
+        line.children[-1].more = mod(10,0,100,"sound_volume",lambda:assets.play_sound("phoenix/objection.ogg"))
                 
         line = gui.pane([0,110],[sw,20])
         line.align = "horiz"
         self.children.append(line)
-        class newr(gui.radiobutton):
-            def click_down_over(s,*args):
-                ermsg.text = ""
-                gui.radiobutton.click_down_over(s,*args)
-                if not assets.init_sound(): 
-                    ermsg.text = "Sound not initialized"
-                else:
-                    assets.music_volume = int(s.text)
-                    assets.play_music("Ding.ogg",loop=0,pre="sfx/")
-                    wini()
-        line.children.append(gui.label("MusicVolume:"))
-        line.children.append(newr("0","musvol"))
-        line.children.append(newr("25","musvol"))
-        line.children.append(newr("50","musvol"))
-        line.children.append(newr("100","musvol"))
-        for t in line.children:
-            if t.text==str(int(assets.music_volume)):
-                t.checked = True
-                
+        
+        self.mv_line = gui.label("MusicVolume: %d"%assets.music_volume)
+        line.children.append(self.mv_line)
+        line.children.append(gui.button(None,"less"))
+        line.children[-1].less = mod(-10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
+        line.children.append(gui.button(None,"more"))
+        line.children[-1].more = mod(10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
+
         self.children.append(ermsg)
     def view(self):
         self.base()
