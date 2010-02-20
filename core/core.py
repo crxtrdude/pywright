@@ -480,7 +480,10 @@ class Assets(object):
                 traceback.print_exc()
             self.snds[name] = snd
         snd.stop()
-        #snd.set_volume(float(self.sound_volume/100.0))
+        try:
+            snd.set_volume(float(self.sound_volume/100.0))
+        except:
+            snd.volume = self.sound_volume/100.0
         channel = snd.play()
         return channel
     def play_music(self,track=None,loop=0,pre=None,reset_track=True):
