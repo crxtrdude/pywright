@@ -28,6 +28,9 @@ PyWright Version 0.95
     - (todo) nametag images instead of (in addition to) automatic
             (need to add overlapping pixels, also use the better graphics for textbox from
             http://pywright.dawnsoft.org/wordpress/?page_id=19/release-news/release-beta1094/)
+    - (todo) can position the textbox and nametag anywhere desired
+            set _textbox_x, _textbox_y (default 0,0)
+            set _nametag_x, _nametag_y
     - customize button look - use:
                 gui Button [label] x=[x] y=[y] graphic=[path/to/image]
             Path to image is the path starting after the art folder, such as "fg/my_button"
