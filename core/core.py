@@ -2256,28 +2256,27 @@ class listmenu(fadesprite,gui.widget):
             if (not (checkmark and checkmark.width)) and self.tag and assets.lists[self.tag].get(rt,None):
                 rt = "("+rt+")"
             txt = font.render(rt,[20,20,20])
-            if checkmark and checkmark.width and self.tag and assets.lists[self.tag].get(rt,None):
-                s = assets.Surface([50+txt.get_width()+checkmark.width,max(txt.get_height(),checkmark.height)]).convert_alpha()
-                s.fill([0,0,0,0])
-                s.blit(txt,[0,(s.get_height()-txt.get_height())//2])
-                s.blit(checkmark.base[0],[50+txt.get_width(),(s.get_height()-checkmark.height)//2])
-                txt = s
             img.blit(txt,[(img.get_width()-txt.get_width())/2,
                 (img.get_height()-txt.get_height())/2])
             dest.blit(img,[x,y])
             if self.selected == c:
                 lwi = 2
-                pygame.draw.line(dest,[255,224,78],[x-1,y+8],[x-1,y+1],lwi)
-                pygame.draw.line(dest,[255,224,78],[x+1,y-2],[x+8,y-2],lwi)
+                color = color_str(assets.variables.get("_list_outline_color","ffaa45"))
+                pygame.draw.line(dest,color,[x-1,y+8],[x-1,y+1],lwi)
+                pygame.draw.line(dest,color,[x+1,y-2],[x+8,y-2],lwi)
                 
-                pygame.draw.line(dest,[255,224,78],[x+img.get_width(),y+8],[x+img.get_width(),y+1],lwi)
-                pygame.draw.line(dest,[255,224,78],[x+img.get_width()-2,y-2],[x+img.get_width()-9,y-2],lwi)
+                pygame.draw.line(dest,color,[x+img.get_width(),y+8],[x+img.get_width(),y+1],lwi)
+                pygame.draw.line(dest,color,[x+img.get_width()-2,y-2],[x+img.get_width()-9,y-2],lwi)
                 
-                pygame.draw.line(dest,[255,224,78],[x+img.get_width(),y+img.get_height()-2],[x+img.get_width(),y+img.get_height()-9],lwi)
-                pygame.draw.line(dest,[255,224,78],[x+img.get_width()-2,y+img.get_height()],[x+img.get_width()-9,y+img.get_height()],lwi)
+                pygame.draw.line(dest,color,[x+img.get_width(),y+img.get_height()-2],[x+img.get_width(),y+img.get_height()-9],lwi)
+                pygame.draw.line(dest,color,[x+img.get_width()-2,y+img.get_height()],[x+img.get_width()-9,y+img.get_height()],lwi)
                 
-                pygame.draw.line(dest,[255,224,78],[x-1,y+img.get_height()-2],[x-1,y+img.get_height()-9],lwi)
-                pygame.draw.line(dest,[255,224,78],[x+1,y+img.get_height()],[x+8,y+img.get_height()],lwi)
+                pygame.draw.line(dest,color,[x-1,y+img.get_height()-2],[x-1,y+img.get_height()-9],lwi)
+                pygame.draw.line(dest,color,[x+1,y+img.get_height()],[x+8,y+img.get_height()],lwi)
+            if checkmark and checkmark.width and self.tag and assets.lists[self.tag].get(rt,None):
+                cx = int(assets.variables.get("_list_checked_x","-10"))
+                cy = int(assets.variables.get("_list_checked_y","-10"))
+                dest.blit(checkmark.base[0],[x+cx,y+cy])
             y+=self.choice.img.get_height()+5
         self.recordb.draw(dest)
     def k_space(self):
