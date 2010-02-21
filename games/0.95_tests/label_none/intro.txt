@@ -56,7 +56,7 @@ goto lobby
 
 label talk
 list talk
-li something
+li {c900}something
 li something else
 showlist fail=lfail
 goto lobby

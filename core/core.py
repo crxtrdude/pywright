@@ -2255,7 +2255,7 @@ class listmenu(fadesprite,gui.widget):
             rt = c[0]
             if (not (checkmark and checkmark.width)) and self.tag and assets.lists[self.tag].get(rt,None):
                 rt = "("+rt+")"
-            txt = font.render(rt,[20,20,20])
+            txt = font.render(rt,[110,20,20])
             img.blit(txt,[(img.get_width()-txt.get_width())/2,
                 (img.get_height()-txt.get_height())/2])
             dest.blit(img,[x,y])

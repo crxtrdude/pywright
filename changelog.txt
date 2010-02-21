@@ -68,6 +68,8 @@ PyWright Version 0.95
         - replaced checkmark image with rip from game
         - adjust checkmark position with variables _list_checked_x, _list_checked_y
                 relative to top left corner of option button
+        - color of text more accurate
+        - little known tip: color of list options can be set with {c462} syntax
     - (todo) examine - clicking check button with mouse doesn't break
     - (todo) dissapearing present button
     - cache fades so they will be faster after one run
