@@ -62,6 +62,12 @@ PyWright Version 0.95
         * Also remember that there is a command to force the game to save, it might be a good
         idea to use this for checkpoints to control where saves occur. A save at the start
         of each scene might work.
+    - Some modification of list menus:
+        - adjust checkmark (for options you've already tried) image by setting variable
+                _list_checked_img to path relative to art folder
+        - replaced checkmark image with rip from game
+        - adjust checkmark position with variables _list_checked_x, _list_checked_y
+                relative to top left corner of option button
     - (todo) examine - clicking check button with mouse doesn't break
     - (todo) dissapearing present button
     - cache fades so they will be faster after one run
