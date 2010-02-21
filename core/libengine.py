@@ -237,6 +237,10 @@ class Script(gui.widget):
                 cp(["mag_per_frame","frames","wait","kill"],ob,oprops)
                 oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
                 obs.append(["zoomanim",[],oprops])
+            if isinstance(ob,rotateanim):
+                cp(["axis","degrees","wait","kill","speed"],ob,oprops)
+                oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
+                obs.append(["rotateanim",[],oprops])
             if isinstance(ob,textbox):
                 cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
                 oprops["text"] = getattr(ob,"text").split("\n",1)[1]
@@ -318,6 +322,14 @@ class Script(gui.widget):
                     after_after.append(f)
                 if cls == "zoomanim":
                     o = zoomanim()
+                    def f(o=o,props=props):
+                        o.obs = []
+                        for o2 in self.obs:
+                            if getattr(o2,"id_name",None) in props["ob_ids"]:
+                                o.obs.append(o2)
+                    after_after.append(f)
+                if cls == "rotateanim":
+                    o = rotateanim()
                     def f(o=o,props=props):
                         o.obs = []
                         for o2 in self.obs:

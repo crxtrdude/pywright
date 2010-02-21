@@ -6,5 +6,6 @@ char ben nametag=BEN hide
 fg wbench y=-10 stack
 set _speaking jj
 ev bus
-zoomanim
 "Hello, my name is ben."
+"rotate"
+rotate degrees=140 speed=2
