@@ -1,12 +1,25 @@
 addev bus
 
 list save_menu
+li set1
+li set2
+showlist
+
+list set1
 li graphics
 li scrolling
 li zoom
 li penalty
 li investigate
 showlist
+
+list set2
+li delays
+showlist
+
+label delays
+script delays
+goto save_menu
 
 label graphics
 script scene1
