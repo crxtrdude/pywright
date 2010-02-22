@@ -83,45 +83,73 @@ endmacro
 
 
 macro walk_left
-addvar cx -1
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cx -$3
 {check_collide collide}
 is collide = 0 doscroll$0
-addvar cx 1
+addvar cx $3
 goto end$0
 label doscroll$0
-scroll name=$1 x=-1
+scroll name=$1 x=-$3
 label end$0
+subvar _lli 1
+is _lli > 0 $0
 endmacro
 
 macro walk_right
-addvar cx 1
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cx $3
 {check_collide collide}
 is collide = 0 doscroll$0
-addvar cx -1
+addvar cx -$3
 goto end$0
 label doscroll$0
-scroll name=$1 x=1
+scroll name=$1 x=$3
 label end$0
+subvar _lli 1
+is _lli > 0 $0
 endmacro
 
 macro walk_up
-addvar cy -1
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cy -$3
 {check_collide collide}
 is collide = 0 doscroll$0
-addvar cy 1
+addvar cy $3
 goto end$0
 label doscroll$0
-scroll name=$1 y=-1
+scroll name=$1 y=-$3
 label end$0
+subvar _lli 1
+is _lli > 0 $0
 endmacro
 
 macro walk_down
-addvar cy 1
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cy $3
 {check_collide collide}
 is collide = 0 doscroll$0
-addvar cy -1
+addvar cy -$3
 goto end$0
 label doscroll$0
-scroll name=$1 y=1
+scroll name=$1 y=$3
 label end$0
+subvar _lli 1
+is _lli > 0 $0
 endmacro

@@ -26,33 +26,18 @@ label wait_input
 gui Wait
 
 label move_left
-{walk_left c}
-{walk_left c}
-{walk_left c}
-{walk_left c}
-{walk_left c}
+#direction, name= to scroll, times to scroll, speed of scroll
+{walk_left c 4 8}
 goto wait_input
 
 label move_right
-{walk_right c}
-{walk_right c}
-{walk_right c}
-{walk_right c}
-{walk_right c}
+{walk_right c 4 8}
 goto wait_input
 
 label move_up
-{walk_up c}
-{walk_up c}
-{walk_up c}
-{walk_up c}
-{walk_up c}
+{walk_up c 4 8}
 goto wait_input
 
 label move_down
-{walk_down c}
-{walk_down c}
-{walk_down c}
-{walk_down c}
-{walk_down c}
+{walk_down c 4 8}
 goto wait_input
