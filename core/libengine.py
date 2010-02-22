@@ -262,6 +262,11 @@ class Script(gui.widget):
             if isinstance(ob,guiWait):
                 cp(["run"],ob,oprops)
                 obs.append(["guiWait",[],oprops])
+            if isinstance(ob,waitenter):
+                obs.append(["waitenter",[],oprops])
+            if isinstance(ob,delay):
+                cp(["ticks"],ob,oprops)
+                obs.append(["delay",[],oprops])
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -279,6 +284,10 @@ class Script(gui.widget):
             print "try to load",o
             try:
                 cls,args,props = o
+                if cls == "delay":
+                    o = delay()
+                if cls == "waitenter":
+                    o = waitenter()
                 if cls == "guiWait":
                     o = guiWait()
                     o.script = self
