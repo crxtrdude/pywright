@@ -1122,6 +1122,10 @@ class Script(gui.widget):
     @category("graphics")
     def _textblock(self,command,x,y,width,height,*text):
         id_name = None
+        color = None
+        if text and text[0].startswith("color="):
+            color = color_str(text[0][6:])
+            text = text[1:]
         if text and text[0].startswith("name="): 
             id_name = text[0].replace("name=","",1)
             text = text[1:]
@@ -1129,6 +1133,8 @@ class Script(gui.widget):
         self.obs.append(tb)
         if id_name: tb.id_name = id_name
         else: tb.id_name = "$$"+str(id(tb))+"$$"
+        if color:
+            tb.color = color
     @category("event")
     def _penalty(self,command,amt,*args):
         var = "penalty"

@@ -1,5 +1,7 @@
 PyWright Version 0.95
     - better text wrapping
+    - textblocks can be colored with "color=" and then either 3 digit RGB, or 
+        6 digit hexidecimal RRGGBB, color string
     - add ability to supply information with a game, such as author or icon
          0.95 game has an icon, the format of display and metadata
          supported is subject to change. All metadata is stored in the 
