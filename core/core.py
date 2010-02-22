@@ -592,6 +592,9 @@ class Assets(object):
         return ["Assets",[],props,None]
     def after_load(self):
         self.items = [evidence(x) for x in self.items]
+        v = self.variables
+        self.variables = Variables()
+        self.variables.update(v)
     def load(self,s):
         self._track,self._loop,self.character,self.px,self.py,self.pz,\
         self.items,self.variables,self.lists = pickle.loads(s)
