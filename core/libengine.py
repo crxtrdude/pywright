@@ -190,7 +190,6 @@ class Script(gui.widget):
                 d = {"button":e.button}
                 d["pos"] = dp(e.pos)
                 e = pygame.event.Event(pygame.MOUSEBUTTONUP,d)
-                print self.obs
             if e.type==pygame.MOUSEBUTTONDOWN:
                 d = {"button":e.button}
                 d["pos"] = dp(e.pos)
@@ -2013,7 +2012,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
         for o in assets.cur_script.world.all[:]:
             if getattr(o,"kill",0): 
-                print "delete",o
                 assets.cur_script.world.all.remove(o)
         assets.cur_script.draw(pygame.screen)
         if assets.flash:
