@@ -244,6 +244,9 @@ class Script(gui.widget):
                 cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
                 oprops["text"] = getattr(ob,"text").split("\n",1)[1]
                 obs.append(["textbox",[oprops["text"],ob.color,ob.delay,ob.speed,ob.rightp,ob.leftp,ob.nametag],oprops])
+            if isinstance(ob,textblock):
+                cp(["text","lines","color"],ob,oprops)
+                obs.append(["textblock",[oprops["text"]],oprops])
             if isinstance(ob,uglyarrow):
                 cp(["showleft","width","height","high"],ob,oprops)
                 if ob.textbox:
@@ -303,6 +306,8 @@ class Script(gui.widget):
                     o = penalty(*args)
                 if cls == "textbox":
                     o = textbox()
+                if cls == "textblock":
+                    o = textblock(*args)
                 if cls == "uglyarrow":
                     o = uglyarrow()
                     def f(o=o,props=props):

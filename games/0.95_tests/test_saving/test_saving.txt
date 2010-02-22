@@ -15,10 +15,15 @@ showlist
 
 list set2
 li delays
+li guis
 showlist
 
 label delays
 script delays
+goto save_menu
+
+label guis
+script guis
 goto save_menu
 
 label graphics
