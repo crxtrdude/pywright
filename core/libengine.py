@@ -265,6 +265,8 @@ class Script(gui.widget):
             if isinstance(ob,guiWait):
                 cp(["run"],ob,oprops)
                 obs.append(["guiWait",[],oprops])
+            if isinstance(ob,gui.button) and hasattr(ob,"made_args"):
+                obs.append(["button",ob.made_args,{}])
             if isinstance(ob,waitenter):
                 obs.append(["waitenter",[],oprops])
             if isinstance(ob,delay):
@@ -294,6 +296,10 @@ class Script(gui.widget):
                 if cls == "guiWait":
                     o = guiWait()
                     o.script = self
+                if cls == "button":
+                    print args
+                    self._gui("gui","Button",*args)
+                    continue
                 if cls == "menu":
                     o = menu()
                     def f(o=o,props=props):
@@ -1073,6 +1079,7 @@ class Script(gui.widget):
         self._obj(*args)
     @category("graphics")
     def _gui(self,command,guitype,*args):
+        made_args = args
         args = list(args)
         x=None
         y=None
@@ -1089,6 +1096,7 @@ class Script(gui.widget):
             self.obs.append(guiBack(x=x,y=y,z=z,name=name))
             self.buildmode = False
         if guitype=="Button":
+            print "make button",args
             macroname=args[0]; del args[0]
             graphic = None
             while args:
@@ -1114,6 +1122,7 @@ class Script(gui.widget):
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
+            btn.made_args = made_args
         if guitype=="Wait":
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
