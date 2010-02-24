@@ -643,7 +643,14 @@ class Assets(object):
             ob.after_load()
         keys = stack.keys()
         keys.sort()
-        assets.stack = []
+        for s in assets.stack[:]:
+            d = 1
+            for o in s.obs:
+                if isinstance(o,case_menu):
+                    d = 0
+                    break
+            if d:
+                assets.stack.remove(s)
         for k in keys:
             print stack[k]
             print stack[k].si
