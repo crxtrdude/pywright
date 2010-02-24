@@ -1,6 +1,7 @@
 #IMPROVEMENTS
 #scroll, zoom don't save that they are scrolling background image (maybe shouldnt scroll background image!)
 #need save lists
+#fadeanim
 
 import gui
 from core import *
@@ -16,7 +17,7 @@ def save(ob):
     oprops = {}
     if hasattr(ob,"fail"):
         oprops["fail"] = ob.fail
-    if isinstance(ob,(sprite,portrait)):
+    if isinstance(ob,(sprite,portrait,listmenu,menu)):
         cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
     if isinstance(ob,bg):
         return ["bg",[],oprops]
