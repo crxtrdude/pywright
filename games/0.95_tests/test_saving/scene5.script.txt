@@ -34,11 +34,15 @@ label none
 goto lobby
 
 label c
+set _list_bg_image general/logobw
+set _menu_fade_level 0
 list talking
 li line 1
 li line 2
 showlist
 label none
+set _list_bg_image general/black
+set _menu_fade_level 50
 goto lobby
 
 label d

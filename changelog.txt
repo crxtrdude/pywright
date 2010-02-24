@@ -67,6 +67,8 @@ PyWright Version 0.95
     - Some modification of list menus:
         - adjust checkmark (for options you've already tried) image by setting variable
                 _list_checked_img to path relative to art folder
+        - change background with _list_bg_image (default general/black)
+                Might want to adjust _menu_fade_level to 0 to see fully opaque image
         - replaced checkmark image with rip from game
         - adjust checkmark position with variables _list_checked_x, _list_checked_y
                 relative to top left corner of option button

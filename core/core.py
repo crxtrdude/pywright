@@ -2169,7 +2169,7 @@ class listmenu(fadesprite,gui.widget):
         x,y = 0,other_screen(0)
         gui.widget.__init__(self,[x,y],[sw,sh])
         fadesprite.__init__(self,x=x,y=y)
-        self.load("general/black")
+        self.load(assets.variables.get("_list_bg_image","general/black"))
         self.max_fade = int(float(assets.variables.get("_menu_fade_level",50)))
         self.fade = 0
         if assets.num_screens == 2 and not vtrue(assets.variables.get("_double_screen_list_fade","false")):
