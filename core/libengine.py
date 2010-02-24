@@ -209,6 +209,7 @@ class Script(gui.widget):
             if save_state:
                 obs.append(save_state)
         props["_objects"] = obs
+        props["_world_id"] = id(self.world)
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
         p = {}
@@ -221,6 +222,10 @@ class Script(gui.widget):
             self.parent = assets.stack[self._parent_index]
         obs = []
         after_after = []
+        if self._world_id in assets.loading_cache:
+            self.world = assets.loading_cache[self._world_id]
+            return
+        assets.loading_cache[self._world_id] = self.world
         for o in getattr(self,"_objects",[]):
             print "try to load",o
             o,later = load.load(self,o)

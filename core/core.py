@@ -606,6 +606,7 @@ class Assets(object):
         pygame.screen.blit(txt,[50,50])
         self.draw_screen()
     def load_game_new(self,path=None,filename="save",hide=False):
+        self.loading_cache = {}
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
         if "\\" in filename or "/" in filename:

@@ -1,6 +1,7 @@
 #IMPROVEMENTS
 #scroll, zoom don't save that they are scrolling background image (maybe shouldnt scroll background image!)
 #fadeanim
+#weirdness with button and gui wait - second script layer not quite correct (copies of objects instead of same instance?)
 #instance attributes which are based on assets.variables: one object created, change variable, create another -
 #   need to save the actual variable and not rely on assets.variables entry to be accurate
 
