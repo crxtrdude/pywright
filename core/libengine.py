@@ -223,101 +223,11 @@ class Script(gui.widget):
         after_after = []
         for o in getattr(self,"_objects",[]):
             print "try to load",o
-            try:
-                cls,args,props = o
-                if cls == "delay":
-                    o = delay()
-                if cls == "waitenter":
-                    o = waitenter()
-                if cls == "guiWait":
-                    o = guiWait()
-                    o.script = self
-                if cls == "button":
-                    print args
-                    self._gui("gui","Button",*args)
-                    continue
-                if cls == "menu":
-                    o = menu()
-                    def f(o=o,props=props):
-                        if o.options and not getattr(o,"selected",""):
-                            o.selected = o.options[0]
-                    after_after.append(f)
-                if cls == "testimony_blink":
-                    o = testimony_blink(*args)
-                if cls == "penalty":
-                    o = penalty(*args)
-                if cls == "textbox":
-                    o = textbox()
-                if cls == "textblock":
-                    o = textblock(*args)
-                if cls == "uglyarrow":
-                    o = uglyarrow()
-                    def f(o=o,props=props):
-                        for tb in self.world.all:
-                            if isinstance(tb,textbox):
-                                o.textbox = tb
-                        o.update()
-                    if props.getattr("_tb",""):
-                        after_after.append(f)
-                if cls == "examinemenu":
-                    o = examine_menu(props["hide"])
-                    o.bg = []
-                    def f(o=o,props=props):
-                        for o2 in self.obs:
-                            if getattr(o2,"id_name",None) in props["bg_ids"]:
-                                o.bg.append(o2)
-                    after_after.append(f)
-                if cls == "scroll":
-                    o = scroll()
-                    def f(o=o,props=props):
-                        o.obs = []
-                        for o2 in self.obs:
-                            if getattr(o2,"id_name",None) in props["ob_ids"]:
-                                o.obs.append(o2)
-                    after_after.append(f)
-                if cls == "zoomanim":
-                    o = zoomanim()
-                    def f(o=o,props=props):
-                        o.obs = []
-                        for o2 in self.obs:
-                            if getattr(o2,"id_name",None) in props["ob_ids"]:
-                                o.obs.append(o2)
-                    after_after.append(f)
-                if cls == "rotateanim":
-                    o = rotateanim()
-                    def f(o=o,props=props):
-                        o.obs = []
-                        for o2 in self.obs:
-                            if getattr(o2,"id_name",None) in props["ob_ids"]:
-                                o.obs.append(o2)
-                    after_after.append(f)
-                if cls == "bg":
-                    o = bg()
-                if cls == "fg":
-                    o = fg()
-                if cls == "ev_menu":
-                    items = [evidence(x) for x in props["items"]]
-                    del props["items"]
-                    o = evidence_menu(items)
-                    for p in props:
-                        setattr(o,p,props[p])
-                    o.layout()
-                if cls == "evidence":
-                    o = evidence(props["id"])
-                if cls == "char":
-                    o = portrait(*args)
-                if cls in ["bg","fg","testimony_blink"]:
-                    for p in props:
-                        setattr(o,p,props[p])
-                    o.load(o.name)
-                if 1:
-                    for p in props:
-                        setattr(o,p,props[p])
+            o,later = load.load(self,o)
+            if o:
                 obs.append(o)
-                o.cur_script = self
-            except:
-                raise
-                print "error loading",o
+            if later:
+                after_after.append(later)
         self.world.all = obs
         for of in after_after:
             of()
