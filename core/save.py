@@ -15,6 +15,7 @@ def cp(l,o,p):
 
 def save(ob):
     oprops = {}
+    cp(["id_name"],ob,oprops)
     if hasattr(ob,"fail"):
         oprops["fail"] = ob.fail
     if isinstance(ob,(sprite,portrait,listmenu,menu)):
