@@ -2057,8 +2057,13 @@ class menu(fadesprite,gui.widget):
             self.kill = 1
         fadesprite.update(self)
         return True
+    def get_coord(self):
+        try:
+            return self.opos_c[self.selected][:]
+        except:
+            return [0,0]
     def k_right(self):
-        coord = self.opos_c[self.selected][:]
+        coord = self.get_coord()
         coord[0]+=1
         if coord[0]>1:
             coord[0] = 0
@@ -2066,7 +2071,7 @@ class menu(fadesprite,gui.widget):
         if sel in self.options:
             self.selected = sel
     def k_left(self):
-        coord = self.opos_c[self.selected][:]
+        coord = self.get_coord()
         coord[0]-=1
         if coord[0]<0:
             coord[0] = 1
@@ -2074,7 +2079,7 @@ class menu(fadesprite,gui.widget):
         if sel in self.options:
             self.selected = sel
     def k_up(self):
-        coord = self.opos_c[self.selected][:]
+        coord = self.get_coord()
         coord[1]-=1
         if coord[1]<0:
             coord[1] = 1
@@ -2082,7 +2087,7 @@ class menu(fadesprite,gui.widget):
         if sel in self.options:
             self.selected = sel
     def k_down(self):
-        coord = self.opos_c[self.selected][:]
+        coord = self.get_coord()
         coord[1]+=1
         if coord[1]>1:
             coord[1] = 0
