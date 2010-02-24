@@ -66,6 +66,8 @@ def load(script,olist):
         def f(o=o,props=props):
             if o.options and not getattr(o,"selected",""):
                 o.selected = o.options[0]
+    if cls == "listmenu":
+        o = listmenu()
     if cls == "examinemenu":
         o = examine_menu(props["hide"])
         o.bg = []

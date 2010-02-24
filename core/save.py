@@ -1,7 +1,8 @@
 #IMPROVEMENTS
 #scroll, zoom don't save that they are scrolling background image (maybe shouldnt scroll background image!)
-#need save lists
 #fadeanim
+#instance attributes which are based on assets.variables: one object created, change variable, create another -
+#   need to save the actual variable and not rely on assets.variables entry to be accurate
 
 import gui
 from core import *
@@ -66,6 +67,9 @@ def save(ob):
     elif isinstance(ob,menu):
         cp(["options","scene","open_script","selected"],ob,oprops)
         return ["menu",[],oprops]
+    elif isinstance(ob,listmenu):
+        cp(["max_fade","options","si","selected","hidden","tag"],ob,oprops)
+        return ["listmenu",[],oprops]
     elif isinstance(ob,examine_menu):
         cp(["hide","regions","blocking","xscroll","xscrolling","mx","my","selected"],ob,oprops)
         oprops["bg_ids"] = [o.id_name for o in ob.bg if hasattr(o,"id_name")]
