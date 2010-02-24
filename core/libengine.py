@@ -925,7 +925,6 @@ class Script(gui.widget):
         self._obj(*args)
     @category("graphics")
     def _gui(self,command,guitype,*args):
-        made_args = args
         args = list(args)
         x=None
         y=None
@@ -952,23 +951,25 @@ class Script(gui.widget):
                 if args[0].startswith("name="): name=args[0][5:]; del args[0]; continue
                 if args[0].startswith("graphic="): graphic = args[0][8:]; del args[0]; continue
                 break
-            if graphic:
-                graphic = assets.open_art(graphic)[0]
             text = ""
             text = " ".join(args)
             btn = gui.button(None,text)
+            btn.s_text = text
+            if graphic:
+                btn.s_graphic = graphic
+                graphic = assets.open_art(graphic)[0]
             btn.graphic = graphic
             btn.rpos = [x,y]
             btn.z = int(assets.variables["_layer_gui"])
             if z is not None: btn.z = z
             btn.pri = 0
+            btn.s_macroname = macroname
             def func(*args):
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
-            btn.made_args = made_args
         if guitype=="Wait":
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)

@@ -71,8 +71,9 @@ def save(ob):
     elif isinstance(ob,guiWait):
         cp(["run"],ob,oprops)
         return ["guiWait",[],oprops]
-    elif isinstance(ob,gui.button) and hasattr(ob,"made_args"):
-        return ["button",ob.made_args,{}]
+    elif isinstance(ob,gui.button) and hasattr(ob,"s_text"):
+        cp(["s_text","s_graphic","rpos","s_macroname","id_name","z","pri"],ob,oprops)
+        return ["button",[],oprops]
     elif isinstance(ob,waitenter):
         return ["waitenter",[],oprops]
     elif isinstance(ob,delay):

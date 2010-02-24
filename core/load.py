@@ -77,9 +77,15 @@ def load(script,olist):
         o = guiWait()
         o.script = script
     if cls == "button":
-        print args
-        script._gui("gui","Button",*args)
-        return None,f
+        o = gui.button(None,props["s_text"])
+        if props.get("s_graphic",""):
+            graphic = props["s_graphic"]
+            graphic = assets.open_art(graphic)[0]
+            o.graphic = graphic
+        def func(*args):
+            script.goto_result(props["s_macroname"])
+        setattr(o,props["s_text"].replace(" ","_"),func)
+        print o
     if cls == "waitenter":
         o = waitenter()
     if cls == "delay":
