@@ -12,6 +12,8 @@ if sys.platform=="win32":
 import random
 from core import *
 import gui
+import save
+import load
 
 
 def pauseandquit():
@@ -198,80 +200,14 @@ class Script(gui.widget):
         gui.widget.handle_events(self,n)
     def save(self):
         props = {}
-        def cp(l,o,p):
-            for arg in l:
-                if hasattr(o,arg):
-                    p[arg] = getattr(o,arg)
-        cp(["scene","si","cross","statement","instatement","lastline","pri","viewed"],self,props)
+        save.cp(["scene","si","cross","statement","instatement","lastline","pri","viewed"],self,props)
         if self.parent:
             props["_parent_index"] = assets.stack.index(self.parent)
         obs = []
         for ob in self.world.all:
-            oprops = {}
-            if hasattr(ob,"fail"):
-                oprops["fail"] = ob.fail
-            if isinstance(ob,sprite) or isinstance(ob,portrait):
-                cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait"],ob,oprops)
-            if isinstance(ob,bg):
-                obs.append(["bg",[],oprops])
-            if isinstance(ob,testimony_blink):
-                obs.append(["testimony_blink",[],oprops])
-            elif isinstance(ob,fg):
-                obs.append(["fg",[],oprops])
-            if isinstance(ob,evidence):
-                oprops["id"] = ob.id
-                obs.append(["evidence",[],oprops])
-            if isinstance(ob,portrait):
-                cp(["clicksound","nametag","charname","emoname","modename"],ob,oprops)
-                obs.append(["char",[ob.name,ob.hide],oprops])
-            if isinstance(ob,evidence_menu):
-                cp(["page","sx","sy","mode","pri","z","item_set"],ob,oprops)
-                oprops["items"] = [x.id for x in ob.items]
-                obs.append(["ev_menu",[],oprops])
-            if isinstance(ob,scroll):
-                cp(["dx","dy","amtx","amty","speed","wait","filter","kill"],ob,oprops)
-                oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
-                obs.append(["scroll",[],oprops])
-            if isinstance(ob,zoomanim):
-                cp(["mag_per_frame","frames","wait","kill"],ob,oprops)
-                oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
-                obs.append(["zoomanim",[],oprops])
-            if isinstance(ob,rotateanim):
-                cp(["axis","degrees","wait","kill","speed"],ob,oprops)
-                oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
-                obs.append(["rotateanim",[],oprops])
-            if isinstance(ob,textbox):
-                cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
-                oprops["text"] = getattr(ob,"text").split("\n",1)[1]
-                obs.append(["textbox",[oprops["text"],ob.color,ob.delay,ob.speed,ob.rightp,ob.leftp,ob.nametag],oprops])
-            if isinstance(ob,textblock):
-                cp(["text","lines","color"],ob,oprops)
-                obs.append(["textblock",[oprops["text"]],oprops])
-            if isinstance(ob,uglyarrow):
-                cp(["showleft","width","height","high"],ob,oprops)
-                if ob.textbox:
-                    oprops["_tb"] = True
-                obs.append(["uglyarrow",[],oprops])
-            if isinstance(ob,penalty):
-                cp(["pos","delay"],ob,oprops)
-                obs.append(["penalty",[ob.end,ob.var],oprops])
-            if isinstance(ob,menu):
-                cp(["options","scene","open_script","selected"],ob,oprops)
-                obs.append(["menu",[],oprops])
-            if isinstance(ob,examine_menu):
-                cp(["hide","regions","blocking","xscroll","xscrolling","mx","my","selected"],ob,oprops)
-                oprops["bg_ids"] = [o.id_name for o in ob.bg if hasattr(o,"id_name")]
-                obs.append(["examinemenu",[],oprops])
-            if isinstance(ob,guiWait):
-                cp(["run"],ob,oprops)
-                obs.append(["guiWait",[],oprops])
-            if isinstance(ob,gui.button) and hasattr(ob,"made_args"):
-                obs.append(["button",ob.made_args,{}])
-            if isinstance(ob,waitenter):
-                obs.append(["waitenter",[],oprops])
-            if isinstance(ob,delay):
-                cp(["ticks"],ob,oprops)
-                obs.append(["delay",[],oprops])
+            save_state = save.save(ob)
+            if save_state:
+                obs.append(save_state)
         props["_objects"] = obs
         return ["assets.Script",[],props,["stack",assets.stack.index(self)]]
     def after_load(self):
@@ -321,7 +257,7 @@ class Script(gui.widget):
                             if isinstance(tb,textbox):
                                 o.textbox = tb
                         o.update()
-                    if props["_tb"]:
+                    if props.getattr("_tb",""):
                         after_after.append(f)
                 if cls == "examinemenu":
                     o = examine_menu(props["hide"])
