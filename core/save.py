@@ -1,3 +1,7 @@
+#IMPROVEMENTS
+#scroll, zoom don't save that they are scrolling background image (maybe shouldnt scroll background image!)
+#need save lists
+
 import gui
 from core import *
 
