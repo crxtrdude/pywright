@@ -1,4 +1,5 @@
 addev bus
+mus pa1_s1/02 - Courtroom Lounge  - Beginning Prelude.ogg
 
 list save_menu
 li set1
