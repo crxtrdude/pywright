@@ -10,12 +10,5 @@ f.write("running from:"+abspath+"\n")
 sys.stderr = f
 sys.stdout = f
 sys.path.insert(0,"")
-if len(sys.argv)>1:
-    if sys.argv[1] == "editor":
-        from core import libedit
-    elif sys.argv[1] == "updater":
-        from core import libupdate
-        libupdate.run()
-else:
-    from core import libengine
-    libengine.run()
+from core import libengine
+libengine.run()

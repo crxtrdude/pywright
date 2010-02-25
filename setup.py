@@ -184,14 +184,6 @@ if cmd == 'py2app' and bexe:
         options={'py2app': OPTIONS},
         setup_requires=['py2app'],
     )
-    f = open("dist/editor","w")
-    f.write("./PyWright_run.app/Contents/MacOS/PyWright_run editor")
-    f.close
-    os.system("chmod a+x dist/editor")
-    f = open("dist/updater","w")
-    f.write("./PyWright_run.app/Contents/MacOS/PyWright_run updater")
-    f.close()
-    os.system("chmod a+x dist/updater")
 
 # make the cx_freeze target
 if cmd == 'cx_freeze' and bexe:
