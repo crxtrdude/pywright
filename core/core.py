@@ -402,7 +402,7 @@ class Assets(object):
         s = None
         try:
             return self._open_art_(name+".gif",key)
-        except IOError:
+        except (IOError,ImportError):
             pass
         try:
             return self._open_art_(name+".png",key)
