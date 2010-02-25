@@ -47,6 +47,13 @@ def load(script,olist):
             for o2 in script.obs:
                 if getattr(o2,"id_name",None) in props["ob_ids"]:
                     o.obs.append(o2)
+    if cls == "fadeanim":
+        o = fadeanim()
+        def f(o=o,props=props):
+            o.obs = []
+            for o2 in script.obs:
+                if getattr(o2,"id_name",None) in props["ob_ids"]:
+                    o.obs.append(o2)
     if cls == "textbox":
         o = textbox()
     if cls == "textblock":

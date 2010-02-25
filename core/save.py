@@ -1,7 +1,6 @@
 #IMPROVEMENTS
 #scroll, zoom don't save that they are scrolling background image (maybe shouldnt scroll background image!)
-#fadeanim
-#weirdness with button and gui wait - second script layer not quite correct (copies of objects instead of same instance?)
+#save and load still available in menu after game exits
 #instance attributes which are based on assets.variables: one object created, change variable, create another -
 #   need to save the actual variable and not rely on assets.variables entry to be accurate
 
@@ -50,6 +49,10 @@ def save(ob):
         cp(["axis","degrees","wait","kill","speed"],ob,oprops)
         oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
         return ["rotateanim",[],oprops]
+    elif isinstance(ob,fadeanim):
+        cp(["start","end","speed","wait"],ob,oprops)
+        oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
+        return ["fadeanim",[],oprops]
     elif isinstance(ob,textbox):
         cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
         oprops["text"] = getattr(ob,"text").split("\n",1)[1]
