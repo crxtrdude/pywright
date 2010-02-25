@@ -1991,6 +1991,7 @@ class uglyarrow(fadesprite):
 class menu(fadesprite,gui.widget):
     z = 5
     fail = "none"
+    id_name = "invest_menu"
     def over(self,mp):
         oy = other_screen(0)
         for o in self.options:
@@ -2138,6 +2139,7 @@ class menu(fadesprite,gui.widget):
 
 class listmenu(fadesprite,gui.widget):
     fail = "none"
+    id_name = "list_menu_id"
     def over(self,mp):
         if getattr(self,"kill",0):
             return False
