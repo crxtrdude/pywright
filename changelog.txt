@@ -54,7 +54,7 @@ PyWright Version 0.95
         a file, and then recreate it when loading, but method is different. 
         What cannot be saved:
             - position in currently playing song
-            - position of a movie file (it will start the movie from the beginning)
+            - movie objects are not saved (a load will resume after the "movie" command)
             - position of text - when saved in the middle of a textbox printing out,
                     loading that game will make the textbox start printing out from
                     the begining again. This can make perceive saves imperfect.
