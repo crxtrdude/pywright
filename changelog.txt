@@ -80,7 +80,6 @@ PyWright Version 0.95
     - scrolling objects on bottom screen works
     - (todo) sort options for games
     - psyche5
-    - (todo) mp3 support with pyaudiere - figure out packaging for this
     - html color support (use {c 000000} where 000000 is 6 digit html color string)
     - color variable substitution (use {c variable} to set the color to "color_variable")
     - if "intro.txt" not found in a game, looks for "[game].txt" instead
@@ -94,19 +93,19 @@ PyWright Version 0.95
         an evidence check script
     - Show investigation menu without having to use multiple scripts:
         A new command "localmenu" was added, allowing you to set up the 
-        investigation menu manually, and letting you organize your scripts how you please. The syntax is
-        this:
+        investigation menu manually, and letting you organize your scripts how you please. 
+        The syntax is this:
             localmenu examine=on/off talk=on/off present=on/off move=on/off
-        This will show a normal investigation menu with those items either on or off. All of the options
-        default to off, so
+        This will show a normal investigation menu with those items either on or off. All of the 
+        options default to off, so
             localmenu talk=on
-        will show a menu that only has the talk option. The options work with variables so you can have
-        code or what the player has done determine what is shown:
+        will show a menu that only has the talk option. The options work with variables so 
+        you can have code or what the player has done determine what is shown:
             localmenu talk=$ema_here present=$ema_here move=on examine=on
         will only show talk and present when $ema_here is equal to on.
-        When a user chooses one of the options in localmenu, instead of running a separate script, it will
-        jump to a label for "examine", "talk", "move", or "present". If a localmenu is shown with every
-        item set to off, it will skip the localmenu line.
+        When a user chooses one of the options in localmenu, instead of running a 
+        separate script, it will jump to a label for "examine", "talk", "move", or "present". If 
+        a localmenu is shown with every item set to off, it will skip the localmenu line.
     - Can turn OFF menu items from the regular menu command
             menu scene examine=off
         will show the menu, and leave examine out of the selectable items, even if scene.examine.txt
