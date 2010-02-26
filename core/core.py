@@ -1534,14 +1534,13 @@ class textbox(gui.widget):
         while lines:
             line = lines.pop(0)
             if vtrue(assets.variables.get("_textbox_wrap","true")):
-                chars = 240
-                left,right = font.split_line(line,240)
+                left,right = font.split_line(line,254)
             else:
                 left,right = line,""
             page.append(left)
             if right.strip():
                 if not lines: lines.append("")
-                lines[0]=right+lines[0]
+                lines[0]=right+" "+lines[0]
             if len(page)==3:
                 pages.append(self.nametag+"\n".join(page))
                 page = []
@@ -1558,17 +1557,17 @@ class textbox(gui.widget):
         if assets.portrait:
             nametag = getattr(assets.portrait,"nametag",nametag) or nametag
         self.nt_full = None
-        if not nametag.strip():
-            self.base = assets.open_art("general/textbox_")[0].convert_alpha()
-        else:
-            self.base = assets.open_art("general/textbox_")[0].convert_alpha()
-            self.nt_left = assets.open_art("general/nt_left")[0].convert_alpha()
-            self.nt_middle = assets.open_art("general/nt_middle")[0].convert_alpha()
-            self.nt_right = assets.open_art("general/nt_right")[0].convert_alpha()
-        nt_full_image = assets.variables.get("_nt_image","")
-        if nt_full_image:
-            print "Load nt image"
-            self.nt_full = assets.open_art(nt_full_image)[0].convert_alpha()
+        self.nt_left = None
+        self.nt_text_image = None
+        self.base = assets.open_art(assets.variables.get("_textbox_img","general/textbox_old"))[0].convert_alpha()
+        if nametag.strip():
+            nt_full_image = assets.variables.get("_nt_image","")
+            if nt_full_image:
+                self.nt_full = assets.open_art(nt_full_image)[0].convert_alpha()
+            else:
+                self.nt_left = assets.open_art("general/nt_left")[0].convert_alpha()
+                self.nt_middle = assets.open_art("general/nt_middle")[0].convert_alpha()
+                self.nt_right = assets.open_art("general/nt_right")[0].convert_alpha()
         self.nametag = nametag
         self.img = self.base.copy()
         self.go = 0
@@ -1673,6 +1672,14 @@ class textbox(gui.widget):
         #End
         if self.nt_full:
             dest.blit(self.nt_full,[self.rpos1[0],self.rpos1[1]-self.nt_full.get_height()])
+        elif self.nt_left and self.nt_text_image:
+            x = self.rpos1[0]
+            y = self.rpos1[1]-self.nt_left.get_height()
+            dest.blit(self.nt_left,[x,y])
+            for ii in range(self.nt_text_image.get_width()+8):
+                dest.blit(self.nt_middle,[x+3+ii,y])
+            dest.blit(self.nt_right,[x+3+ii+1,y])
+            dest.blit(self.nt_text_image,[x+5,y])
         dest.blit(self.img,
             self.rpos1)
         if self.rightp and self.nextline:
@@ -1841,34 +1848,20 @@ class textbox(gui.widget):
         if self.next==0 and len(self.written)>self.wlen:
             self.wlen = len(self.written)
             self.img = self.base.copy()
-            spacings = [(18,4,15),(13,3,13)]
-            y, stx, inc = 19, 6, 18
-            #~ if 1:#assets.variables.get("_textbox_lines","auto")=="2" or (len(self.text.split("\n"))<4 and assets.variables.get("_textbox_lines","auto")=="auto"): 
-                #~ y,stx,inc = spacings[0]
-            #~ else: 
-                #~ y,stx,inc = spacings[1]
+            y, stx, inc = 6, 6, 18
             x = stx
             color = self.color
             center = False
             lines = self.written.split("\n")
+            print lines
             for i,line in enumerate(lines):
                 if title:
                     if line.strip(): 
                         nt_image = arial10.render(line.capitalize().replace("_"," "),1,color)
-                        self.img.blit(self.nt_left,[0,0])
-                        for ii in range(nt_image.get_width()+8):
-                            self.img.blit(self.nt_middle,[3+ii,0])
-                        self.img.blit(self.nt_right,[3+ii+1,0])
-                        self.img.blit(nt_image,[5,0])
+                        self.nt_text_image = nt_image
                     title = False
                 else:
                     img = font.render(line,color)
-                    char = ""
-                    if char:
-                        if len(lines)<i+1:
-                            lines[i+1]=char+lines[i+1]
-                        else:
-                            lines.append(char)
                     color = font.lastcolor
                     if "{center}" in line:
                         center = not center

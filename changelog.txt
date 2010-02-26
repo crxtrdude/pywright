@@ -1,4 +1,5 @@
 PyWright Version 0.95
+    - first version not considered "beta"
     - better text wrapping
     - textblocks can be colored with "color=" and then either 3 digit RGB, or 
         6 digit hexidecimal RRGGBB, color string
