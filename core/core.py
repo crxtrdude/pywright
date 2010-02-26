@@ -1665,26 +1665,52 @@ class textbox(gui.widget):
         if not self.go or self.kill:
             return
         #For the widget
+        x = assets.variables.get("_textbox_x","")
+        y = assets.variables.get("_textbox_y","")
         self.rpos1 = [(sw-self.img.get_width())/2,
             sh-self.img.get_height()]
+        if x!="":
+            self.rpos1[0] = int(x)
+        if y!="":
+            self.rpos1[1] = int(y)
         self.width1 = self.img.get_width()
         self.height1 = self.img.get_height()
-        #End
-        if self.nt_full:
-            dest.blit(self.nt_full,[self.rpos1[0],self.rpos1[1]-self.nt_full.get_height()])
-        elif self.nt_left and self.nt_text_image:
-            x = self.rpos1[0]
-            y = self.rpos1[1]-self.nt_left.get_height()
-            dest.blit(self.nt_left,[x,y])
-            for ii in range(self.nt_text_image.get_width()+8):
-                dest.blit(self.nt_middle,[x+3+ii,y])
-            dest.blit(self.nt_right,[x+3+ii+1,y])
-            dest.blit(self.nt_text_image,[x+5,y])
         dest.blit(self.img,
             self.rpos1)
         if self.rightp and self.nextline:
-            dest.blit(self.rpi.img,[sw-16,
-                sh-16])
+            dest.blit(self.rpi.img,[self.rpos1[0]+self.width1-16,
+                self.rpos1[1]+self.height1-16])
+        #End
+        x = assets.variables.get("_nt_x","")
+        y = assets.variables.get("_nt_y","")
+        if self.nt_full:
+            nx,ny = self.rpos1[0],(self.rpos1[1]-self.nt_full.get_height())
+            if x!="":
+                nx = int(x)
+            if y!="":
+                ny = int(y)
+            dest.blit(self.nt_full,[nx,ny])
+            if self.nt_text_image:
+                if assets.variables.get("_nt_text_x","")!="":
+                    nx += int(assets.variables.get("_nt_text_x",0))
+                if assets.variables.get("_nt_text_y","")!="":
+                    ny += int(assets.variables.get("_nt_text_y",0))
+                dest.blit(self.nt_text_image,[nx+5,ny])
+        elif self.nt_left and self.nt_text_image:
+            nx,ny = self.rpos1[0],(self.rpos1[1]-self.nt_left.get_height())
+            if x!="":
+                nx = int(x)
+            if y!="":
+                ny = int(y)
+            dest.blit(self.nt_left,[nx,ny])
+            for ii in range(self.nt_text_image.get_width()+8):
+                dest.blit(self.nt_middle,[nx+3+ii,ny])
+            dest.blit(self.nt_right,[nx+3+ii+1,ny])
+            if assets.variables.get("_nt_text_x","")!="":
+                nx += int(assets.variables.get("_nt_text_x",0))
+            if assets.variables.get("_nt_text_y","")!="":
+                ny += int(assets.variables.get("_nt_text_y",0))
+            dest.blit(self.nt_text_image,[nx+5,ny])
         if self.statement:
             self.pressb.draw(dest)
             self.presentb.draw(dest)
@@ -1853,11 +1879,15 @@ class textbox(gui.widget):
             color = self.color
             center = False
             lines = self.written.split("\n")
-            print lines
             for i,line in enumerate(lines):
                 if title:
-                    if line.strip(): 
-                        nt_image = arial10.render(line.capitalize().replace("_"," "),1,color)
+                    if line.strip():
+                        ncolor = assets.variables.get("_nt_text_color","")
+                        if ncolor:
+                            ncolor = color_str(ncolor)
+                        else:
+                            ncolor = color
+                        nt_image = arial10.render(line.capitalize().replace("_"," "),1,ncolor)
                         self.nt_text_image = nt_image
                     title = False
                 else:
@@ -3180,6 +3210,7 @@ class textblock(sprite):
         self.size = size
         self.surf = surf
         self.color = color
+        self.width,self.height = self.size
     def save(self):
         return pickle.dumps([self.text,self.lines,self.pos,self.size,self.color])
     def restore(self,s):
