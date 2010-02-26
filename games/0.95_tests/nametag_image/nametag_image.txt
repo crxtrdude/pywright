@@ -1,4 +1,5 @@
 set _debug true
+set _textbox_bg general/textbox_2
 bg black
 
 textblock 0 0 100 100 name=x standard, oldstyle

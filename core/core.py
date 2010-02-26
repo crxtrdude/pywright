@@ -1559,7 +1559,7 @@ class textbox(gui.widget):
         self.nt_full = None
         self.nt_left = None
         self.nt_text_image = None
-        self.base = assets.open_art(assets.variables.get("_textbox_img","general/textbox_old"))[0].convert_alpha()
+        self.base = assets.open_art(assets.variables.get("_textbox_bg","general/textbox_old"))[0].convert_alpha()
         if nametag.strip():
             nt_full_image = assets.variables.get("_nt_image","")
             if nt_full_image:
