@@ -1,6 +1,9 @@
 PyWright Version 0.95
     - first version not considered "beta"
-    - better text wrapping
+    - different text wrapping behavior:
+        wraps on words, not characters
+        if {n} is in the text, will not wrap automatically, period
+        if {n} is not in the text, will wrap if _textbox_wrap is true, which is default
     - textblocks can be colored with "color=" and then either 3 digit RGB, or 
         6 digit hexidecimal RRGGBB, color string
     - add ability to supply information with a game, such as author or icon
