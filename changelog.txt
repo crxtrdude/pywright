@@ -9,7 +9,9 @@ PyWright Version 0.95
          .pwv file located in a game directory. Each row of the file has
          a field name, a space, followed by the field data. 
          Currently supported fields:
-            * version - should start at 0, and grow by 1 for each release
+            * version - Any floating point number is valid. If a higher number is available on updater,
+                            it will let the user know that they can update.
+            * version_date - the date this version was released - mm/dd/yyyy
             * author - the name of the game creator. Displayed next to 
                     title on the game list.
             * title - the game name, displayed on the game list
@@ -17,6 +19,10 @@ PyWright Version 0.95
                     of the game folder; include file extension
                     (i.e., if icon equals "art/general/icon.png" there should be a
                     "games/my_game/art/general/icon.png" present)
+                    should be 70x70
+                    required for games on update service
+            * website - a link to the project website if there is one
+            * category - may be used to sort games later on
     - ALL code that can jump to another label can be provided with a fail= argument to
             control where it will go if it can't find the label it is looking for. To be more specific,
             while reading through the code sequentially, if it sees a label with the name that

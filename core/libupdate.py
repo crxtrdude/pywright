@@ -154,23 +154,31 @@ def build_list(dir="art/port",url="zip_port_info"):
         cb.filename = an[n]["zipname"]
         image = load_image(an[n]["iconurl"])
         p = pane([0,0])
-        p.width,p.height = [300,80]
+        p.width,p.height = [300,95]
         p.align = "horiz"
         image_b = button(None,"Click_me")
         image_b.click_down_over = cb.click_down_over
         image_b.graphic = image
         p.add_child(image_b)
         stats = pane([0,0])
-        stats.width,stats.height = [250,76]
+        stats.width,stats.height = [250,93]
         stats.align = "vert"
         stats.background = False
         stats.border = False
         stats.add_child(cb)
-        stats.add_child(Label(status))
+        sline = status
         if an[n].get("author",""):
-            stats.add_child(Label("by "+an[n]["author"]))
+            sline += "                    "+"by "+an[n]["author"]
+        stats.add_child(Label(sline))
         if an[n].get("version_date",""):
             stats.add_child(Label("ver %s updated on %s"%(an[n]["version"],an[n]["version_date"])))
+        if an[n].get("website",""):
+            url = an[n]["website"]
+            urlb = button(None,url)
+            urlb.textcolor = [0,0,255]
+            import webbrowser
+            setattr(urlb,url,lambda *args: webbrowser.open(url))
+            stats.add_child(urlb)
         p.add_child(stats)
         p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
         cases[status].append(p)
