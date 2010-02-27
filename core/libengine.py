@@ -1661,6 +1661,8 @@ def make_start_script(logo=True):
             if g:
                 d = {}
                 for l in lines:
+                    if not l.strip():
+                        continue
                     l = l.split(" ",1)
                     d[l[0]] = l[1]
                 if d.get("icon",""):
@@ -2044,7 +2046,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             import traceback
             traceback.print_exc()
     if hasattr(assets, "threads"):
-        while [1 for thread in assets.threads if thread.isAlive()]:
+        while [1 for thread in assets.threads if thread and thread.isAlive()]:
             print "waiting"
             pass
 if __name__=="__main__":

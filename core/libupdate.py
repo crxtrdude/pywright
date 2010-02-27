@@ -57,14 +57,6 @@ def get_data_from_folder(folder):
     except:
         pass
     return {"version":0}
-def zipinfo(name):
-    spl = name.rsplit(".zip_",1)
-    if len(spl)<2: return None
-    ver = cver(spl[1])
-    if "/" in spl[0]:
-        spl[0] = spl[0].rsplit("/",1)[1]
-    inf = {"name":spl[0],"ver":ver,"realpath":name,"author":"saluk"}
-    return inf
 
 from gui import *
 
@@ -97,15 +89,16 @@ def names(url):
     try:
         f = urllib2.urlopen("http://pywright.dawnsoft.org/"+url)
     except:
+        print "fail"
         return {}
-    lines = f.read().replace("\r\n","\n").split("\n")
+    lines = eval(f.read())
     f.close()
     files = {}
     for x in lines:
-        if not x.strip(): continue
-        inf = zipinfo(x)
-        if inf and (not files.has_key(inf["name"]) or files[inf["name"]]<inf["ver"]):
-            files[inf["name"]]=inf
+        if x["zipname"] in files:
+            if x["version"]<=files[x["zipname"]]["version"]:
+                continue
+        files[x["zipname"]]=x
     return files
 
 screen = pygame.display.set_mode([400,50])
@@ -137,14 +130,14 @@ def build_list(dir="art/port",url="zip_port_info"):
     for n in sorted(an.keys()):
         if n not in mn:
             status = "NEW"
-        elif an[n]["ver"]>mn[n]["version"]:
+        elif an[n]["version"]>mn[n]["version"]:
             status = "UPDATED"
         else:
             status = "INSTALLED"
         fnd = 1
         cb = checkbox(n)
-        cb.file = an[n]["realpath"]
-        cb.filename = an[n]["name"]
+        cb.file = an[n]["zipfile"]
+        cb.filename = an[n]["zipname"]
         image = pygame.image.load("art/ev/bus.png")
         p = pane([0,0])
         p.width,p.height = [300,80]
@@ -173,6 +166,15 @@ def build_list(dir="art/port",url="zip_port_info"):
     else:
         list.status_box.text = "Download "+dir+"!"
 
+def shortest_pwv_path(zip):
+    pwvpaths = []
+    for path in zip.namelist():
+        if path.endswith("/.pwv") or path==".pwv":
+            pwvpaths.append(path)
+    pwvpaths.sort(key=lambda o: len(o))
+    return pwvpaths[0]
+
+    
 class Engine:
     mode = "port"
     quit_threads = 0
@@ -194,10 +196,11 @@ class Engine:
     def Download_Foreground(self):
         self.Download_X("fg","art/fg","fg.php")
     def Download_Games(self):
-        self.Download_X("games","games","games2.php")
+        self.Download_X("games","games","updates3/games.cgi")
     def Download_Music(self):
         self.Download_X("music","music","music2.php")
     def Update_PyWright(self,thread=True):
+        return None
         def t():
             list.status_box.text="Fetching data from server..."
             self.mode = "engine"
@@ -210,11 +213,11 @@ class Engine:
             online_update = names("updates2.php")
             cb = None
             for n in online_update:
-                print online_update[n]["ver"],ver
-                if online_update[n]["ver"]>ver:
+                print online_update[n]["version"],ver
+                if online_update[n]["version"]>ver:
                     cb = checkbox(n)
                     cb.editbox.col = [255,0,0]
-                    cb.file = online_update[n]["realpath"]
+                    cb.file = online_update[n]["zipfile"]
                     list.add_child(cb)
             if not cb:
                 list.status_box.text="No updates found."
@@ -233,7 +236,8 @@ class Engine:
         else: t()
     def do_downloads(self,checkfolder=True,output=None):
         for x in list.children[2:]:
-            if x.checked:
+            check = x.children[1].children[0]
+            if check.checked:
                 if not hasattr(self,"progress"):
                     self.progress = progress()
                     root.add_child(self.progress)
@@ -241,12 +245,12 @@ class Engine:
                 self.progress.width = 400
                 self.progress.rpos[1] = list.rpos[1]+list.height+20
                 self.progress.progress = 0
-                print self.dl_url+"/"+x.file
-                serv = urllib2.urlopen(self.dl_url+x.file)
+                print self.dl_url+"/"+check.file
+                serv = urllib2.urlopen(self.dl_url+check.file)
                 size = int(serv.info()["Content-Length"])
                 read = 0
                 bytes = 0
-                cli = open(x.filename,"wb")
+                cli = open(check.filename,"wb")
                 s = time.time()
                 bps = 0
                 while not Engine.quit_threads:
@@ -270,36 +274,46 @@ class Engine:
                             if evt.type == pygame.QUIT: raise SystemExit
                 serv.close()
                 cli.close()
-                if os.path.exists(self.path+"/"+x.text):
-                    if not os.path.isdir(self.path+"/"+x.text):
-                        os.remove(self.path+"/"+x.text)
+                if os.path.exists(self.path+"/"+check.text):
+                    if not os.path.isdir(self.path+"/"+check.text):
+                        os.remove(self.path+"/"+check.text)
                     else:
-                        removeall(self.path+"/"+x.text)
-                if not os.path.exists(self.path+"/"+x.text):
-                    os.mkdir(self.path+"/"+x.text)
+                        removeall(self.path+"/"+check.text)
+                if not os.path.exists(self.path+"/"+check.text):
+                    os.mkdir(self.path+"/"+check.text)
                 try:
-                    z = ZipFile(x.filename,"r")
+                    z = ZipFile(check.filename,"r")
                 except:
                     print "File corrupt"
                     return
+                #Extract to a folder named after zip? or just extract to games...
+                pwv = shortest_pwv_path(z)
+                if pwv == ".pwv":
+                    game_root = self.path+"/"+check.text+"/"
+                    block = None
+                else:
+                    game_root = self.path+"/"
+                    block = pwv.split("/",1)[0]
                 for name in z.namelist():
                     txt = z.read(name)
+                    if block:
+                        if not name.startswith(block):
+                            continue
                     if "/" in name:
                         try:
-                            os.makedirs(self.path+"/"+x.text+"/"+name.rsplit("/",1)[0])
+                            os.makedirs(game_root+name.rsplit("/",1)[0])
                         except:
                             pass
                     if not name.endswith("/"):
-                        f = open(self.path+"/"+x.text+"/"+name,"wb")
+                        f = open(game_root+name,"wb")
                         f.write(txt)
                         f.close()
                 z.close()
-                os.remove(x.filename)
+                os.remove(check.filename)
                 root.children.remove(self.progress)
-                list.children.remove(x)
-                if len(list.children)<=2:
-                    list.status_box.text = "No more new downloads."
                 del self.progress
+                if self.mode == "games":
+                    self.Download_Games()
     def download(self):
         t = threading.Thread(target=self.do_downloads)
         t.start()
