@@ -148,7 +148,8 @@ def build_list(dir="art/port",url="zip_port_info"):
         else:
             status = "INSTALLED"
         fnd = 1
-        cb = checkbox(n)
+        cb = checkbox(an[n]["title"])
+        cb.name = n
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
         image = load_image(an[n]["iconurl"])
@@ -166,8 +167,10 @@ def build_list(dir="art/port",url="zip_port_info"):
         stats.border = False
         stats.add_child(cb)
         stats.add_child(Label(status))
-        stats.add_child(Label("by "+an[n]["author"]))
-        stats.add_child(Label("date: 2/12/2010"))
+        if an[n].get("author",""):
+            stats.add_child(Label("by "+an[n]["author"]))
+        if an[n].get("version_date",""):
+            stats.add_child(Label("ver %s updated on %s"%(an[n]["version"],an[n]["version_date"])))
         p.add_child(stats)
         p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
         cases[status].append(p)
@@ -177,7 +180,7 @@ def build_list(dir="art/port",url="zip_port_info"):
     if not fnd:
         list.status_box.text  = "No "+dir+" are available to download"
     else:
-        list.status_box.text = "Download "+dir+"!"
+        list.status_box.text = "Download "+dir+"! Click check boxes to select."
 
 def shortest_pwv_path(zip):
     pwvpaths = []
@@ -286,13 +289,8 @@ class Engine:
                             if evt.type == pygame.QUIT: raise SystemExit
                 serv.close()
                 cli.close()
-                if os.path.exists(self.path+"/"+check.text):
-                    if not os.path.isdir(self.path+"/"+check.text):
-                        os.remove(self.path+"/"+check.text)
-                    else:
-                        removeall(self.path+"/"+check.text)
-                if not os.path.exists(self.path+"/"+check.text):
-                    os.mkdir(self.path+"/"+check.text)
+                #~ if not os.path.exists(self.path+"/"+check.name):
+                    #~ os.mkdir(self.path+"/"+check.name)
                 try:
                     z = ZipFile(check.filename,"r")
                 except:
@@ -301,7 +299,7 @@ class Engine:
                 #Extract to a folder named after zip? or just extract to games...
                 pwv = shortest_pwv_path(z)
                 if pwv == ".pwv":
-                    game_root = self.path+"/"+check.text+"/"
+                    game_root = self.path+"/"+check.name+"/"
                     block = None
                 else:
                     game_root = self.path+"/"
