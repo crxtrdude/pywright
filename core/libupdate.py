@@ -112,6 +112,7 @@ screen = pygame.display.set_mode([400,50])
 root = widget()
 root.width,root.height = [640,480]
 
+Label = label
 label = editbox(None,"Select Art Type to Download:")
 label.draw_back=False
 root.add_child(label)
@@ -146,21 +147,21 @@ def build_list(dir="art/port",url="zip_port_info"):
         cb.filename = an[n]["name"]
         image = pygame.image.load("art/ev/bus.png")
         p = pane([0,0])
-        p.width,p.height = [300,76]
+        p.width,p.height = [300,80]
         p.align = "horiz"
         image_b = button(None,"Click_me")
         image_b.click_down_over = cb.click_down_over
         image_b.graphic = image
         p.add_child(image_b)
-        stats = scrollpane([0,0])
-        stats.width,stats.height = [250,70]
+        stats = pane([0,0])
+        stats.width,stats.height = [250,76]
         stats.align = "vert"
         stats.background = False
         stats.border = False
         stats.add_child(cb)
-        stats.add_child(editbox(None,status))
-        stats.add_child(editbox(None,"by "+an[n]["author"]))
-        stats.add_child(editbox(None,"date: 2/12/2010"))
+        stats.add_child(Label(status))
+        stats.add_child(Label("by "+an[n]["author"]))
+        stats.add_child(Label("date: 2/12/2010"))
         p.add_child(stats)
         p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
         cases[status].append(p)
