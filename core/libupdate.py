@@ -99,9 +99,10 @@ def load_image(path):
     return iconcache[path]
         
 def names(url):
-    try:
+    print "accessing","http://pywright.dawnsoft.org/"+url
+    if 1:#try:
         f = urllib2.urlopen("http://pywright.dawnsoft.org/"+url)
-    except:
+    else:#except:
         print "fail"
         return {}
     lines = eval(f.read())
@@ -148,18 +149,22 @@ def build_list(dir="art/port",url="zip_port_info"):
         else:
             status = "INSTALLED"
         fnd = 1
-        cb = checkbox(an[n]["title"])
+        cb = checkbox(an[n].get("title",an[n]["zipname"]))
         cb.name = n
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
-        image = load_image(an[n]["iconurl"])
+        try:
+            image = load_image(an[n]["iconurl"])
+        except:
+            image = None
         p = pane([0,0])
         p.width,p.height = [300,95]
         p.align = "horiz"
-        image_b = button(None,"Click_me")
-        image_b.click_down_over = cb.click_down_over
-        image_b.graphic = image
-        p.add_child(image_b)
+        if image:
+            image_b = button(None,"Click_me")
+            image_b.click_down_over = cb.click_down_over
+            image_b.graphic = image
+            p.add_child(image_b)
         stats = pane([0,0])
         stats.width,stats.height = [250,93]
         stats.align = "vert"
@@ -219,9 +224,9 @@ class Engine:
     def Download_Foreground(self):
         self.Download_X("fg","art/fg","fg.php")
     def Download_Games(self):
-        self.Download_X("games","games","updates3/games.cgi")
+        self.Download_X("games","games","updates3/games.cgi?content_type=games")
     def Download_Music(self):
-        self.Download_X("music","music","music2.php")
+        self.Download_X("music","music","updates3/games.cgi?content_type=music")
     def Update_PyWright(self,thread=True):
         return None
         def t():
