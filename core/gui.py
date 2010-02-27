@@ -416,6 +416,7 @@ class pane(widget):
     bgcolor = [255,255,255]
     bordercolor = [200,200,200]
     border = True
+    background = True
     def __init__(self,*args,**kwargs):
         super(pane,self).__init__(*args,**kwargs)
         self.in_height = 0
@@ -424,7 +425,11 @@ class pane(widget):
         if not hasattr(self,"offset"):
             self.offset = [0,0]
         surf = pygame.Surface([self.width,self.height])
-        surf.fill(self.bgcolor)
+        if self.background:
+            surf.fill(self.bgcolor)
+        else:
+            surf = surf.convert_alpha()
+            surf.fill([0,0,0,0])
         x = self.offset[0]
         yoff = self.offset[1]
         y = yoff

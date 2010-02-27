@@ -55,7 +55,7 @@ def get_data_from_folder(folder):
             f.close()
             return get_data_from_pwv(txt)
     except:
-        raise
+        pass
     return {"version":0}
 def zipinfo(name):
     spl = name.rsplit(".zip_",1)
@@ -63,7 +63,7 @@ def zipinfo(name):
     ver = cver(spl[1])
     if "/" in spl[0]:
         spl[0] = spl[0].rsplit("/",1)[1]
-    inf = {"name":spl[0],"ver":ver,"realpath":name}
+    inf = {"name":spl[0],"ver":ver,"realpath":name,"author":"saluk"}
     return inf
 
 from gui import *
@@ -132,18 +132,45 @@ def build_list(dir="art/port",url="zip_port_info"):
     mn = mynames(dir)
     list.status_box.text="Fetching data from server..."
     an = names(url)
+    cases = {"NEW":[],"UPDATED":[],"INSTALLED":[]}
     for n in sorted(an.keys()):
-        if n not in mn or an[n]["ver"]>mn[n]["version"]:
-            fnd = 1
-            cb = checkbox(n)
-            cb.file = an[n]["realpath"]
-            cb.filename = an[n]["name"]
-            list.add_child(cb)
-            if n in mn: cb.editbox.col = [255,0,0]
+        if n not in mn:
+            status = "NEW"
+        elif an[n]["ver"]>mn[n]["version"]:
+            status = "UPDATED"
+        else:
+            status = "INSTALLED"
+        fnd = 1
+        cb = checkbox(n)
+        cb.file = an[n]["realpath"]
+        cb.filename = an[n]["name"]
+        image = pygame.image.load("art/ev/bus.png")
+        p = pane([0,0])
+        p.width,p.height = [300,76]
+        p.align = "horiz"
+        image_b = button(None,"Click_me")
+        image_b.click_down_over = cb.click_down_over
+        image_b.graphic = image
+        p.add_child(image_b)
+        stats = scrollpane([0,0])
+        stats.width,stats.height = [250,70]
+        stats.align = "vert"
+        stats.background = False
+        stats.border = False
+        stats.add_child(cb)
+        stats.add_child(editbox(None,status))
+        stats.add_child(editbox(None,"by "+an[n]["author"]))
+        stats.add_child(editbox(None,"date: 2/12/2010"))
+        p.add_child(stats)
+        p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
+        cases[status].append(p)
+    for s in ["NEW","UPDATED","INSTALLED"]:
+        for n in cases[s]:
+            list.add_child(n)
     if not fnd:
-        list.status_box.text  = "No new "+dir+" are available to download"
+        list.status_box.text  = "No "+dir+" are available to download"
     else:
-        list.status_box.text = "Download "+dir+". Updated or new."
+        list.status_box.text = "Download "+dir+"!"
 
 class Engine:
     mode = "port"
