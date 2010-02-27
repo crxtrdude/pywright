@@ -1529,11 +1529,14 @@ class textbox(gui.widget):
                     pass
         text = "{".join(nt)
         lines = text.split("\n")
+        wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
+        if len(lines)>1:
+            wrap = False
         pages = []
         page = []
         while lines:
             line = lines.pop(0)
-            if vtrue(assets.variables.get("_textbox_wrap","true")):
+            if wrap:
                 left,right = font.split_line(line,254)
             else:
                 left,right = line,""

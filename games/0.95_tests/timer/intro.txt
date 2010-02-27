@@ -27,4 +27,5 @@ label none
 goto x
 
 label end
-"end of file"
+"so{n}tha'ts how timers work yada                            blah blah blah {n}..."
+"this is the end of the file, that means that the first timer ran out and jumped here"
