@@ -13,11 +13,10 @@ PyWright Version 0.95
             * author - the name of the game creator. Displayed next to 
                     title on the game list.
             * title - the game name, displayed on the game list
-            * icon - part from game/art to an image to use as the icon. The game
-                    folder itself must contain the icon, and the path must be correct
-                    (i.e., if icon equals "general/icon.png" there should be a
+            * icon - path to an image to use as the game's icon, relative to the root
+                    of the game folder; include file extension
+                    (i.e., if icon equals "art/general/icon.png" there should be a
                     "games/my_game/art/general/icon.png" present)
-                    The extension must be included.
     - ALL code that can jump to another label can be provided with a fail= argument to
             control where it will go if it can't find the label it is looking for. To be more specific,
             while reading through the code sequentially, if it sees a label with the name that
