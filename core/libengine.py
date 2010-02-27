@@ -861,7 +861,6 @@ class Script(gui.widget):
         for a in args:
             if a.startswith("label="):
                 label = a.split("=",1)[1]
-        print "run script",scriptname,"with label",label
         if "noclear" not in args:
             for o in self.obs:
                 o.kill = 1
@@ -873,7 +872,6 @@ class Script(gui.widget):
         if "stack" in args:
             assets.addscene(name+".script")
         else:
-            print "reinitialize scene"
             p = self.parent
             self.init(name)
             self.parent = p
