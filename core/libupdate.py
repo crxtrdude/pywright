@@ -85,6 +85,19 @@ def mynames(dir="art/port"):
     for file in [x for x in os.listdir(dir) if x != ".svn"]:
         files[file] = get_data_from_folder(dir+"/"+file)
     return files
+
+import cStringIO
+iconcache = {}
+def load_image(path):
+    if path not in iconcache:
+        f = urllib2.urlopen("http://pywright.dawnsoft.org/"+path)
+        txt = f.read()
+        f.close()
+        f = cStringIO.StringIO(txt)
+        icon = pygame.image.load(f,path)
+        iconcache[path] = icon
+    return iconcache[path]
+        
 def names(url):
     try:
         f = urllib2.urlopen("http://pywright.dawnsoft.org/"+url)
@@ -138,7 +151,7 @@ def build_list(dir="art/port",url="zip_port_info"):
         cb = checkbox(n)
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
-        image = pygame.image.load("art/ev/bus.png")
+        image = load_image(an[n]["iconurl"])
         p = pane([0,0])
         p.width,p.height = [300,80]
         p.align = "horiz"
@@ -174,7 +187,6 @@ def shortest_pwv_path(zip):
     pwvpaths.sort(key=lambda o: len(o))
     return pwvpaths[0]
 
-    
 class Engine:
     mode = "port"
     quit_threads = 0
