@@ -333,6 +333,8 @@ class Engine:
     def update(self):
         t = threading.Thread(target=self.do_update)
         t.start()
+    def End_updater(self,*args):
+        self.running = False
     def do_update(self,output=False):
         for x in list.children[2:]:
             if x.checked:
@@ -397,9 +399,13 @@ class Engine:
 def run():
     screen = pygame.display.set_mode([400,480])
     e = Engine()
+    e.running = True
     start = button(e,"download")
     start.rpos[1] = list.rpos[1]+list.height
+    end = button(e,"End updater")
+    end.rpos[1] = start.rpos[1]+30
     root.add_child(start)
+    root.add_child(end)
     root.start_index = root.children.index(start)
 
     char_b = button(e,"Download Characters")
@@ -450,8 +456,7 @@ def run():
     root.add_child(pwup_b)
 
     clock = pygame.time.Clock()
-    running = True  
-    while running:
+    while e.running:
         mp = pygame.mouse.get_pos()
         clock.tick(60)
         screen.fill([225,225,225])
@@ -461,6 +466,6 @@ def run():
         quit = root.handle_events(pygame.event.get())
         if quit:
             Engine.quit_threads = True
-            running = False
+            e.running = False
 if __name__=="__main__":
     run()
