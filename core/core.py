@@ -3270,6 +3270,21 @@ class delay(sprite):
         self.ticks-=1
         return True
         
+class timer(sprite):
+    def __init__(self,ticks=1,run=None):
+        sprite.__init__(self)
+        self.ticks = abs(ticks)
+        self.pri = 0
+        self.run = run
+        self.script = assets.cur_script
+    def update(self):
+        if self.ticks<=0:
+            self.kill = 1
+            if self.run:
+                ns = self.script.execute_macro(self.run)
+        self.ticks-=1
+        assets.variables["_timer_value_"+self.run] = str(self.ticks)
+        
 class effect(object):
     def __init__(self):
         self.z = zlayers.index(self.__class__.__name__)

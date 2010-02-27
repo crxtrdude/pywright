@@ -801,6 +801,8 @@ class Script(gui.widget):
         do = delay(ticks)
         do.pri=pri
         self.obs.append(do)
+    def _timer(self,command,ticks,run):
+        self.obs.append(timer(int(ticks),run))
     @category("control")
     def _waitenter(self,command):
         self.buildmode = False

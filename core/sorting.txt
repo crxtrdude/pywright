@@ -17,7 +17,7 @@
 [pri]
 -10000	error_msg
 -1000	waitenter scroll rotateanim fadeanim guiBack guiScroll saved
-0	fg evidence_menu movie sprite fadesprite
+0	fg evidence_menu movie sprite fadesprite timer
 20	portrait
 25	case_menu
 30	textbox guiWait

@@ -89,3 +89,6 @@ def save(ob):
     elif isinstance(ob,delay):
         cp(["ticks"],ob,oprops)
         return ["delay",[],oprops]
+    elif isinstance(ob,timer):
+        cp(["ticks","run"],ob,oprops)
+        return ["timer",[],oprops]

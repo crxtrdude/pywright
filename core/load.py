@@ -99,7 +99,9 @@ def load(script,olist):
         o = waitenter()
     if cls == "delay":
         o = delay()
-        
+    if cls == "timer":
+        o = timer()
+        o.script = script
     for p in props:
         setattr(o,p,props[p])
     o.cur_script = script

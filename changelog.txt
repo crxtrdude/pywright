@@ -60,6 +60,10 @@ PyWright Version 0.95
             variable name. If $index were equal to 0, this would be like "getvar x rectangle_0.x",
             and whatever was stored in the rectangle_0.x variable would be copied into the "x"
             variable.
+    - added a timer. Can run multiple timers at once, and the value of each timer is saved
+            to an individual variable. Will run a macro when the timer runs to zero.
+            timer [ticks] [macroname]
+            The value can be accessed from $_timer_value_[macroname]
     - reworked saving system. Very careful about what can be saved and what cannot.
         Logic behind it is still to record the state of every object currently in memory to
         a file, and then recreate it when loading, but method is different. 
@@ -69,6 +73,8 @@ PyWright Version 0.95
             - position of text - when saved in the middle of a textbox printing out,
                     loading that game will make the textbox start printing out from
                     the begining again. This can make perceive saves imperfect.
+            - many macros running at once, and many timers running at once can be
+                    saved but the behavior of loading may not be accurate
         * Be aware of these limitations, you can control when it is allowed to save the game or
         not by setting the _allow_saveload variable on or off. It might be a good idea to turn
         it off before starting a movie for instance.
