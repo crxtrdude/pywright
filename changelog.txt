@@ -48,6 +48,9 @@ PyWright Version 0.95
                 gui Button [label] x=[x] y=[y] graphic=[path/to/image]
             Path to image is the path starting after the art folder, such as "fg/my_button"
             or "general/somebutton"
+    - made "script" command a bit more flexible. Can pass a label= argument to jump
+            to a label after loading the file. If [name].script.txt is not found, will look for
+            [name].txt. Also, the script command can be called safely from a running macro.
     - copy the value of a variable into another. Allows using code to generate a variable name
             to access. Allows processing lists of items, or selecting variables for some reason or
             other. More complicated than other methods, but more flexible as well.

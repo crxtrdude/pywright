@@ -281,7 +281,7 @@ class Script(gui.widget):
         self.held = []
         #~ if vtrue(assets.variables.get("_preload","on")):
             #~ self.preload()
-        
+        return True
     def preload(self):
         old = self.obs[:]
         self.obs = []
@@ -453,6 +453,7 @@ class Script(gui.widget):
         nscript.macros = self.macros
         assets.stack.append(nscript)
         self.buildmode = False
+        nscript.parent = self
         return nscript
     def next_statement(self):
         if not assets.variables.get("_statements",[]):
@@ -856,13 +857,32 @@ class Script(gui.widget):
         self.obs.append(case_menu(assets.game,**kwargs))
     @category("control")
     def _script(self,command,scriptname,*args):
+        label = None
+        for a in args:
+            if a.startswith("label="):
+                label = a.split("=",1)[1]
+        print "run script",scriptname,"with label",label
         if "noclear" not in args:
             for o in self.obs:
                 o.kill = 1
+        name = scriptname+".script"
+        try:
+            assets.open_script(name,False,".txt")
+        except file_error:
+            name = scriptname
         if "stack" in args:
-            assets.addscene(scriptname+".script")
+            assets.addscene(name+".script")
         else:
-            self.init(scriptname+".script")
+            print "reinitialize scene"
+            p = self.parent
+            self.init(name)
+            self.parent = p
+        while assets.cur_script.parent:
+            parent = assets.cur_script.parent
+            assets.cur_script.parent = parent.parent
+            assets.stack.remove(parent)
+        if label:
+            self.goto_result(label,backup=None)
     @category("control")
     def _top(self,command):
         self.si = 0
