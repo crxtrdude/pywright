@@ -2,7 +2,7 @@
 
 macro timeup
 clear
-"Time is up!"
+"Time is up!{n}.{n}.{n}stuff"
 script intro label=end
 endmacro
 

@@ -1650,12 +1650,10 @@ class textbox(gui.widget):
     def forward(self,sound=True):
         assets.cur_script.tboff()
         lines = self.text.split("\n")
-        if len(lines)<=4: 
-            self._text = ""
-        else:
-            lines = lines[4:]
-            self._text = "\n".join(lines)
+        lines = lines[4:]
+        self._text = "\n".join(lines)
         self.written = ""
+        self.wlen = 0
         self.next = self.num_lines
         self.img = self.base.copy()
         if not self.text.strip():
