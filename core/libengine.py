@@ -1664,11 +1664,7 @@ def make_start_script(logo=True):
                     l = l.split(" ",1)
                     d[l[0]] = l[1]
                 if d.get("icon",""):
-                    og = assets.game
-                    assets.game = "games/"+f
-                    s = sprite().load(d["icon"])
-                    assets.game = og
-                    graphic = s.base[0]
+                    graphic = pygame.image.load("games/"+f+"/art/"+d["icon"])
                 else:
                     graphic = pygame.Surface([1,1])
                 txt = item.font.render(d.get("title",f)+" by "+d["author"],1,[0,0,0])
