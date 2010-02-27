@@ -1769,12 +1769,12 @@ def run(checkupdate=True):
     newengine = None
     if checkupdate:
         import libupdate
-        e = libupdate.Engine()
+        eng = libupdate.Engine()
         libupdate.screen.blit(arial14.render("Checking for Updates...",1,[255,255,255]),[0,0])
         pygame.display.flip()
         libupdate.root.start_index = 0
         try:
-            assets.threads = [e.Update_PyWright(thread=True)]
+            assets.threads = [eng.Update_PyWright(thread=True)]
             pygame.event.clear()
             pygame.event.pump()
             while libupdate.list.status_box.text=="Fetching data from server...":
@@ -1796,7 +1796,7 @@ def run(checkupdate=True):
                     libupdate.Engine.quit_threads = 0
                     libupdate.screen.blit(arial14.render("Doing update to "+c.text,1,[255,255,255]),[0,20])
                     pygame.display.flip()
-                    e.do_update(output=True)
+                    eng.do_update(output=True)
                     goodkeys = "copy_reg,sre_compile,locale,_sre,__main__,site,__builtin__,\
 operator,encodings,os.path,encodings.encodings,encodings.cp437,errno,\
 encodings.codecs,sre_constants,re,ntpath,UserDict,nt,stat,zipimport,warnings,\
