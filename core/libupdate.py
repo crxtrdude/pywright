@@ -34,15 +34,29 @@ import md5
 def cver(verstr):
     """Converts a version string into a number"""
     if verstr.startswith("b"):
-        return int(verstr[1:])-1000
-    return int(verstr)
-def getver(folder):
+        return float(verstr[1:])-100000
+    return float(verstr)
+def get_data_from_pwv(txt):
+    d = {}
+    if txt[0]=="b" or txt[0].isdigit() and "\n" not in txt:
+        d["version"] = cver(txt.strip())
+        return d
+    for line in txt.split("\n"):
+        key,val = line.strip().split(" ",1)
+        if key == "version":
+            val = cver(val)
+        d[key] = val
+    return d
+def get_data_from_folder(folder):
     try:
         if ".pwv" in os.listdir(folder):
-            return cver(open(folder+"/.pwv").read())
+            f = open(folder+"/.pwv")
+            txt = f.read()
+            f.close()
+            return get_data_from_pwv(txt)
     except:
-        pass
-    return 0
+        raise
+    return {"version":0}
 def zipinfo(name):
     spl = name.rsplit(".zip_",1)
     if len(spl)<2: return None
@@ -77,7 +91,7 @@ for required_path in ["art/3d","art/bg","art/ev","art/fg","art/general","art/por
 def mynames(dir="art/port"):
     files = {}
     for file in [x for x in os.listdir(dir) if x != ".svn"]:
-        files[file] = getver(dir+"/"+file)
+        files[file] = get_data_from_folder(dir+"/"+file)
     return files
 def names(url):
     try:
@@ -119,7 +133,7 @@ def build_list(dir="art/port",url="zip_port_info"):
     list.status_box.text="Fetching data from server..."
     an = names(url)
     for n in sorted(an.keys()):
-        if n not in mn or an[n]["ver"]>mn[n]:
+        if n not in mn or an[n]["ver"]>mn[n]["version"]:
             fnd = 1
             cb = checkbox(n)
             cb.file = an[n]["realpath"]
@@ -155,23 +169,6 @@ class Engine:
         self.Download_X("games","games","games2.php")
     def Download_Music(self):
         self.Download_X("music","music","music2.php")
-    def Upload_My_Games(self):
-        list.status_box.text="Fetching data from server..."
-        def t():
-            self.mode = "send"
-            list.children  = [list.status_box,list.scbar]
-            online_games = names("games.php")
-            for n in os.listdir("games"):
-                if n==".svn": continue
-                cb = checkbox(n)
-                if n not in online_games.keys() or online_games[n]["ver"]<getver("games/"+n):
-                    cb.editbox.col = [255,0,0]
-                list.add_child(cb)
-            rpos = root.children[root.start_index].rpos
-            root.children[root.start_index] = button(self,"upload")
-            root.children[root.start_index].rpos = rpos
-            list.status_box.text="Which game to upload: Red games have been changed by you."
-        threading.Thread(target=t).start()
     def Update_PyWright(self,thread=True):
         def t():
             list.status_box.text="Fetching data from server..."
@@ -179,10 +176,13 @@ class Engine:
             list.children  = [list.status_box,list.scbar]
             self.path = "."
             self.url = "updates2.php"
-            ver = getver(".")
+            data = get_data_from_folder(".")
+            print data
+            ver = data["version"]
             online_update = names("updates2.php")
             cb = None
             for n in online_update:
+                print online_update[n]["ver"],ver
                 if online_update[n]["ver"]>ver:
                     cb = checkbox(n)
                     cb.editbox.col = [255,0,0]
@@ -281,58 +281,6 @@ class Engine:
     def update(self):
         t = threading.Thread(target=self.do_update)
         t.start()
-    def do_uploads(self):
-        for x in list.children[2:]:
-            if x.checked:
-                if not hasattr(self,"progress"):
-                    self.progress = progress()
-                    root.add_child(self.progress)
-                self.progress.height = 20
-                self.progress.width = 400
-                self.progress.rpos[1] = list.rpos[1]+list.height+20
-                self.progress.progress = 0
-                self.progress.text = "Upload commencing, may take some time"
-                z = ZipFile(x.text+".zip","w")
-                for folder,folders,files in os.walk("games/"+x.text):
-                    if ".svn" in folder: continue
-                    for file in files:
-                        if file in ["save","last"]: continue
-                        file = (folder+"/"+file).replace("\\","/")
-                        z.write(file,file.replace("games/"+x.text,""))
-                z.close()
-                
-                
-                data = {}
-                data["id"]=x.text+".zip,"+str(dates_content("games/"+x.text))
-                data["file"] = open(x.text+".zip","rb").read()
-                os.remove(x.text+".zip")
-                
-                import httplib
-                conn = httplib.HTTPConnection("pywright.dawnsoft.org")
-                conn.connect()
-                conn.putrequest("POST","/up.php")
-                data = urllib.urlencode(data)
-                size = len(data)
-                print size
-                conn.putheader("Content-Length",str(size))
-                conn.putheader("Content-Type","application/x-www-form-urlencoded")
-                conn.endheaders()
-                print "sending the data"
-                while data:
-                    s = data[:2024]
-                    data = data[2024:]
-                    conn.send(s)
-                    self.progress.progress = (size-len(data))/float(size)
-                    if Engine.quit_threads: return
-                conn.send("\r\n\r\n")
-                resp = conn.getresponse()
-                print resp.read()
-                conn.close()
-
-                root.children.remove(self.progress)
-                x.editbox.col = [0,0,0]
-                x.checked = False
-                del self.progress
     def do_update(self,output=False):
         for x in list.children[2:]:
             if x.checked:
