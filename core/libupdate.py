@@ -171,7 +171,7 @@ def build_list(dir="art/port",url="zip_port_info"):
         stats.background = False
         stats.border = False
         stats.add_child(cb)
-        sline = status
+        sline = status 
         if an[n].get("author",""):
             sline += "                    "+"by "+an[n]["author"]
         stats.add_child(Label(sline))
