@@ -1,4 +1,4 @@
-version 0
+version 2
 version_date 2/13/2010
 author saluk
 website http://pywright.dawnsoft.org/
