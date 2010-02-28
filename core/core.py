@@ -111,6 +111,7 @@ class meta:
         self.blipsound = None
         self.frameoffset = {}
         self.delays = {}
+        self.speed = 6
     def load_from(self,f):
         lines = f.read().replace("\r\n","\n").split("\n")
         setlength = False
@@ -141,6 +142,8 @@ class meta:
             if l.startswith("framedelay "):
                 frame,delay = l.split(" ")[1:]
                 self.delays[int(frame)] = int(delay)
+            if l.startswith("globaldelay "):
+                self.speed = float(l.split(" ",1)[1])
         f.close()
         if not setlength:
             if self.vertical==1:
@@ -960,6 +963,7 @@ class sprite(gui.button):
         self.offsety = m.offsety
         self.blipsound = m.blipsound
         self.delays = m.delays
+        self.spd = m.speed
     def load(self,name,key=[255,0,255]):
         self.key = key
         if type(name)==type(""):
@@ -1050,10 +1054,10 @@ class sprite(gui.button):
     def update(self):
         if self.next>0:
             self.next-=1
-        if self.next==0:
+        if self.next<=0:
             if self.sounds.get(self.x,None):
                 assets.play_sound(self.sounds[self.x])
-            self.next = self.delays.get(self.x,self.spd)
+            self.next += self.delays.get(self.x,self.spd)
             self.x += 1
             if self.x>=len(self.base):
                 if self.loops and (not self.loopmode or self.loopmode=="loop"):
