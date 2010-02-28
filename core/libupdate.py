@@ -161,8 +161,11 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
             url = an[n]["website"]
             urlb = button(None,url)
             urlb.textcolor = [0,0,255]
-            import webbrowser
-            setattr(urlb,url,lambda *args: webbrowser.open(url))
+            try:
+                import webbrowser
+                setattr(urlb,url,lambda *args: webbrowser.open(url))
+            except ImportError:
+                pass
             stats.add_child(urlb)
         p.add_child(stats)
         p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
