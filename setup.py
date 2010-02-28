@@ -213,6 +213,10 @@ if cmd in ('py2exe','cx_freeze','script', 'py2app'):
         if not os.path.isdir(fname):
             print "copy",fname,dname
             shutil.copy(fname,dname)
+if cmd == "py2exe":
+    os.mkdir("library")
+    for fname in os.listdir("extradlls"):
+        shutil.copy("extradlls/"+fname,"library/"+fname)
 if cmd=="py2exe":
     files = []
     dirs = []
