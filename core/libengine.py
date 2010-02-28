@@ -1770,7 +1770,7 @@ def draw_screen():
 assets.make_screen = make_screen
 assets.draw_screen = draw_screen
 
-def run(checkupdate=True):
+def run(checkupdate=False):
     import sys,os
     
 
@@ -1799,7 +1799,8 @@ def run(checkupdate=True):
             else:
                 libupdate.screen.blit(arial14.render("Finished checking for updates",1,[255,255,255]),[0,0])
             pygame.display.flip()
-            for c in libupdate.list.children:
+            for pane in libupdate.list.children[2:]:
+                c = pane.children[1].children[0]
                 if isinstance(c,gui.checkbox):
                     c.checked = True
                     libupdate.Engine.quit_threads = 0
