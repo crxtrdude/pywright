@@ -885,6 +885,15 @@ class Script(gui.widget):
     @category("control")
     def _top(self,command):
         self.si = 0
+    def _globaldelay(self,command,spd,*args):
+        name = None
+        for a in args:
+            if a.startswith("name="):
+                name = a.split("=",1)[1]
+        for o in self.world.all:
+            if hasattr(o,"spd"):
+                if not name or getattr(o,"id_name",None)==name:
+                    o.spd = float(spd)
     @category("graphics")
     def _obj(self,command,*args):
         func = {"bg":bg,"fg":fg,"ev":evidence,"obj":graphic}[command]

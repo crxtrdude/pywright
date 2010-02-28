@@ -6,6 +6,20 @@ PyWright Version 0.95
         if {n} is not in the text, will wrap if _textbox_wrap is true, which is default
     - textblocks can be colored with "color=" and then either 3 digit RGB, or 
         6 digit hexidecimal RRGGBB, color string
+    - animated gifs have never worked well in the past, and will not work on the mac
+        version of pywright. Recommend to convert all gif images and animations to
+        .png. Converter available http://pywright.dawnsoft.org/gif2strip/index.cgi
+    - animation speed of objects is now controllable
+        2 ways:
+            * In the .txt file along with your animation (something.png which may have something.txt)
+                add a command "globaldelay x", where x is the amount of frames to pause between
+                frame changes.
+            * with the command "globaldelay x name=y" where x is the amount of frames to pause
+                between frame changes, and y should be the name of an existing object. Without
+                name it will change everything!
+            The delay amount can be a decimal number, like 4.5
+            The delay will not affect animations which already use "framedelay" in their .txt file
+                to set individual delays for specific frames
     - add ability to supply information with a game, such as author or icon
          0.95 game has an icon, the format of display and metadata
          supported is subject to change. All metadata is stored in the 
