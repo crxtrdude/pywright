@@ -299,7 +299,7 @@ class Engine:
         #Extract folder from zip to todir
         elif filename+"/" in z.namelist():
             root = todir+"/"
-            block = root
+            block = filename+"/"
         #Create folder from filename, extract contents of zip to there
         else:
             root = todir+"/"+filename+"/"
