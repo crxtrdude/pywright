@@ -14,6 +14,7 @@ from core import *
 import gui
 import save
 import load
+from pwvlib import *
 
 
 def pauseandquit():
@@ -1671,30 +1672,21 @@ def make_start_script(logo=True):
     for f in os.listdir("games"):
         if f in [".svn"]: continue
         item = gui.button(make_start_script,f)
-        if os.path.exists("games/"+f+"/.pwv"):
-            t = open("games/"+f+"/.pwv").read()
-            lines = t.replace("\r\n","\n").replace("\r","\n").split("\n")
-            g = 1
-            if len(lines)==1:
-                if " " not in lines[0].strip():
-                    g = 0
-            if g:
-                d = {}
-                for l in lines:
-                    if not l.strip():
-                        continue
-                    l = l.split(" ",1)
-                    d[l[0]] = l[1]
-                if d.get("icon",""):
-                    graphic = pygame.image.load("games/"+f+"/"+d["icon"])
-                else:
-                    graphic = pygame.Surface([1,1])
-                txt = item.font.render(d.get("title",f)+" by "+d["author"],1,[0,0,0])
-                image = pygame.Surface([max(graphic.get_width(),txt.get_width()),graphic.get_height()+txt.get_height()])
-                image.fill([200,200,255])
-                image.blit(graphic,[0,0])
-                image.blit(txt,[0,graphic.get_height()])
-                item.graphic = image
+        d = get_data_from_folder("games/"+f)
+        print d
+        if d.get("icon",""):
+            graphic = pygame.image.load("games/"+f+"/"+d["icon"])
+        else:
+            graphic = pygame.Surface([1,1])
+        title = d.get("title",f)
+        if d.get("author",""):
+            title += " by "+d["author"]
+        txt = item.font.render(title,1,[0,0,0])
+        image = pygame.Surface([max(graphic.get_width(),txt.get_width()),graphic.get_height()+txt.get_height()])
+        image.fill([200,200,255])
+        image.blit(graphic,[0,0])
+        image.blit(txt,[0,graphic.get_height()])
+        item.graphic = image
         list.add_child(item)
         def _play_game(func=f):
             #~ item.rpos = [0,other_screen(0)]

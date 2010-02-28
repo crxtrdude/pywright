@@ -5,6 +5,7 @@ import zlib
 from core import pygame
 import threading,time,urllib,urllib2
 from zipfile import ZipFile,ZIP_DEFLATED
+from pwvlib import *
 
 ERROR_STR= """Error removing %(path)s, %(error)s """
 
@@ -30,33 +31,6 @@ def removeall(path):
             rmgeneric(fullpath, f)
 
 import md5
-
-def cver(verstr):
-    """Converts a version string into a number"""
-    if verstr.startswith("b"):
-        return float(verstr[1:])-100000
-    return float(verstr)
-def get_data_from_pwv(txt):
-    d = {}
-    if txt[0]=="b" or txt[0].isdigit() and "\n" not in txt:
-        d["version"] = cver(txt.strip())
-        return d
-    for line in txt.split("\n"):
-        key,val = line.strip().split(" ",1)
-        if key == "version":
-            val = cver(val)
-        d[key] = val
-    return d
-def get_data_from_folder(folder):
-    try:
-        if ".pwv" in os.listdir(folder):
-            f = open(folder+"/.pwv")
-            txt = f.read()
-            f.close()
-            return get_data_from_pwv(txt)
-    except:
-        pass
-    return {"version":0}
 
 from gui import *
 
@@ -195,14 +169,6 @@ def build_list(dir="art/port",url="zip_port_info"):
     else:
         list.status_box.text = "Download "+dir+"! Click check boxes to select."
 
-def shortest_pwv_path(zip):
-    pwvpaths = []
-    for path in zip.namelist():
-        if path.endswith("/.pwv") or path==".pwv":
-            pwvpaths.append(path)
-    pwvpaths.sort(key=lambda o: len(o))
-    return pwvpaths[0]
-
 class Engine:
     mode = "port"
     quit_threads = 0
@@ -218,11 +184,11 @@ class Engine:
             root.children[root.start_index].rpos = rpos
         threading.Thread(target=t).start()
     def Download_Characters(self):
-        self.Download_X("port","art/port","ports.php")
+        self.Download_X("port","art/port","updates3/games.cgi?content_type=port")
     def Download_Backgrounds(self):
-        self.Download_X("bg","art/bg","bg.php")
+        self.Download_X("bg","art/bg","updates3/games.cgi?content_type=bg")
     def Download_Foreground(self):
-        self.Download_X("fg","art/fg","fg.php")
+        self.Download_X("fg","art/fg","updates3/games.cgi?content_type=fg")
     def Download_Games(self):
         self.Download_X("games","games","updates3/games.cgi?content_type=games")
     def Download_Music(self):
@@ -311,7 +277,7 @@ class Engine:
                     return
                 #Extract to a folder named after zip? or just extract to games...
                 pwv = shortest_pwv_path(z)
-                if pwv == ".pwv":
+                if pwv in ["data.txt",".pwv"]:
                     game_root = self.path+"/"+check.name+"/"
                     block = None
                 else:
@@ -326,7 +292,7 @@ class Engine:
                         try:
                             os.makedirs(game_root+name.rsplit("/",1)[0])
                         except:
-                            pass
+                            raise
                     if not name.endswith("/"):
                         f = open(game_root+name,"wb")
                         f.write(txt)
