@@ -402,16 +402,16 @@ class Assets(object):
         frame images"""
         s = None
         try:
-            return self._open_art_(name+".gif",key)
-        except (IOError,ImportError):
-            pass
-        try:
             return self._open_art_(name+".png",key)
         except (IOError,pygame.error):
             pass
         try:
             return self._open_art_(name+".jpg",key)
         except (IOError,pygame.error):
+            pass
+        try:
+            return self._open_art_(name+".gif",key)
+        except (IOError,ImportError,pygame.error):
             pass
         raise art_error("Art file corrupt or missing:"+name)
     def init_sound(self,reset=False):
