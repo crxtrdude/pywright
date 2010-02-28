@@ -71,10 +71,11 @@ if bexe:
     add_files(data,os.walk('fonts'))
     add_files(data,os.walk('sfx'))
     add_files(data,os.walk('art/general'))
-    add_files(data,os.walk("core"))
+    add_files(data,os.walk("core"),["cache"])
+    data+=["core/cache"]
     data+=["games/","music/","movies/","downloads/"]
     data+=["doc.txt","changelog.txt","data.txt"]
-    data+=["art/ev/","art/port/","art/fg/","art/bg/","art/3d/"]
+    data+=["art/ev/","art/port/","art/fg/","art/bg/"]
     data+=["art/bg/"+x for x in os.listdir("art/bg/") if x.endswith(".png")]
     data+=["art/fg/"+x for x in os.listdir("art/fg/") if x.endswith(".png") or x.endswith(".gif") or x.endswith(".txt")]
 
