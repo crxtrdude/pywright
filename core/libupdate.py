@@ -94,7 +94,7 @@ root = widget()
 root.width,root.height = [640,480]
 
 Label = label
-label = editbox(None,"Select Art Type to Download:")
+label = editbox(None,"Select content type to download:")
 label.draw_back=False
 root.add_child(label)
 label.draw(screen)
@@ -107,13 +107,18 @@ list.status_box.draw_back = False
 list.status_box.draw(screen)
 root.add_child(list)
 
-def build_list(dir="art/port",url="zip_port_info"):
+def build_list(dir="art/port",url="zip_port_info",check_folder=None):
     list.children = [list.status_box,list.scbar]
     fnd = 0
     list.status_box.text="Scanning local files..."
     mn = mynames(dir)
     list.status_box.text="Fetching data from server..."
     an = names(url)
+    if check_folder:
+        d = get_data_from_folder(check_folder)
+        mn = {}
+        for n in an:
+            mn[n] = d
     cases = {"NEW":[],"UPDATED":[],"INSTALLED":[]}
     for n in sorted(an.keys()):
         if n not in mn:
@@ -134,11 +139,12 @@ def build_list(dir="art/port",url="zip_port_info"):
         p = pane([0,0])
         p.width,p.height = [300,95]
         p.align = "horiz"
-        if image:
-            image_b = button(None,"Click_me")
-            image_b.click_down_over = cb.click_down_over
-            image_b.graphic = image
-            p.add_child(image_b)
+        image_b = button(None,"")
+        image_b.background = False
+        image_b.border = False
+        image_b.click_down_over = cb.click_down_over
+        image_b.graphic = image
+        p.add_child(image_b)
         stats = pane([0,0])
         stats.width,stats.height = [250,93]
         stats.align = "vert"
@@ -167,18 +173,20 @@ def build_list(dir="art/port",url="zip_port_info"):
     if not fnd:
         list.status_box.text  = "No "+dir+" are available to download"
     else:
+        if dir == ".":
+            dir = "updates"
         list.status_box.text = "Download "+dir+"! Click check boxes to select."
 
 class Engine:
     mode = "port"
     quit_threads = 0
     dl_url = "http://pywright.dawnsoft.org/"
-    def Download_X(self,mode,path,url):
+    def Download_X(self,mode,path,url,check_folder=None):
         def t():
             self.mode = mode
             self.path = path
             self.url = url
-            build_list(path,url)
+            build_list(path,url,check_folder)
             rpos = root.children[root.start_index].rpos
             root.children[root.start_index] = button(self,"download")
             root.children[root.start_index].rpos = rpos
@@ -194,41 +202,10 @@ class Engine:
     def Download_Music(self):
         self.Download_X("music","music","updates3/games.cgi?content_type=music")
     def Update_PyWright(self,thread=True):
-        return None
-        def t():
-            list.status_box.text="Fetching data from server..."
-            self.mode = "engine"
-            list.children  = [list.status_box,list.scbar]
-            self.path = "."
-            self.url = "updates2.php"
-            data = get_data_from_folder(".")
-            print data
-            ver = data["version"]
-            online_update = names("updates2.php")
-            cb = None
-            for n in online_update:
-                print online_update[n]["version"],ver
-                if online_update[n]["version"]>ver:
-                    cb = checkbox(n)
-                    cb.editbox.col = [255,0,0]
-                    cb.file = online_update[n]["zipfile"]
-                    list.add_child(cb)
-            if not cb:
-                list.status_box.text="No updates found."
-                return
-            rpos = root.children[root.start_index].rpos
-            root.children[root.start_index] = button(self,"update")
-            root.children[root.start_index].rpos = rpos
-            list.status_box.text="Download engine updates (just get the latest one):"
-            #~ rpos = root.children[root.start_index].rpos
-            #~ root.children[root.start_index] = button(self,"download")
-            #~ root.children[root.start_index].rpos = rpos
-        if thread:
-            thread = threading.Thread(target=t)
-            thread.start()
-            return thread
-        else: t()
+        self.path = "."
+        self.Download_X("engine",".","updates3/games.cgi?content_type=engine",check_folder=".")
     def do_downloads(self,checkfolder=True,output=None):
+        print list.children
         for x in list.children[2:]:
             check = x.children[1].children[0]
             if check.checked:
@@ -312,9 +289,12 @@ class Engine:
         except:
             print "File corrupt"
             return
-            
+        
+        if self.mode == "engine":
+            root = "./"
+            block = None
         #Extract folder from zip to todir
-        if filename+"/" in z.namelist():
+        elif filename+"/" in z.namelist():
             root = todir+"/"
             block = root
         #Create folder from filename, extract contents of zip to there
@@ -335,7 +315,7 @@ class Engine:
                 try:
                     os.makedirs(root+name.rsplit("/",1)[0])
                 except:
-                    raise
+                    pass
             if not name.endswith("/"):
                 f = open(root+name,"wb")
                 f.write(txt)
@@ -425,7 +405,7 @@ def run():
     start = button(e,"download")
     start.rpos[1] = list.rpos[1]+list.height
     end = button(e,"End updater")
-    end.rpos[1] = start.rpos[1]+30
+    end.rpos[1] = start.rpos[1]+50
     root.add_child(start)
     root.add_child(end)
     root.start_index = root.children.index(start)
@@ -460,16 +440,6 @@ def run():
     info_label.draw_back = False
     info_label.rpos[0]=0
     info_label.rpos[1]=60
-
-    #~ lbl = root.add_child(editbox(None,"Manage Games:"))
-    #~ lbl.rpos[1]=60
-    #~ lbl.draw_back=False
-    #~ lbl.draw(screen)
-    #~ up_b = button(e,"Upload My Games")
-    #~ up_b.rpos[1]=lbl.rpos[1]
-    #~ up_b.rpos[0]=lbl.rpos[0]+lbl.width+5
-    #~ up_b.draw(screen)
-    #~ root.add_child(up_b)
     
     pwup_b = button(e,"Update PyWright")
     pwup_b.rpos[1]=80
