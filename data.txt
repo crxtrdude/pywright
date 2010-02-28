@@ -1,0 +1,7 @@
+version 0.95
+version_date 2/27/2010
+author saluk
+website http://pywright.dawnsoft.org/
+title PyWright Game Engine
+icon art/general/bb.png
+category engine
