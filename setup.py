@@ -72,15 +72,11 @@ if bexe:
     add_files(data,os.walk('sfx'))
     add_files(data,os.walk('art/general'))
     add_files(data,os.walk("core"))
-    data+=["games/","music/","movies/"]
-    data+=["doc.txt","changelog.txt",".pwv"]
+    data+=["games/","music/","movies/","downloads/"]
+    data+=["doc.txt","changelog.txt","data.txt"]
     data+=["art/ev/","art/port/","art/fg/","art/bg/","art/3d/"]
     data+=["art/bg/"+x for x in os.listdir("art/bg/") if x.endswith(".png")]
     data+=["art/fg/"+x for x in os.listdir("art/fg/") if x.endswith(".png") or x.endswith(".gif") or x.endswith(".txt")]
-# define what is our source
-#~ src = []
-#~ add_files(src,os.walk('lib'))
-#~ src.extend(glob.glob('*.py'))
 
 # build the sdist target
 if cmd == 'sdist' and bexe:
@@ -134,7 +130,7 @@ class Py2exe(py2exe):
 if cmd in ('script',) and bexe:
     dist_dir = "scriptdist"
     data_dir = dist_dir
-    data+=["updater.py","editor.py","PyWright.py"]
+    data+=["updater.py","PyWright.py"]
 if cmd in ('py2exe',) and bexe:
     dist_dir = os.path.join('dist',cfg['py2exe.target'])
     data_dir = dist_dir
@@ -146,14 +142,16 @@ if cmd in ('py2exe',) and bexe:
         cmdclass = {"py2exe":Py2exe},
         options={'py2exe':{
             'dist_dir':dist_dir,
-            'dll_excludes':['_dotblas.pyd',"_numericsurfarray.pyd",
-                                    "cdrom.pyd"],
-            'packages':['encodings'],
+            'dll_excludes':['_dotblas.pyd',"cdrom.pyd"],
+            'packages':['encodings','pygame','numpy'],
+            'includes':['__future__'],
+            'ignores':['numpy.distutils.tests'],
             'excludes':['curses','email','logging','numarray',
                                 'Tkinter','tcl',"ssl",
-                                "__future__","stringprep","StringIO","bz2","_ssl",
-                                "doctest","optparse","popen2","Numeric",
-                                "numpy","OpenGL"],
+                                "stringprep","StringIO","bz2","_ssl",
+                                "doctest","optparse","popen2","Numeric","OpenGL",
+                                "multiprocessing","compiler","distutils",
+                                "setuptools","psyco"],
             'compressed':1,
             'bundle_files':2,
             'ascii':1
@@ -162,8 +160,6 @@ if cmd in ('py2exe',) and bexe:
             'script':"PyWright.py",
             'icon_resources':[(1,"art/general/bb.ico")],
             },
-            {
-            'script':"editor.py"},
             {
             "script":"updater.py"}],
         )
