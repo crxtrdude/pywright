@@ -316,11 +316,8 @@ class Engine:
             if block:
                 if not name.startswith(block):
                     continue
-            if "/" in name:
-                try:
-                    os.makedirs(root+name.rsplit("/",1)[0])
-                except:
-                    pass
+            if "/" in name and not os.path.exists(root+name.rsplit("/",1)[0]):
+                os.makedirs(root+name.rsplit("/",1)[0])
             if not name.endswith("/"):
                 f = open(root+name,"wb")
                 f.write(txt)
