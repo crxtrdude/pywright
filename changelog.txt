@@ -9,8 +9,8 @@ PyWright Version 0.95
     - add ability to supply information with a game, such as author or icon
          0.95 game has an icon, the format of display and metadata
          supported is subject to change. All metadata is stored in the 
-         .pwv file located in a game directory. Each row of the file has
-         a field name, a space, followed by the field data. 
+         data.txt file located in a game directory. (used to be called .pwv)
+         Each row of the file has a field name, a space, followed by the field data. 
          Currently supported fields:
             * version - Any floating point number is valid. If a higher number is available on updater,
                             it will let the user know that they can update.
@@ -26,6 +26,9 @@ PyWright Version 0.95
                     required for games on update service
             * website - a link to the project website if there is one
             * category - may be used to sort games later on
+    - updater and games list show icons
+    - updater can resome downloads: just try to download the file again and it will
+            attempt to resume
     - ALL code that can jump to another label can be provided with a fail= argument to
             control where it will go if it can't find the label it is looking for. To be more specific,
             while reading through the code sequentially, if it sees a label with the name that
