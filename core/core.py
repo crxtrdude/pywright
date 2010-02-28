@@ -14,13 +14,11 @@ try:
 except:
     audiere = None
 
-Numeric = False
 try:
-    import Numeric
+    from numpy import array
+    pygame.sndarray.use_arraytype("numpy")
 except:
-    print "Numeric not installed.  Fades in Software rendering may have issues"
-#from numpy import array
-#pygame.sndarray.use_arraytype("numpy")
+    array = None
 sw,sh = 256,192
 #sw,sh = 640,480
 spd = 6
