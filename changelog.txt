@@ -29,6 +29,8 @@ PyWright Version 0.95
             * version - Any floating point number is valid. If a higher number is available on updater,
                             it will let the user know that they can update.
             * version_date - the date this version was released - mm/dd/yyyy
+            * version_notes - info about what was changed in this version, not yet used
+            * description - info about the game itself, not yet used
             * author - the name of the game creator. Displayed next to 
                     title on the game list.
             * title - the game name, displayed on the game list
