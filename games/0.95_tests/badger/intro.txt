@@ -1,4 +1,4 @@
-fg badgerx/badger nowait name=badger
+fg badger/badger nowait name=badger
 "Doo de do de do do"
 globaldelay 1 name=badger
 "faster"
@@ -8,7 +8,7 @@ clear
 fg fire/flame1 nowait
 fg fire/flame2 nowait
 fg fire/ghostfire nowait
-fg badgerx/badger-break
+fg badger/badger-break
 "aw"
 globaldelay 12
 "slowmo!"
