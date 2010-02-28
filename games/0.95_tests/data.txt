@@ -1,5 +1,6 @@
-version 2
+version 3
 version_date 2/13/2010
+version_note added badger test
 author saluk
 website http://pywright.dawnsoft.org/
 icon art/general/thinker.png
