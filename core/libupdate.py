@@ -282,7 +282,7 @@ class Engine:
         serv.close()
         cli.close()
         self.extract_zip(path,filename)
-        root.children.remove(self.progress)
+        self.progress.text = "FINISHED"
         del self.progress
         if self.mode == "games":
             self.Download_Games()
@@ -309,7 +309,9 @@ class Engine:
                 pass
             block = None
         for name in z.namelist():
-            print name
+            if hasattr(self,"progress"):
+                self.progress.text = "extracting:"+name
+            print "extract:",name
             txt = z.read(name)
             if block:
                 if not name.startswith(block):
