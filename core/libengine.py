@@ -1673,7 +1673,6 @@ def make_start_script(logo=True):
         if f in [".svn"]: continue
         item = gui.button(make_start_script,f)
         d = get_data_from_folder("games/"+f)
-        print d
         if d.get("icon",""):
             graphic = pygame.image.load("games/"+f+"/"+d["icon"])
         else:

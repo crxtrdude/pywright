@@ -232,77 +232,120 @@ class Engine:
         for x in list.children[2:]:
             check = x.children[1].children[0]
             if check.checked:
-                if not hasattr(self,"progress"):
-                    self.progress = progress()
-                    root.add_child(self.progress)
-                self.progress.height = 20
-                self.progress.width = 400
-                self.progress.rpos[1] = list.rpos[1]+list.height+20
-                self.progress.progress = 0
-                print self.dl_url+"/"+check.file
-                serv = urllib2.urlopen(self.dl_url+check.file)
-                size = int(serv.info()["Content-Length"])
-                read = 0
-                bytes = 0
-                cli = open(check.filename,"wb")
-                s = time.time()
-                bps = 0
-                while not Engine.quit_threads:
-                    r = serv.read(1024)
-                    if not r: break
-                    cli.write(r)
-                    read += len(r)
-                    bytes += len(r)
-                    self.progress.progress = read/float(size)
-                    if time.time()-s>1:
-                        bps = bytes/(time.time()-s)
-                        s = time.time()
-                        bytes = 0
-                    self.progress.text = "%sKB/%sKB - %s KB/s"%(read/1000.0,size/1000.0,bps/1000.0)
-                    if output:
-                        self.progress.rpos = [0,0]
-                        self.progress.width = 256
-                        self.progress.draw(output[0])
-                        output[1]()
-                        for evt in pygame.event.get():
-                            if evt.type == pygame.QUIT: raise SystemExit
-                serv.close()
-                cli.close()
-                #~ if not os.path.exists(self.path+"/"+check.name):
-                    #~ os.mkdir(self.path+"/"+check.name)
-                try:
-                    z = ZipFile(check.filename,"r")
-                except:
-                    print "File corrupt"
-                    return
-                #Extract to a folder named after zip? or just extract to games...
-                pwv = shortest_pwv_path(z)
-                if pwv in ["data.txt",".pwv"]:
-                    game_root = self.path+"/"+check.name+"/"
-                    block = None
+                if os.path.exists("downloads/"+check.filename+"_url"):
+                    seek,path,filename,url = open("downloads/"+check.filename+"_url","r").read().split(" ")
+                    self.download_file(path,filename,url,output,seek)
                 else:
-                    game_root = self.path+"/"
-                    block = pwv.split("/",1)[0]
-                for name in z.namelist():
-                    txt = z.read(name)
-                    if block:
-                        if not name.startswith(block):
-                            continue
-                    if "/" in name:
-                        try:
-                            os.makedirs(game_root+name.rsplit("/",1)[0])
-                        except:
-                            raise
-                    if not name.endswith("/"):
-                        f = open(game_root+name,"wb")
-                        f.write(txt)
-                        f.close()
-                z.close()
-                os.remove(check.filename)
-                root.children.remove(self.progress)
-                del self.progress
-                if self.mode == "games":
-                    self.Download_Games()
+                    self.download_file(self.path,check.filename,self.dl_url+check.file,output)
+    def download_file(self,path,filename,url,output=None,seek=0):
+        if not hasattr(self,"progress"):
+            self.progress = progress()
+            root.add_child(self.progress)
+        self.progress.height = 20
+        self.progress.width = 400
+        self.progress.rpos[1] = list.rpos[1]+list.height+20
+        self.progress.progress = 0
+        headers = {"User-Agent":"pywright downloader"}
+        if seek:
+            seek = int(seek)
+            serv = urllib2.urlopen(url)
+            size = int(serv.info()["Content-Length"])
+            headers["Range"] = "bytes=%d-%d"%(seek,size)
+            serv.close()
+        req = urllib2.Request(url,None,headers)
+        try:
+            serv = urllib2.urlopen(req)
+        except:
+            seek = 0
+            serv = urllib2.urlopen(url)
+        size = int(serv.info()["Content-Length"])
+        read = seek
+        bytes = seek
+        prog = open("downloads/"+filename+"_url","w")
+        prog.write(str(seek)+" "+path+" "+filename+" "+url)
+        prog.close()
+        f = open("downloads/last","w")
+        f.write(path+" "+filename)
+        f.close()
+        old = None
+        if seek:
+            f = open("downloads/"+filename,"rb")
+            old = f.read()
+            f.close()
+        cli = open("downloads/"+filename,"wb")
+        if old:
+            cli.write(old)
+        s = time.time()
+        bps = 0
+        while not Engine.quit_threads:
+            r = serv.read(4096)
+            if not r: break
+            cli.write(r)
+            read += len(r)
+            bytes += len(r)
+            self.progress.progress = read/float(size)
+            if time.time()-s>1:
+                bps = bytes/(time.time()-s)
+                s = time.time()
+                bytes = 0
+            self.progress.text = "%sKB/%sKB - %s KB/s"%(read/1000.0,size/1000.0,bps/1000.0)
+            if output:
+                self.progress.rpos = [0,0]
+                self.progress.width = 256
+                self.progress.draw(output[0])
+                output[1]()
+                for evt in pygame.event.get():
+                    if evt.type == pygame.QUIT: raise SystemExit
+            prog = open("downloads/"+filename+"_url","w")
+            prog.write(str(read)+" "+path+" "+filename+" "+url)
+            prog.close()
+        serv.close()
+        cli.close()
+        self.extract_zip(path,filename)
+        root.children.remove(self.progress)
+        del self.progress
+        if self.mode == "games":
+            self.Download_Games()
+    def extract_zip(self,todir,filename):
+        try:
+            z = ZipFile("downloads/"+filename,"r")
+        except:
+            print "File corrupt"
+            return
+            
+        #Extract folder from zip to todir
+        if filename+"/" in z.namelist():
+            root = todir+"/"
+            block = root
+        #Create folder from filename, extract contents of zip to there
+        else:
+            root = todir+"/"+filename+"/"
+            try:
+                os.makedirs(root)
+            except:
+                pass
+            block = None
+        for name in z.namelist():
+            print name
+            txt = z.read(name)
+            if block:
+                if not name.startswith(block):
+                    continue
+            if "/" in name:
+                try:
+                    os.makedirs(root+name.rsplit("/",1)[0])
+                except:
+                    raise
+            if not name.endswith("/"):
+                f = open(root+name,"wb")
+                f.write(txt)
+                f.close()
+        z.close()
+        os.remove("downloads/"+filename)
+        try:
+            os.remove("downloads/last")
+        except:
+            pass
     def download(self):
         t = threading.Thread(target=self.do_downloads)
         t.start()
@@ -433,6 +476,10 @@ def run():
     pwup_b.rpos[0]=300
     pwup_b.draw(screen)
     root.add_child(pwup_b)
+    
+    if os.path.exists("downloads/last"):
+        last_path,last_dl = open("downloads/last","r").read().split(" ")
+        e.extract_zip(last_path,last_dl)
 
     clock = pygame.time.Clock()
     while e.running:
