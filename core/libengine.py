@@ -1069,7 +1069,7 @@ class Script(gui.widget):
         filter = "top"
         for a in args:
             if a.startswith("mag="):
-                mag=int(a[4:])
+                mag=float(a[4:])
             if a.startswith("frames="):
                 frames=int(a[7:])
             if a.startswith("last"):
@@ -1621,23 +1621,6 @@ class screen_settings(gui.pane):
         
 class choose_game(gui.widget):
     def update(self,*args):
-        if not hasattr(self,"d"):
-            self.d = [1,1,1]
-        self.children[1].pos[0]+=self.d[0]*0.5
-        self.children[1].pos[1]+=self.d[1]*0.5
-        #self.children[1].setfade(self.children[1].fade+self.d[2]*5)
-        if self.children[1].fade>=500:
-            self.d[2] = -1
-        if self.children[1].fade<=0:
-            self.d[2] = 1
-        if self.children[1].pos[1]<0:
-            self.d[1] = 1
-        if self.children[1].pos[1]>50:
-            self.d[1] = -1
-        if self.children[1].pos[0]<0:
-            self.d[0] = 1
-        if self.children[1].pos[0]>80:
-            self.d[0] = -1
         return True
         
 def make_start_script(logo=True):
@@ -1645,18 +1628,23 @@ def make_start_script(logo=True):
     root.pri = -1000
     root.z = 0
     bottomscript = Script()
-    bottomscript.init()
+    introlines = []
+    try:
+        import urllib2
+        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro.txt")
+        introlines = online_script.read().split("\n")
+        online_script.close()
+    except:
+        pass
+    bottomscript.init(scriptlines=["draw_off",
+                                            "fg ../general/logo y=-20 name=logo",
+                                            "zoom mag=-0.5",
+                                            "draw_on"] + introlines + ["add_root","gui Wait"])
     assets.stack = [bottomscript]  #So that the root object gets tagged as in bottomscript
-    bottomscript.obs = [root]
+    def add_root(command,*args):
+        bottomscript.obs.append(root)
+    bottomscript._add_root = add_root
     root.width,root.height = [1000,1000]
-    
-    root.add_child(sprite(0,0).load("bg/black.png"))
-    s = fadesprite(0,0).load("general/logo.png")
-    s.img = s.base[0] = pygame.transform.rotozoom(s.base[0],0,0.5)
-    s.setfade(0)
-    root.add_child(s)
-    root.children[-1].width = 0
-    root.children[-2].width = 0
     
     list = gui.scrollpane([0,other_screen(0)])
     list.width,list.height = [sw,sh]
