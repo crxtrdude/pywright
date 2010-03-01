@@ -240,7 +240,7 @@
 
 ___________________________________________________________________________________
 ___________________________________________________________________________________
-Beta versions before 0.95:
+Beta versions before 0.95 (RIP December 2007-December 2009):
 
 PyWright Beta 10.94
     - Some more fixes to hidden statements
