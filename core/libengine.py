@@ -220,16 +220,24 @@ class Script(gui.widget):
         for k in p:
             setattr(self,k,p[k])
         if hasattr(self,"_parent_index"):
-            self.parent = assets.stack[self._parent_index]
+            try:
+                self.parent = assets.stack[self._parent_index]
+            except IndexError:
+                pass
         obs = []
         after_after = []
+        if not hasattr(self,"_world_id"):
+            self._world_id = id(self)
         if self._world_id in assets.loading_cache:
             self.world = assets.loading_cache[self._world_id]
             return
         assets.loading_cache[self._world_id] = self.world
         for o in getattr(self,"_objects",[]):
             print "try to load",o
-            o,later = load.load(self,o)
+            try:
+                o,later = load.load(self,o)
+            except:
+                continue
             if o:
                 obs.append(o)
             if later:
@@ -2049,7 +2057,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     assets.save_game()
                 if e.type==pygame.KEYDOWN and\
                 e.key == pygame.K_F7 and assets.game!="menu":
-                    assets.load_game()
+                    assets.load_game(assets.game)
         except script_error, e:
             assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             import traceback

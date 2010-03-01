@@ -677,7 +677,7 @@ class Assets(object):
         if not hide:
             self.cur_script.obs.append(saved())
     def load_game(self,path=None,filename="save",hide=False):
-        if not os.path.exists(self.game+"/"+filename+".ns"):
+        if not os.path.exists(path+"/"+filename+".ns"):
             self.load_game_old(path,filename,hide)
         else:
             self.load_game_new(path,filename,hide)
@@ -2446,7 +2446,12 @@ class case_menu(fadesprite,gui.widget):
             spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
             spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
             self.option_imgs.append([spr,[x,y+60]])
-            if os.path.exists(self.path+"/"+o+"/save"):
+            if os.path.exists(self.path+"/"+o+"/save.ns"):
+                txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
+                spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
+                spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
+                self.option_imgs.append([spr,[x,y+90]])
+            elif os.path.exists(self.path+"/"+o+"/save"):
                 txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
                 spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
