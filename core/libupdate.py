@@ -84,7 +84,7 @@ def names(url):
     files = {}
     for x in lines:
         if x["zipname"] in files:
-            if x["version"]<=files[x["zipname"]]["version"]:
+            if compare_versions(x["version"],files[x["zipname"]]["version"])<0:
                 continue
         files[x["zipname"]]=x
     return files
@@ -123,7 +123,7 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
     for n in sorted(an.keys()):
         if n not in mn:
             status = "NEW"
-        elif an[n]["version"]>mn[n]["version"]:
+        elif compare_versions(an[n]["version"],mn[n]["version"])>0:
             status = "UPDATED"
         else:
             status = "INSTALLED"
@@ -156,7 +156,7 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
             sline += "                    "+"by "+an[n]["author"]
         stats.add_child(Label(sline))
         if an[n].get("version_date",""):
-            stats.add_child(Label("ver %s updated on %s"%(an[n]["version"],an[n]["version_date"])))
+            stats.add_child(Label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"])))
         if an[n].get("website",""):
             url = an[n]["website"]
             urlb = button(None,url)
@@ -195,18 +195,18 @@ class Engine:
             root.children[root.start_index].rpos = rpos
         threading.Thread(target=t).start()
     def Download_Characters(self):
-        self.Download_X("port","art/port","updates3/games.cgi?content_type=port")
+        self.Download_X("port","art/port","updates3/games.cgi?content_type=port&ver_type=tuple")
     def Download_Backgrounds(self):
-        self.Download_X("bg","art/bg","updates3/games.cgi?content_type=bg")
+        self.Download_X("bg","art/bg","updates3/games.cgi?content_type=bg&ver_type=tuple")
     def Download_Foreground(self):
-        self.Download_X("fg","art/fg","updates3/games.cgi?content_type=fg")
+        self.Download_X("fg","art/fg","updates3/games.cgi?content_type=fg&ver_type=tuple")
     def Download_Games(self):
-        self.Download_X("games","games","updates3/games.cgi?content_type=games")
+        self.Download_X("games","games","updates3/games.cgi?content_type=games&ver_type=tuple")
     def Download_Music(self):
-        self.Download_X("music","music","updates3/games.cgi?content_type=music")
+        self.Download_X("music","music","updates3/games.cgi?content_type=music&ver_type=tuple")
     def Update_PyWright(self,thread=True):
         self.path = "."
-        self.Download_X("engine",".","updates3/games.cgi?content_type=engine",check_folder=".")
+        self.Download_X("engine",".","updates3/games.cgi?content_type=engine&ver_type=tuple",check_folder=".")
     def do_downloads(self,checkfolder=True,output=None):
         print list.children
         for x in list.children[2:]:
