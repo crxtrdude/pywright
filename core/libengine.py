@@ -1644,10 +1644,8 @@ def make_start_script(logo=True):
         online_script.close()
     except:
         pass
-    bottomscript.init(scriptlines=["draw_off",
-                                            "fg ../general/logo y=-20 name=logo",
-                                            "zoom mag=-0.5",
-                                            "draw_on"] + introlines + ["add_root","gui Wait"])
+    bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 name=logo",
+                                            "zoom mag=-0.25 frames=30 nowait"] + introlines + ["add_root","gui Wait"])
     assets.stack = [bottomscript]  #So that the root object gets tagged as in bottomscript
     def add_root(command,*args):
         bottomscript.obs.append(root)
