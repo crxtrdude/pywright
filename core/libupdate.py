@@ -132,10 +132,6 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
         cb.name = n
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
-        try:
-            image = load_image(an[n]["iconurl"])
-        except:
-            image = None
         p = pane([0,0])
         p.width,p.height = [300,95]
         p.align = "horiz"
@@ -143,7 +139,13 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
         image_b.background = False
         image_b.border = False
         image_b.click_down_over = cb.click_down_over
-        image_b.graphic = image
+        def load_icon_this(url=an[n]["iconurl"],but=image_b):
+            try:
+                image = load_image(url)
+            except:
+                image = None
+            but.graphic = image
+        threading.Thread(target=load_icon_this).start()
         p.add_child(image_b)
         stats = pane([0,0])
         stats.width,stats.height = [250,93]
