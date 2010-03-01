@@ -1,15 +1,38 @@
-PyWright Version 0.95
-    - first version not considered "beta"
-    - different text wrapping behavior:
-        wraps on words, not characters
-        if {n} is in the text, will not wrap automatically, period
-        if {n} is not in the text, will wrap if _textbox_wrap is true, which is default
-    - textblocks can be colored with "color=" and then either 3 digit RGB, or 
-        6 digit hexidecimal RRGGBB, color string
-    - animated gifs have never worked well in the past, and will not work on the mac
-        version of pywright. Recommend to convert all gif images and animations to
-        .png. Converter available http://pywright.dawnsoft.org/gif2strip/index.cgi
-    - animation speed of objects is now controllable
+(Note: file not intended for word wrapping)
+
+*PyWright Version 0.95: February 28, 2010*
+
+        Version 0.95 represents a couple months of extra effort poured into various aspects
+    of the engine. Of all of the versions I have made, I am most happy with this one. It
+    has the least amount of bugs ever, and the least amount of things that just bug me.
+    It is a combination of some reworked code, some thrown on features, and some just plain
+    tinkering and experimenting. Most of the changes have been made possible due to the
+    great feedback I've received from the community, along with feature suggestions, and
+    some real effort at beta testing. I think it has earned it's not-beta-any-longer status.
+    Enjoy!
+    
+    -----------------------------------------------------
+    
+    Textual changes:
+        * Automatic wrapping is based on words, so it's a more sane default setting. If {n} is 
+        in the text, the autowrapper will shut off, as behavior gets complex to mix the two.
+        If {n} is not in the text, can still disable wrap by setting _textbox_wrap to false.
+        * Colors can be either the old style 3 digit color, or the new 6 digit color based on html
+        * Colors can be set based on a variable, use {c variable} to set the color the variable value
+        * textblocks can be colored with "color=[color]" where color is anything accepted by {c}
+    Positioning of textbox and nametag:
+        set _textbox_x, _textbox_y (default 0,0)  to reposition the textbox (absolute values!)
+        set _textbox_bg  to change the image
+        set _nt_image to use a different nametag image
+            note: if _nt_image is set the image is displayed even if the nametag is blank
+            this is so you can put text on a nametag image in your art program
+            and display it instead of letting the code write the name
+        set _nt_x, _nt_y  to reposition the nametag image (absolute values!)
+        set _nt_text_x _nt_text_y to reposition nametag text  (relative values)
+        set _nt_text_color to 3 digit or 6 digit color string to change the nametag color
+                                                        
+    Animation changes:
+        The animation speed of objects is now controllable
         2 ways:
             * In the .txt file along with your animation (something.png which may have something.txt)
                 add a command "globaldelay x", where x is the amount of frames to pause between
@@ -20,76 +43,163 @@ PyWright Version 0.95
             The delay amount can be a decimal number, like 4.5
             The delay will not affect animations which already use "framedelay" in their .txt file
                 to set individual delays for specific frames
-    - add ability to supply information with a game, such as author or icon
-         0.95 game has an icon, the format of display and metadata
-         supported is subject to change. All metadata is stored in the 
-         data.txt file located in a game directory. (used to be called .pwv)
-         Each row of the file has a field name, a space, followed by the field data. 
-         Currently supported fields:
-            * version - Any floating point number is valid. If a higher number is available on updater,
-                            it will let the user know that they can update.
-            * version_date - the date this version was released - mm/dd/yyyy
-            * version_notes - info about what was changed in this version, not yet used
-            * description - info about the game itself, not yet used
-            * author - the name of the game creator. Displayed next to 
-                    title on the game list.
-            * title - the game name, displayed on the game list
-            * icon - path to an image to use as the game's icon, relative to the root
-                    of the game folder; include file extension
-                    (i.e., if icon equals "art/general/icon.png" there should be a
-                    "games/my_game/art/general/icon.png" present)
-                    should be 70x70
-                    required for games on update service
-            * website - a link to the project website if there is one
-            * category - may be used to sort games later on
-    - updater and games list show icons
-    - updater can resome downloads: just try to download the file again and it will
-            attempt to resume
-    - ALL code that can jump to another label can be provided with a fail= argument to
-            control where it will go if it can't find the label it is looking for. To be more specific,
-            while reading through the code sequentially, if it sees a label with the name that
-            fail= specifies, it will assume the label it looked for could not be found and stop
-            there. It used to be that the only supported "fail label" was "none", which caused
-            many problems with various parts of the script affecting each other. No longer the case.
-            Commands that support fail= argument:
-                    goto, showlist, menu, localmenu, cross, present, examine
-            also: flag, noflag, is, isnot - note that the fail= argument must be at the end of these
-                    commands. Also, in these cases, it only goes to the fail label if the expression
-                    is FALSE, as opposed to stopping if it reaches this label
-    - can position the textbox and nametag anywhere desired
-            set _textbox_x, _textbox_y (default 0,0)  to reposition the textbox (absolute values!)
-            set _textbox_bg  to change the image
-            set _nt_image to use a different nametag image
-                note: if _nt_image is set the image is displayed even if the nametag is blank
-                this is so you can put text on a nametag image in your art program
-                and display it instead of letting the code write the name
-            set _nt_x, _nt_y  to reposition the nametag image (absolute values!)
-            set _nt_text_x _nt_text_y to reposition nametag text  (relative values)
-            set _nt_text_color to 3 digit or 6 digit color string to change the nametag color
-    - customize button look - use:
-                gui Button [label] x=[x] y=[y] graphic=[path/to/image]
+                
+     Customize button look:
+        Buttons can now have a graphic, allowing much more freedom in custom gui design.
+        gui Button [label] x=[x] y=[y] graphic=[path/to/image]
             Path to image is the path starting after the art folder, such as "fg/my_button"
             or "general/somebutton"
-    - made "script" command a bit more flexible. Can pass a label= argument to jump
+            
+    Customize list menus:
+        Asside from the more accurate builtin checkmark and check placing, you can also
+        customize your lists a bit more.
+            - adjust checkmark (for options you've already tried) image by setting variable
+                    _list_checked_img to path relative to art folder
+            - change background with _list_bg_image (default general/black)
+                    Might want to adjust _menu_fade_level to 0 to see fully opaque image
+            - adjust checkmark position with variables _list_checked_x, _list_checked_y
+                    relative to top left corner of option button
+            - color of text more accurate
+            - little known tip: color of list options can be set with {c462} syntax
+            
+    Zoom command: to zoom into the screen or scale objects
+        Syntax:
+            zoom mag=[amount] frames=[number] [last] [nowait] {name=somename}
+                mag is the number of scaling levels to zoom. A mag of 2 means "add 2 scaling
+            levels to current scale". If current scale is 1, the final scale is 3x. Semantics of this
+            is likely to change.
+                frames is the number of frames for zoom to happen
+                last will only scale the last object
+                nowait to continue script while zooming.
+                name=somename will only scale the named object
+                
+    Customize investigation menu:
+    
+        A new command "localmenu" was added, allowing you to set up the 
+        investigation menu manually, and letting you organize your scripts how you please. 
+        The syntax is this:
+            localmenu examine=on/off talk=on/off present=on/off move=on/off
+        This will show a normal investigation menu with those items either on or off. All of the 
+        options default to off, so
+            localmenu talk=on
+        will show a menu that only has the talk option. The options work with variables so 
+        you can have code or what the player has done determine what is shown:
+            localmenu talk=$ema_here present=$ema_here move=on examine=on
+        will only show talk and present when $ema_here is equal to on.
+        When a user chooses one of the options in localmenu, instead of running a 
+        separate script, it will jump to a label for "examine", "talk", "move", or "present". If 
+        a localmenu is shown with every item set to off, it will skip the localmenu line.
+    
+        Can turn OFF menu items from the regular menu command
+            menu scene examine=off
+        will show the menu, and leave examine out of the selectable items, even if scene.examine.txt
+        exists.
+    
+    Label none workaround:
+            Frequently in medium to complex scripts, it becoms impossible for an interface, such
+        as a "present" or an "examine", to jump to a label past another section of code - because 
+        it stops when it hits a "label none" that was meant for a different interface. Frequently
+        when this happens you have to resort to jumping to a middle part of the code and then
+        calling "goto" from there to actually get where you want. 0.95 lets you be absolutely
+        explicit about the behavior of interfaces and labels.
+            Simply add a "fail=x" to the end of the interface command, and it will consider "x"
+        to be where it stops searching, instead of "none".
+        Commands that support "fail=x" in their arguments:
+            goto*, showlist, menu, localmenu, cross, present, examine
+            *normally goto does NOT stop when it hits label none, but with fail= you can
+                    give it that behavior.
+        
+        Logic commands in 0.95 also support "fail=x" in order to tell it to jump to "x" when the
+            expression is false; rather than continuing on the next line.
+            
+            Logic commands that support "fail=x" at the very end of the command:
+                flag, noflag, is, isnot
+    
+    Advanced scripting changes:
+            Some builtin interfaces give a bit more feedback to scripts in the form of variables
+            that they set:
+                _examine_clickx, _examine_clicky are set to x and y after
+                                        clicking a spot in the examine screen; 
+                _selected is set to the evidence id when running an evidence check script
+                
+            Script command:
+                Made "script" command a bit more flexible. Can pass a label= argument to jump
             to a label after loading the file. If [name].script.txt is not found, will look for
             [name].txt. Also, the script command can be called safely from a running macro.
-    - copy the value of a variable into another. Allows using code to generate a variable name
-            to access. Allows processing lists of items, or selecting variables for some reason or
-            other. More complicated than other methods, but more flexible as well.
-            syntax: getvar [destination] [name1] [name2] [name3] [name...]
-            All of the names are joined together, and then that is the variable name which
-            is copied into the destination variable.
+            
+            Copying variables dynamically:
+                Can copy the value of a variable into another. Allows using code to generate a 
+            variable name to access. Allows processing lists of items, or selecting variables 
+            for some reason or other. More complicated than other methods, but more flexible 
+            as well.
+            
+            syntax: getvar [destination variable] [namefragment] [namefragment]
+            
+            All of the name fragments are joined together into one name. The value of whatever 
+            variable that combined name refers to is copied into the destination variable.
+            
             Example:
+            
             getvar x rectangle_ $index .x
-            First, "rectangle_", the value of $index, and ".x" are all joined into a single
-            variable name. If $index were equal to 0, this would be like "getvar x rectangle_0.x",
-            and whatever was stored in the rectangle_0.x variable would be copied into the "x"
+            
+            First, "rectangle_", the VALUE of $index, and ".x" are all joined into a single
+            variable name. If $index were equal to 0, this would be like "getvar my_x rectangle_0.x",
+            and whatever was stored in the rectangle_0.x variable would be copied into the "my_x"
             variable.
-    - added a timer. Can run multiple timers at once, and the value of each timer is saved
-            to an individual variable. Will run a macro when the timer runs to zero.
-            timer [ticks] [macroname]
-            The value can be accessed from $_timer_value_[macroname]
-    - reworked saving system. Very careful about what can be saved and what cannot.
+            
+    Timers:
+        Added a timer command, like a stopwatch or a countdown. It's possible to run multiple timers 
+        at once, and the value of each timer is saved to an independant variable. When the timer
+        runs to zero, a macro you specifiy is run. It could be used to give the player a time limit
+        to solve some piece of logic, where they get a penalty if they run out of time. It is also
+        useful for many other things. Consider a short timer to control some animation - when the
+        timer runs out, you move an object, and then start the timer again. It will keep moving the
+        object at those set intervals.
+            Syntax:
+                timer [ticks] [macroname]
+                
+            The value of the timer (ticks left till macro is run) can be accessed 
+            from $_timer_value_[macroname]
+
+    Updated updater:
+            Metadata support added for all content types. This data used to be stored in a file
+        called ".pwv" which came with content, such as the game, or the character; and it
+        used to be limited to only a version number.
+            With 0.95, the standard filename is data.txt. A data.txt file should always be
+        included in the root of your game folder. It's purpose is to tell potential players or
+        potential downloaders some more information about your game. If data.txt is not 
+        included, your version will be assumed to be 0, and you won't have an icon, or title,
+        etc.
+            Each row of the file has a field name, a space, followed by the field data. 
+            
+             Currently supported/planned to be supported fields:
+                * version - Any floating point number is valid. If a higher number is 
+                                available on updater, it will let the user know that they 
+                                can update. Also multiple decimal places are supported. 
+                                example: 1.5.1
+                * version_date - the date this version was released - mm/dd/yyyy
+                * version_notes - info about what was changed in this version
+                * description - info about the game itself
+                * author - the name of the game creator. Displayed next to 
+                        title on the game list.
+                * title - the game name, displayed on the game list
+                * icon - path to an image to use as the game's icon, relative to the root
+                        of the game folder; include file extension
+                        (i.e., if icon equals "art/general/icon.png" there should be a
+                        "games/my_game/art/general/icon.png" present)
+                        should be 70x70
+                        required for games on update service
+                * website - a link to the project website if there is one
+                * category - may be used to sort games later on
+        
+            Metadata changes have allowed some modifications to the view of the 
+        updater and the games list, especially the icon, to make choosing the right
+        game easier.
+            Beyond that, the updater is now more stable, able to resume downloads
+        (if you try and download something that halted in the middle again, it will
+        resume), and will attempt to extract
+        
+    Reworked saving system. Very careful about what can be saved and what cannot.
         Logic behind it is still to record the state of every object currently in memory to
         a file, and then recreate it when loading, but method is different. 
         What cannot be saved:
@@ -106,52 +216,31 @@ PyWright Version 0.95
         * Also remember that there is a command to force the game to save, it might be a good
         idea to use this for checkpoints to control where saves occur. A save at the start
         of each scene might work.
-    - Some modification of list menus:
-        - adjust checkmark (for options you've already tried) image by setting variable
-                _list_checked_img to path relative to art folder
-        - change background with _list_bg_image (default general/black)
-                Might want to adjust _menu_fade_level to 0 to see fully opaque image
-        - replaced checkmark image with rip from game
-        - adjust checkmark position with variables _list_checked_x, _list_checked_y
-                relative to top left corner of option button
-        - color of text more accurate
-        - little known tip: color of list options can be set with {c462} syntax
-    - (todo) examine - clicking check button with mouse doesn't break
-    - (todo) dissapearing present button
-    - cache fades so they will be faster after one run
-    - scrolling objects on bottom screen works
-    - (todo) sort options for games
-    - psyche5
-    - html color support (use {c 000000} where 000000 is 6 digit html color string)
-    - color variable substitution (use {c variable} to set the color to "color_variable")
-    - if "intro.txt" not found in a game, looks for "[game].txt" instead
-    - fixed court record buttons from investigation menu
-    - added "zoomanim" command, to zoom into the screen or scale objects
-        zoomanim mag=magnitude to zoom; frames=number of frames for zoom to happen; last to
-        only scale the last object; name=somename to only scale the named object; nowait to
-        continue script while zooming.
-    - some more feedback variables: _examine_clickx, _examine_clicky are set to x and y after
-        clicking a spot in the examine screen; _selected is set to the evidence id when running
-        an evidence check script
-    - Show investigation menu without having to use multiple scripts:
-        A new command "localmenu" was added, allowing you to set up the 
-        investigation menu manually, and letting you organize your scripts how you please. 
-        The syntax is this:
-            localmenu examine=on/off talk=on/off present=on/off move=on/off
-        This will show a normal investigation menu with those items either on or off. All of the 
-        options default to off, so
-            localmenu talk=on
-        will show a menu that only has the talk option. The options work with variables so 
-        you can have code or what the player has done determine what is shown:
-            localmenu talk=$ema_here present=$ema_here move=on examine=on
-        will only show talk and present when $ema_here is equal to on.
-        When a user chooses one of the options in localmenu, instead of running a 
-        separate script, it will jump to a label for "examine", "talk", "move", or "present". If 
-        a localmenu is shown with every item set to off, it will skip the localmenu line.
-    - Can turn OFF menu items from the regular menu command
-            menu scene examine=off
-        will show the menu, and leave examine out of the selectable items, even if scene.examine.txt
-        exists.
+
+    Regressions (changes that could be seen as downgrades):
+        * It's official - gif support on pywright is not "recommended". The code is not actually
+        gone, but it will not work on a mac, and never worked wll anyway.
+        Converter available: http://pywright.dawnsoft.org/gif2strip/index.cgi
+        * Automatic updates are disabled. Too dangerous. In a later release, there will
+        at least be notifications that a new version is available, but it will never force
+        the user to upgrade.
+        * Any time an image fades in, the fadeable image will be stored to core/cache.
+        This will speed up the fade animation on later runs. The downside, is it eats hard
+        drive space, and if you make a modification to a graphic file, it will rever to the 
+        old version during the fade. Faster fading without the cache is a possibility
+        down the road.
+        
+    -other random bug fixes/additions:
+        *scrolling objects on bottom screen works
+        *psyche5 macro included in chains to have 5 locks
+        *if "intro.txt" not found in a game, looks for "[game].txt" instead, if you would rather
+            name it that
+        *fixed court record buttons from investigation menu
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+Beta versions before 0.95:
 
 PyWright Beta 10.94
     - Some more fixes to hidden statements
