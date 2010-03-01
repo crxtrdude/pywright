@@ -175,11 +175,11 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
     for s in ["NEW","UPDATED","INSTALLED"]:
         for n in cases[s]:
             list.add_child(n)
+    if dir == ".":
+        dir = "updates"
     if not fnd:
         list.status_box.text  = "No "+dir+" are available to download"
     else:
-        if dir == ".":
-            dir = "updates"
         list.status_box.text = "Download "+dir+"! Click check boxes to select."
 
 class Engine:
