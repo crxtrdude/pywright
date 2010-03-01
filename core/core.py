@@ -3383,16 +3383,13 @@ class zoomanim(effect):
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
-        print self.frames
         self.frames -= 1
         if self.frames <= 0:
             self.kill = 1
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"dim"):
-                print "old dim",o.dim
                 o.dim += self.mag_per_frame
-                print "new dim",o.dim
         if self.wait:
             return True
     def control_last(self):
