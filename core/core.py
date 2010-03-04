@@ -1236,7 +1236,9 @@ class portrait(object):
                 if not self.combined.split:
                     self.combined.split = len(self.combined.base)//2
                 self.talk_sprite.load(self.combined.base[:self.combined.split])
+                self.talk_sprite.name = self.combined.name+"_talk"
                 self.blink_sprite.load(self.combined.base[self.combined.split:])
+                self.blink_sprite.name = self.combined.name+"_blink"
                 self.talk_sprite.loops = 1
                 self.blink_sprite.loops = 1
                 self.blink_sprite.blinkmode = self.combined.blinkmode

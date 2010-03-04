@@ -1,5 +1,8 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.951
+    - fix for combined sprite fading
+
 *PyWright Version 0.95: February 28, 2010*
 
         Version 0.95 represents a couple months of extra effort poured into various aspects
