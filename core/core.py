@@ -1107,8 +1107,8 @@ class fadesprite(sprite):
                             self.mockimg.set_at([x,y],invis)
                         rgba=rgba[0],rgba[1],rgba[2],int(0.1*rgba[3])
                         #self.tenpercent.set_at([x,y],rgba)
-                        if [rgba[0],rgba[1],rgba[2]] == [255,0,255]:
-                            self.draw_func = self.layerdraw
+                        #~ if [rgba[0],rgba[1],rgba[2]] == [255,0,255]:
+                            #~ self.draw_func = self.layerdraw
                 pygame.image.save(self.mockimg,"core/cache/"+nn+".mock.png")
                 self.mockimg.set_colorkey(invis)
             else:
@@ -2134,8 +2134,10 @@ class menu(fadesprite,gui.widget):
             self.selected = sel
     def enter_down(self):
         if self.open_script:
+            print "INITIALIZE MENU SCENE"
             assets.cur_script.init(self.scene+"."+self.selected)
         else:
+            print "TRY TO JUMP TO LABEL"
             assets.cur_script.goto_result(self.selected,backup=self.fail)
         self.kill = 1
     def addm(self,opt):
