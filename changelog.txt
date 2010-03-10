@@ -1,7 +1,8 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.951
+*PyWright 0.952
     - fix for combined sprite fading
+    - cached fades are refreshed if the source content changes
 
 *PyWright Version 0.95: February 28, 2010*
 
