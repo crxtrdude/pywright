@@ -132,6 +132,8 @@ assets.World = World
 
 def EVAL(stuff):
     stuff = stuff.split(" ",2)
+    if len(stuff)==1:
+        return vtrue(assets.variables.get(stuff[0],""))
     if len(stuff)==2:
         stuff = stuff[0],"=",stuff[1]
     current,op,check = stuff
