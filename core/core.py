@@ -395,11 +395,13 @@ class Assets(object):
         if self.cur_script:
             self.cur_script.imgcache[name] = img
         img._meta = self.meta
+        self.real_path = pre+name
         return img
     def open_art(self,name,key=None):
         """Try to open an art file.  Name has no extension.
         Will open gif, then png, then jpg.  Returns list of 
         frame images"""
+        self.real_path = None
         s = None
         try:
             return self._open_art_(name+".png",key)
@@ -975,6 +977,7 @@ class sprite(gui.button):
         else:
             self.base = name
             self.load_extra(meta())
+        self.real_path = assets.real_path
         if self.base:
             self.width,self.height = self.base[0].get_size()
         else:
@@ -1082,6 +1085,7 @@ class sprite(gui.button):
             self.img = self.base[self.x]
         
 class fadesprite(sprite):
+    real_path=None
     def setfade(self,val=255):
         if getattr(self,"fade",None) is None: self.fade = 255
         self.lastfade = self.fade
