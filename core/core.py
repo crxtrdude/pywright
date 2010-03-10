@@ -1100,7 +1100,13 @@ class fadesprite(sprite):
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             self.draw_func = self.mockdraw
             nn = self.name.replace("/","sl")
-            if not os.path.exists("core/cache/"+nn+".mock.png"):
+            exists = os.path.exists("core/cache/"+nn+".mock.png")
+            if exists and self.real_path:
+                cache_t = os.stat("core/cache/"+nn+".mock.png").st_mtime
+                content_t = os.stat(self.real_path).st_mtime
+                if content_t>cache_t:
+                    exists = False
+            if not exists:
                 self.mockimg = self.img.convert()
                 #self.tenpercent = self.img.convert_alpha()
                 invis = [255,0,255]
