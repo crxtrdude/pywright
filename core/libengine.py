@@ -1,4 +1,3 @@
-VERSION = "Version 0.95"
 
 from errors import script_error
 
@@ -16,6 +15,8 @@ import save
 import load
 from pwvlib import *
 
+d = get_data_from_folder(".")
+VERSION = "Version "+cver_s(d["version"])
 
 def pauseandquit():
     import time

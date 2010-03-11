@@ -1,8 +1,11 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.952
+*PyWright 0.960: March 11, 2010*
     - fix for combined sprite fading
     - cached fades are refreshed if the source content changes
+    - some fading graphics crashed
+    - F7 to load worked but not clicking the button
+    - valid expression "is var1 AND var2 OR var3" to test truth of flags or variables
 
 *PyWright Version 0.95: February 28, 2010*
 
