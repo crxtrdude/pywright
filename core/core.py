@@ -679,7 +679,10 @@ class Assets(object):
         if not hide:
             self.cur_script.obs.append(saved())
     def load_game(self,path=None,filename="save",hide=False):
-        if not os.path.exists(path+"/"+filename+".ns"):
+        chkpath=""
+        if path is not None:
+            chkpath=path+"/"
+        if not os.path.exists(chkpath+filename+".ns"):
             self.load_game_old(path,filename,hide)
         else:
             self.load_game_new(path,filename,hide)
