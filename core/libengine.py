@@ -994,7 +994,9 @@ class Script(gui.widget):
         if guitype=="Button":
             print "make button",args
             macroname=args[0]; del args[0]
+            print macroname
             graphic = None
+            width = None
             while args:
                 if args[0].startswith("x="): x=int(args[0][2:]); del args[0]; continue
                 if args[0].startswith("y="): y=int(args[0][2:]); del args[0]; continue
@@ -1016,6 +1018,7 @@ class Script(gui.widget):
             btn.pri = 0
             btn.s_macroname = macroname
             def func(*args):
+                print "go to",macroname
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
             self.obs.append(btn)
