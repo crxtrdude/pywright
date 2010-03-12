@@ -141,8 +141,10 @@ class widget(object):
         return False
 
 class editbox(widget):
-    def __init__(self,target_ob,target_attr):
+    def __init__(self,target_ob,target_attr,is_dict=False):
+        print "init editbox"
         super(editbox,self).__init__()
+        self.is_dict = is_dict
         if target_ob is None:
             self.target_ob = self
             self.target_attr = "text"
@@ -179,7 +181,10 @@ class editbox(widget):
         l = len(self.val())
         if self.carat>l: self.carat = l
     def val(self):
-        return getattr(self.target_ob,self.target_attr).replace("\n","")
+        if self.is_dict:
+            return self.target_ob.get(self.target_attr,"").replace("\n","")
+        else:
+            return getattr(self.target_ob,self.target_attr).replace("\n","")
     def insert(self,unicode):
         try:
             u = str(unicode)
@@ -218,7 +223,10 @@ class editbox(widget):
             v = v[:self.carat]+v[self.carat+1:]
         self.set(v)
     def set(self,v):
-        setattr(self.target_ob,self.target_attr,v)
+        if not self.is_dict:
+            setattr(self.target_ob,self.target_attr,v)
+        else:
+            self.target_ob[self.target_attr] = v
     bgcol = [210,210,210]
     bgcol2 = [180,180,200]
     bgfocus = [180,180,220]
