@@ -978,6 +978,8 @@ class Script(gui.widget):
         x=None
         y=None
         z=None
+        width=None
+        height=None
         name=""
         if guitype=="Back":
             while args:
@@ -1019,6 +1021,41 @@ class Script(gui.widget):
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
+        if guitype=="Input":
+            print "make inputbox",args
+            varname=args[0]; del args[0]
+            varvalue = assets.variables.get(varname,"")
+            assets.variables[varname] = varvalue
+            #graphic = None
+            type = "normal"
+            while args:
+                a = args.pop(0)
+                if a.startswith("x="): x=int(a[2:])
+                elif a.startswith("y="): y=int(a[2:])
+                elif a.startswith("z="): z=int(a[2:])
+                elif a.startswith("name="): name=a[5:]
+                elif a.startswith("width="): width=int(a[6:])
+                elif a.startswith("height="): height=int(a[7:])
+                #elif a.startswith("graphic="): graphic = args[0][8:]
+                elif a == "password":
+                    type = "password"
+            eb = gui.editbox(assets.variables,varname,is_dict=True)
+            #~ if graphic:
+                #~ btn.s_graphic = graphic
+                #~ graphic = assets.open_art(graphic)[0]
+            #~ btn.graphic = graphic
+            eb.rpos = [x,y]
+            if width:
+                eb.width = width
+            if height:
+                eb.height = height
+            print eb.width
+            eb.z = int(assets.variables["_layer_gui"])
+            if z is not None: eb.z = z
+            eb.pri = 0
+            if name: eb.id_name = name
+            else: eb.id_name = "$$"+str(id(eb))+"$$"
+            self.obs.append(eb)
         if guitype=="Wait":
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
