@@ -331,6 +331,10 @@ def PerteVie(vals,elements):
     vals["postcode"] = "penalty -%d"%(amt,)
 def FaireClignoterVie(vals,elements):
     vals["postcode"] = "penalty 0"
+    
+#Game is over
+def ReglerGameOver(vals,elements):
+    vals["postcode"] = "nt\nGAME OVER\nexit\n"
 
 crossexam = [None]
 jumpto_when_press = {}
@@ -350,6 +354,13 @@ def LancerCI(vals,elements):
     if failure_msg:
         label_none[failure_msg[0]] = True
         
+def InputVar(vals,elements):
+    """Ask user to define variable"""
+    print elements
+    pass
+def TesterVar(vals,elements):
+    print elements
+    """Evaluate whether the variable that was input is correct"""
 def DefinirVar(vals,elements):
     """Define variable"""
     vals["postcode"] += "\nsetvar %s %s"%(elements[0][0],elements[1][0])
