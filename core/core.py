@@ -352,6 +352,7 @@ class Assets(object):
         if self.cur_script and self.cur_script.imgcache.has_key(name):
             img = self.cur_script.imgcache[name]
             self.meta = img._meta
+            self.real_path = img.real_path
             return img
         self.meta = meta()
         pre = "art/"
@@ -392,10 +393,10 @@ class Assets(object):
             import gl
             img = [gl.TexQuad([0,0],surface=x) for x in img]
         img = ImgFrames(img)
+        img._meta = self.meta
+        img.real_path = self.real_path = pre+name
         if self.cur_script:
             self.cur_script.imgcache[name] = img
-        img._meta = self.meta
-        self.real_path = pre+name
         return img
     def open_art(self,name,key=None):
         """Try to open an art file.  Name has no extension.
