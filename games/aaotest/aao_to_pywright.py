@@ -324,13 +324,19 @@ goto %(fail)s
 
 #Add and subtract to penalty
 def ReglerVie(vals,elements):
-    amt = int(int(textify(elements[0]))/120.0*100)
-    vals["postcode"] = "penalty %d"%(amt,)
+    """Set penalty to amount"""
+    value = int(int(textify(elements[0]))/120.0*100)
+    code = "set _diff %s\n"%value
+    code += "subvar _diff $penalty\n"
+    code += "penalty $_diff\n"
+    vals["postcode"] = code
 def PerteVie(vals,elements):
+    """Subtract amount from penalty"""
     amt = int(int(textify(elements[0]))/120.0*100)
     vals["postcode"] = "penalty -%d"%(amt,)
 def FaireClignoterVie(vals,elements):
-    vals["postcode"] = "penalty 0"
+    """Show flashing element of penalty"""
+    vals["postcode"] = "flashpenalty %s"%int(elements[0][0])
 def ReglerGameOver(vals,elements):
     """Changes where we go if penalties run out"""
     vals["postcode"] = "setvar _penalty_script intro line_%s"%elements[0][0]
