@@ -680,6 +680,7 @@ class Assets(object):
         if not hide:
             self.cur_script.obs.append(saved())
     def load_game(self,path=None,filename="save",hide=False):
+        self.cur_script.imgcache.clear()
         chkpath=""
         if path is not None:
             chkpath=path+"/"
