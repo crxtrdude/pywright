@@ -299,8 +299,17 @@ class Assets(object):
     def open_script(self,name,macros=True,ext=".txt"):
         lines = self.raw_lines(name,ext)
         reallines = []
+        block_comment = False
         for line in lines:
             line = line.strip()
+            if line.startswith("###"):
+                if block_comment:
+                    block_comment = False
+                else:
+                    block_comment = True
+                continue
+            if block_comment:
+                continue
             if macros and line.startswith("include "):
                 reallines.extend(self.open_script(line[8:].strip(),False))
             else:
