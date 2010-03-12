@@ -6,7 +6,11 @@
     - TODO modify blink rate
     - TODO play only a part of an animation
     - TODO fix word wrapping some more
-    - TODO editbox input/password mode
+    - added "gui Input" command:
+        gui Input [variable_name] {x=} {y=} {z=} {name=} {width=width of box}
+        The input box will start pre filled with the value of the variable given
+        When the player types in the box, it will save the results back to that variable
+        later you can get what they entered by checking the value of the variable
     - TODO updater tag browsing, better sorting
     - TODO bring up CR during possible cross examine, always shows present
     - TODO Press with multi-screen text just goes to the next page
