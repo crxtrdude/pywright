@@ -354,12 +354,27 @@ def LancerCI(vals,elements):
         label_none[failure_msg[0]] = True
         
 def InputVar(vals,elements):
-    """Ask user to define variable"""
-    print elements
-    pass
+    """Ask user to define variable
+    [varname,vartype,password?]"""
+    vals["postcode"] += """gui Input %s name=_in x=12 y=12 password width=100
+gui Button _next__inputvar name=_inb x=12 y=40 enter
+gui Wait
+label _next__inputvar
+delete name=_in
+delete name=_inb"""%(elements[0][0])
+
 def TesterVar(vals,elements):
-    print elements
-    """Evaluate whether the variable that was input is correct"""
+    """Evaluate a variable value
+    [varname,valid values in em,jump points in em, fail point]"""
+    varname = elements[0][0]
+    code = "\n"
+    for i,valid in enumerate(elements[1]):
+        valid = textify(valid)
+        jump = textify(elements[2][i])
+        code += "is %s = %s line_%s\n"%(varname,valid,jump)
+    fail = elements[3][0]
+    code += "goto line_%s"%fail
+    vals["postcode"] += code
 def DefinirVar(vals,elements):
     """Define variable"""
     vals["postcode"] += "\nsetvar %s %s"%(elements[0][0],elements[1][0])
