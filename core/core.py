@@ -1422,9 +1422,20 @@ class penalty(fadesprite):
         else:
             self.delay -= 1
             if self.delay<0:
+                self.die()
                 self.kill = 1
         self.sv(v)
         return True
+    def die(self):
+        if self.gv()<=0:
+            print "bad penalty about to die"
+            ps = assets.variables.get("_penalty_script","")
+            if ps:
+                args = []
+                if " " in ps:
+                    ps,label = ps.split(" ",1)
+                    args.append("label="+label)
+                assets.cur_script._script("script",ps,*args)
         
 class bg(fadesprite):
     autoclear = True

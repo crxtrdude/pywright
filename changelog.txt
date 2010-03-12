@@ -18,6 +18,12 @@
          on the time they were added
       set _layering_method zorder (default) to make the order be based on
          each objects z= value
+    - set _penalty_script [scriptname] {label} to define a place to go if a penalty
+        bar runs out.  Label is optional. Example:
+            set _penalty_script penalty     -  Will run "penalty.txt" if any penalty bar
+                                                        runs out
+            set _penalty_script intro fail    -  Will run "intro.txt" and jump to label "fail"
+                                                        if a penalty bar runs out
 
 *PyWright 0.960: March 11, 2010*
     - fix for combined sprite fading
