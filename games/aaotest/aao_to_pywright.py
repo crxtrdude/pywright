@@ -15,7 +15,7 @@ import re
 import subprocess
 
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10711" #My dialogue test case
-game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10458"
+game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
 
 def create_folders():
     if not os.path.exists("art"):
