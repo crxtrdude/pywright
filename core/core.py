@@ -1742,7 +1742,8 @@ class textbox(gui.widget):
                 if self.pressing == 0:
                     self.pressb.highlight = False
                     assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
-                    self.forward()
+                    #self.forward()
+                    self.kill = 1
             if self.presenting:
                 self.presenting -= 1
                 if self.presenting == 0:
