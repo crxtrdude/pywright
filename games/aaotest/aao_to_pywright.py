@@ -99,7 +99,7 @@ def textify(contentlist,colorize=False,replace_line_end=None):
 def wget(url,saveto):
     print "get",url,"to",saveto
     import urllib
-    if saveto.endswith(".gif"):
+    if url.endswith(".gif"):
         prefix=saveto.rsplit(".",1)[0]
         saveto = prefix+".png"
         txt_name = prefix+".txt"
@@ -109,7 +109,7 @@ def wget(url,saveto):
                 gif2strip.go(url,saveto)
             except urllib2.HTTPError:
                 pass
-    elif saveto.endswith(".mp3"):
+    elif url.endswith(".mp3"):
         prefix=saveto.rsplit(".",1)[0]
         saveto=prefix+".ogg"
         if not os.path.exists(saveto):
@@ -171,13 +171,13 @@ def setupchar(id, name, talk, blink):
     charname = "aao_"+id
     if not os.path.exists("art/port/"+charname):
         os.mkdir("art/port/"+charname)
-    talkname = nice_name(talk).rsplit(".",1)[0]+"(talk).gif"
+    talkname = nice_name(talk).rsplit(".",1)[0]+"(talk).png"
     if not os.path.exists("art/port/"+charname+"/"+talkname):
         url = talk
         if not url.startswith("http://"):
             url = "http://aceattorney.sparklin.org/"+url
         wget(url,"art/port/"+charname+"/"+talkname)
-    blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).gif"
+    blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).png"
     if blink:
         if not os.path.exists("art/port/"+charname+"/"+blinkname):
             url = blink
