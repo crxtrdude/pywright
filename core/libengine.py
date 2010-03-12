@@ -2077,6 +2077,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 if e.type==pygame.KEYDOWN and\
                 e.key == pygame.K_F7 and assets.game!="menu":
                     assets.load_game(assets.game)
+                assets.cur_script.handle_events([e])
         except script_error, e:
             assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             import traceback
