@@ -1697,30 +1697,8 @@ def make_start_script(logo=True):
         item.graphic = image
         list.add_child(item)
         def _play_game(func=f):
-            #~ item.rpos = [0,other_screen(0)]
-            #~ item.text = "LOADING..."
-            #~ item.draw(pygame.screen)
-            #~ draw_screen()
             gamedir = os.path.join("games",func)
-            #~ chars = assets.get_char_list(gamedir)
-            #~ def dchar():
-                #~ return None
-                #~ import libupdate
-                #~ e = libupdate.Engine()
-                #~ e.Download_Characters()
-                #~ while 1:
-                    #~ if libupdate.list.status_box.text.startswith("No new"): return
-                    #~ if libupdate.list.status_box.text.startswith("Download"): break
-                    #~ pygame.display.flip()
-                #~ for child in libupdate.list.children[2:]:
-                    #~ if child.text in chars:
-                        #~ child.checked = 1
-                #~ def draw():
-                    #~ if len(libupdate.list.children)>2:
-                        #~ pygame.screen.blit(arial10.render("Downloading "+libupdate.list.children[2].text,1,[255,255,255]),[0,16])
-                    #~ draw_screen()
-                #~ e.do_downloads(output=(pygame.screen,draw))
-            #~ dchar()
+            assets.game = gamedir
             scr = Script()
             scr.init()
             scr.obs = []
