@@ -1,5 +1,20 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.970:*
+    - TODO randomize typing sounds/volume etc
+    - TODO restore from main screen uses wrong path for some art
+    - TODO modify blink rate
+    - TODO play only a part of an animation
+    - TODO fix word wrapping some more
+    - TODO editbox input/password mode
+    - TODO updater tag browsing, better sorting
+    - TODO bring up CR during possible cross examine, always shows present
+    - TODO Press with multi-screen text just goes to the next page
+    - set _layering_method stack to make the order of objects be based
+         on the time they were added
+      set _layering_method zorder (default) to make the order be based on
+         each objects z= value
+
 *PyWright 0.960: March 11, 2010*
     - fix for combined sprite fading
     - cached fades are refreshed if the source content changes
