@@ -983,11 +983,13 @@ class Script(gui.widget):
         name=""
         if guitype=="Back":
             while args:
-                if args[0].startswith("x="): x=int(args[0][2:]); del args[0]; continue
-                if args[0].startswith("y="): y=int(args[0][2:]); del args[0]; continue
-                if args[0].startswith("z="): z=int(args[0][2:]); del args[0]; continue
-                if args[0].startswith("name="): name=args[0][5:]; del args[0]; continue
-                break
+                a = args.pop(0)
+                if a.startswith("x="): x=int(a[2:])
+                elif a.startswith("y="): y=int(a[2:])
+                elif a.startswith("z="): z=int(a[2:])
+                elif a.startswith("width="): width=int(a[6:])
+                elif a.startswith("height="): height=int(a[7:])
+                elif a.startswith("name="): name=a[5:]
             print x,y,z
             self.obs.append(guiBack(x=x,y=y,z=z,name=name))
             self.buildmode = False
@@ -998,12 +1000,18 @@ class Script(gui.widget):
             graphic = None
             width = None
             while args:
-                if args[0].startswith("x="): x=int(args[0][2:]); del args[0]; continue
-                if args[0].startswith("y="): y=int(args[0][2:]); del args[0]; continue
-                if args[0].startswith("z="): z=int(args[0][2:]); del args[0]; continue
-                if args[0].startswith("name="): name=args[0][5:]; del args[0]; continue
-                if args[0].startswith("graphic="): graphic = args[0][8:]; del args[0]; continue
-                break
+                a = args[0]
+                print a
+                if a.startswith("x="): x=int(a[2:])
+                elif a.startswith("y="): y=int(a[2:])
+                elif a.startswith("z="): z=int(a[2:])
+                elif a.startswith("width="): width=int(a[6:])
+                elif a.startswith("height="): height=int(a[7:])
+                elif a.startswith("name="): name=a[5:]
+                elif a.startswith("graphic="): graphic = a[8:]
+                else:
+                    break
+                del args[0]
             text = ""
             text = " ".join(args)
             btn = gui.button(None,text)
