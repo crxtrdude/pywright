@@ -71,6 +71,9 @@ def load_image(path):
         icon = pygame.image.load(f,path)
         iconcache[path] = icon
     return iconcache[path]
+    
+class my_o_dict(dict):
+    pass
         
 def names(url):
     print "accessing","http://pywright.dawnsoft.org/"+url
@@ -81,11 +84,14 @@ def names(url):
         return {}
     lines = eval(f.read())
     f.close()
-    files = {}
+    files = my_o_dict()
+    files.okeys = []
     for x in lines:
         if x["zipname"] in files:
             if compare_versions(x["version"],files[x["zipname"]]["version"])<0:
                 continue
+        else:
+            files.okeys.append(x["zipname"])
         files[x["zipname"]]=x
     return files
 
@@ -120,7 +126,7 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
         for n in an:
             mn[n] = d
     cases = {"NEW":[],"UPDATED":[],"INSTALLED":[]}
-    for n in sorted(an.keys()):
+    for n in an.okeys:
         if n not in mn:
             status = "NEW"
         elif compare_versions(an[n]["version"],mn[n]["version"])>0:
