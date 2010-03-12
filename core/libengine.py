@@ -96,7 +96,10 @@ class World:
         be rendered"""
         class mylist(list): pass
         n = mylist(self.all[:])
-        argsort(n,"z")
+        if assets.variables.get("_layering_method","zorder") == "zorder":
+            argsort(n,"z")
+        else:
+            pass
         oldapp = n.append
         def _app(ob):
             self.append(ob)
