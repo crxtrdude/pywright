@@ -331,10 +331,9 @@ def PerteVie(vals,elements):
     vals["postcode"] = "penalty -%d"%(amt,)
 def FaireClignoterVie(vals,elements):
     vals["postcode"] = "penalty 0"
-    
-#Game is over
 def ReglerGameOver(vals,elements):
-    vals["postcode"] = "nt\nGAME OVER\nexit\n"
+    """Changes where we go if penalties run out"""
+    vals["postcode"] = "setvar _penalty_script intro line_%s"%elements[0][0]
 
 crossexam = [None]
 jumpto_when_press = {}
@@ -398,7 +397,7 @@ def AjouterCI(vals,elements):
     
 def FinDuJeu(vals,elements):
     """Finish the Game"""
-    vals["postcode"] = "exit"
+    vals["postcode"] = "endscript"
 
 def apply_event(vals,elements):
     e = [e for e in elements if not e=="\n"]
