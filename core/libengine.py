@@ -1057,9 +1057,7 @@ class Script(gui.widget):
             #~ btn.graphic = graphic
             eb.rpos = [x,y]
             if width:
-                eb.width = width
-            if height:
-                eb.height = height
+                eb.force_width = width
             print eb.width
             eb.z = int(assets.variables["_layer_gui"])
             if z is not None: eb.z = z

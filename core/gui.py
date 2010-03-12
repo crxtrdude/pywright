@@ -155,6 +155,7 @@ class editbox(widget):
         self.height = self.font.render("TEST",1,[0,0,0]).get_height()
         self.draw_back = True
         self.carat = 0
+        self.force_width = None
     def click_up(self,pos):
         pass
     def click_down_over(self,mp):
@@ -246,7 +247,9 @@ class editbox(widget):
             self.txtrender = self.font.render(val,1,col)
             if hasattr(self,"bg"): del self.bg
         txt = self.txtrender
-        ts = txt.get_size()
+        ts = list(txt.get_size())
+        if self.force_width is not None:
+            ts[0] = self.force_width
         if not hasattr(self,"bg"): 
             self.bg = pygame.Surface([ts[0]+4,ts[1]+4]).convert_alpha()
             if hasattr(self,"lastbgcol"): del self.lastbgcol
