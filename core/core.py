@@ -1313,6 +1313,7 @@ class portrait(object):
             #if mode=="talk":self.set_talking()
         else:
             raise art_error("Can't load '"+charname+"' '"+emo+"' '"+mode+"'")
+        self.blinkspeed = self.blink_sprite.blinkspeed
     def save(self):
         return pickle.dumps([self.charname,self.emoname,self.modename,self.hide,self.pos,self.nametag,
             getattr(self,"id_name",None)])

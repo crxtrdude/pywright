@@ -31,7 +31,7 @@ def save(ob):
         oprops["id"] = ob.id
         return ["evidence",[],oprops]
     elif isinstance(ob,portrait):
-        cp(["clicksound","nametag","charname","emoname","modename"],ob,oprops)
+        cp(["clicksound","nametag","charname","emoname","modename","blinkspeed"],ob,oprops)
         return ["char",[ob.name,ob.hide],oprops]
     elif isinstance(ob,evidence_menu):
         cp(["page","sx","sy","mode","pri","z","item_set"],ob,oprops)

@@ -19,6 +19,8 @@ def load(script,olist):
         o = evidence(props["id"])
     if cls == "char":
         o = portrait(*args)
+        if "blinkspeed" in props:
+            o.blink_sprite.blinkspeed = props["blinkspeed"]
     if cls == "ev_menu":
         items = [evidence(x) for x in props["items"]]
         del props["items"]
