@@ -3,7 +3,13 @@
 *PyWright 0.970:*
     - TODO randomize typing sounds/volume etc
     - loading a game uses correct path for art
-    - TODO modify blink rate
+    - set _blinkspeed_global [min] [max] - overrides global minimum and maximum
+            frames to wait for a character to blink
+            set _blinkspeed_global default to reset
+    - set _blinkspeed_next [min] [max] - the next character added will inherit
+            this minimum and maimum frames to wait to play the next blink animation
+    - blinkspeed [min] [max] in art files will set the default speed for that sprite
+    - blinking sprites "park" at the first frame of the animation instead of the last
     - TODO play only a part of an animation
     - TODO fix word wrapping some more
     - added "gui Input" command:

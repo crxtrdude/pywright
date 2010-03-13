@@ -20,7 +20,7 @@ def save(ob):
     if hasattr(ob,"fail"):
         oprops["fail"] = ob.fail
     if isinstance(ob,(sprite,portrait,listmenu,menu)):
-        cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd"],ob,oprops)
+        cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd","blinkspeed"],ob,oprops)
     if isinstance(ob,bg):
         return ["bg",[],oprops]
     elif isinstance(ob,testimony_blink):

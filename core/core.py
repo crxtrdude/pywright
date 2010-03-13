@@ -112,6 +112,7 @@ class meta:
         self.frameoffset = {}
         self.delays = {}
         self.speed = 6
+        self.blinkspeed = [40,100]
     def load_from(self,f):
         lines = f.read().replace("\r\n","\n").split("\n")
         setlength = False
@@ -144,6 +145,8 @@ class meta:
                 self.delays[int(frame)] = int(delay)
             if l.startswith("globaldelay "):
                 self.speed = float(l.split(" ",1)[1])
+            if l.startswith("blinkspeed "):
+                self.blinkspeed = [int(x) for x in l.split(" ")[1:]]
         f.close()
         if not setlength:
             if self.vertical==1:
@@ -377,6 +380,8 @@ class Assets(object):
                 f = open(pre+name[:-4]+".txt")
                 self.meta.load_from(f)
             except:
+                import traceback
+                traceback.print_exc()
                 raise art_error("Art textfile corrupt:"+pre+name[:-4]+".txt")
         if name.endswith(".gif"):
             img,self.meta = load_gif_anim(pre+name,self.meta.framecompress)
@@ -936,6 +941,7 @@ arial10 = pygame.font.Font("fonts/arial.ttf",10)
 arial14 = pygame.font.Font("fonts/arial.ttf",14)
 
 class sprite(gui.button):
+    blinkspeed = [40,100]
     autoclear = False
     pri = 0
     #widget stuff
@@ -980,6 +986,12 @@ class sprite(gui.button):
         self.blipsound = m.blipsound
         self.delays = m.delays
         self.spd = m.speed
+        self.blinkspeed = m.blinkspeed
+        if assets.variables.get("_blinkspeed_next",""):
+            self.blinkspeed = [int(x) for x in assets.variables["_blinkspeed_next"].split(" ")]
+            assets.variables["_blinkspeed_next"] = ""
+        elif assets.variables.get("_blinkspeed_global",""):
+            self.blinkspeed = [int(x) for x in assets.variables["_blinkspeed_global"].split(" ")]
     def load(self,name,key=[255,0,255]):
         self.key = key
         if type(name)==type(""):
@@ -1083,16 +1095,13 @@ class sprite(gui.button):
                         self.loops -= 1
                         if self.loops == 1:
                             self.loops = 0
+                elif self.loopmode in ["blink","blinknoset"]:
+                    self.x = 0
+                    self.next = random.randint(self.blinkspeed[0],self.blinkspeed[1])
                 else:
                     self.next = -1
                     self.x-=1
                     #self.x = 0
-        if self.loopmode in ["blink","blinknoset"]:
-            if not getattr(self,"nextblink",None):
-                self.x = 0
-                self.next = self.spd
-                self.nextblink = random.randint(40,100)
-            self.nextblink -= 1
         if self.loopmode == "stop":
             self.loops = 0
         if self.base:
@@ -1265,7 +1274,10 @@ class portrait(object):
                 self.blink_sprite.name = self.combined.name+"_blink"
                 self.talk_sprite.loops = 1
                 self.blink_sprite.loops = 1
+                self.talk_sprite.delays = self.combined.delays
+                self.blink_sprite.delays = self.combined.delays
                 self.blink_sprite.blinkmode = self.combined.blinkmode
+                self.blink_sprite.blinkspeed = self.combined.blinkspeed
                 self.talk_sprite.offsetx = self.combined.offsetx
                 self.talk_sprite.offsety = self.combined.offsety
                 self.blink_sprite.offsetx = self.combined.offsetx
