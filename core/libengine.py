@@ -16,6 +16,7 @@ import load
 from pwvlib import *
 
 d = get_data_from_folder(".")
+__version__ = cver_s(d["version"])
 VERSION = "Version "+cver_s(d["version"])
 
 def pauseandquit():
