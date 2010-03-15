@@ -64,7 +64,7 @@ import cStringIO
 iconcache = {}
 def load_image(path):
     if path not in iconcache:
-        f = urllib2.urlopen("http://pywright.dawnsoft.org/"+path)
+        f = urllib2.urlopen(path)
         txt = f.read()
         f.close()
         f = cStringIO.StringIO(txt)
@@ -188,10 +188,12 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
     else:
         list.status_box.text = "Download "+dir+"! Click check boxes to select."
 
+import libengine
+get_url = "updates3/games.cgi?content_type=%s&ver_type=tuple&fullurl=true&version="+str(libengine.__version__)
+print get_url
 class Engine:
     mode = "port"
     quit_threads = 0
-    dl_url = "http://pywright.dawnsoft.org/"
     def Download_X(self,mode,path,url,check_folder=None):
         def t():
             self.mode = mode
@@ -203,18 +205,18 @@ class Engine:
             root.children[root.start_index].rpos = rpos
         threading.Thread(target=t).start()
     def Download_Characters(self):
-        self.Download_X("port","art/port","updates3/games.cgi?content_type=port&ver_type=tuple")
+        self.Download_X("port","art/port",get_url%("port",))
     def Download_Backgrounds(self):
-        self.Download_X("bg","art/bg","updates3/games.cgi?content_type=bg&ver_type=tuple")
+        self.Download_X("bg","art/bg",get_url%("bg",))
     def Download_Foreground(self):
-        self.Download_X("fg","art/fg","updates3/games.cgi?content_type=fg&ver_type=tuple")
+        self.Download_X("fg","art/fg",get_url%("fg",))
     def Download_Games(self):
-        self.Download_X("games","games","updates3/games.cgi?content_type=games&ver_type=tuple")
+        self.Download_X("games","games",get_url%("games",))
     def Download_Music(self):
-        self.Download_X("music","music","updates3/games.cgi?content_type=music&ver_type=tuple")
+        self.Download_X("music","music",get_url%("music",))
     def Update_PyWright(self,thread=True):
         self.path = "."
-        self.Download_X("engine",".","updates3/games.cgi?content_type=engine&ver_type=tuple",check_folder=".")
+        self.Download_X("engine",".",get_url%("engine",),check_folder=".")
     def do_downloads(self,checkfolder=True,output=None):
         print list.children
         for x in list.children[2:]:
@@ -224,7 +226,7 @@ class Engine:
                     seek,path,filename,url = open("downloads/"+check.filename+"_url","r").read().split(" ")
                     self.download_file(path,filename,url,output,seek)
                 else:
-                    self.download_file(self.path,check.filename,self.dl_url+check.file,output)
+                    self.download_file(self.path,check.filename,check.file,output)
     def download_file(self,path,filename,url,output=None,seek=0):
         if not hasattr(self,"progress"):
             self.progress = progress()
