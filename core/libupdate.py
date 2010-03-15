@@ -341,74 +341,8 @@ class Engine:
     def download(self):
         t = threading.Thread(target=self.do_downloads)
         t.start()
-    def upload(self):
-        t = threading.Thread(target=self.do_uploads)
-        t.start()
-    def update(self):
-        t = threading.Thread(target=self.do_update)
-        t.start()
     def End_updater(self,*args):
         self.running = False
-    def do_update(self,output=False):
-        for x in list.children[2:]:
-            if x.checked:
-                print x
-                if not hasattr(self,"progress"):
-                    self.progress = progress()
-                    root.add_child(self.progress)
-                self.progress.height = 20
-                self.progress.width = 400
-                self.progress.rpos[1] = list.rpos[1]+list.height+20
-                self.progress.progress = 0
-                serv = urllib2.urlopen(self.dl_url+x.file)
-                size = int(serv.info()["Content-Length"])
-                read = 0
-                bytes = 0
-                cli = open("update.zip","wb")
-                s = time.time()
-                bps = 0
-                while not Engine.quit_threads:
-                    r = serv.read(1024)
-                    if not r: break
-                    cli.write(r)
-                    read += len(r)
-                    bytes += len(r)
-                    self.progress.progress = read/float(size)
-                    if time.time()-s>1:
-                        bps = bytes/(time.time()-s)
-                        s = time.time()
-                        bytes = 0
-                    self.progress.text = "%.02dKB/%.02dKB : %.02d KB/s"%(read/1000.0,size/1000.0,bps/1000.0)
-                    if output:
-                        self.progress.rpos = [0,0]
-                        self.progress.draw(screen)
-                        pygame.display.flip()
-                        for evt in pygame.event.get():
-                            if evt.type == pygame.QUIT: raise SystemExit
-                serv.close()
-                cli.close()
-                root.children.remove(self.progress)
-                list.children.remove(x)
-                if os.path.exists("update.zip"):
-                    z = ZipFile("update.zip","r")
-                    for name in z.namelist():
-                        txt = z.read(name)
-                        print name
-                        if "/" in name:
-                            try:
-                                os.makedirs("./"+name.rsplit("/",1)[0])
-                            except:
-                                pass
-                        try:
-                            f = open("./"+name,"wb")
-                            f.write(txt)
-                            f.close()
-                        except:
-                            pass
-                    z.close()
-                    os.remove("update.zip")
-                list.status_box.text = "Update completed."
-                del self.progress
                 
 def run():
     screen = pygame.display.set_mode([400,480])
