@@ -142,7 +142,6 @@ class widget(object):
 
 class editbox(widget):
     def __init__(self,target_ob,target_attr,is_dict=False):
-        print "init editbox"
         super(editbox,self).__init__()
         self.is_dict = is_dict
         if target_ob is None:
