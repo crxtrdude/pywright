@@ -222,7 +222,7 @@ class Engine:
         for x in list.children[2:]:
             check = x.children[1].children[0]
             if check.checked:
-                if os.path.exists("downloads/"+check.filename+"_url"):
+                if os.path.exists("downloads/"+check.filename+"_url") and os.path.exists("downloads/"+check.filename):
                     seek,path,filename,url = open("downloads/"+check.filename+"_url","r").read().split(" ")
                     self.download_file(path,filename,url,output,seek)
                 else:
