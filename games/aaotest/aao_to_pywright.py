@@ -61,12 +61,17 @@ def cent_to_frame(t):
     return int(frames)
 assert cent_to_frame("300")==180
 
-f = urllib.urlopen(game_url)
-html = f.read()
-f.close()
-f = open("last.html","w")
-f.write(html)
-f.close()
+if os.path.exists("last.html"):
+    f = open("last.html")
+    html = f.read()
+    f.close()
+else:
+    f = urllib.urlopen(game_url)
+    html = f.read()
+    f.close()
+    f = open("last.html","w")
+    f.write(html)
+    f.close()
 soup = BeautifulSoup(html)
 first_line = soup.find(id=re.compile("ligne_donnees_"))
 table = first_line.parent
