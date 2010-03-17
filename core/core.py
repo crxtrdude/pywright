@@ -112,7 +112,7 @@ class meta:
         self.frameoffset = {}
         self.delays = {}
         self.speed = 6
-        self.blinkspeed = [40,100]
+        self.blinkspeed = [100,200]
     def load_from(self,f):
         lines = f.read().replace("\r\n","\n").split("\n")
         setlength = False
@@ -941,7 +941,7 @@ arial10 = pygame.font.Font("fonts/arial.ttf",10)
 arial14 = pygame.font.Font("fonts/arial.ttf",14)
 
 class sprite(gui.button):
-    blinkspeed = [40,100]
+    blinkspeed = [100,200]
     autoclear = False
     pri = 0
     #widget stuff
