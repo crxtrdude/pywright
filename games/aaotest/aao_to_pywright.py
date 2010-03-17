@@ -512,10 +512,19 @@ for line in lines:
             if attr['id'] == 'id_auteur_'+id_num:
                 vals['char_id'] = t
             if attr['id'] == 'image_perso_'+id_num:
-                if t != "no":
+                if t == "no":
+                    pass
+                elif vals['char_id'] == "-4":
+                    vals['fg'] = fg(t)
+                else:
                     vals['char'] = t
             if attr['id'] == 'image_fixe_perso_'+id_num:
-                vals["charblink"] = t
+                if t == "no":
+                    pass
+                elif vals['char_id'] == '-4':
+                    pass
+                else:
+                    vals["charblink"] = t
             if attr['id'] == 'operation_'+id_num:
                 content_list = attr.contents[0]
                 if content_list:
@@ -565,8 +574,6 @@ for line in lines:
         else:
             charname,ename = setupchar(vals["char_id"], vals["nametag"], vals["char"], vals["charblink"])
             f.write("\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
-            if vals["char_id"] == "-4":
-                f.write(" stack z=2")
         if vals["fg"]:
             f.write("\nfg "+vals["fg"]+" nowait")
         if vals["pretextcode"]:
