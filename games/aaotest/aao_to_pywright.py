@@ -565,6 +565,8 @@ for line in lines:
         else:
             charname,ename = setupchar(vals["char_id"], vals["nametag"], vals["char"], vals["charblink"])
             f.write("\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
+            if vals["char_id"] == "-4":
+                f.write(" stack z=2")
         if vals["fg"]:
             f.write("\nfg "+vals["fg"]+" nowait")
         if vals["pretextcode"]:
