@@ -1210,7 +1210,7 @@ class portrait(object):
     female = bliplines[4].strip().split(" ")
     def __init__(self,name=None,hide=False):
         self.init(name,hide)
-    def init(self,name=None,hide=False):
+    def init(self,name=None,hide=False,blinkname=None):
         if not name: return
         self.z = zlayers.index(self.__class__.__name__)
         self.clicksound = "blipmale.ogg"
@@ -1228,12 +1228,18 @@ class portrait(object):
             emo,mode = emo.rsplit("(blink)",1)[0],"blink)"
         elif emo.endswith("(talk)"):
             emo,mode = emo.rsplit("(talk)",1)[0],"talk)"
+        blinkemo = emo
+        blinkmode = mode
+        if blinkname:
+            blinkemo = blinkname
+            blinkmode = "blink"
         
         mode = mode[:-1]
         if charname in self.female:
             self.clicksound = "blipfemale.ogg"
         self.charname = charname
         self.emoname = emo
+        self.blinkemo = blinkemo
         self.modename = mode
         self.nametag = charname+"\n"
         
@@ -1255,7 +1261,7 @@ class portrait(object):
 
             def noext(x):
                 return x.rsplit(".",1)[0]
-            available = [x for x in os.listdir(path) if (noext(x)==emo+"(blink)")]
+            available = [x for x in os.listdir(path) if (noext(x)==blinkemo+"(blink)")]
             if available and not hasattr(self.blink_sprite,"img"):
                 self.blink_sprite.load(shrink(path+available[0]))
                 
@@ -1348,6 +1354,13 @@ class portrait(object):
         self.hide = False
         p = self.pos[:]
         self.init(self.charname+"/"+emo+"("+self.modename+")")
+        self.pos = p
+    def set_blink_emotion(self,emo):
+        if self.hide and self.hide != "wait": return
+        if not emo: return
+        self.hide = False
+        p = self.pos[:]
+        self.init(self.charname+"/"+self.emoname+"("+self.modename+")",blinkname=emo)
         self.pos = p
     def set_talking(self):
         if self.hide: return

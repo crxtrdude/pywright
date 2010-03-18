@@ -1203,6 +1203,7 @@ class Script(gui.widget):
         #first arg is z value (or top for highest z)
         z = None
         e = "normal(blink)"
+        be = ""
         x = 0
         y = 0
         pri = None
@@ -1211,6 +1212,7 @@ class Script(gui.widget):
         for a in args:
             if a.startswith("z="): z = int(a[2:])
             if a.startswith("e="): e = a[2:]+"(blink)"
+            if a.startswith("be="): be = a[3:]
             if a.startswith("x="): x = int(a[2:])
             if a.startswith("y="): y = int(a[2:])
             if a.startswith("priority="): pri = int(a[9:])
@@ -1231,6 +1233,8 @@ class Script(gui.widget):
             self._fade("fade","wait","name="+p.id_name,"speed=5")
             p.extrastr = " fade"
         assets.variables["_speaking_name"] = nametag
+        if be:
+            p.set_blink_emotion(be)
     def _emo(self,command,emotion,name=None):
         char = None
         if not name:
@@ -1245,6 +1249,28 @@ class Script(gui.widget):
             err = None
             try:
                 char.set_emotion(emotion)
+            except (script_error,art_error),e:
+                err = e
+            char.nametag = nametag
+            assets.variables["_speaking_name"] = nametag
+            if err:
+                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
+                import traceback
+                traceback.print_exc()
+    def _bemo(self,command,emotion,name=None):
+        char = None
+        if not name:
+            char = assets.variables.get("_speaking", None)
+        if name:
+            for c in self.obs:
+                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
+                    char = c
+                    break
+        if char:
+            nametag = char.nametag
+            err = None
+            try:
+                char.set_blink_emotion(emotion)
             except (script_error,art_error),e:
                 err = e
             char.nametag = nametag
