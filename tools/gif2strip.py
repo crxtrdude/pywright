@@ -82,10 +82,9 @@ def go(path_to_gif,saveto=None,delete=False):
             f.write("framedelay %s %s\n"%(i,d))
 
 if __name__ == "__main__":
-    go("hikaru-breakdown(a).gif")
-    go("miles-damage(d).gif")
-
-#~ if __name__ == "__main__":
-    #~ if len(sys.argv)<2:
-        #~ sys.argv.append(r"games\aaotest\art\port\aao_1\Ressources_Images_persos_PhoenixVieux_1.gif(talk).gif")
-    #~ go(sys.argv[1])
+    if len(sys.argv)<2:
+        for f in os.listdir("."):
+            if f.endswith(".gif"):
+                go(f)
+    else:
+        go(sys.argv[1])
