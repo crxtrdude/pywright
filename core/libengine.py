@@ -906,9 +906,15 @@ class Script(gui.widget):
             if a.startswith("name="):
                 name = a.split("=",1)[1]
         for o in self.world.all:
+            if name and getattr(o,"id_name",None)!=name:
+                continue
+            if isinstance(o,portrait):
+                if "b" in args:
+                    o = o.blink_sprite
+                if "t" in args:
+                    o = o.talk_sprite
             if hasattr(o,"spd"):
-                if not name or getattr(o,"id_name",None)==name:
-                    o.spd = float(spd)
+                o.spd = float(spd)
     def _controlanim(self,command,*args):
         start = None
         end = None

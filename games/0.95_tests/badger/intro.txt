@@ -1,9 +1,13 @@
-set _blinkspeed_next 0 0
 char maya
+globaldelay 12 name=maya t
+"{delay2} Slooooooow talking maya"
+set _blinkspeed_next 0 0
+char maya name=maya
 controlanim name=maya noloop t start=4
 "I can only talk once, so nener nener nener nener. And a hidey hidey ho."
 controlanim name=maya noloop b
 "maybe my frames have run out? by the way I no longer blink"
+
 
 
 fg badger/badger nowait name=badger
