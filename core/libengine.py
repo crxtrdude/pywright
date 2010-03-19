@@ -802,8 +802,29 @@ class Script(gui.widget):
         root = assets.game.replace("\\","/").rsplit("/",1)[0]
         if root == "games" or root == "games":
             root = assets.game
-        self.draw(pygame.screen)
         image = pygame.screen.convert()
+        self.draw(image)
+        resize = list(image.get_size())
+        subrect = image.get_rect()
+        for a in args:
+            if a.startswith("width="):
+                resize[0] = int(a.split("=")[1])
+            if a.startswith("height="):
+                resize[1] = int(a.split("=")[1])
+            if a.startswith("x="):
+                subrect.x = int(a.split("=")[1])
+            if a.startswith("y="):
+                subrect.y = int(a.split("=")[1])
+            if a.startswith("rwidth="):
+                subrect.width = int(a.split("=")[1])
+                print "set width",subrect.width
+            if a.startswith("rheight="):
+                subrect.height = int(a.split("=")[1])
+                print "set height",subrect.height
+        print subrect.x,subrect.y,subrect.width,subrect.height
+        image = image.subsurface(subrect)
+        if resize:
+            image = pygame.transform.scale(image,resize)
         pygame.image.save(image,root+"/"+path+".png")
         image = pygame.transform.scale(image,[50,50])
         pygame.real_screen.blit(image,[0,0])

@@ -17,10 +17,11 @@ mulvar sy 3
 scroll x=$sx y=$sy name=lobby2 speed=5 nowait
 zoom mag=2 frames=30 name=lobby2 nowait
 
-gui Button save_pic x=50 y=200 Save Picture
+gui Button save_pic x=50 y=200 name=spb Save Picture 
 gui Wait
 
 label save_pic
+delete name=spb
 #Go to the next photo
 addvar photos 1
 joinvar v pic_ $photos _bg
@@ -40,7 +41,7 @@ set $v viewphoto
 #joinvar v pic_ $photos _pic
 #set $v photo
 joinvar path photo/art/ev/ pic_ $photos
-screenshot $path
+screenshot $path x=10 y=202 rwidth=236 rheight=172 width=70 height=70
 
 clear
 goto take_photo
