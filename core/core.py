@@ -1299,13 +1299,16 @@ class portrait(object):
                 self.blink_sprite.load(shrink(path+available[0]))
                 if self.blink_sprite.blinkmode=="blinknoset": self.blink_sprite.blinkmode = "stop"
 
-        if os.path.exists("art/port/"+charname):
-            loadfrom("art/port/"+charname)
         game = assets.game.replace("\\","/").rsplit("/",1)[0]
-        if os.path.exists(game+"/art/port/"+charname):
-            loadfrom(game+"/art/port/"+charname)
         if os.path.exists(assets.game+"/art/port/"+charname):
             loadfrom(assets.game+"/art/port/"+charname)
+        elif os.path.exists(game+"/art/port/"+charname):
+            loadfrom(game+"/art/port/"+charname)
+        elif os.path.exists("art/port/"+charname):
+            loadfrom("art/port/"+charname)
+        else:
+            raise art_error("Character folder %s not found"%charname)
+        
         if hasattr(self.talk_sprite,"img") and not hasattr(self.blink_sprite,"img"):
             self.blink_sprite.img = self.talk_sprite.img
             self.blink_sprite.blinkmode = "stop"
