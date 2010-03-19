@@ -5,7 +5,6 @@
         Try with the updated apollo:
         char apollo e=confident    -> when he's blinking, his mouth is open
         char apollo e=confident be=confident2   -> When he's blinking, mouth is closed.
-    - TODO music during case menu
     - TODO downloader recovers from network errors
     - TODO maximum loghistory size
     - TODO randomize typing sounds/volume etc
@@ -17,7 +16,18 @@
             this minimum and maimum frames to wait to play the next blink animation
     - blinkspeed [min] [max] in art files will set the default speed for that sprite
     - blinking sprites "park" at the first frame of the animation instead of the last
-    - TODO play only a part of an animation
+    - can control a playing animation's properties:
+           controlanim name=thename start=n end=n jumpto=n {loop} {noloop} {b/t}
+           name should be equal to the name of an existing object
+           start will change the first frame of the animation
+           end will change the last frame of the animation
+           jumpto will set the current frame of the animation
+           loop will force the animation to loop
+           noloop will force the animation not to loop
+           b will control the blink sprite of named character
+           t will control the talking sprite of named character
+    - globaldelay command can control characters now by appending b or t to control
+            the blink or talk sprite of that character
     - TODO fix word wrapping some more
     - added "gui Input" command:
         gui Input [variable_name] {x=} {y=} {z=} {name=} {width=width of box}

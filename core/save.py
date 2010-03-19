@@ -20,7 +20,7 @@ def save(ob):
     if hasattr(ob,"fail"):
         oprops["fail"] = ob.fail
     if isinstance(ob,(sprite,portrait,listmenu,menu)):
-        cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd","blinkspeed"],ob,oprops)
+        cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd","blinkspeed","loops","loopmode","start","end"],ob,oprops)
     if isinstance(ob,bg):
         return ["bg",[],oprops]
     elif isinstance(ob,testimony_blink):
@@ -31,7 +31,16 @@ def save(ob):
         oprops["id"] = ob.id
         return ["evidence",[],oprops]
     elif isinstance(ob,portrait):
-        cp(["clicksound","nametag","charname","emoname","modename","blinkspeed","blinkemo"],ob,oprops)
+        cp(["clicksound","nametag","charname","emoname","modename","blinkemo"],ob,oprops)
+        tsprops = {}
+        bsprops = {}
+        copy = ["loops","x","blinkspeed","spd","start","end","loopmode","dim"]
+        if hasattr(ob,"talk_sprite"):
+            cp(copy,ob.talk_sprite,tsprops)
+        if hasattr(ob,"talk_sprite"):
+            cp(copy,ob.blink_sprite,bsprops)
+        oprops["tsprite"] = tsprops
+        oprops["bsprite"] = bsprops
         return ["char",[ob.name,ob.hide],oprops]
     elif isinstance(ob,evidence_menu):
         cp(["page","sx","sy","mode","pri","z","item_set"],ob,oprops)

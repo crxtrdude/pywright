@@ -23,6 +23,12 @@ def load(script,olist):
             o.blink_sprite.blinkspeed = props["blinkspeed"]
         if "blinkemo" in props:
             o.set_blink_emotion(props["blinkemo"])
+        if "tsprite" in props:
+            for k in props["tsprite"]:
+                setattr(o.talk_sprite,k,props["tsprite"][k])
+        if "bsprite" in props:
+            for k in props["bsprite"]:
+                setattr(o.blink_sprite,k,props["bsprite"][k])
     if cls == "ev_menu":
         items = [evidence(x) for x in props["items"]]
         del props["items"]

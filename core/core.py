@@ -1039,6 +1039,8 @@ class sprite(gui.button):
             self.pos[1]=other_screen(self.pos[1])
         self.base = []
         self.delays = {}
+        self.start = 0
+        self.end = None
     def save(self):
         if not hasattr(self,"name"): self.name = ""
         id_name = getattr(self,"id_name",None)
@@ -1086,9 +1088,12 @@ class sprite(gui.button):
         if self.next<=0:
             if self.sounds.get(self.x,None):
                 assets.play_sound(self.sounds[self.x])
-            self.next += self.delays.get(self.x,self.spd)
             self.x += 1
-            if self.x>=len(self.base):
+            self.next += self.delays.get(self.x,self.spd)
+            end = len(self.base)
+            if self.end is not None:
+                end = self.end
+            if self.x>=end:
                 if self.loops and (not self.loopmode or self.loopmode=="loop"):
                     self.x = 0
                     if self.loops>1:
@@ -1096,7 +1101,7 @@ class sprite(gui.button):
                         if self.loops == 1:
                             self.loops = 0
                 elif self.loopmode in ["blink","blinknoset"]:
-                    self.x = 0
+                    self.x = self.start
                     self.next = random.randint(self.blinkspeed[0],self.blinkspeed[1])
                 else:
                     self.next = -1
@@ -1105,7 +1110,8 @@ class sprite(gui.button):
         if self.loopmode == "stop":
             self.loops = 0
         if self.base:
-            self.img = self.base[self.x]
+            if self.x<len(self.base):
+                self.img = self.base[self.x]
         
 class fadesprite(sprite):
     real_path=None

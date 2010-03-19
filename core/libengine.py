@@ -909,6 +909,52 @@ class Script(gui.widget):
             if hasattr(o,"spd"):
                 if not name or getattr(o,"id_name",None)==name:
                     o.spd = float(spd)
+    def _controlanim(self,command,*args):
+        start = None
+        end = None
+        name = None
+        loop = None
+        jumpto = None
+        b = None
+        t = None
+        for a in args:
+            if a.startswith("name="):
+                name = a.split("=",1)[1]
+            if a == "loop":
+                loop = True
+            if a == "noloop":
+                loop = False
+            if a.startswith("start="):
+                start = int(a.split("=",1)[1])
+            if a.startswith("end="):
+                end = int(a.split("=",1)[1])
+            if a.startswith("jumpto="):
+                jumpto = int(a.split("=",1)[1])
+            if a == "b":
+                b = True
+            elif a == "t":
+                t = True
+        for o in self.world.all:
+            if not name or getattr(o,"id_name",None)==name:
+                if isinstance(o,portrait):
+                    if b:
+                        o = o.blink_sprite
+                    elif t:
+                        o = o.talk_sprite
+                if start is not None:
+                    o.start = start
+                    if o.x<start:
+                        o.x = start
+                if end is not None:
+                    o.end = end
+                if loop is not None:
+                    if loop:
+                        o.loops = 1
+                    else:
+                        o.loops = 0
+                        o.loopmode = "stop"
+                if jumpto is not None:
+                    o.x = jumpto
     @category("graphics")
     def _obj(self,command,*args):
         func = {"bg":bg,"fg":fg,"ev":evidence,"obj":graphic}[command]
