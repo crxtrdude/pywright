@@ -223,11 +223,11 @@ class Engine:
             check = x.children[1].children[0]
             if check.checked:
                 if os.path.exists("downloads/"+check.filename+"_url") and os.path.exists("downloads/"+check.filename):
-                    seek,path,filename,url = open("downloads/"+check.filename+"_url","r").read().split(" ")
-                    self.download_file(path,filename,url,output,seek)
+                    path,filename,url = open("downloads/"+check.filename+"_url","r").read().split(" ")
+                    self.download_file(path,filename,url,output,True)
                 else:
                     self.download_file(self.path,check.filename,check.file,output)
-    def download_file(self,path,filename,url,output=None,seek=0):
+    def download_file(self,path,filename,url,output=None,seek=False):
         if not hasattr(self,"progress"):
             self.progress = progress()
             root.add_child(self.progress)
@@ -237,34 +237,36 @@ class Engine:
         self.progress.progress = 0
         headers = {"User-Agent":"pywright downloader"}
         if seek:
-            seek = int(seek)
+            f = open("downloads/"+filename,"rb")
+            old = f.read()
+            f.close()
+            cli = open("downloads/"+filename,"a")
+            seek = len(old)
             serv = urllib2.urlopen(url)
             size = int(serv.info()["Content-Length"])
+            if seek>size:
+                os.remove("downloads/"+filename+"_url")
+                cli = open("downloads/"+filename,"w")
             headers["Range"] = "bytes=%d-%d"%(seek,size)
             serv.close()
+        else:
+            seek = 0
+            cli = open("downloads/"+filename,"wb")
         req = urllib2.Request(url,None,headers)
         try:
             serv = urllib2.urlopen(req)
         except:
             seek = 0
             serv = urllib2.urlopen(url)
-        size = int(serv.info()["Content-Length"])
+            size = int(serv.info()["Content-Length"])
         read = seek
         bytes = seek
         prog = open("downloads/"+filename+"_url","w")
-        prog.write(str(seek)+" "+path+" "+filename+" "+url)
+        prog.write(path+" "+filename+" "+url)
         prog.close()
         f = open("downloads/last","w")
         f.write(path+" "+filename)
         f.close()
-        old = None
-        if seek:
-            f = open("downloads/"+filename,"rb")
-            old = f.read()
-            f.close()
-        cli = open("downloads/"+filename,"wb")
-        if old:
-            cli.write(old)
         s = time.time()
         bps = 0
         while not Engine.quit_threads:
@@ -287,7 +289,7 @@ class Engine:
                 for evt in pygame.event.get():
                     if evt.type == pygame.QUIT: raise SystemExit
             prog = open("downloads/"+filename+"_url","w")
-            prog.write(str(read)+" "+path+" "+filename+" "+url)
+            prog.write(path+" "+filename+" "+url)
             prog.close()
         serv.close()
         cli.close()
