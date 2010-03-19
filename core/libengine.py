@@ -34,6 +34,31 @@ def category(cat):
         f.cat = cat
         return f
     return _dec
+class DOCTYPE():
+    def __init__(self,name,description="",default=None):
+        self.name = name
+        self.description = description
+        self.default = default
+    def __repr__(self):
+        s = self.__class__.__name__+" ( "+self.name+":"+self.description+" ) "
+        if self.default is not None:
+            s+="default:"+repr(self.default)
+        return s
+class COMBINED(DOCTYPE):
+    """Set of arguments joined as text"""
+class KEYWORD(DOCTYPE):
+    """A value assigned by name"""
+class TOKEN(DOCTYPE):
+    """This exact token string may be present"""
+class VALUE(DOCTYPE):
+    """A named value, assigned by position"""
+class CHOICE():
+    """One of these options should be present here"""
+    def __init__(self,options):
+        self.options = options
+    def __repr__(self):
+        return self.__class__.__name__+" ["+" ".join(repr(o) for o in self.options)+"]"
+
     
 delete_on_menu = [evidence,portrait,fg]
 only_one = [textbox,testimony_blink,evidence_menu]
@@ -534,14 +559,23 @@ class Script(gui.widget):
         if name>=len(self.scriptlines) or name<0:
             raise script_error,"Trying to go to invalid line number"
         self.si = name+1
-    def _draw_on(self,*args):
+    @category([])
+    def _draw_on(self,command,*args):
+        """Turns engine drawing on."""
         assets.variables["render"] = 1
-    def _draw_off(self,*args):
+    @category([])
+    def _draw_off(self,command,*args):
+        """Turns engine drawing off."""
         assets.variables["render"] = 0
-    def _print(self,*args):
+    @category([COMBINED("text","Some text to print")])
+    def _print(self,command,*args):
+        """Prints some text to the logfile. Only useful for debugging purposes."""
         print " ".join(args[1:])
-    @category("control")
-    def _endscript(self,*args):
+    @category([])
+    def _endscript(self,command,*args):
+        """Ends the currently running script and pops it off the stack. Multiple scripts
+        may be running in PyWright, in which case the next script on the stack will
+        resume running."""
         self.buildmode = False
         if self in assets.stack:
             assets.stack.remove(self)
@@ -555,17 +589,23 @@ class Script(gui.widget):
             assets.stack[:] = []
             make_start_script(False)
         return
-    @category("control")
+    @category([CHOICE([TOKEN("true","turns on debug mode"),TOKEN("false","turns off debug mode")])])
     def _debug(self,command,value):
+        """Used to turn debug mode on or off. Debug mode will print more errors to the screen,
+        and allow you to skip through any text."""
         if value.lower() in ["on","1","true"]:
             assets.variables["_debug"] = "on"
         else:
             assets.variables["_debug"] = "off"
-    @category("control")
+    @category([COMBINED("label text","The name of this section of code")])
     def _label(self,command,*name):
+        """Used to mark a spot in a wrightscript file. Other code can then refer to this spot,
+        specifically for making the code reader "goto" this spot."""
         assets.variables["_lastlabel"] = " ".join(name)
-    @category("control")
+    @category([VALUE("game","Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase"),
+                    VALUE("script","Script to look for in the game folder to run first","intro")])
     def _game(self,command,game,script="intro"):
+        """Can be used to start a new game or case."""
         for o in self.obs[:]:
             o.kill = 1
         assets.clear()
@@ -575,8 +615,10 @@ class Script(gui.widget):
         scene = script
         #assets.addscene(scene)
         self.init(scene)
-    @category("control")
+    @category([COMBINED("destination","The destination label to move to"),
+                    KEYWORD("fail","A label to jump to if the destination can't be found")])
     def _goto(self,command,place,*args):
+        """Makes the script go to a different section, based on the label name."""
         fail = None
         for x in args:
             if "=" in x:
@@ -584,6 +626,10 @@ class Script(gui.widget):
                 if k == "fail":
                     fail = v
         self.goto_result(place,wrap=True,backup=fail)
+    @category([COMBINED("flag expression","list of flag names joined with AND or OR"),
+                    CHOICE([
+                    TOKEN("?"),VALUE("label","label to jump to if the evaluation is true")
+                    ])])
     def flag_logic(self,value,*args):
         fail=None
         args = list(args)
@@ -606,17 +652,32 @@ class Script(gui.widget):
             mode = 1-mode
         if not eval(sentance)==value: return self.fail(label,fail)
         self.succeed(label)
-    @category("control")
+    @category(flag_logic.cat)
     def _noflag(self,command,*args):
+        """Evaluates an expression with flag names. If the expression
+        is not true, jumps to the listed label. Otherwise, will
+        jump to the fail keyword if that was given. If the line ends
+        with a '?', it will execute the next line and the next line only
+        when the flag expression is false."""
         self.flag_logic(False,*args)
-    @category("control")
+    @category(flag_logic.cat)
     def _flag(self,command,*args):
+        """Evaluates an expression with flag names. If the expression
+        is true, jumps to the listed label. Otherwise, will
+        jump to the fail keyword if that was given. If the line ends
+        with a '?', it will execute the next line and the next line only
+        when the flag expression is true."""
         self.flag_logic(True,*args)
-    @category("control")
+    @category([VALUE('flag name','flag to set')])
     def _setflag(self,command,flag):
+        """Sets a flag. Shorthand for setting a variable equal to true. Flags
+        will remain set for the remainder of the game, and can be used to
+        track what a player has done."""
         if flag not in assets.variables: assets.variables[flag]="true"
-    @category("control")
+    @category([VALUE('flag name','flag to unset')])
     def _delflag(self,command,flag):
+        """Deletes a flag. Flags will remain set for the remainder of the game, but
+        can be forgotten with delflag."""
         if flag in assets.variables: del assets.variables[flag]
     @category("control")
     def _set(self,command,variable,*args):
@@ -627,6 +688,7 @@ class Script(gui.widget):
         value = "".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
+    @category("blah")
     def _random(self,command,variable,start,end):
         random.seed(pygame.time.get_ticks()+random.random())
         value = random.randint(int(start),int(end))
@@ -660,6 +722,7 @@ class Script(gui.widget):
         oldvalue = int(assets.variables.get(variable,0))
         oldvalue = abs(int(oldvalue))
         assets.variables[variable] = str(oldvalue)
+    @category("blah")
     def _exportvars(self,command,filename,*vars):
         d = {}
         if not vars:
@@ -672,6 +735,7 @@ class Script(gui.widget):
         f = open(assets.game+"/"+filename,"w")
         f.write(repr(d))
         f.close()
+    @category("blah")
     def _importvars(self,command,filename):
         filename = filename.replace("..","").replace(":","")
         while filename.startswith("/"):
@@ -685,6 +749,7 @@ class Script(gui.widget):
         if txt.strip():
             d = eval(txt)
             assets.variables.update(d)
+    @category("blah")
     def _savegame(self,command,*args):
         filename = "save"
         hide = False
@@ -698,6 +763,7 @@ class Script(gui.widget):
         assets.variables["_allow_saveload"] = "true"
         assets.save_game(filename,hide)
         self.si -= 1
+    @category("blah")
     def _loadgame(self,command,*args):
         filename = "save"
         hide = False
@@ -710,6 +776,7 @@ class Script(gui.widget):
         assets.variables["_allow_saveload"] = "true"
         assets.load_game(None,filename,hide)
         return self._endscript()
+    @category("blah")
     def _deletegame(self,command,path):
         if "/" in path or "\\" in path:
             raise script_error("Invalid save file path:'%s'"%(path,))
@@ -740,8 +807,13 @@ class Script(gui.widget):
         args = [OR(x) for x in args]
         if False in args: return self.fail(label,fail)
         self.succeed(label)
-    @category("control")
+    @category([COMBINED('expression'),
+                    KEYWORD('fail','label to jump to if expression fails'),
+                    CHOICE([VALUE('label'),TOKEN('?')])])
     def _isnot(self,command,*args):
+        """If the expression is false, will jump to the success label.
+        Otherwise, it will either continue to the next line, or jump to
+        the label set by the fail keyword"""
         fail = None
         args = list(args)
         label = args.pop(-1)
@@ -797,7 +869,7 @@ class Script(gui.widget):
             return self.succeed(label)
         return self.fail(label)
     @category("control")
-    def _nopenalty(self,*args):
+    def _nopenalty(self,command,*args):
         if assets.variables.get("penalty",100)<=0:
             self._goto(None,args[1])
     @category("control")
@@ -818,6 +890,7 @@ class Script(gui.widget):
         do = delay(ticks)
         do.pri=pri
         self.obs.append(do)
+    @category("blah")
     def _timer(self,command,ticks,run):
         self.obs.append(timer(int(ticks),run))
     @category("control")
@@ -900,6 +973,7 @@ class Script(gui.widget):
     @category("control")
     def _top(self,command):
         self.si = 0
+    @category("blah")
     def _globaldelay(self,command,spd,*args):
         name = None
         for a in args:
@@ -915,6 +989,7 @@ class Script(gui.widget):
                     o = o.talk_sprite
             if hasattr(o,"spd"):
                 o.spd = float(spd)
+    @category("blah")
     def _controlanim(self,command,*args):
         start = None
         end = None
@@ -1012,19 +1087,20 @@ class Script(gui.widget):
         if "fade" in args: self._fade("fade","wait","name="+o.id_name,"speed=5")
         if loops is not None:
             o.loops = int(loops)
+    @category("blah")
     def _movie(self,command,file,sound=None):
         self.buildmode = False
         m = movie(file,sound)
         self.obs.append(m)
     @category("graphics")
-    def _bg(self,*args):
-        self._obj(*args)
+    def _bg(self,command,*args):
+        self._obj(command,*args)
     @category("graphics")
-    def _fg(self,*args):
-        self._obj(*args)
+    def _fg(self,command,*args):
+        self._obj(command,*args)
     @category("graphics")
-    def _ev(self,*args):
-        self._obj(*args)
+    def _ev(self,command,*args):
+        self._obj(command,*args)
     @category("graphics")
     def _gui(self,command,guitype,*args):
         args = list(args)
@@ -1152,11 +1228,11 @@ class Script(gui.widget):
         self.obs.append(penalty(end,var))
         self.buildmode = False
     @category("event")
-    def _notguilty(self,*args):
+    def _notguilty(self,command,*args):
         self.obs.append(notguilty())
         self.buildmode = False
     @category("event")
-    def _guilty(self,*args):
+    def _guilty(self,command,*args):
         self.obs.append(guilty())
         self.buildmode = False
     @category("event")
@@ -1173,6 +1249,7 @@ class Script(gui.widget):
                                                 setzero={"nowait":"wait"})
         self.obs.append(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    @category("blah")
     def _zoom(self,command,*args):
         mag = 1
         frames = 1
@@ -1287,6 +1364,7 @@ class Script(gui.widget):
         assets.variables["_speaking_name"] = nametag
         if be:
             p.set_blink_emotion(be)
+    @category("blah")
     def _emo(self,command,emotion,name=None):
         char = None
         if not name:
@@ -1309,6 +1387,7 @@ class Script(gui.widget):
                 assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
                 import traceback
                 traceback.print_exc()
+    @category("blah")
     def _bemo(self,command,emotion,name=None):
         char = None
         if not name:
@@ -1452,11 +1531,14 @@ class Script(gui.widget):
                 #Add a dummy last statement so that next_statement can exit the cross/endcross section
                 assets.variables["_statements"].append({"words":"$$$","test":None,"index":self.si+ni})
                 break
+    @category("blah")
     def _cross_restart(self,command,*args):
         if assets.variables.get("currentcross",None) is not None:
             self.si = assets.variables.get("currentcross",None)
+    @category("blah")
     def _next_statement(self,command,*args):
         self.next_statement()
+    @category("blah")
     def _prev_statement(self,command,*args):
         self.prev_statement()
     @category("cross")
@@ -1473,6 +1555,7 @@ class Script(gui.widget):
             test = statement.pop(-1)[5:]
         statement = " ".join(statement)
         return statement,test
+    @category("blah")
     def _statement(self,command,*statement):
         statement,test = self.parse_statement(statement)
         if not self.state_test_true(test):
