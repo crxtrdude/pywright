@@ -2608,8 +2608,7 @@ class examine_menu(sprite,gui.widget):
             self.highlight()
     def click_down_over(self,mp):
         gui.window.focused = self
-        print mp[0],mp[1]-other_screen(0)
-        if mp[0]<175 or mp[1]-other_screen(0)<159:
+        if self.hide or self.selected == ["none"] or mp[0]<175 or mp[1]-other_screen(0)<159:
             self.move_over(mp,None,None)
     def click_up(self,mp):
         if gui.window.focused == self:
