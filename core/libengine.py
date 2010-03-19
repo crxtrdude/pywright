@@ -1853,7 +1853,7 @@ def make_start_script(logo=True):
     introlines = []
     try:
         import urllib2
-        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro.txt")
+        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro.txt",timeout=2)
         introlines = online_script.read().split("\n")
         online_script.close()
     except:
