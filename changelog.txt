@@ -47,6 +47,16 @@
                                                         runs out
             set _penalty_script intro fail    -  Will run "intro.txt" and jump to label "fail"
                                                         if a penalty bar runs out
+    - added a screenshot command:
+            screen [name] {width=} {height=} {x=} {y=} {rwidth=} {rheight=}
+        saves a screenshot as [name]
+        [name] is relative to the current game directory
+        if you put it in art/fg you can then show it in game
+        will resize to width and height if they are listed (they
+        must both be listed if one is)
+        if x, y, rwidth, and rheight are listed, this is the region of the screen that
+        will be in the screenshot
+        
 
 *PyWright 0.960: March 11, 2010*
     - fix for combined sprite fading
