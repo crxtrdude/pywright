@@ -1876,6 +1876,7 @@ def make_start_script(logo=True):
 
     def run_updater(*args):
         import libupdate
+        reload(libupdate)
         libupdate.run()
         make_screen()
         make_start_script()
