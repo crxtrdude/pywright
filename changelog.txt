@@ -48,8 +48,8 @@
             set _penalty_script intro fail    -  Will run "intro.txt" and jump to label "fail"
                                                         if a penalty bar runs out
     - added a screenshot command:
-            screen [name] {width=} {height=} {x=} {y=} {rwidth=} {rheight=}
-        saves a screenshot as [name]
+            screenshot [name] {width=} {height=} {x=} {y=} {rwidth=} {rheight=}
+        saves a screenshot as [name], make sure to include the .png or .jpg on the end
         [name] is relative to the current game directory
         if you put it in art/fg you can then show it in game
         will resize to width and height if they are listed (they

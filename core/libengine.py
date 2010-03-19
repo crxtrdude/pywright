@@ -560,19 +560,19 @@ class Script(gui.widget):
             raise script_error,"Trying to go to invalid line number"
         self.si = name+1
     @category([])
-    def _draw_on(self,command,*args):
+    def _draw_on(self,*args):
         """Turns engine drawing on."""
         assets.variables["render"] = 1
     @category([])
-    def _draw_off(self,command,*args):
+    def _draw_off(self,*args):
         """Turns engine drawing off."""
         assets.variables["render"] = 0
     @category([COMBINED("text","Some text to print")])
-    def _print(self,command,*args):
+    def _print(self,*args):
         """Prints some text to the logfile. Only useful for debugging purposes."""
         print " ".join(args[1:])
     @category([])
-    def _endscript(self,command,*args):
+    def _endscript(self,*args):
         """Ends the currently running script and pops it off the stack. Multiple scripts
         may be running in PyWright, in which case the next script on the stack will
         resume running."""
@@ -791,6 +791,23 @@ class Script(gui.widget):
             os.remove(path)
         except:
             raise script_error("Could not delete save file, file in use or protected")
+    @category([VALUE("path","path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)"),
+                    KEYWORD("width","shrink screenshot to this width"),
+                    KEYWORD("height","shrink screenshot to this height"),
+                    KEYWORD("x","x-value of region to screenshot"),
+                    KEYWORD("y","y-value of region to screenshot"),
+                    KEYWORD("rwidth","width of region to screenshot"),
+                    KEYWORD("rheight","height of region to screenshot")])
+    def _screenshot(self,command,path,*args):
+        root = assets.game.replace("\\","/").rsplit("/",1)[0]
+        if root == "games" or root == "games":
+            root = assets.game
+        self.draw(pygame.screen)
+        image = pygame.screen.convert()
+        pygame.image.save(image,root+"/"+path+".png")
+        image = pygame.transform.scale(image,[50,50])
+        pygame.real_screen.blit(image,[0,0])
+        pygame.display.flip()
     @category("control")
     def _is(self,command,*args):
         fail = None
