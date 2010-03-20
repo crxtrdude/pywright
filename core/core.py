@@ -499,9 +499,9 @@ class Assets(object):
             self.snds[name] = snd
         snd.stop()
         try:
-            snd.set_volume(float(self.sound_volume/100.0))
+            snd.set_volume(float(self.sound_volume/100.0)*volume)
         except:
-            snd.volume = self.sound_volume/100.0
+            snd.volume = (self.sound_volume/100.0)*volume
         channel = snd.play()
         return channel
     def play_music(self,track=None,loop=0,pre=None,reset_track=True):
@@ -1938,7 +1938,7 @@ class textbox(gui.widget):
                         if self.in_paren:
                             assets.portrait.set_blinking()
                     if char.strip():
-                        assets.play_sound(self.clicksound)
+                        assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
                     addchar = False
                     self.next_char = int(self.next_char*self.delay)
                     if self.wait=="manual":

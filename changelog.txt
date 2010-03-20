@@ -8,7 +8,7 @@
     - downloader a little more fault tolerant
     - downloader has less urls hardcoded, this will help when I move downloads
         to a separate content service from the web site
-    - TODO randomize typing sounds/volume etc
+    - randomized clicksound volume
     - fixed check button on examine
     - loading a game uses correct path for art
     - set _blinkspeed_global [min] [max] - overrides global minimum and maximum
