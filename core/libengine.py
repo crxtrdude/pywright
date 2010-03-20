@@ -1609,6 +1609,7 @@ class Script(gui.widget):
                 if x["words"]==self.statement:
                     self.si = x["index"]
                     self.next_statement()
+            self.cross = "proceed"
             return
         self.si = self.lastline
     @category("cross")

@@ -1798,6 +1798,7 @@ class textbox(gui.widget):
                 self.pressing -= 1
                 if self.pressing == 0:
                     self.pressb.highlight = False
+                    assets.cur_script.cross = "pressed"
                     assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
                     #self.forward()
                     self.kill = 1
@@ -3131,7 +3132,7 @@ class evidence_menu(fadesprite,gui.widget):
         if self.back or self.switch: 
             #print "have back or switch",self.back,self.switch
             return
-        if not assets.cur_script.cross=="proceed": 
+        if not assets.cur_script.cross=="proceed":
             #print "no cur_script.cross"
             return
         if not vtrue(assets.variables.get("_allow_present_"+self.item_set,"true")):
@@ -3144,6 +3145,7 @@ class evidence_menu(fadesprite,gui.widget):
     def k_x(self):
         if not self.can_present(): return
         assets.variables["_selected"] = self.chosen
+        assets.cur_script.cross = "presenting"
         assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),backup=self.fail)
         self.kill = 1
         for o in assets.cur_script.obs:

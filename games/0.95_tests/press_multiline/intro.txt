@@ -1,0 +1,21 @@
+addev bus
+label top
+cross
+statement a
+"this{n}is{n}a{n}long{n}statement{n}mwahahaha{n}and stuff."
+statement b
+"another statement"
+endcross
+goto top
+
+label press a
+"You pressed the statmenet"
+resume
+
+label press b
+"Pressing b"
+resume
+
+label none
+"None!"
+resume
