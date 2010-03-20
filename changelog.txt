@@ -5,8 +5,9 @@
         Try with the updated apollo:
         char apollo e=confident    -> when he's blinking, his mouth is open
         char apollo e=confident be=confident2   -> When he's blinking, mouth is closed.
-    - TODO downloader recovers from network errors
-    - TODO maximum loghistory size
+    - downloader a little more fault tolerant
+    - downloader has less urls hardcoded, this will help when I move downloads
+        to a separate content service from the web site
     - TODO randomize typing sounds/volume etc
     - fixed check button on examine
     - loading a game uses correct path for art
