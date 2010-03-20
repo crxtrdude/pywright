@@ -1,3 +1,8 @@
+label wrap
+
+"{c999}I'm sure none of our lives will ever seem the same after the events of the last couple of months."
+
+
 addev bus
 label top
 cross

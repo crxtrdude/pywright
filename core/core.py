@@ -786,7 +786,7 @@ class ImgFont(object):
         self.chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ "+\
          "abcdefghijklmnopqrstuvwxyz"+\
          "!?.;[](){}\"\"@#:+,/*'_\t\r%\b~<>&`^-"
-        self.width = {}
+        self.width = {"":0}
         self.start = {}
         self.quote = 0
     def get_char(self,t,color=[255,255,255]):
@@ -857,19 +857,25 @@ class ImgFont(object):
         parse = True
         wb = 0
         for i,c in enumerate(text):
+            
+            if c not in self.width:
+                self.get_char(c)
+                
             if c == "{":
                 parse = False
-            if parse and c == " ":
-                which.append("")
             if parse:
-                if which == left and width+self.width.get(c,8)>max_width:
+                if which == left and width+self.width[c]>max_width:
                     r = which.pop(-1)
                     which = right
                     right.insert(0,r[1:])
-                width+=self.width.get(c,8)
+                elif c == " ":
+                    if not which[-1] or which[-1][-1]!=" ":
+                        which.append("")
+                width+=self.width[c]
             if c== "}":
                 parse = True
             which[-1]+=c
+        print left,right
         return "".join(left),"".join(right)
     def render(self,text,color=[255,255,255],return_size=False):
         """return a surface with rendered text
@@ -1604,14 +1610,15 @@ class textbox(gui.widget):
         text = "{".join(nt)
         lines = text.split("\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
-        if len(lines)>1:
-            wrap = False
+        if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
+            if len(lines)>1:
+                wrap = False
         pages = []
         page = []
         while lines:
             line = lines.pop(0)
             if wrap:
-                left,right = font.split_line(line,254)
+                left,right = font.split_line(line,250)
             else:
                 left,right = line,""
             page.append(left)

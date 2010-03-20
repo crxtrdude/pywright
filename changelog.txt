@@ -1,6 +1,6 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.970:*
+*PyWright 0.970: March 19, 2010*
     - characters can choose different blink animations than the default:
         Try with the updated apollo:
         char apollo e=confident    -> when he's blinking, his mouth is open
@@ -30,7 +30,14 @@
            t will control the talking sprite of named character
     - globaldelay command can control characters now by appending b or t to control
             the blink or talk sprite of that character
-    - TODO fix word wrapping some more
+    - fixed word wrapping some more. Bugs seem to be gone. If
+        _textbox_wrap_avoid_controlled is true (defaults to true), lines containing
+        {n} will not be wrapped, even if _textbox_wrap is true. If you want to
+        have text wrapping on lines containing {n}, set _textbox_wrap_avoid_controlled
+        to false, and _textbox_wrap to true. To always control text wrapping manually,
+        set _textbox_wrap to false. AAO games have lines containing {n} that also
+        need wrapping, so aao conversion needs to use _textbox_wrap true and
+        _textbox_wrap_avoid_controlled false.
     - added "gui Input" command:
         gui Input [variable_name] {x=} {y=} {z=} {name=} {width=width of box}
         The input box will start pre filled with the value of the variable given
