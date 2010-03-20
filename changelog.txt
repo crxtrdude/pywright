@@ -36,7 +36,6 @@
         The input box will start pre filled with the value of the variable given
         When the player types in the box, it will save the results back to that variable
         later you can get what they entered by checking the value of the variable
-    - TODO updater tag browsing, better sorting
     - entering the court record during a press of a cross examine statement doesn't show the
         present option
     - set _layering_method stack to make the order of objects be based
