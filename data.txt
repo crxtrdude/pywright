@@ -1,5 +1,5 @@
-version 0.960
-version_date 3/10/2010
+version 0.970
+version_date 3/20/2010
 author saluk
 website http://pywright.dawnsoft.org/
 title PyWright Game Engine
