@@ -178,7 +178,7 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
         p.add_child(stats)
         p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
         cases[status].append(p)
-    for s in ["NEW","UPDATED","INSTALLED"]:
+    for s in ["UPDATED","NEW","INSTALLED"]:
         for n in cases[s]:
             list.add_child(n)
     if dir == ".":
