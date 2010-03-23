@@ -1,5 +1,8 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.971: March 22, 2010*
+    - Major bug in updater, downloads only worked on resumable files
+
 *PyWright 0.970: March 19, 2010*
     - characters can choose different blink animations than the default:
         Try with the updated apollo:

@@ -236,29 +236,41 @@ class Engine:
         self.progress.rpos[1] = list.rpos[1]+list.height+20
         self.progress.progress = 0
         headers = {"User-Agent":"pywright downloader"}
+        size = None
+        print "download with seek",seek
         if seek:
             f = open("downloads/"+filename,"rb")
             old = f.read()
             f.close()
-            cli = open("downloads/"+filename,"a")
+            cli = open("downloads/"+filename,"w")
+            cli.write(old)
             seek = len(old)
+            print "seeked",seek,"bytes"
             serv = urllib2.urlopen(url)
             size = int(serv.info()["Content-Length"])
             if seek>size:
+                print "resetting download"
+                seek = 0
                 os.remove("downloads/"+filename+"_url")
                 cli = open("downloads/"+filename,"w")
             headers["Range"] = "bytes=%d-%d"%(seek,size)
             serv.close()
+            print "headers:",headers
         else:
             seek = 0
             cli = open("downloads/"+filename,"wb")
+            print "opened new file"
         req = urllib2.Request(url,None,headers)
         try:
             serv = urllib2.urlopen(req)
+            print "opened resume"
         except:
             seek = 0
             serv = urllib2.urlopen(url)
+            print "opened new"
+        if not size:
             size = int(serv.info()["Content-Length"])
+        print "size of document:",size
         read = seek
         bytes = seek
         prog = open("downloads/"+filename+"_url","w")
@@ -273,6 +285,7 @@ class Engine:
             r = serv.read(4096)
             if not r: break
             cli.write(r)
+            cli.flush()
             read += len(r)
             bytes += len(r)
             self.progress.progress = read/float(size)
@@ -293,8 +306,7 @@ class Engine:
             prog.close()
         serv.close()
         cli.close()
-        self.extract_zip(path,filename)
-        self.progress.text = "FINISHED"
+        self.progress.text = self.extract_zip(path,filename)
         del self.progress
         if self.mode == "games":
             self.Download_Games()
@@ -302,8 +314,9 @@ class Engine:
         try:
             z = ZipFile("downloads/"+filename,"r")
         except:
-            print "File corrupt"
-            return
+            import traceback
+            traceback.print_exc()
+            return "Corrupt"
         
         if self.mode == "engine":
             root = "./"
@@ -324,7 +337,10 @@ class Engine:
             if hasattr(self,"progress"):
                 self.progress.text = "extracting:"+name
             print "extract:",name
-            txt = z.read(name)
+            try:
+                txt = z.read(name)
+            except:
+                return "Corrupt download"
             if block:
                 if not name.startswith(block):
                     continue
@@ -340,6 +356,7 @@ class Engine:
             os.remove("downloads/last")
         except:
             pass
+        return "FINISHED"
     def download(self):
         t = threading.Thread(target=self.do_downloads)
         t.start()
