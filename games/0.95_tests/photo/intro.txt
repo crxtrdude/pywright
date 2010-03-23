@@ -1,5 +1,8 @@
 #Number of photos we have taken, infinite available
 set photos 0
+delev pic_1
+delev pic_2
+delev pic_3
 
 label take_photo
 bg lobby
