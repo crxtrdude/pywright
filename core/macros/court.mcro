@@ -1,3 +1,17 @@
+#Clear court related variables
+macro clearcourt
+set helper_nt  
+set defense_nt  
+set witness_nt  
+set prosecutor_nt  
+set judge_nt  
+set _defense  
+set _witness  
+set _helper  
+set _prosecutor  
+set _judge  
+endmacro
+
 #Load all of the characters and backgrounds for courtroom
 macro startcourt
 
