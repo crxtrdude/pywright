@@ -1287,6 +1287,24 @@ class Script(gui.widget):
                                                 setzero={"nowait":"wait"})
         self.obs.append(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    @category("event")
+    def _shake(self,command,*args):
+        args = list(args)
+        ttl = 30
+        offset = 15
+        wait = True
+        if "nowait" in args:
+            wait = False
+            args.remove("nowait")
+        if len(args)>0:
+            ttl = int(args[0])
+        if len(args)>1:
+            offset = int(args[1])
+        sh = shake()
+        sh.ttl = ttl
+        sh.offset = offset
+        sh.wait = wait
+        self.obs.append(sh)
     @category("blah")
     def _zoom(self,command,*args):
         mag = 1
@@ -2148,13 +2166,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 fl.color = assets.flashcolor
                 assets.flashcolor = [255,255,255]
             assets.flash = 0
-        if assets.shake:
-            fl = shake()
-            assets.cur_script.obs.append(fl)
-            fl.ttl = assets.shake
-            fl.offset = assets.shakeoffset
-            fl.wait = assets.shakewait
-            assets.shake = 0
+        if assets.shakeargs:
+            assets.cur_script._shake(*assets.shakeargs)
+            assets.shakeargs = 0
         if showfps:
             pygame.screen.blit(font.render(str(1/(dt/1000.0)),[100,180,200]),[0,0])
             #~ y = 12

@@ -4,6 +4,8 @@
     - t d crashes PyWright
     - bigfish shake smoothing, also use {s nowait} if you want text
         to continue during the shake
+    - Added command "shake" to cause a shaking outside of text
+        shake [time] [distance] {nowait}
     - change text of evidence/profiles
         dollar sign ($) not required for profile ids
         when using addev, second argument is the name of the court record page

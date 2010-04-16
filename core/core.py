@@ -535,8 +535,7 @@ class Assets(object):
             self.portrait.set_emotion(e)
     flash = 0  #Tells main to add a flash object
     flashcolor = [255,255,255]
-    shake = 0  #Tell main to add a shake object
-    shakeoffset = 15
+    shakeargs = 0  #Tell main to add a shake object
     def get_stack_top(self):
         try:
             return self.stack[-1]
@@ -1901,17 +1900,7 @@ class textbox(gui.widget):
                             if len(command)>2:
                                 assets.flashcolor = color_str(command[2])
                         elif command[0]=="s":
-                            assets.shake = 30
-                            assets.shakeoffset = 15
-                            assets.shakewait = True
-                            command = command.split(" ")
-                            if "nowait" in command:
-                                assets.shakewait = False
-                                command.remove("nowait")
-                            if len(command)>1:
-                                assets.shake = int(command[1])
-                            if len(command)>2:
-                                assets.shakeoffset = int(command[2])
+                            assets.shakeargs = command.split(" ")
                         elif command[0]=="p":
                             self.next_char = int(command[1:].strip())
                         elif command[0]=="c":
