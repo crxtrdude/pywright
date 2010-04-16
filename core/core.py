@@ -2899,6 +2899,7 @@ class evidence_menu(fadesprite,gui.widget):
         "ev_z_bg": "general/evidence_zoom",
         "ev_z_bg_x": 0,
         "ev_z_bg_y": 0,
+        "ev_z_text_col":"FFFFFF",
         }
         for k in defs:
             if not k in assets.variables:
@@ -3295,7 +3296,7 @@ class evidence_menu(fadesprite,gui.widget):
             name = icon.name
             if assets.gbamode:
                 newsurf.blit(font.render(name,[255,255,0]),[103,65])
-            tb = textblock(icon.desc,[tbpos[0],tbpos[1]],tbsize,[1,1,1])
+            tb = textblock(icon.desc,[tbpos[0],tbpos[1]],tbsize,color_str(assets.variables["ev_z_text_col"]))
             newsurf.blit(icon.scaled,[back_pos[0],back_pos[1]])
             tb.pos = [tbpos[0],tbpos[1]]
             tb.draw(newsurf)

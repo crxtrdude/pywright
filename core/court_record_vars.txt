@@ -78,6 +78,9 @@ set ev_z_textbox_y 70
 set ev_z_textbox_w 130
 set ev_z_textbox_h 100
 
+#Color of "about" text for zoomed view (default white)
+set ev_z_text_col FFFFFF
+
 #Position of zoomed evidence icon
 set ev_z_icon_x 25
 set ev_z_icon_y 60
