@@ -1449,7 +1449,7 @@ class Script(gui.widget):
                 import traceback
                 traceback.print_exc()
     @category("init")
-    def _addev(self,command,ev,page="evidence"):
+    def _addev(self,command,ev,page=None):
         evob = evidence(ev,page=page)
         if ev not in [x.id for x in assets.items]: assets.items.append(evob)
     @category("init")

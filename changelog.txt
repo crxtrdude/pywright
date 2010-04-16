@@ -1,6 +1,22 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.971: March 22, 2010*
+*PyWright 0.975: April 17, 2010*
+    - t d crashes PyWright
+    - t bigfish cosmetic modifications
+    - t change text of evidence/profiles
+        dollar sign ($) not required for profile ids
+        when using addev, second argument is the name of the court record page
+            to place the item on
+        addev maya profiles
+        addev card evidence
+        When renaming the pages, make sure to addev to the right one.
+        addev with no second argument (addev document) will go to the "first"
+            page, whatever the name.
+        addev with dollar sign ids will go to the "second" page whatever the name
+        rename pages with "set _ev_pages [firstpagename] [secondpagename] [thirdpagename]"
+        unlimited # of pages allowed
+
+*PyWright 0.971/0.973: March 22, 2010*
     - Major bug in updater, downloads only worked on resumable files
 
 *PyWright 0.970: March 19, 2010*

@@ -1395,7 +1395,14 @@ class evidence(fadesprite):
         if not kwargs.has_key("x"): kwargs["x"]=5
         if not kwargs.has_key("y"): kwargs["y"]=5
         if not kwargs.has_key("pri"): kwargs["pri"]=50
-        if not kwargs.has_key("page"): kwargs["page"] = "evidence"
+        if not kwargs.get("page",None):
+            pages = assets.variables.get("_ev_pages","evidence profiles").split(" ")
+            if len(pages)==1:
+                pages = pages + pages
+            if name.endswith("$"):
+                kwargs["page"] = pages[1]
+            else:
+                kwargs["page"] = pages[0]
         self.page = kwargs["page"]
         super(evidence,self).__init__(**kwargs)
         self.id = name
@@ -2954,9 +2961,7 @@ class evidence_menu(fadesprite,gui.widget):
         line = []
         for icon in self.items:
             icon.reload()
-            if self.item_set == "profiles" and not (icon.id.endswith("$") or icon.page=="profile"):
-                continue
-            if self.item_set != "profiles" and (icon.id.endswith("$") or icon.page=="profile"):
+            if self.item_set != icon.page:
                 continue
             line.append(icon)
             if len(line)==4:
