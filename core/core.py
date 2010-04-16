@@ -3211,7 +3211,7 @@ class evidence_menu(fadesprite,gui.widget):
             [x+int(assets.variables["ev_currentname_x"]),y+int(assets.variables["ev_currentname_y"])])
         if vtrue(assets.variables.get("_evidence_enabled","true")) and vtrue(assets.variables.get("_profiles_enabled","true")):
             dest.blit(arial14.render(
-                self.next_screen(),1,[255,255,255]),
+                self.next_screen().capitalize(),1,[255,255,255]),
                 [x+int(assets.variables["ev_modebutton_x"]),y+int(assets.variables["ev_modebutton_y"])])
         if self.can_present():
             self.present_button.draw(dest)
