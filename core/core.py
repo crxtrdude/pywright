@@ -1903,7 +1903,11 @@ class textbox(gui.widget):
                         elif command[0]=="s":
                             assets.shake = 30
                             assets.shakeoffset = 15
+                            assets.shakewait = True
                             command = command.split(" ")
+                            if "nowait" in command:
+                                assets.shakewait = False
+                                command.remove("nowait")
                             if len(command)>1:
                                 assets.shake = int(command[1])
                             if len(command)>2:
@@ -3619,17 +3623,19 @@ class shake(effect):
         self.offset = 15
         if vtrue(assets.variables.get("_shake_sound","false")):
             assets.play_sound("Shock.ogg")
+        self.wait = True
     def save(self):
         return ""
     def restore(self,s):
         pass
     def draw(self,dest):
-        if not hasattr(self,"scr_surf"): self.scr_surf = dest.copy()
-        dest.blit(self.scr_surf,[random.randint(-self.offset,self.offset),random.randint(-self.offset,self.offset)])
+        dest.blit(dest.copy(),[random.randint(-self.offset,self.offset),random.randint(-self.offset,self.offset)])
     def update(self):
+        self.offset -= abs(self.offset / self.ttl)
+        if self.offset < 1: self.offset = 1
         self.ttl -= 1
         if self.ttl<=0: self.kill = 1
-        return True
+        return self.wait
     
 class notguilty(sprite):
     def __init__(self):

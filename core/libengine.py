@@ -2153,6 +2153,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             assets.cur_script.obs.append(fl)
             fl.ttl = assets.shake
             fl.offset = assets.shakeoffset
+            fl.wait = assets.shakewait
             assets.shake = 0
         if showfps:
             pygame.screen.blit(font.render(str(1/(dt/1000.0)),[100,180,200]),[0,0])
