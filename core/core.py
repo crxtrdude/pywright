@@ -2711,11 +2711,19 @@ class examine_menu(sprite,gui.widget):
             [dest.blit(o.img,[o.pos[0],other_screen(o.pos[1])]) for o in self.bg]
         my = other_screen(self.my)
         if vtrue(assets.variables.get("_examine_showcursor", "true")):
-            pygame.draw.line(dest,[255,255,255],[0,my],[self.mx-5,my])
-            pygame.draw.line(dest,[255,255,255],[self.mx+5,my],[sw,my])
-            pygame.draw.line(dest,[255,255,255],[self.mx,other_screen(0)],[self.mx,my-5])
-            pygame.draw.line(dest,[255,255,255],[self.mx,my+5],[self.mx,other_screen(sh)])
-            pygame.draw.rect(dest,[255,255,255],[[self.mx-5,my-5],[10,10]],1)
+            if assets.variables.get("_examine_cursor_img","").strip():
+                spr = sprite(0,0)
+                spr.load(assets.variables.get("_examine_cursor_img",""))
+                spr.pos[0] = self.mx-spr.width//2
+                spr.pos[1] = my-spr.height//2
+                spr.draw(dest)
+            else:
+                col = color_str(assets.variables.get("_examine_cursor_col","FFFFFF"))
+                pygame.draw.line(dest,col,[0,my],[self.mx-5,my])
+                pygame.draw.line(dest,col,[self.mx+5,my],[sw,my])
+                pygame.draw.line(dest,col,[self.mx,other_screen(0)],[self.mx,my-5])
+                pygame.draw.line(dest,col,[self.mx,my+5],[self.mx,other_screen(sh)])
+                pygame.draw.rect(dest,col,[[self.mx-5,my-5],[10,10]],1)
         if vtrue(assets.variables.get("_examine_showbars", "true")):
             dest.blit(self.fg,[0,other_screen(0)])
         if self.selected != ["none"] and not self.hide:

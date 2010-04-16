@@ -2,8 +2,9 @@
 
 *PyWright 0.975: April 17, 2010*
     - t d crashes PyWright
-    - t bigfish cosmetic modifications
-    - t change text of evidence/profiles
+    - bigfish shake smoothing, also use {s nowait} if you want text
+        to continue during the shake
+    - change text of evidence/profiles
         dollar sign ($) not required for profile ids
         when using addev, second argument is the name of the court record page
             to place the item on
@@ -18,6 +19,12 @@
     - discontinued "_allow_present_evidence" and "_allow_present_profiles"
         use "_evidence_present" and "_profiles_present" instead
         (or "_pagename_present" for renamed pages)
+    - skinnable examine cursor:
+        set _examine_cursor_col FFFFFF
+                changes the color (html color string)
+        set _examine_cursor_img path_from_art
+                use an image instead. Center of image is placed at cursor
+                ex: set _examine_cursor_img general/evcursor
 
 *PyWright 0.971/0.973: March 22, 2010*
     - Major bug in updater, downloads only worked on resumable files
