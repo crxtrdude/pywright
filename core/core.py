@@ -2934,18 +2934,17 @@ class evidence_menu(fadesprite,gui.widget):
         self.ev_zoom = assets.open_art(assets.variables["ev_z_bg"]+assets.appendgba)[0]
         self.scroll = 0
         self.scroll_dir = 0
-
-        self.item_set = "evidence"
         
         self.present_button = present_button(self)
         self.present_button.pos = [int(assets.variables["ev_present_x"]),
                     other_screen(int(assets.variables["ev_present_y"]))]
-        if not (vtrue(assets.variables.get("_profiles_enabled","true")) or vtrue(assets.variables.get("_evidence_enabled","true"))):
+        self.pages_set = assets.variables.get("_ev_pages","evidence profiles").split(" ")
+        for p in self.pages_set[:]:
+            if not vtrue(assets.variables.get("_%s_enabled"%p,"true")):
+                self.pages_set.remove(p)
+        if not self.pages_set:
             self.kill = 1
-        if not vtrue(assets.variables.get("_profiles_enabled","true")):
-            self.item_set = "evidence"
-        if not vtrue(assets.variables.get("_evidence_enabled","true")):
-            self.item_set = "profiles"
+        self.item_set = self.pages_set[0]
         self.layout()
     def save(self):
         return ""
@@ -3092,12 +3091,15 @@ class evidence_menu(fadesprite,gui.widget):
             self.switch = False
         self.choose()
     def choose(self):
+        itback = assets.variables.get("ev_mode_bg_"+self.item_set,None)
+        if not itback:
+            itback = assets.variables.get("ev_mode_bg_evidence",None)
         if self.back and self.canback():
-            self.load(assets.variables["ev_mode_bg_"+self.item_set]+"_back"+assets.appendgba)
+            self.load(itback+"_back"+assets.appendgba)
         elif self.switch:
-            self.load(assets.variables["ev_mode_bg_"+self.item_set]+"_profile"+assets.appendgba)
+            self.load(itback+"_profile"+assets.appendgba)
         else:
-            self.load(assets.variables["ev_mode_bg_"+self.item_set]+assets.appendgba)
+            self.load(itback+assets.appendgba)
         if self.back or self.switch or self.page>=len(self.pages):
             pass
         else:
@@ -3163,14 +3165,19 @@ class evidence_menu(fadesprite,gui.widget):
         for o in assets.cur_script.obs:
             if isinstance(o,textbox):
                 o.kill = 1
+    def next_screen(self):
+        if len(self.pages_set)==1:
+            return ""
+        cur = self.pages_set.index(self.item_set)
+        cur += 1
+        if cur>=len(self.pages_set):
+            cur = 0
+        return self.pages_set[cur]
     def k_z(self):
-        if not vtrue(assets.variables.get("_evidence_enabled","true")):
-            return
-        if not vtrue(assets.variables.get("_profiles_enabled","true")):
+        if len(self.pages_set)==1:
             return
         self.chosen = None
-        modes = {"evidence":"profiles","profiles":"evidence"}
-        self.item_set = modes[self.item_set]
+        self.item_set = self.next_screen()
         self.layout()
         #if not self.pages: self.item_set = modes[self.item_set]
         #self.layout()
@@ -3204,7 +3211,7 @@ class evidence_menu(fadesprite,gui.widget):
             [x+int(assets.variables["ev_currentname_x"]),y+int(assets.variables["ev_currentname_y"])])
         if vtrue(assets.variables.get("_evidence_enabled","true")) and vtrue(assets.variables.get("_profiles_enabled","true")):
             dest.blit(arial14.render(
-                {"evidence":"profiles","profiles":"evidence"}[self.item_set],1,[255,255,255]),
+                self.next_screen(),1,[255,255,255]),
                 [x+int(assets.variables["ev_modebutton_x"]),y+int(assets.variables["ev_modebutton_y"])])
         if self.can_present():
             self.present_button.draw(dest)

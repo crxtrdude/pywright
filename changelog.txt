@@ -15,6 +15,9 @@
         addev with dollar sign ids will go to the "second" page whatever the name
         rename pages with "set _ev_pages [firstpagename] [secondpagename] [thirdpagename]"
         unlimited # of pages allowed
+    - discontinued "_allow_present_evidence" and "_allow_present_profiles"
+        use "_evidence_present" and "_profiles_present" instead
+        (or "_pagename_present" for renamed pages)
 
 *PyWright 0.971/0.973: March 22, 2010*
     - Major bug in updater, downloads only worked on resumable files
