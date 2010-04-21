@@ -629,7 +629,7 @@ class Script(gui.widget):
     @category([COMBINED("flag expression","list of flag names joined with AND or OR"),
                     CHOICE([
                     TOKEN("?"),VALUE("label","label to jump to if the evaluation is true")
-                    ])])
+                    ]),KEYWORD("fail","label to jump to if evaluation is false","none")])
     def flag_logic(self,value,*args):
         fail=None
         args = list(args)
@@ -679,22 +679,35 @@ class Script(gui.widget):
         """Deletes a flag. Flags will remain set for the remainder of the game, but
         can be forgotten with delflag."""
         if flag in assets.variables: del assets.variables[flag]
-    @category("control")
+    @category([VALUE("variable","variable name to set"),COMBINED("value","Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.")])
     def _set(self,command,variable,*args):
+        """Sets a variable to some value."""
         value = " ".join(args)
         assets.variables[variable]=value
-    @category("control")
+    @category([VALUE("destination variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")])
     def _getvar(self,command,variable,*args):
+        """Copies the value of one variable into another."""
         value = "".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
-    @category("blah")
+    @category([VALUE("variable","variable name to save random value to"),VALUE("start","smallest number to generate"),VALUE("end","largest number to generate")])
     def _random(self,command,variable,start,end):
+        """Generates a random integer with a minimum
+        value of START, a maximum value of END, and
+        stores that value to VARIABLE"""
         random.seed(pygame.time.get_ticks()+random.random())
         value = random.randint(int(start),int(end))
         assets.variables[variable]=str(value)
-    @category("control")
+    @category([VALUE("variable","variable to save value to"),COMBINED("words","words to join together")])
     def _joinvar(self,command,variable,*args):
+        """Takes a series of words and joins them together, save the joined
+        string to a variable. For instance 
+        {{{setvar hour 3
+        setvar minut 15
+        joinvar time $hour : $minute
+        "{$time}"}}}
+        will output "3:15"
+        """
         value = "".join(args)
         assets.variables[variable]=value
     @category("control")
