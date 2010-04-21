@@ -613,7 +613,7 @@ class Assets(object):
         self.variables = Variables()
         self.variables.update(v)
         if getattr(self,"_track",None):
-            self.play_music(self._track,self._loop)
+            self.play_music(self._track,self._loop,reset_track=False)
     def load(self,s):
         self._track,self._loop,self.character,self.px,self.py,self.pz,\
         self.items,self.variables,self.lists = pickle.loads(s)

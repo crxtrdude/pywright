@@ -4,7 +4,7 @@
     - fg/detention and fg/detention_apollo included for detention center scenes
     - slightly updated interface buttons and cross examination from bigfish
     - "check" on examine screen not as finicky
-    - t looping music after save/load bugfix
+    - looping music after save/load bugfix
     - press/present on lower screen
     - bars on main arrow
         set _bigbutton_bg main2
