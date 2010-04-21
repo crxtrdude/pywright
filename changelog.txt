@@ -5,8 +5,9 @@
     - slightly updated interface buttons and cross examination from bigfish
     - "check" on examine screen not as finicky
     - t looping music after save/load bugfix
-    - t press/present on lower screen
-    - t bars on uglyarrow
+    - press/present on lower screen
+    - bars on main arrow
+        set _bigbutton_bg main2
     - bigfish shake smoothing, also use {s nowait} if you want text
         to continue during the shake
     - Added command "shake" to cause a shaking outside of text

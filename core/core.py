@@ -2019,7 +2019,7 @@ class textbox(gui.widget):
 class uglyarrow(fadesprite):
     def __init__(self):
         fadesprite.__init__(self,x=0,y=sh)
-        self.load("bg/main")
+        self.load(assets.variables.get("_bigbutton_bg","bg/main"))
         self.arrow = sprite(0,0).load("general/arrow_big.png")
         self.button = None
         self.double = None
