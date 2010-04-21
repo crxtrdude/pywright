@@ -1,7 +1,12 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.975: April 17, 2010*
-    - t d crashes PyWright
+*PyWright 0.974: April 17, 2010*
+    - fg/detention and fg/detention_apollo included for detention center scenes
+    - slightly updated interface buttons and cross examination from bigfish
+    - "check" on examine screen not as finicky
+    - t looping music after save/load bugfix
+    - t press/present on lower screen
+    - t bars on uglyarrow
     - bigfish shake smoothing, also use {s nowait} if you want text
         to continue during the shake
     - Added command "shake" to cause a shaking outside of text

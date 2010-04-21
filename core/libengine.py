@@ -2155,7 +2155,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         if not assets.cur_script: break
         [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
         for o in assets.cur_script.world.all[:]:
-            if getattr(o,"kill",0): 
+            if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
         assets.cur_script.draw(pygame.screen)
         if assets.flash:
@@ -2202,18 +2202,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         #print [o.z for o in assets.cur_script.obs]
                 if e.type == pygame.QUIT:
                     running = False
-                #~ if e.type==pygame.KEYDOWN and\
-                #~ e.key==pygame.K_d:
-                    #~ showfps = not showfps
-                    #~ if showfps:
-                        #~ clses = {}
-                        #~ ol = get_all_objects()
-                        #~ for o in ol:
-                            #~ if not hasattr(o,"__class__"): continue
-                            #~ n = clses.get(o.__class__.__name__,0)+1
-                            #~ clses[o.__class__.__name__]=n
-                        #~ del clses
-                        #~ del ol
                 if e.type==pygame.KEYUP and\
                 e.key==pygame.K_RETURN:
                     if "enter" in assets.cur_script.held: assets.cur_script.held.remove("enter")

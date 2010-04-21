@@ -957,6 +957,8 @@ class sprite(gui.button):
     width,height = [sw,sh]
     children = []
     spd = 6
+    def delete(self):
+        self.kill = 1
     def makestr(self):
         """A wrightscript string to recreate the object"""
         if not getattr(self,"name",None): return ""
@@ -1470,7 +1472,7 @@ class penalty(fadesprite):
             self.delay -= 1
             if self.delay<0:
                 self.die()
-                self.kill = 1
+                self.delete()
         self.sv(v)
         return True
     def die(self):
@@ -1525,11 +1527,13 @@ class testimony_blink(fg):
     
 class press_button(fadesprite,gui.widget):
     def __init__(self,parent):
+        fadesprite.__init__(self)
+        self.z = zlayers.index(self.__class__.__name__)
         self.normal = assets.open_art("general/crossex")[0]
         self.high = assets.open_art("general/crossex_high")[0]
         self.rect = [[0,0],[64,16]]
         self.highlight = False
-        self.pos = [0,0]
+        self.pos = [0,other_screen(0)]
         gui.widget.__init__(self,self.pos,[64,16],parent)
         self.width,self.height = 64,16
     def draw(self,dest):
@@ -1540,11 +1544,13 @@ class press_button(fadesprite,gui.widget):
 
 class present_button(fadesprite,gui.widget):
     def __init__(self,parent):
+        fadesprite.__init__(self)
+        self.z = zlayers.index(self.__class__.__name__)
         self.normal = assets.open_art("general/crossex")[0]
         self.high = assets.open_art("general/crossex_high")[0]
         self.rect = [[0,16],[64,16]]
         self.highlight = False
-        self.pos = [sw-64,0]
+        self.pos = [sw-64,other_screen(0)]
         gui.widget.__init__(self,self.pos,[64,16],parent)
         self.width,self.height = 64,16
     def draw(self,dest):
@@ -1687,6 +1693,10 @@ class textbox(gui.widget):
         self.presenting = 0
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
+    def delete(self):
+        self.pressb.kill = 1
+        self.presentb.kill = 1
+        self.kill = 1
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
         if assets.portrait:
@@ -1744,7 +1754,7 @@ class textbox(gui.widget):
         self.next = self.num_lines
         self.img = self.base.copy()
         if not self.text.strip():
-            self.kill = 1
+            self.delete()
         if sound:
             assets.play_sound("bloop.ogg",volume=0.7)
     def draw(self,dest):
@@ -1799,9 +1809,26 @@ class textbox(gui.widget):
                 ny += int(assets.variables.get("_nt_text_y",0))
             dest.blit(self.nt_text_image,[nx+5,ny])
         if self.statement:
-            self.pressb.draw(dest)
-            self.presentb.draw(dest)
-            self.children+=[self.pressb,self.presentb]
+            h1=h2=False
+            for o in assets.cur_script.obs:
+                if isinstance(o,press_button):
+                    if o != self.pressb:
+                        o.kill = 1
+                    else:
+                        h1 = o
+                if isinstance(o,present_button):
+                    if o != self.presentb:
+                        o.kill = 1
+                    else:
+                        h2 = o
+            if not h1:
+                assets.cur_script.obs.append(self.pressb)
+            if not h2:
+                assets.cur_script.obs.append(self.presentb)
+        if assets.num_screens == 2 and self.statement:
+            self.recordb.pos = [self.recordb.pos[0],192*2-self.recordb.height]
+        elif assets.num_screens == 1 and self.statement:
+            self.recordb.pos = [self.recordb.pos[0],192]
         self.recordb.draw(dest)
         self.children+=[self.recordb]
     def update(self):
@@ -1814,7 +1841,7 @@ class textbox(gui.widget):
                     assets.cur_script.cross = "pressed"
                     assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
                     #self.forward()
-                    self.kill = 1
+                    self.delete()
             if self.presenting:
                 self.presenting -= 1
                 if self.presenting == 0:
@@ -2171,7 +2198,7 @@ class menu(fadesprite,gui.widget):
         self.recordb.click_down_over([256,0])
     def update(self):
         if not self.options:
-            self.kill = 1
+            self.delete()
         fadesprite.update(self)
         return True
     def get_coord(self):
@@ -2218,7 +2245,7 @@ class menu(fadesprite,gui.widget):
         else:
             print "TRY TO JUMP TO LABEL"
             assets.cur_script.goto_result(self.selected,backup=self.fail)
-        self.kill = 1
+        self.delete()
     def addm(self,opt):
         if opt:
             self.options.append(opt)
@@ -2314,6 +2341,10 @@ class listmenu(fadesprite,gui.widget):
         return pickle.dumps([self.options,self.si,self.selected,self.hidden,self.tag])
     def restore(self,s):
         self.options,self.si,self.selected,self.hidden,self.tag = pickle.loads(s)
+    def delete(self):
+        self.kill = 1
+        if hasattr(self,"bck"):
+            self.bck.kill = 1
     def update(self):
         if getattr(self,"kill",0):
             return False
@@ -2325,8 +2356,7 @@ class listmenu(fadesprite,gui.widget):
             self.bck.pos[1] = other_screen(self.bck.pos[1])
             self.bck.pri = 1000
             def k_space(b=self.bck):
-                b.kill = 1
-                self.kill = 1
+                self.delete()
                 print "kill back button and self"
                 assets.variables["_selected"] = "Back"
             self.bck.k_space = k_space
@@ -2353,9 +2383,7 @@ class listmenu(fadesprite,gui.widget):
             return False
         if self.tag:
             assets.lists[self.tag][self.selected[0]] = 1
-        self.kill = 1
-        if hasattr(self,"bck"):
-            self.bck.kill = 1
+        self.delete()
         if self.selected[1] != "Back":
             assets.variables["_selected"] = self.selected[1]
             assets.cur_script.goto_result(self.selected[1],backup=self.fail)
@@ -2411,9 +2439,7 @@ class listmenu(fadesprite,gui.widget):
         if getattr(self,"kill",0):
             return False
         if hasattr(self,"bck") or "Back" in self.options:
-            if hasattr(self,"bck"):
-                self.bck.kill = 1
-            self.kill = 1
+            self.delete()
 
 class case_menu(fadesprite,gui.widget):
     children = []
@@ -2611,8 +2637,8 @@ class examine_menu(sprite,gui.widget):
     def move_over(self,pos,rel,buttons):
         if gui.window.focused == self:
             self.mx,self.my = [pos[0],pos[1]-other_screen(0)]
-            if self.mx>sw-81 and self.my>sh-33 and self.selected and self.selected[0] != 'none':
-                self.enter_down()
+            #~ if self.mx>sw-81 and self.my>sh-33 and self.selected and self.selected[0] != 'none':
+                #~ self.enter_down()
             self.highlight()
     def click_down_over(self,mp):
         gui.window.focused = self
