@@ -2003,9 +2003,9 @@ def make_screen():
             pygame.USE_GL = False
     if not pygame.USE_GL:
         try:
-            SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
+            SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
         except:
-            SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
+            SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
         pygame.screen = pygame.Surface([sw,sh*assets.num_screens]).convert()
         pygame.blank = pygame.screen.convert()
     pygame.display.set_caption("PyWright "+VERSION)
@@ -2205,6 +2205,15 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 if e.type==150:
                     if assets.variables.get("_music_loop",None):
                         assets.play_music(assets.variables["_music_loop"])
+                if e.type==pygame.VIDEORESIZE:
+                    w,h = e.w,e.h
+                    if assets.num_screens == 2:
+                        h = h//2
+                    w = (256/192.0)*h
+                    assets.swidth = w
+                    assets.sheight = h
+                    make_screen()
+                    wini()
                 if e.type==pygame.KEYDOWN and \
                 e.key==pygame.K_ESCAPE:
                     ss = [x for x in assets.cur_script.obs if isinstance(x,screen_settings)]
