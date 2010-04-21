@@ -1842,7 +1842,7 @@ class screen_settings(gui.pane):
         for r in self.reses: 
             if r.checked:
                 self.oldwidth,self.oldheight = assets.swidth,assets.sheight
-                self.timer = 2.0
+                self.timer = 5.0
                 self.really_applyb = gui.pane()
                 self.really_applyb.width = 1000
                 self.really_applyb.height = 1000
@@ -1881,7 +1881,7 @@ class screen_settings(gui.pane):
         self.pos = self.rpos
         if getattr(self,"timer",0)>0:
             self.timer -= .02
-            self.really_applyb.timer.text = "Resetting view in:" + str(self.timer)
+            self.really_applyb.timer.text = "Resetting view in: %.02f seconds"%self.timer
         else:
             if getattr(self,"really_applyb",None):
                 assets.cur_script.world.remove(self.really_applyb)
