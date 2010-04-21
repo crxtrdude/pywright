@@ -2110,8 +2110,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         for line in f.readlines():
             spl = line.split("=")
             if len(spl)!=2: continue
-            if spl[0]=='width': assets.swidth = int(spl[1])
-            if spl[0]=='height': assets.sheight = int(spl[1])
+            if spl[0]=='width': assets.swidth = int(float(spl[1]))
+            if spl[0]=='height': assets.sheight = int(float(spl[1]))
             if spl[0]=='scale2x': assets.filter = int(spl[1])
             if spl[0]=='fullscreen': assets.fullscreen = int(spl[1])
             if spl[0]=="gbamode": assets.gbamode = int(spl[1])
