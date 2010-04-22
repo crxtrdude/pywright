@@ -6,6 +6,7 @@
     - "check" on examine screen not as finicky
     - looping music after save/load bugfix
     - press/present on lower screen
+    - can resize the window with the mouse, slightly better drawing routine for scaled views
     - bars on main arrow
         set _bigbutton_bg main2
     - bigfish shake smoothing, also use {s nowait} if you want text

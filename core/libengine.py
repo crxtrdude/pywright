@@ -2008,6 +2008,7 @@ def make_screen():
             SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
         pygame.screen = pygame.Surface([sw,sh*assets.num_screens]).convert()
         pygame.blank = pygame.screen.convert()
+        pygame.blank.fill([0,0,0])
     pygame.display.set_caption("PyWright "+VERSION)
     pygame.display.set_icon(pygame.image.load("art/general/bb.png"))
 
@@ -2024,10 +2025,8 @@ def draw_screen():
         scaled = pygame.screen
         if scale:
             scaled = pygame.transform.rotozoom(pygame.screen,0,sc)
-        #scaled = pygame.transform.scale(scaled,[assets.swidth,assets.sheight])
         pygame.real_screen.blit(scaled,[0,0])
         pygame.display.flip()
-        scaled.blit(pygame.blank,[0,0])
     if assets.num_screens==2:
         if not hasattr(assets,"grey_bottom"):
             assets.grey_bottom = assets.Surface([256,192])
@@ -2170,6 +2169,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         for o in assets.cur_script.world.all[:]:
             if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
+        pygame.screen.blit(pygame.blank,[0,0])
         assets.cur_script.draw(pygame.screen)
         if assets.flash:
             fl = flash()
