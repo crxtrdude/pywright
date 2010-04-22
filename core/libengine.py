@@ -494,7 +494,6 @@ class Script(gui.widget):
         nscript.macros = self.macros
         assets.stack.append(nscript)
         self.buildmode = False
-        nscript.parent = self
         return nscript
     def next_statement(self):
         if not assets.variables.get("_statements",[]):
