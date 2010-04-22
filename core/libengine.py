@@ -1021,6 +1021,7 @@ class Script(gui.widget):
             assets.stack.remove(parent)
         if label:
             self.goto_result(label,backup=None)
+        self.execute_macro("defaults")
     @category("control")
     def _top(self,command):
         self.si = 0

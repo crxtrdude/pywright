@@ -997,7 +997,7 @@ class sprite(gui.button):
         if assets.variables.get("_blinkspeed_next",""):
             self.blinkspeed = [int(x) for x in assets.variables["_blinkspeed_next"].split(" ")]
             assets.variables["_blinkspeed_next"] = ""
-        elif assets.variables.get("_blinkspeed_global",""):
+        elif assets.variables.get("_blinkspeed_global","default")!="default":
             self.blinkspeed = [int(x) for x in assets.variables["_blinkspeed_global"].split(" ")]
     def load(self,name,key=[255,0,255]):
         self.key = key
@@ -2031,17 +2031,16 @@ class uglyarrow(fadesprite):
         self.showleft = True
     def update(self):
         self.pos[1] = sh
-        low = assets.variables.get("_bigbutton_img","general/buttonpress.png")
-        high = low.rsplit(".")
-        high[0]+="_high"
-        high = high[0]+"."+high[1]
+        low = assets.variables.get("_bigbutton_img","general/buttonpress")
+        high = low
+        high+="_high"
         if self.textbox and self.textbox.statement:
             if not self.double:
                 self.double = sprite(0,0).load("general/cross_exam_buttons.png")
                 self.button = None
         else:
             self.double = None
-        if not self.double and (not self.button or self.button.name not in [low.rsplit(".")[0],high.rsplit(".")[0]]):
+        if not self.double and (not self.button or self.button.name not in [low,high]):
             self.button = sprite(0,0).load(assets.variables.get("_bigbutton_img","general/buttonpress.png"))
         self.arrow.update()
         return False
@@ -2105,10 +2104,7 @@ class uglyarrow(fadesprite):
         over = self.over(mp)
         if over == True and not self.high and self.can_click():
             self.high = True
-            high = assets.variables.get("_bigbutton_img","general/buttonpress.png")
-            high = high.rsplit(".")
-            high[0]+="_high"
-            high = high[0]+"."+high[1]
+            high = assets.variables.get("_bigbutton_img","general/buttonpress")+"_high"
             self.button = sprite(0,0).load(high)
         if over == "left" and self.can_click() and self.showleft:
             self.textbox.k_left()
@@ -2614,6 +2610,7 @@ class case_menu(fadesprite,gui.widget):
         path = os.path.join(self.path,self.options[self.choice])
         assets.cur_script._game("",path,script=self.get_script(path))
         self.reload = True
+        assets.cur_script.execute_macro("init_defaults")
     def draw(self,dest):
         if self.reload:
             return

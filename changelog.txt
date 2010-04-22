@@ -36,6 +36,20 @@
         set _examine_cursor_img path_from_art
                 use an image instead. Center of image is placed at cursor
                 ex: set _examine_cursor_img general/evcursor
+    - defaults:
+        workaround for making some control variables more obvious and a bit safer
+        should make the "no back button" type of bug less deadly
+        new "defaults" macro (in core/macros). This macro resets most customization
+            variables to their default value. Just use the "defaults" command that
+            this file supplies.
+        variable controlling when "defaults" macro is run: _run_defaults_on_script
+            defaults to true for backwards compatibility
+            RECOMMENDED not to ever set this false - if you need some of these
+                values to be persistent, use a longer script
+            when true, the "defaults" macro will be run every time a new script is run
+            if you have a different set of default values, copy core/macros/defaults.mcro
+            into your game and edit it.
+            
 
 *PyWright 0.971/0.973: March 22, 2010*
     - Major bug in updater, downloads only worked on resumable files
