@@ -28,6 +28,8 @@
     - discontinued "_allow_present_evidence" and "_allow_present_profiles"
         use "_evidence_present" and "_profiles_present" instead
         (or "_pagename_present" for renamed pages)
+    - discontinued "_textbox_show_recordbutton"
+        use "_cr_button" instead
     - skinnable examine cursor:
         set _examine_cursor_col FFFFFF
                 changes the color (html color string)

@@ -434,7 +434,7 @@ class Script(gui.widget):
                 self.viewed[assets.game+self.scene+str(self.si)] = True
                 addob(tbox)
                 arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
-                if vtrue(assets.variables.get("_textbox_show_button","true")):
+                if vtrue(assets.variables.get("_cr_button","true")):
                     if not arrows:
                         arrows = [uglyarrow()]
                         self.obs.append(arrows[0])
