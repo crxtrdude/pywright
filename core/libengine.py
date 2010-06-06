@@ -190,6 +190,102 @@ def OR(stuff):
         if EVAL(line):
             return True
     return False
+def GV(v):
+    if v[0].isdigit():
+        if "." in v:
+            return float(v)
+        return int(v)
+    if v.startswith("'") and v.endswith("'"):
+        return v[1:-1]
+    v = assets.variables.get(v,"")
+    if v[0].isdigit():
+        if "." in v:
+            return float(v)
+        return int(v)
+    return v
+def ADD(statements):
+    return GV(statements[0])+GV(statements[1])
+def MUL(statements):
+    return GV(statements[0])*GV(statements[1])
+def MINUS(statements):
+    return GV(statements[0])-GV(statements[1])
+def DIV(statements):
+    return GV(statements[0])/GV(statements[1])
+def EQ(statements):
+    return str(GV(statements[0])==GV(statements[1])).lower()
+def EXPR(line):
+    statements = []
+    cur = ""
+    paren = []
+    quote = []
+    for word in line.split(" "):
+        if not paren and not quote and word == "+":
+            statements.append(ADD)
+        elif not paren and not quote and word == "*":
+            statements.append(MUL)
+        elif not paren and not quote and word == "-":
+            statements.append(MINUS)
+        elif not paren and not quote and word == "/":
+            statements.append(DIV)
+        elif not paren and not quote and word == "==":
+            statements.append(EQ)
+        elif word.strip():
+            if paren:
+                if word.endswith(")"):
+                    paren.append(word)
+                    statements.append(EXPR(" ".join(paren)[1:-1]))
+                    paren = []
+                else:
+                    paren.append(word)
+            elif quote:
+                quote.append(word)
+                if word.endswith("'"):
+                    statements.append(" ".join(quote))
+                    print statements
+                    quote = []
+            elif word.startswith("(") and word.endswith(")"):
+                statements.append(word[1:-1])
+            elif word.startswith("("):
+                paren.append(word)
+            elif word.startswith("'") and word.endswith("'"):
+                statements.append(word)
+                print statements
+            elif word.startswith("'"):
+                quote.append(word)
+            else:
+                statements.append(word)
+    return statements
+def EVAL_EXPR(expr):
+    if not isinstance(expr,list):
+        return str(expr)
+    if len(expr)==1:
+        return EVAL_EXPR(expr[0])
+    oop = [MUL,DIV,ADD,MINUS,EQ]
+    ops = []
+    for i,v in enumerate(expr):
+        if v in oop:
+            ops.append((i,v))
+    if not ops:
+        return str(expr[0])
+    ops.sort(key=lambda x: oop.index(x[1]))
+    op = ops[0]
+    left = expr[op[0]-1:op[0]]
+    right = expr[op[0]+1:op[0]+2]
+    left = EVAL_EXPR(left)
+    right = EVAL_EXPR(right)
+    v = op[1]([left,right])
+    expr[op[0]-1] = v
+    del expr[op[0]]
+    del expr[op[0]]
+    return EVAL_EXPR(expr)
+
+#~ assert EVAL_EXPR(EXPR("5 + 1 + 3 * 10"))=="36"
+#~ assert EVAL_EXPR(EXPR("2 * (5 + 1)"))=="12"
+#~ assert EVAL_EXPR(EXPR("'funny ' + 'business'"))=="funny business"
+#~ assert vtrue(EVAL_EXPR(EXPR("2 * (5 + 1) == (5 + 1) * 2")))
+assets.variables["something"] = "1"
+assert EVAL_EXPR(EXPR("5 + something + 3 * 10"))=="36"
+del assets.variables["something"]
 
 class Script(gui.widget):
     save_me = True
