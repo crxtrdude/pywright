@@ -2675,7 +2675,8 @@ class examine_menu(sprite,gui.widget):
             self.enter_down()
             gui.window.over = None
             gui.window.focused = None
-    def __init__(self,hide=False):
+    def __init__(self,hide=False,name="blah"):
+        self.name = name
         self.pri = -2000
         sprite.__init__(self)
         self.pos = [0,other_screen(0)]
@@ -2699,6 +2700,9 @@ class examine_menu(sprite,gui.widget):
         self.fg = assets.open_art("general/examinefg")[0]
         self.xscroll = 0
         self.xscrolling = 0
+        scroll_amt = assets.variables.get("_xscroll_"+self.name,0)
+        if scroll_amt==-1:
+            assets.cur_script.obs.append(scroll(-256,0,256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
         #self.recordb = record_button(assets.cur_script)
     #~ def k_tab(self):
@@ -2843,6 +2847,7 @@ class examine_menu(sprite,gui.widget):
             self.scrollbut = guiScroll(self.xscroll)
             self.scrollbut.parent = self
             assets.cur_script.obs.append(self.scrollbut)
+        assets.variables["_xscroll_"+self.name] = self.xscroll
         return self.blocking
     def enter_down(self):
         print self.selected,self.regions,self.mx,self.my

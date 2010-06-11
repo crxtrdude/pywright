@@ -1657,7 +1657,7 @@ class Script(gui.widget):
         self.buildmode = False
     @category("examine")
     def _examine(self,command,*args):
-        em = examine_menu(hide=("hide" in args))
+        em = examine_menu(hide=("hide" in args),name=self.scene+":%s"%self.si)
         self.obs.append(em)
         while self.si<len(self.scriptlines):
             line = self.getline()
