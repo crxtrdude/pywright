@@ -1298,6 +1298,8 @@ class Script(gui.widget):
                 clear = 0
             if a=="nowait":
                 wait = 0
+        if y>=192 and assets.num_screens == 1 and assets.screen_compress:
+            y -= 192
         more["wait"] = wait
         if clear and func==bg:
             for o in self.obs[:]:
@@ -1418,7 +1420,6 @@ class Script(gui.widget):
             eb.rpos = [x,y]
             if width:
                 eb.force_width = width
-            print eb.width
             eb.z = int(assets.variables["_layer_gui"])
             if z is not None: eb.z = z
             eb.pri = 0
