@@ -1,6 +1,6 @@
 version 0.974
-version_date 4/17/2010
-version_notes Cosmetic changes
+version_date 6/11/2010
+version_notes Bugs, expressions, joystick, better screen resize, some polish
 author saluk
 website http://pywright.dawnsoft.org/
 title PyWright Game Engine

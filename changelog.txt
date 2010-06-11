@@ -98,13 +98,6 @@
         new "defaults" macro (in core/macros). This macro resets most customization
             variables to their default value. Just use the "defaults" command that
             this file supplies.
-        variable controlling when "defaults" macro is run: _run_defaults_on_script
-            defaults to true for backwards compatibility
-            RECOMMENDED not to ever set this false - if you need some of these
-                values to be persistent, use a longer script
-            when true, the "defaults" macro will be run every time a new script is run
-            if you have a different set of default values, copy core/macros/defaults.mcro
-            into your game and edit it.
         What this means in practice: If you forget to reset a control variable, it will
         automatically reset when a new script is run
             
