@@ -1535,6 +1535,7 @@ class Script(gui.widget):
         assets.variables["_speaking_name"] = nametag
         if be:
             p.set_blink_emotion(be)
+        p.single = "noauto" in args
     @category("blah")
     def _emo(self,command,emotion,name=None):
         char = None

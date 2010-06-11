@@ -1382,6 +1382,8 @@ class portrait(object):
             self.cur_sprite.rot = self.rot[:]
             self.cur_sprite.draw(dest)
     def update(self):
+        if getattr(self,"single",None):
+            self.cur_sprite.loopmode = "loop"
         if not self.hide and getattr(self.cur_sprite,"img",None):
             return self.cur_sprite.update()
     def set_emotion(self,emo):
