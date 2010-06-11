@@ -3775,14 +3775,15 @@ class guiWait(sprite):
             ns = self.script.execute_macro(self.run)
         return True
         
-class saved(sprite):
-    def __init__(self,ticks=120,text="Game Saved!",block=True):
+class saved(fadesprite):
+    def __init__(self,ticks=150,text="Saving...",block=True):
         super(saved,self).__init__()
         self.text = text
         self.ticks = abs(ticks)
+        self.start = self.ticks
         self.pri = -5000
-        self.pos[0]=sw
-        self.pos[1]=30
+        self.pos[0]=0
+        self.pos[1]=0
         self.block = block
     def save(self):
         return ""
@@ -3795,7 +3796,6 @@ class saved(sprite):
         dest.blit(txt1,self.pos)
         dest.blit(txt2,[self.pos[0]+2,self.pos[1]+2])
     def update(self):
-        self.pos[0]-=3
         if self.ticks<=0:
             self.kill = 1
             return False
