@@ -1,6 +1,7 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.974: June 4, 2010*
+    - preliminary gamepad/joystick support
     - court macro fix for scrolling from helper
     - examine screens with 2 sides remember which side the player was looking at last
         (can do: 
@@ -18,13 +19,16 @@
     - less intrusive save/load messages
     
     - More powerful expressions
+    
         Commands using expressions:
             setvar_ex [variable name] [expression]
             is_ex [expression] [label]
         They follow the format of the regular command, except the expression format is a bit more
         powerful.
+        
         Expression format:
         [number or variable] [operator] [number or variable] ...
+        
         Operators:
             +
             -
