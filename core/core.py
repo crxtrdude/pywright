@@ -217,16 +217,13 @@ class Assets(object):
     sound_volume = 100
     _music_vol = 100
     def smus(self,v):
+        self._music_vol = v
         try:
-            self._music_vol = v
             pygame.mixer.music.set_volume(v/100.0)
         except:
             pass
     def gmus(self):
-        try:
-            return pygame.mixer.music.get_volume()*100
-        except:
-            return self._music_vol
+        return self._music_vol
     music_volume = property(gmus,smus)
     def _appendgba(self):
         if not self.gbamode: return ""
@@ -443,7 +440,7 @@ class Assets(object):
                 pygame.mixer.pre_init(self.sound_format, self.sound_sign*self.sound_bits, 2, self.sound_buffer)
                 pygame.mixer.init()
                 self.sound_init = 1
-                pygame.mixer.music.set_volume(self._music_vol/100.0)
+                self.music_volume = self._music_vol
                 return True
             except:
                 self.sound_init = -1
