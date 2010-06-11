@@ -301,9 +301,6 @@ class Engine:
                 output[1]()
                 for evt in pygame.event.get():
                     if evt.type == pygame.QUIT: raise SystemExit
-            prog = open("downloads/"+filename+"_url","w")
-            prog.write(path+" "+filename+" "+url)
-            prog.close()
         serv.close()
         cli.close()
         self.progress.text = self.extract_zip(path,filename)
