@@ -2091,7 +2091,7 @@ class uglyarrow(fadesprite):
                 self.arrow.img = pygame.transform.flip(self.arrow.img,1,0)
                 if self.showleft:
                     self.arrow.draw(dest)
-                self.arrow.pos[0] = (sw-self.arrow.img.get_width())//2+75
+                self.arrow.pos[0] = (sw-self.arrow.img.get_width())//2+70
                 self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
                 self.arrow.img = pygame.transform.flip(self.arrow.img,1,0)
                 self.arrow.draw(dest)
