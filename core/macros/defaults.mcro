@@ -7,8 +7,6 @@
 macro init_defaults
 print customizing defaults
 
-set _run_defaults_on_script on
-
 #When on, players can fastforward through all text, and more errors are produced
 set _debug off
 
@@ -38,6 +36,9 @@ set _textbox_lines auto
 set _textbox_wrap true
 #Whether text containing {n} follows the above wrap rules
 set _textbox_wrap_avoid_controlled true
+
+#Change the examine cursor color
+set _examine_cursor_col FFFFFF
 
 #How much investigation menus fade the screen
 set _menu_fade_level 50
@@ -110,7 +111,10 @@ set _examine_showbars true
 set _examine_showcursor true
 
 #When using "examine", scroll existing name=this object instead of copying background
-set _examine_showcursor  
+set _examine_use  
+
+#Show this cursor image instead of the cross hairs
+set _examine_cursor_img  
 
 #Run this macro when clicking the mouse during examine
 set _examine_mousedown false
