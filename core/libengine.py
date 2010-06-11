@@ -2462,8 +2462,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                                 if "enter" in assets.cur_script.held:
                                     assets.cur_script.held.remove("enter")
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_RIGHT:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_RIGHT) or (e.type==pygame.JOYHATMOTION and e.value[0]==1):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"statement") and not o.statement:
                             continue
@@ -2497,8 +2497,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,"k_space") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_space()
                             break
-                if e.type==pygame.KEYDOWN and \
-                    e.key == pygame.K_TAB:
+                if (e.type==pygame.KEYDOWN and \
+                    e.key == pygame.K_TAB) or (e.type==pygame.JOYBUTTONDOWN and\
+                e.button==3):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_tab") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_tab()
@@ -2517,6 +2518,11 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,"k_x") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_x()
                             break
+                if (e.type==pygame.KEYDOWN and \
+                    e.key==pygame.K_LSHIFT) or (e.type==pygame.JOYBUTTONDOWN and\
+                    e.button==6):
+                    assets.cur_screen = 1-assets.cur_screen
+                    make_screen()
                 #~ if e.type==pygame.KEYDOWN and\
                 #~ e.key==pygame.K_BACKSPACE:
                     #~ ex = [x.split("_") for x in sorted(os.listdir("")) if x.startswith("screen_")]
@@ -2530,6 +2536,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key == pygame.K_F7 and assets.game!="menu":
                     assets.load_game(assets.game)
                 assets.cur_script.handle_events([e])
+            #~ if pygame.js1:
+                #~ print pygame.js1.get_button(0)
         except script_error, e:
             assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             import traceback
