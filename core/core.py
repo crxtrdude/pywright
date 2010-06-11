@@ -2490,6 +2490,7 @@ class case_menu(fadesprite,gui.widget):
                 scr = assets.Script()
                 scr.init("intro")
                 assets.stack = [scr]
+                assets.cur_script.execute_macro("init_defaults")
                 return
         self.pri = kwargs.get("pri",ulayers.index(self.__class__.__name__))
         self.reload=False
