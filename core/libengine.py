@@ -361,7 +361,6 @@ class Script(gui.widget):
             return
         assets.loading_cache[self._world_id] = self.world
         for o in getattr(self,"_objects",[]):
-            print "try to load",o
             try:
                 o,later = load.load(self,o)
             except:
@@ -857,6 +856,8 @@ class Script(gui.widget):
         if txt.strip():
             d = eval(txt)
             assets.variables.update(d)
+    def autosave(self):
+        self._savegame("save","autosave")
     @category("blah")
     def _savegame(self,command,*args):
         filename = "save"
@@ -1067,6 +1068,8 @@ class Script(gui.widget):
         self.scriptlines = []
         self.si = 0
         self.obs.append(m)
+        self.execute_macro("defaults")
+        self.autosave()
     @category("control")
     def _localmenu(self,command,*args):
         self.buildmode = False
@@ -1117,6 +1120,7 @@ class Script(gui.widget):
         if label:
             self.goto_result(label,backup=None)
         self.execute_macro("defaults")
+        self.autosave()
     @category("control")
     def _top(self,command):
         self.si = 0

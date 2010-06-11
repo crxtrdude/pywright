@@ -673,6 +673,17 @@ class Assets(object):
             print stack[k].si
             assets.stack.append(stack[k])
         self.cur_script.obs.append(saved(text="Game restored",block=False))
+    def backup(self,path,save):
+        if not os.path.exists(path+"/"+save):
+            return
+        if not os.path.exists(path+"/save_backup"):
+            os.mkdir(path+"/save_backup")
+        f = open(path+"/"+save)
+        t = f.read()
+        f.close()
+        f = open(path+"/save_backup/"+save+"_%s"%time.time(),"w")
+        f.write(t)
+        f.close()
     def save_game(self,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
@@ -684,20 +695,33 @@ class Assets(object):
         for script in self.stack:
             if script.save_me:
                 stuff.append(script.save())
+        self.backup(self.game,filename)
         f = open(self.game+"/"+filename,"w")
         f.write(repr(stuff))
         f.close()
         if not hide:
-            self.cur_script.obs.append(saved())
+            self.cur_script.obs.append(saved(block=False))
     def load_game(self,path=None,filename="save",hide=False):
         self.cur_script.imgcache.clear()
         chkpath=""
         if path is not None:
             chkpath=path+"/"
+        if filename == "save":
+            filename = self.check_autosave(chkpath)
         if not os.path.exists(chkpath+filename+".ns"):
             self.load_game_old(path,filename,hide)
         else:
             self.load_game_new(path,filename,hide)
+    def check_autosave(self,path):
+        if not os.path.exists(path+"/autosave.ns"):
+            return "save"
+        if not os.path.exists(path+"/save.ns"):
+            return "save"
+        mt1 = os.path.getmtime(path+"/autosave.ns")
+        mt2 = os.path.getmtime(path+"/save.ns")
+        if mt1>mt2:
+            return 'autosave'
+        return "save"
     def load_game_old(self,path=None,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
