@@ -64,7 +64,10 @@ def save(ob):
         return ["fadeanim",[],oprops]
     elif isinstance(ob,textbox):
         cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
-        oprops["text"] = getattr(ob,"text").split("\n",1)[1]
+        t = getattr(ob,"text","")
+        if "\n" not in t:
+            return
+        oprops["text"] = t.split("\n",1)[1]
         return ["textbox",[oprops["text"],ob.color,ob.delay,ob.speed,ob.rightp,ob.leftp,ob.nametag],oprops]
     elif isinstance(ob,textblock):
         cp(["text","lines","color"],ob,oprops)

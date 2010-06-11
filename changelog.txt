@@ -1,6 +1,57 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.974: April 17, 2010*
+*PyWright 0.974: June 4, 2010*
+    - examine screens with 2 sides remember which side the player was looking at last
+        (can do: 
+            set _xscroll_scriptname:linenumber 0
+        to reset, where scriptname is the name of the script the examine was from,
+        and linenumber is the line number the examine command was on)
+    - the keyword "noauto" on a "char" line will force it to just play the animation straight
+        without using lipsyncing or blink automation
+    - download progress sometimes too fast, interfering with the download
+    - Every time a save file is overwritten the old one is backed up into 
+            "case/save_backup". No interface for restoring saves is implemented,
+            but the files can manually be copied
+    - Automatic saves are created every time a new script is run with the "script" or
+            "menu" commands
+    - less intrusive save/load messages
+    
+    - More powerful expressions
+        Commands using expressions:
+            setvar_ex [variable name] [expression]
+            is_ex [expression] [label]
+        They follow the format of the regular command, except the expression format is a bit more
+        powerful.
+        Expression format:
+        [number or variable] [operator] [number or variable] ...
+        Operators:
+            +
+            -
+            *
+            /
+            ==
+            >
+            >=
+            <
+            <=
+            AND
+            OR
+        Terms can be grouped by parenthesis to alter the order of operations.
+        The order of operations is: * / + - == < <= > >= AND OR
+        
+        Examples
+        
+            setvar_ex hours_played hours_played + 1
+            (This is the same as 'addvar hours_played 1' but you can do more complex things with
+            it of course)
+        
+            is_ex age > 10 AND height >= 5 good
+            "You are too young or too small, please try another ride."
+            exit
+            label good
+            "You are old enough and tall enough for this ride."
+            NOTE: the label name cannot have spaces
+        
     - fg/detention and fg/detention_apollo included for detention center scenes
     - slightly updated interface buttons and cross examination from bigfish
     - "check" on examine screen not as finicky
@@ -49,6 +100,8 @@
             when true, the "defaults" macro will be run every time a new script is run
             if you have a different set of default values, copy core/macros/defaults.mcro
             into your game and edit it.
+        What this means in practice: If you forget to reset a control variable, it will
+        automatically reset when a new script is run
             
 
 *PyWright 0.971/0.973: March 22, 2010*
@@ -118,6 +171,7 @@
         must both be listed if one is)
         if x, y, rwidth, and rheight are listed, this is the region of the screen that
         will be in the screenshot
+        
         
 
 *PyWright 0.960: March 11, 2010*
