@@ -493,6 +493,7 @@ class Assets(object):
             except:
                 import traceback
                 traceback.print_exc()
+                return
             self.snds[name] = snd
         snd.stop()
         try:
@@ -837,8 +838,6 @@ class ImgFont(object):
             edge += 3
             self.width[t] = edge-start
             self.start[t] = start
-            print surf.get_rect()
-            print [[start,starty],[edge-start-1,surf.get_height()-starty-1]]
             surf = surf.subsurface([[start,starty],[edge-start-1,surf.get_height()-starty-1]])
             self.colors[t,tuple(color)] = surf
             return surf
@@ -895,7 +894,6 @@ class ImgFont(object):
             if c== "}":
                 parse = True
             which[-1]+=c
-        print left,right
         return "".join(left),"".join(right)
     def render(self,text,color=[255,255,255],return_size=False):
         """return a surface with rendered text
@@ -2782,13 +2780,13 @@ class examine_menu(sprite,gui.widget):
         keys = pygame.key.get_pressed()
         spd = 3
         d = [0,0]
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or pygame.jsleft():
             d[0]-=3
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or pygame.jsright():
             d[0]+=3
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or pygame.jsup():
             d[1]-=3
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or pygame.jsdown():
             d[1]+=3
         self.mx+=d[0]
         self.my+=d[1]
@@ -2797,7 +2795,9 @@ class examine_menu(sprite,gui.widget):
         if self.my-5<0: self.my=5
         if self.my+5>sh: self.my=sh-5
         if assets.variables.get("_examine_scrolling",None)=="perceive":
-            def add(p):
+            print "moving",d
+            def add(x):
+                print "moving",x
                 x.pos[0]-=d[0]
                 x.pos[1]-=d[1]
             [add(x) for x in self.bg]

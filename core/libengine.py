@@ -241,7 +241,6 @@ def EXPR(line):
                 quote.append(word)
                 if word.endswith("'"):
                     statements.append(" ".join(quote))
-                    print statements
                     quote = []
             elif word.startswith("(") and word.endswith(")"):
                 statements.append(word[1:-1])
@@ -249,7 +248,6 @@ def EXPR(line):
                 paren.append(word)
             elif word.startswith("'") and word.endswith("'"):
                 statements.append(word)
-                print statements
             elif word.startswith("'"):
                 quote.append(word)
             else:
@@ -1270,13 +1268,12 @@ class Script(gui.widget):
                 elif a.startswith("width="): width=int(a[6:])
                 elif a.startswith("height="): height=int(a[7:])
                 elif a.startswith("name="): name=a[5:]
-            print x,y,z
+            if y>=192 and assets.num_screens == 1 and assets.screen_compress:
+                y -= 192
             self.obs.append(guiBack(x=x,y=y,z=z,name=name))
             self.buildmode = False
         if guitype=="Button":
-            print "make button",args
             macroname=args[0]; del args[0]
-            print macroname
             graphic = None
             width = None
             while args:
@@ -1300,20 +1297,20 @@ class Script(gui.widget):
                 btn.s_graphic = graphic
                 graphic = assets.open_art(graphic)[0]
             btn.graphic = graphic
+            if y>=192 and assets.num_screens == 1 and assets.screen_compress:
+                y -= 192
             btn.rpos = [x,y]
             btn.z = int(assets.variables["_layer_gui"])
             if z is not None: btn.z = z
             btn.pri = 0
             btn.s_macroname = macroname
             def func(*args):
-                print "go to",macroname
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
         if guitype=="Input":
-            print "make inputbox",args
             varname=args[0]; del args[0]
             varvalue = assets.variables.get(varname,"")
             assets.variables[varname] = varvalue
@@ -1335,6 +1332,8 @@ class Script(gui.widget):
                 #~ btn.s_graphic = graphic
                 #~ graphic = assets.open_art(graphic)[0]
             #~ btn.graphic = graphic
+            if y>=192 and assets.num_screens == 1 and assets.screen_compress:
+                y -= 192
             eb.rpos = [x,y]
             if width:
                 eb.force_width = width
@@ -1360,6 +1359,9 @@ class Script(gui.widget):
         if text and text[0].startswith("name="): 
             id_name = text[0].replace("name=","",1)
             text = text[1:]
+        y = int(y)
+        if y>=192 and assets.num_screens == 1 and assets.screen_compress:
+            y -= 192
         tb = textblock(" ".join(text),[int(x),int(y)],[int(width),int(height)],surf=pygame.screen)
         self.obs.append(tb)
         if id_name: tb.id_name = id_name
@@ -1767,9 +1769,11 @@ sound_format=%s
 sound_bits=%s
 sound_buffer=%s
 sound_volume=%s
-music_volume=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
+music_volume=%s
+screen_compress=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
 assets.gbamode,int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
-assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume)))
+assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
+int(assets.screen_compress)))
     f.close()
 
 class screen_settings(gui.pane):
@@ -1933,6 +1937,8 @@ class screen_settings(gui.pane):
         self.fs = res_box.children[-1]
         res_box.children.append(gui.checkbox("dualscreen"))
         self.ds = res_box.children[-1]
+        res_box.children.append(gui.checkbox("virtual_dualscreen"))
+        self.vds = res_box.children[-1]
         self.reses = gui.radiobutton.groups["resopt"]
         for r in self.reses:
             if str(assets.swidth) in r.text:
@@ -1941,6 +1947,8 @@ class screen_settings(gui.pane):
             self.fs.checked = True
         if assets.num_screens==2:
             self.ds.checked = True
+        if not assets.screen_compress:
+            self.vds.checked = True
                 
         self.children.append(gui.button(self,"apply",[10,140]))
     def setgui(self,v):
@@ -1978,6 +1986,9 @@ class screen_settings(gui.pane):
         assets.num_screens = 1
         if self.ds.checked:
             assets.num_screens = 2
+        assets.screen_compress = 1
+        if self.vds.checked:
+            assets.screen_compress = 0
         make_screen()
     def save_resolution(self):
         assets.cur_script.world.remove(self.really_applyb)
@@ -2035,6 +2046,7 @@ def make_start_script(logo=True):
         bottomscript.obs.append(root)
     bottomscript._add_root = add_root
     root.width,root.height = [1000,1000]
+    root.z = 1000
     
     list = gui.scrollpane([0,other_screen(0)])
     list.width,list.height = [sw,sh]
@@ -2090,27 +2102,39 @@ def make_start_script(logo=True):
         setattr(make_start_script,f.replace(" ","_"),_play_game)
 
 def make_screen():
-    if pygame.USE_GL:
-        try:
-            import gl
-            gl.init([assets.swidth,assets.sheight*assets.num_screens],assets.fullscreen)
-            SCREEN= pygame.real_screen = pygame.display.get_surface()
-            pygame.screen = gl.surface([assets.swidth,assets.sheight*assets.num_screens],[sw,sh*assets.num_screens])
-        except:
-            import traceback
-            traceback.print_exc()
-            print "NO OPENGL!  Switching to software rendering."
-            pygame.USE_GL = False
-    if not pygame.USE_GL:
-        try:
-            SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
-        except:
-            SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
-        pygame.screen = pygame.Surface([sw,sh*assets.num_screens]).convert()
-        pygame.blank = pygame.screen.convert()
-        pygame.blank.fill([0,0,0])
+    if not hasattr(assets,"cur_screen"):
+        assets.cur_screen = 0
+    try:
+        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
+    except:
+        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
+    ns = assets.num_screens
+    if assets.cur_screen:
+        ns = 2
+    pygame.screen = pygame.Surface([sw,sh*ns]).convert()
+    pygame.blank = pygame.screen.convert()
+    pygame.blank.fill([0,0,0])
     pygame.display.set_caption("PyWright "+VERSION)
     pygame.display.set_icon(pygame.image.load("art/general/bb.png"))
+    if pygame.joystick.get_init():
+        pygame.joystick.quit()
+    pygame.joystick.init()
+    pygame.js1 = None
+    if pygame.joystick.get_count():
+        pygame.js1 = pygame.joystick.Joystick(0)
+        pygame.js1.init()
+    def gl():
+        return pygame.js1 and pygame.js1.get_numhats() and pygame.js1.get_hat(0)[0]<0
+    def gr():
+        return pygame.js1 and pygame.js1.get_numhats() and pygame.js1.get_hat(0)[0]>0
+    def gu():
+        return pygame.js1 and pygame.js1.get_numhats() and pygame.js1.get_hat(0)[1]>0
+    def gd():
+        return pygame.js1 and pygame.js1.get_numhats() and pygame.js1.get_hat(0)[1]<0
+    pygame.jsleft = gl
+    pygame.jsright = gr
+    pygame.jsup = gu
+    pygame.jsdown = gd
 
     
 def draw_screen():
@@ -2125,7 +2149,10 @@ def draw_screen():
         scaled = pygame.screen
         if scale:
             scaled = pygame.transform.rotozoom(pygame.screen,0,sc)
-        pygame.real_screen.blit(scaled,[0,0])
+        y = 0
+        if assets.cur_screen == 1:
+            y = -192*sc
+        pygame.real_screen.blit(scaled,[0,y])
         pygame.display.flip()
     if assets.num_screens==2:
         if not hasattr(assets,"grey_bottom"):
@@ -2201,6 +2228,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.filter = 0
     assets.gbamode = 0
     assets.num_screens = 2
+    assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
     pygame.USE_GL=1
     pygame.DISPLAY_LIST=1
     pygame.TEXTURE_CACHE=0
@@ -2222,6 +2250,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if spl[0]=="sound_buffer": assets.sound_buffer = int(spl[1])
             if spl[0]=="sound_volume": assets.sound_volume = float(spl[1])
             if spl[0]=="music_volume": assets.music_volume = float(spl[1])
+            if spl[0]=="screen_compress": assets.screen_compress = int(spl[1])
     wini()
     
     pygame.USE_GL=0
@@ -2324,8 +2353,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         #print [o.z for o in assets.cur_script.obs]
                 if e.type == pygame.QUIT:
                     running = False
-                if e.type==pygame.KEYUP and\
-                e.key==pygame.K_RETURN:
+                if (e.type==pygame.KEYUP and\
+                e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONUP and\
+                e.button==1):
                     if "enter" in assets.cur_script.held: assets.cur_script.held.remove("enter")
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"enter_up"):
@@ -2336,8 +2366,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     assets.fullscreen = 1-assets.fullscreen
                     make_screen()
                     wini()
-                elif e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_RETURN:
+                elif (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONDOWN and\
+                e.button==0):
                     if "enter" not in assets.cur_script.held: assets.cur_script.held.append("enter")
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"enter_down") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
@@ -2357,28 +2388,29 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,"k_right") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_right()
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_LEFT:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_LEFT) or (e.type==pygame.JOYHATMOTION and e.value[0]==-1):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"statement") and not o.statement:
                             continue
                         if hasattr(o,"k_left") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_left()
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_UP:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_UP) or (e.type==pygame.JOYHATMOTION and e.value[1]==1):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_up") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_up()
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_DOWN:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_DOWN) or (e.type==pygame.JOYHATMOTION and e.value[1]==-1):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_down") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_down()
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_SPACE:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_SPACE) or (e.type==pygame.JOYBUTTONDOWN and\
+                e.button==1):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_space") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_space()
@@ -2389,14 +2421,16 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,"k_tab") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_tab()
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_z:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_z) or (e.type==pygame.JOYBUTTONDOWN and\
+                e.button==4):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_z") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_z()
                             break
-                if e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_x:
+                if (e.type==pygame.KEYDOWN and\
+                e.key==pygame.K_x) or (e.type==pygame.JOYBUTTONDOWN and\
+                e.button==5):
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_x") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_x()
