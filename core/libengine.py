@@ -1439,7 +1439,7 @@ class Script(gui.widget):
                 wait = 0
             if a.startswith("name="):
                 name = a[5:]
-        zzzooom = zoomanim(mag,frames,wait)
+        zzzooom = zoomanim(mag,frames,wait,name)
         if last:
             zzzooom.control_last()
         if name:

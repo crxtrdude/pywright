@@ -1356,6 +1356,12 @@ class portrait(object):
         else:
             raise art_error("Can't load '"+charname+"' '"+emo+"' '"+mode+"'")
         self.blinkspeed = self.blink_sprite.blinkspeed
+    def set_dim(self,amt):
+        self.blink_sprite.dim = amt
+        self.talk_sprite.dim = amt
+    def get_dim(self):
+        return self.blink_sprite.dim
+    dim = property(get_dim,set_dim)
     def save(self):
         return pickle.dumps([self.charname,self.emoname,self.modename,self.hide,self.pos,self.nametag,
             getattr(self,"id_name",None)])
