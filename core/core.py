@@ -1,5 +1,6 @@
 from errors import *
 
+import time
 import gui
 import zlib
 import os
