@@ -163,7 +163,7 @@ assets.World = World
 def EVAL(stuff):
     stuff = stuff.split(" ",2)
     if len(stuff)==1:
-        return vtrue(assets.variables.get(stuff[0],""))
+        return assets.variables.get(stuff[0],"")
     if len(stuff)==2:
         stuff = stuff[0],"=",stuff[1]
     current,op,check = stuff
@@ -185,11 +185,6 @@ def EVAL(stuff):
         return current <= check
     elif op == ">=":
         return current >= check
-def OR(stuff):
-    for line in stuff:
-        if EVAL(line):
-            return True
-    return False
 def GV(v):
     if v[0].isdigit():
         if "." in v:
@@ -213,6 +208,27 @@ def DIV(statements):
     return GV(statements[0])/GV(statements[1])
 def EQ(statements):
     return str(GV(statements[0])==GV(statements[1])).lower()
+def GTEQ(statements):
+    return str(GV(statements[0])>=GV(statements[1])).lower()
+def GT(statements):
+    return str(GV(statements[0])>GV(statements[1])).lower()
+def LT(statements):
+    return str(GV(statements[0])<GV(statements[1])).lower()
+def LTEQ(statements):
+    return str(GV(statements[0])<=GV(statements[1])).lower()
+def AND(statements):
+    if vtrue(statements[0]) and vtrue(statements[1]):
+        return "true"
+    return "false"
+def OR(stuff):
+    for line in stuff:
+        if EVAL(line):
+            return True
+    return False
+def OR2(statements):
+    if vtrue(statements[0]) or vtrue(statements[1]):
+        return "true"
+    return "false"
 def EXPR(line):
     statements = []
     cur = ""
@@ -229,6 +245,18 @@ def EXPR(line):
             statements.append(DIV)
         elif not paren and not quote and word == "==":
             statements.append(EQ)
+        elif not paren and not quote and word == "<=":
+            statements.append(LTEQ)
+        elif not paren and not quote and word == ">=":
+            statements.append(GTEQ)
+        elif not paren and not quote and word == "<":
+            statements.append(LT)
+        elif not paren and not quote and word == ">":
+            statements.append(GT)
+        elif not paren and not quote and word == "AND":
+            statements.append(AND)
+        elif not paren and not quote and word == "OR":
+            statements.append(OR2)
         elif word.strip():
             if paren:
                 if word.endswith(")"):
@@ -258,7 +286,7 @@ def EVAL_EXPR(expr):
         return str(expr)
     if len(expr)==1:
         return EVAL_EXPR(expr[0])
-    oop = [MUL,DIV,ADD,MINUS,EQ]
+    oop = [MUL,DIV,ADD,MINUS,EQ,LT,GT,LTEQ,GTEQ,OR2,AND]
     ops = []
     for i,v in enumerate(expr):
         if v in oop:
@@ -277,13 +305,25 @@ def EVAL_EXPR(expr):
     del expr[op[0]]
     return EVAL_EXPR(expr)
 
-#~ assert EVAL_EXPR(EXPR("5 + 1 + 3 * 10"))=="36"
-#~ assert EVAL_EXPR(EXPR("2 * (5 + 1)"))=="12"
-#~ assert EVAL_EXPR(EXPR("'funny ' + 'business'"))=="funny business"
-#~ assert vtrue(EVAL_EXPR(EXPR("2 * (5 + 1) == (5 + 1) * 2")))
+assert EVAL_EXPR(EXPR("5 + 1 + 3 * 10"))=="36"
+assert EVAL_EXPR(EXPR("2 * (5 + 1)"))=="12"
+assert EVAL_EXPR(EXPR("'funny ' + 'business'"))=="funny business"
+assert vtrue(EVAL_EXPR(EXPR("2 * (5 + 1) == (5 + 1) * 2")))
 assets.variables["something"] = "1"
 assert EVAL_EXPR(EXPR("5 + something + 3 * 10"))=="36"
 del assets.variables["something"]
+assert EVAL_EXPR(EXPR("(5 == 4 OR 5 == 5) AND (1 + 3 == 4) AND ('funny' = 'not funny')"))=="false"
+assert EVAL_EXPR(EXPR("(5 == 4 OR 5 == 5) AND (1 + 3 == 4) OR ('funny' = 'not funny')"))=="true"
+assert EVAL_EXPR(EXPR("5 > 3"))=="true"
+assert EVAL_EXPR(EXPR("5 > 6"))=="false"
+assert EVAL_EXPR(EXPR("5 < 3"))=="false"
+assert EVAL_EXPR(EXPR("5 < 6"))=="true"
+assert EVAL_EXPR(EXPR("5 >= 3"))=="true"
+assert EVAL_EXPR(EXPR("5 >= 5"))=="true"
+assert EVAL_EXPR(EXPR("5 >= 6"))=="false"
+assert EVAL_EXPR(EXPR("5 <= 3"))=="false"
+assert EVAL_EXPR(EXPR("5 <= 5"))=="true"
+assert EVAL_EXPR(EXPR("5 <= 6"))=="true"
 
 class Script(gui.widget):
     save_me = True
@@ -776,12 +816,18 @@ class Script(gui.widget):
         """Sets a variable to some value."""
         value = " ".join(args)
         assets.variables[variable]=value
+    @category([VALUE("variable","variable name to set"),COMBINED("expression2","The results of the expression will be stored in the variable.")])
+    def _set_ex(self,command,variable,*args):
+        """Sets a variable to some value based on an expression"""
+        value = EVAL_EXPR(EXPR(" ".join(args)))
+        assets.variables[variable]=value
     @category([VALUE("destination variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")])
     def _getvar(self,command,variable,*args):
         """Copies the value of one variable into another."""
         value = "".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
+    _setvar_ex = _set_ex
     @category([VALUE("variable","variable name to save random value to"),VALUE("start","smallest number to generate"),VALUE("end","largest number to generate")])
     def _random(self,command,variable,start,end):
         """Generates a random integer with a minimum
@@ -802,28 +848,43 @@ class Script(gui.widget):
         """
         value = "".join(args)
         assets.variables[variable]=value
-    @category("control")
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to add to the variable")])
     def _addvar(self,command,variable,value):
+        """Adds an amount to a variable. If the variable 'x' were set to 4, the script
+        {{{addvar x 1}}}
+        would set 'x' to 5."""
         oldvalue = int(assets.variables.get(variable,0))
         oldvalue += int(value)
         assets.variables[variable] = str(oldvalue)
-    @category("control")
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to subtract from the variable")])
     def _subvar(self,command,variable,value):
+        """Subtract an amount from a variable. If the variable 'x' were set to 33, the script
+        {{{subvar x 3}}}
+        would set 'x' to 30."""
         oldvalue = int(assets.variables[variable])
         oldvalue -= int(value)
         assets.variables[variable] = str(oldvalue)
-    @category("control")
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to multiply the variable by")])
     def _mulvar(self,command,variable,value):
+        """Multiply a variable by a number. If the variable 'x' were set to 5, the script
+        {{{mulvar x 3}}}
+        would set 'x' to 15."""
         oldvalue = int(assets.variables[variable])
         oldvalue *= int(value)
         assets.variables[variable] = str(int(oldvalue))
-    @category("control")
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to divide the variable by")])
     def _divvar(self,command,variable,value):
+        """Divide a variable by a number. If the variable 'x' were set to 10, the script
+        {{{divvar x 2}}}
+        would set 'x' to 5."""
         oldvalue = int(assets.variables[variable])
         oldvalue /= float(value)
         assets.variables[variable] = str(int(oldvalue))
-    @category("control")
+    @category([VALUE("variable","variable to save to")])
     def _absvar(self,command,variable):
+        """Force a variable to be positive. If the variable 'x' were set to -12, the script
+        {{{absvar x}}}
+        would set 'x' to 12."""
         oldvalue = int(assets.variables.get(variable,0))
         oldvalue = abs(int(oldvalue))
         assets.variables[variable] = str(oldvalue)
@@ -936,7 +997,27 @@ class Script(gui.widget):
         image = pygame.transform.scale(image,[50,50])
         pygame.real_screen.blit(image,[0,0])
         pygame.display.flip()
-    @category("control")
+    @category(
+                    [COMBINED('expression2'),
+                    CHOICE([VALUE('label'),TOKEN('?')]),
+                    KEYWORD('fail','label to jump to if expression fails')])
+    def _is_ex(self,command,*args):
+        fail = None
+        args = list(args)
+        label = args.pop(-1)
+        if label.startswith("fail="):
+            fail = label.split("=",1)[1]
+            label = args.pop(-1)
+        if label.endswith("?"):
+            args.append(label[:-1])
+            label = "?"
+        answer = EVAL_EXPR(EXPR(" ".join(args)))
+        if vtrue(answer):
+            return self.succeed(label)
+        return self.fail(label,fail)
+    @category([COMBINED('expression'),
+                    KEYWORD('fail','label to jump to if expression fails'),
+                    CHOICE([VALUE('label'),TOKEN('?')])])
     def _is(self,command,*args):
         fail = None
         args = list(args)
