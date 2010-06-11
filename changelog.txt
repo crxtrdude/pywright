@@ -1,6 +1,7 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.974: June 4, 2010*
+    - court macro fix for scrolling from helper
     - examine screens with 2 sides remember which side the player was looking at last
         (can do: 
             set _xscroll_scriptname:linenumber 0
