@@ -2035,6 +2035,8 @@ class textbox(gui.widget):
                         center = not center
                     if center:
                         x = (sw-img.get_width())//2
+                    if x+img.get_width()>256:
+                        self.OVERAGE = x+img.get_width()-256
                     self.img.blit(img,[x,y])
                     y+=inc
                     x = stx
