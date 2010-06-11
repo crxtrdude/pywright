@@ -1,6 +1,6 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.974: June 4, 2010*
+*PyWright 0.974: June 11, 2010*
     - preliminary gamepad/joystick support
     - court macro fix for scrolling from helper
     - examine screens with 2 sides remember which side the player was looking at last
