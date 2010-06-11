@@ -578,7 +578,7 @@ class Assets(object):
         return p
     def clear(self):
         if not hasattr(self,"variables"):
-            self.variables = {}
+            self.variables = Variables()
         self.variables.clear()
         while assets.items:
             assets.items.pop(0)
