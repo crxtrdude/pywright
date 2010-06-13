@@ -52,6 +52,8 @@ class TOKEN(DOCTYPE):
     """This exact token string may be present"""
 class VALUE(DOCTYPE):
     """A named value, assigned by position"""
+class ETC(DOCTYPE):
+    """Each following argument is a separate entity, all potentially optional"""
 class CHOICE():
     """One of these options should be present here"""
     def __init__(self,options):
@@ -761,7 +763,8 @@ class Script(gui.widget):
     @category([COMBINED("flag expression","list of flag names joined with AND or OR"),
                     CHOICE([
                     TOKEN("?"),VALUE("label","label to jump to if the evaluation is true")
-                    ]),KEYWORD("fail","label to jump to if evaluation is false","none")])
+                    ]),
+                    KEYWORD("fail","label to jump to if evaluation is false","none")])
     def flag_logic(self,value,*args):
         fail=None
         args = list(args)
@@ -888,8 +891,13 @@ class Script(gui.widget):
         oldvalue = int(assets.variables.get(variable,0))
         oldvalue = abs(int(oldvalue))
         assets.variables[variable] = str(oldvalue)
-    @category("blah")
+    @category([VALUE("filename","file to export variables into, relative to the case folder"),
+            ETC("variable names",
+                "The names of variables to export. If none are listed, all variables will be exported",
+                "all variables")])
     def _exportvars(self,command,filename,*vars):
+        """Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
+        ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses."""
         d = {}
         if not vars:
             vars = assets.variables.keys()
@@ -901,8 +909,9 @@ class Script(gui.widget):
         f = open(assets.game+"/"+filename,"w")
         f.write(repr(d))
         f.close()
-    @category("blah")
+    @category([VALUE("filename","file to import variables from, relative to the case folder")])
     def _importvars(self,command,filename):
+        """Restores previously exported variables from the file."""
         filename = filename.replace("..","").replace(":","")
         while filename.startswith("/"):
             filename = filename[1:]
@@ -917,8 +926,10 @@ class Script(gui.widget):
             assets.variables.update(d)
     def autosave(self):
         self._savegame("save","autosave")
-    @category("blah")
+    @category([VALUE("filename","File to save to, relative to case folder. Saved games may not be named 'hide'","save"),
+            TOKEN("hide","If hide token is included, the interface wont inform the user of the save.")])
     def _savegame(self,command,*args):
+        """Creates a new saved game in the case folder."""
         filename = "save"
         hide = False
         args = list(args)
@@ -931,8 +942,10 @@ class Script(gui.widget):
         assets.variables["_allow_saveload"] = "true"
         assets.save_game(filename,hide)
         self.si -= 1
-    @category("blah")
+    @category([VALUE("filename","Saved game to load, relative to case folder. Saved games may not be named 'hide'","save"),
+            TOKEN("hide","If hide token is included, the interface wont inform the user of the load.")])
     def _loadgame(self,command,*args):
+        """Restores a save file."""
         filename = "save"
         hide = False
         args = list(args)
@@ -944,21 +957,6 @@ class Script(gui.widget):
         assets.variables["_allow_saveload"] = "true"
         assets.load_game(None,filename,hide)
         return self._endscript()
-    @category("blah")
-    def _deletegame(self,command,path):
-        if "/" in path or "\\" in path:
-            raise script_error("Invalid save file path:'%s'"%(path,))
-        path = assets.game+"/"+path
-        t = open(path,"r").read()
-        try:
-            print t[:10],t[-10:]
-            assert t.startswith("(lp0..--..") and t.endswith("end\n")
-        except AssertionError:
-            raise script_error("Cannot delete non-save")
-        try:
-            os.remove(path)
-        except:
-            raise script_error("Could not delete save file, file in use or protected")
     @category([VALUE("path","path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)"),
                     KEYWORD("width","shrink screenshot to this width"),
                     KEYWORD("height","shrink screenshot to this height"),
@@ -967,6 +965,8 @@ class Script(gui.widget):
                     KEYWORD("rwidth","width of region to screenshot"),
                     KEYWORD("rheight","height of region to screenshot")])
     def _screenshot(self,command,path,*args):
+        """Takes a screenshot and saves the image. Can select a specific region of the screen to
+        snapshot. Useful for custom interfaces, or just providing a snapshot feature."""
         root = assets.game.replace("\\","/").rsplit("/",1)[0]
         if root == "games" or root == "games":
             root = assets.game
