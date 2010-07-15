@@ -1187,7 +1187,7 @@ class Script(gui.widget):
         except file_error:
             name = scriptname
         if "stack" in args:
-            assets.addscene(name+".script")
+            assets.addscene(name)
         else:
             p = self.parent
             self.init(name)
