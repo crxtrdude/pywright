@@ -1247,7 +1247,7 @@ class portrait(object):
         if not name: return
         self.z = zlayers.index(self.__class__.__name__)
         self.clicksound = "blipmale.ogg"
-        self.pri = 20
+        self.pri = ulayers.index(self.__class__.__name__)
         self.pos = [0,0]
         self.rot = [0,0,0]
         self.name = name
@@ -2054,7 +2054,7 @@ class uglyarrow(fadesprite):
         self.button = None
         self.double = None
         self.textbox = None
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.width = self.iwidth = sw
         self.height = self.iheight = sh
         self.high = False
@@ -2679,7 +2679,7 @@ class examine_menu(sprite,gui.widget):
             gui.window.focused = None
     def __init__(self,hide=False,name="blah"):
         self.name = name
-        self.pri = -2000
+        self.pri = ulayers.index(self.__class__.__name__)
         sprite.__init__(self)
         self.pos = [0,other_screen(0)]
         self.width = sw
@@ -2968,6 +2968,7 @@ class evidence_menu(fadesprite,gui.widget):
                 assets.variables[k] = defs[k]
     def __init__(self,items=[],gba=True):
         self.init_vars()
+        self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,other_screen(0)
         fadesprite.__init__(self,x=x,y=y)
         gui.widget.__init__(self,[x,y],[sw,sh])
@@ -3410,7 +3411,7 @@ class textblock(sprite):
 class waitenter(sprite):
     def __init__(self):
         super(waitenter,self).__init__()
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
     def save(self):
         return ""
     def restore(self,s):
@@ -3425,7 +3426,7 @@ class delay(sprite):
     def __init__(self,ticks=1):
         super(delay,self).__init__()
         self.ticks = abs(ticks)
-        self.pri = 10000
+        self.pri = ulayers.index(self.__class__.__name__)
     def save(self):
         return ""
     def restore(self,s):
@@ -3442,7 +3443,7 @@ class timer(sprite):
     def __init__(self,ticks=1,run=None):
         sprite.__init__(self)
         self.ticks = abs(ticks)
-        self.pri = 0
+        self.pri = ulayers.index(self.__class__.__name__)
         self.run = run
         self.script = assets.cur_script
     def update(self):
@@ -3482,7 +3483,7 @@ class scroll(effect):
                 self.dy=amty/abs(amty)
         self.dx*=speed
         self.dy*=speed
-        self.pri = -3000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.speed = speed
         self.obs = assets.cur_script.obs
         self.filter = filter
@@ -3528,7 +3529,7 @@ class zoomanim(effect):
     def __init__(self,mag=1,frames=1,wait=1,name=None):
         super(zoomanim,self).__init__()
         self.mag=mag
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.frames = frames
         self.obs = assets.cur_script.obs
         self.mag_per_frame = float(self.mag)/float(self.frames)
@@ -3569,7 +3570,7 @@ class rotateanim(effect):
         super(rotateanim,self).__init__()
         self.axis = {"x":0,"y":1,"z":2,0:0,1:1,2:2}[axis]
         self.degrees = degrees
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.speed = speed
         self.obs = obs
         self.wait = wait
@@ -3609,7 +3610,7 @@ class fadeanim(effect):
         super(fadeanim,self).__init__()
         self.start = start
         self.end = end
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.speed = speed
         self.obs = obs
         self.wait = wait
@@ -3691,7 +3692,7 @@ class notguilty(sprite):
     def __init__(self):
         sprite.__init__(self)
         self.ttl = 120
-        self.pri = 1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.obs = []
     def save(self):
         return ""
@@ -3716,7 +3717,7 @@ class guilty(sprite):
     def __init__(self):
         sprite.__init__(self)
         self.ttl = 5*60
-        self.pri = 1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.i = 0
         self.img = assets.open_art("general/guilty")[0]
         self.xes = [0,41,79,104,129,160,197]
@@ -3746,7 +3747,7 @@ class guiBack(sprite,gui.widget):
     def __init__(self,image=None,x=None,y=None,z=None,name=None):
         sprite.__init__(self)
         gui.widget.__init__(self)
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
         if not image:
             image = "general/back"
         self.image = image
@@ -3781,7 +3782,7 @@ class guiScroll(sprite,gui.widget):
     def __init__(self,direction):
         sprite.__init__(self,flipx=direction+1)
         gui.widget.__init__(self)
-        self.pri = -1000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.load("general/examine_scroll")
         self.pos = [sw//2-self.img.get_width()//2,other_screen(sh-self.img.get_height())]
         gui.widget.__init__(self,self.pos,self.img.get_size())
@@ -3803,7 +3804,7 @@ class guiWait(sprite):
         gui.widget.__init__(self)
         self.width = 0
         self.height = 0
-        self.pri = 31
+        self.pri = ulayers.index(self.__class__.__name__)
         self.pos = [0,0]
         self.run = run
         self.script = assets.cur_script
@@ -3822,7 +3823,7 @@ class saved(fadesprite):
         self.text = text
         self.ticks = abs(ticks)
         self.start = self.ticks
-        self.pri = -5000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.pos[0]=0
         self.pos[1]=0
         self.block = block
@@ -3847,7 +3848,7 @@ class error_msg(gui.pane):
     def click_down_over(self,mp):
         self.kill = 1
     def __init__(self,msg,line,lineno,script):
-        self.pri = -10000
+        self.pri = ulayers.index(self.__class__.__name__)
         self.z = zlayers.index(self.__class__.__name__)
         gui.pane.__init__(self)
         msg_lines = [""]
@@ -3890,7 +3891,7 @@ class movie:
         self.sound = sound
         if sound:
             self.sound = assets.play_sound(sound)
-        self.pri = 0
+        self.pri = ulayers.index(self.__class__.__name__)
         self.z = zlayers.index(self.__class__.__name__)
         self.paused = 0
         self.id_name = name

@@ -16,11 +16,15 @@
 #The order object classes are updated, lower value is "more blocking"
 [pri]
 -10000	error_msg
--1000	waitenter scroll rotateanim fadeanim guiBack guiScroll saved
-0	fg evidence_menu movie sprite fadesprite timer
+-5000 saved
+-3000 scroll
+-1000	waitenter scroll rotateanim fadeanim guiBack guiScroll timer zoomanim uglyarrow
+-500 examine_menu
+0	fg evidence_menu movie sprite fadesprite
 20	portrait
 25	case_menu
-30	textbox guiWait
+30	textbox
+31 guiWait
 50	penalty menu listmenu
 1000	notguilty guilty
 10000	delay
