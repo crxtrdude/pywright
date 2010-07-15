@@ -119,8 +119,8 @@ set _examine_cursor_img
 #Run this macro when clicking the mouse during examine
 set _examine_mousedown false
 
-#Allow or disallow the blinking testimony object
-set _testimony_blinker false
+#Allow or disallow the blinking testimony object during cross examinations
+set _testimony_blinker true
 
 #Whether user can click the save/load buttons
 set _allow_click_save true
