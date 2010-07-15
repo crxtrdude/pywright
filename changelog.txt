@@ -1,5 +1,9 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.975: July 17, 2010*
+    - screenshots for multiple saved games
+    - interface for loading a saved game
+
 *PyWright 0.974: June 11, 2010*
     - preliminary gamepad/joystick support
     - court macro fix for scrolling from helper
