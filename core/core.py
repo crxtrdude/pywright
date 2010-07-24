@@ -718,7 +718,7 @@ class Assets(object):
         if not os.path.exists(path+"/autosave.ns"):
             return "save"
         if not os.path.exists(path+"/save.ns"):
-            return "save"
+            return "autosave"
         mt1 = os.path.getmtime(path+"/autosave.ns")
         mt2 = os.path.getmtime(path+"/save.ns")
         if mt1>mt2:
@@ -2588,6 +2588,11 @@ class case_menu(fadesprite,gui.widget):
                 spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
                 self.option_imgs.append([spr,[x,y+90]])
             elif os.path.exists(self.path+"/"+o+"/save"):
+                txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
+                spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
+                spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
+                self.option_imgs.append([spr,[x,y+90]])
+            elif os.path.exists(self.path+"/"+o+"/autosave.ns"):
                 txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
                 spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
