@@ -6,7 +6,7 @@
     - more clear when there is an update
     - more clear to restart the game after update
     - autosave respects _allow_saveload variable
-    - savegame and loadgame command dont alter the _allow_saveload variable
+*    - savegame and loadgame command dont alter the _allow_saveload variable
         (You can turn off saves, call savegame at checkpoints or when prompted by 
         a custom save interface, and not have to worry about the player trying to
         save in other ways, or autosave)

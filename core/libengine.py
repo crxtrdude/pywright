@@ -925,7 +925,8 @@ class Script(gui.widget):
             d = eval(txt)
             assets.variables.update(d)
     def autosave(self):
-        self._savegame("save","autosave")
+        if vtrue(assets.variables.get("_allow_saveload","true")):
+            self._savegame("save","autosave")
     @category([VALUE("filename","File to save to, relative to case folder. Saved games may not be named 'hide'","save"),
             TOKEN("hide","If hide token is included, the interface wont inform the user of the save.")])
     def _savegame(self,command,*args):
@@ -939,8 +940,10 @@ class Script(gui.widget):
         if args:
             filename = args[0]
         self.si += 1
+        old = assets.variables.get("_allow_saveload","true")
         assets.variables["_allow_saveload"] = "true"
         assets.save_game(filename,hide)
+        assets.variables["_allow_saveload"] = old
         self.si -= 1
     @category([VALUE("filename","Saved game to load, relative to case folder. Saved games may not be named 'hide'","save"),
             TOKEN("hide","If hide token is included, the interface wont inform the user of the load.")])
@@ -954,8 +957,10 @@ class Script(gui.widget):
             args.remove("hide")
         if args:
             filename = args[0]
+        old = assets.variables.get("_allow_saveload","true")
         assets.variables["_allow_saveload"] = "true"
         assets.load_game(None,filename,hide)
+        assets.variables["_allow_saveload"] = old
         return self._endscript()
     @category([VALUE("path","path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)"),
                     KEYWORD("width","shrink screenshot to this width"),
