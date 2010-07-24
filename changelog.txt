@@ -3,6 +3,15 @@
 *PyWright 0.975: July 17, 2010*
     - screenshots for multiple saved games
     - interface for loading a saved game
+    - more clear when there is an update
+    - more clear to restart the game after update
+    - autosave respects _allow_saveload variable
+    - savegame and loadgame command dont alter the _allow_saveload variable
+        (You can turn off saves, call savegame at checkpoints or when prompted by 
+        a custom save interface, and not have to worry about the player trying to
+        save in other ways, or autosave)
+    - autowait animations (with default)
+    - find characters used and package them
 
 *PyWright 0.974: June 11, 2010*
     - preliminary gamepad/joystick support
