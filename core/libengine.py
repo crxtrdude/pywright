@@ -431,9 +431,9 @@ class Script(gui.widget):
             try:
                 self.scriptlines = assets.open_script(scene,macros,ext)
             except Exception,e:
-                self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
+                self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
                 return
             self.macros = assets.macros
         self.labels = []
