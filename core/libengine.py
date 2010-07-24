@@ -2113,6 +2113,35 @@ class choose_game(gui.widget):
     def update(self,*args):
         return True
         
+def load_game_menu():
+    root = choose_game()
+    root.pri = -1000
+    root.z = 1000
+    list = gui.scrollpane([0,other_screen(0)])
+    list.width,list.height = [sw,sh]
+    root.add_child(list)
+    title = gui.editbox(None,"Choose save to load")
+    title.draw_back = False
+    list.add_child(title)
+    assets.cur_script.obs.append(root)
+    saves = []
+    for f in ["save","autosave"]:
+        for ext in [".ns",""]:
+            fp = assets.game+"/"+f+ext
+            if os.path.exists(fp):
+                saves.append((fp,os.path.getmtime(fp)))
+    if os.path.isdir(assets.game+"/save_backup"):
+        for f in os.listdir(assets.game+"/save_backup"):
+            fp = assets.game+"/save_backup/"+f
+            saves.append((fp,os.path.getmtime(fp)))
+    saves.sort(key=lambda a: -a[1])
+    for s in saves:
+        lt = time.localtime(s[1])
+        fn = s[0].rsplit("/",1)[1].split(".",1)[0]
+        t = fn+" %s/%s/%s %s:%s"%(lt.tm_mon,lt.tm_mday,lt.tm_year,lt.tm_hour,lt.tm_min)
+        item = gui.button(load_game_menu,t)
+        list.add_child(item)
+        
 def make_start_script(logo=True):
     root = choose_game()
     root.pri = -1000
@@ -2539,7 +2568,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     assets.save_game()
                 if e.type==pygame.KEYDOWN and\
                 e.key == pygame.K_F7 and assets.game!="menu":
-                    assets.load_game(assets.game)
+                    load_game_menu()
+                    #assets.load_game(assets.game)
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
