@@ -1,8 +1,9 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.975: July 17, 2010*
-    - screenshots for multiple saved games
-    - interface for loading a saved game
+*    - interface for loading a saved game
+        (The sorting and dates may not be completely accurate with older saves, but
+        newer saves should always be at the top of the list from now on)
     - more clear when there is an update
     - more clear to restart the game after update
     - autosave respects _allow_saveload variable
@@ -12,6 +13,16 @@
         save in other ways, or autosave)
     - autowait animations (with default)
     - find characters used and package them
+    - save games from very old versions of PyWright are not supported (the first released
+        version of Turnabout Substitution for instance) If you have used PyWright
+        in the last year or so you shouldn't have any old saves anyway.
+    - the fg command used to wait for animations to finish
+        Lately, it does not, and you have had to use "pause" commands to get things
+        timed. Since people have now been working with fg that doesn't auto pause,
+        I have added the "wait" argument to fg that you can use if you would like it to pause:
+            fg SomeAnim wait - wait until an fg animation gets to the end
+        I also added a way to make an fg dissapear when the animation is done:
+            fg SomeAnim temporary
 
 *PyWright 0.974: June 11, 2010*
     - preliminary gamepad/joystick support

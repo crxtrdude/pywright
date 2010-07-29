@@ -2116,8 +2116,9 @@ class choose_game(gui.widget):
 def load_game_menu():
     root = choose_game()
     root.pri = -1000
-    root.z = 1000
-    list = gui.scrollpane([0,other_screen(0)])
+    root.z = 5000
+    root.width,root.height = [sw,sh]
+    list = gui.scrollpane([0,0])
     list.width,list.height = [sw,sh]
     root.add_child(list)
     title = gui.editbox(None,"Choose save to load")
@@ -2127,20 +2128,33 @@ def load_game_menu():
     saves = []
     for f in ["save","autosave"]:
         for ext in [".ns",""]:
-            fp = assets.game+"/"+f+ext
+            p = f+ext
+            fp = assets.game+"/"+p
             if os.path.exists(fp):
                 saves.append((fp,os.path.getmtime(fp)))
     if os.path.isdir(assets.game+"/save_backup"):
         for f in os.listdir(assets.game+"/save_backup"):
-            fp = assets.game+"/save_backup/"+f
-            saves.append((fp,os.path.getmtime(fp)))
+            p = f
+            fp = assets.game+"/save_backup/"+p
+            saves.append((fp,float(fp.rsplit("_",1)[1])))
     saves.sort(key=lambda a: -a[1])
+    i = len(saves)
     for s in saves:
         lt = time.localtime(s[1])
         fn = s[0].rsplit("/",1)[1].split(".",1)[0]
-        t = fn+" %s/%s/%s %s:%s"%(lt.tm_mon,lt.tm_mday,lt.tm_year,lt.tm_hour,lt.tm_min)
-        item = gui.button(load_game_menu,t)
+        t = str(i)+") "+fn+" %s/%s/%s %s:%s"%(lt.tm_mon,lt.tm_mday,lt.tm_year,lt.tm_hour,lt.tm_min)
+        i -= 1
+        item = gui.button(root,t)
         list.add_child(item)
+        filename=s[0].replace(assets.game,"")[1:]
+        fullpath=s[0]
+        def do_load(filename=filename,fullpath=fullpath):
+            root.kill = 1
+            print "loading",filename,fullpath
+            assets.clear()
+            assets.load_game_from_string(open(fullpath).read())
+        setattr(root,t.replace(" ","_"),do_load)
+assets.load_game_menu = load_game_menu
         
 def make_start_script(logo=True):
     root = choose_game()

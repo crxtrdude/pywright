@@ -624,7 +624,6 @@ class Assets(object):
         pygame.screen.blit(txt,[50,50])
         self.draw_screen()
     def load_game_new(self,path=None,filename="save",hide=False):
-        self.loading_cache = {}
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
         if "\\" in filename or "/" in filename:
@@ -638,10 +637,14 @@ class Assets(object):
         except:
             self.cur_script.obs.append(saved(text="You have not yet saved, no game to load.",ticks=240))
             return
+        save_text = f.read()
+        f.close()
+        self.load_game_from_string(save_text)
+    def load_game_from_string(self,save_text):
+        self.loading_cache = {}
+        things = eval(save_text)
         assets.clear()
         stack = {}
-        things = eval(f.read())
-        f.close()
         loaded = []
         for cls,args,props,dest in things:
             if cls == "Assets":
@@ -649,7 +652,6 @@ class Assets(object):
             else:
                 ob = eval(cls)(*args)
             for k in props:
-                print k,props[k]
                 setattr(ob,k,props[k])
             if dest:
                 cont,index = dest
@@ -671,8 +673,7 @@ class Assets(object):
             if d:
                 assets.stack.remove(s)
         for k in keys:
-            print stack[k]
-            print stack[k].si
+
             assets.stack.append(stack[k])
         self.cur_script.obs.append(saved(text="Game restored",block=False))
     def backup(self,path,save):
@@ -683,7 +684,7 @@ class Assets(object):
         f = open(path+"/"+save)
         t = f.read()
         f.close()
-        f = open(path+"/save_backup/"+save+"_%s"%time.time(),"w")
+        f = open(path+"/save_backup/"+save+"_"+repr(os.path.getmtime(path+"/"+save)),"w")
         f.write(t)
         f.close()
     def save_game(self,filename="save",hide=False):
@@ -2484,7 +2485,9 @@ class case_menu(fadesprite,gui.widget):
             if new and mp[1]>=npos[1] and mp[1]<=npos[1]+new.get_height():
                 self.enter_down()
             elif save and mp[1]>=spos[1] and mp[1]<=spos[1]+save.get_height():
-                assets.load_game(self.path+"/"+self.options[self.choice])
+                assets.game = self.path+"/"+self.options[self.choice]
+                assets.load_game_menu()
+                #assets.load_game(self.path+"/"+self.options[self.choice])
     def get_script(self,fullpath):
         dname = os.path.split(fullpath)[1]
         for test in [[fullpath+"/intro.txt","intro"],[fullpath+"/"+dname+".txt",dname]]:
