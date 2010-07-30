@@ -5,10 +5,12 @@
     loaded, you may leave the extension off, or include the extension - your choice. Before, some commands
     needed a file extension, some commands needed them off, and some commands worked either way.
     Now it is consistent.
-    For music: you can leave off the extension for .ogg
-    For sound effects: you can leave off the extension for .wav or .mp3
+    For music: you can leave off the extension for .wav, .mid, .mod, .xm, .s3m, .it, .ogg
+    For sound effects: you can leave off the extension for .wav, .ogg
     For graphics: you can leave the extension off for .png or .jpg
+    For scripts: you can leave the extension off for .txt
     For all types: if you include the extension it should work
+    - cleanup of the big arrow code, should be less buggy in general
 *   - The variable _version will be set to the PyWright version. You can use this to version
         lock your games if you like:
         

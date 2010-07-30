@@ -30,7 +30,28 @@ sw,sh = 256,192
 #sw,sh = 640,480
 spd = 6
 
-#from GifImagePlugin import getheader, getdata
+ext_map = {"image":["png","jpg"],
+"script":["txt"],
+"music":["wav","mid","mod","ogg","s3m","it","xm"],
+"sound":["wav","ogg"]}
+def ext_for(types=["image","script","music","sound"]):
+    for et in types:
+        for e in ext_map[et]:
+            yield "."+e
+def noext(p,types=["image","script","music","sound"]):
+    """Path without the extension, if extension is in known types"""
+    for ext in ext_for(types):
+        if p.endswith(ext):
+            return p.rsplit(".",1)[0]
+    return p
+def onlyext(p,types=["image","script","music","sound"]):
+    """Returns the extension of the path"""
+    for ext in ext_for(types):
+        if p.endswith(ext):
+            return ext
+assert noext("something.png",["image"])=="something"
+assert noext("something.png",["music"])=="something.png"
+assert onlyext("something.png")==".png"
 
 def to_triplets(li):
     new = []
@@ -245,6 +266,8 @@ class Assets(object):
     def raw_lines(self,name,ext=".txt",start="game"):
         if start=="game":
             start = self.game
+        if name.endswith(".txt"):
+            ext = ""
         try:
             return open(start+"/"+name+ext).read().replace("\r\n","\n").split("\n")
         except IOError:
@@ -427,19 +450,17 @@ class Assets(object):
         Will open gif, then png, then jpg.  Returns list of 
         frame images"""
         self.real_path = None
-        s = None
-        try:
-            return self._open_art_(name+".png",key)
-        except (IOError,pygame.error):
-            pass
-        try:
-            return self._open_art_(name+".jpg",key)
-        except (IOError,pygame.error):
-            pass
-        try:
-            return self._open_art_(name+".gif",key)
-        except (IOError,ImportError,pygame.error):
-            pass
+        tries = [name]
+        if name==noext(name):
+            for ext in ext_for(["image"]):
+                tries.append(name+ext)
+        for t in tries:
+            try:
+                return self._open_art_(t,key)
+            except (IOError,ImportError,pygame.error):
+                pass
+        import traceback
+        traceback.print_exc()
         raise art_error("Art file corrupt or missing:"+name)
     def init_sound(self,reset=False):
         if reset or not self.sound_init:
@@ -624,11 +645,6 @@ class Assets(object):
         self.variables = Variables()
         self.variables.update(v)
         if getattr(self,"_track",None):
-            self.play_music(self._track,self._loop,reset_track=False)
-    def load(self,s):
-        self._track,self._loop,self.character,self.px,self.py,self.pz,\
-        self.items,self.variables,self.lists = pickle.loads(s)
-        if self._track:
             self.play_music(self._track,self._loop,reset_track=False)
     def show_load(self):
         self.make_screen()
@@ -998,8 +1014,6 @@ class sprite(gui.button):
         self.key = key
         if type(name)==type(""):
             path = ""
-            if name[-4:] in [".jpg",".gif",".png"]:
-                name = name[:-4]
             self.base = assets.open_art(name,key)
             self.load_extra(assets.meta)
         else:
@@ -1986,19 +2000,30 @@ class uglyarrow(fadesprite):
         self.height = self.iheight = sh
         self.high = False
         self.showleft = True
+        self.last = None
+    def show_unclicked(self):
+        p = assets.variables.get("_bigbutton_img","general/buttonpress")
+        if self.last != p:
+            self.last = p
+            self.button = sprite(0,0).load(p)
+    def show_clicked(self):
+        p = assets.variables.get("_bigbutton_img","general/buttonpress")
+        high = noext(p)+"_high"+onlyext(p)
+        if self.last != high:
+            self.last = high
+            self.button = sprite(0,0).load(high)
+    def show_cross(self):
+        if not self.double:
+            self.double = sprite(0,0).load("general/cross_exam_buttons.png")
+        self.button = None
     def update(self):
         self.pos[1] = sh
-        low = assets.variables.get("_bigbutton_img","general/buttonpress")
-        high = low
-        high+="_high"
-        if self.textbox and self.textbox.statement:
-            if not self.double:
-                self.double = sprite(0,0).load("general/cross_exam_buttons.png")
-                self.button = None
+        if self.high:
+            self.show_clicked()
         else:
-            self.double = None
-        if not self.double and (not self.button or self.button.name not in [low,high]):
-            self.button = sprite(0,0).load(assets.variables.get("_bigbutton_img","general/buttonpress.png"))
+            self.show_unclicked()
+        if self.textbox and self.textbox.statement:
+            self.show_cross()
         self.arrow.update()
         return False
     def draw(self,dest):
@@ -2049,8 +2074,10 @@ class uglyarrow(fadesprite):
     def move_over(self,mp,rel,bt):
         if not self.over(mp):
             if self.high:
-                self.high = False
-                self.button = sprite(0,0).load(assets.variables.get("_bigbutton_img","general/buttonpress.png"))
+                self.high = None
+        else:
+            if self.high == None:
+                self.high = True
     def click_down_over(self,mp):
         #BAD - send clicks to record button
         for widget in assets.cur_script.obs:
@@ -2061,8 +2088,6 @@ class uglyarrow(fadesprite):
         over = self.over(mp)
         if over == True and not self.high and self.can_click():
             self.high = True
-            high = assets.variables.get("_bigbutton_img","general/buttonpress")+"_high"
-            self.button = sprite(0,0).load(high)
         if over == "left" and self.can_click() and self.showleft:
             self.textbox.k_left()
         if over == "right" and self.can_click():
@@ -2070,7 +2095,6 @@ class uglyarrow(fadesprite):
     def click_up_over(self,mp):
         if self.high:
             self.high = False
-            self.button = sprite(0,0).load(assets.variables.get("_bigbutton_img","general/buttonpress.png"))
             if self.can_click():
                 self.textbox.enter_down()
     def can_click(self):
