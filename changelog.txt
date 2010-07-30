@@ -9,7 +9,9 @@
     For sound effects: you can leave off the extension for .wav, .ogg
     For graphics: you can leave the extension off for .png or .jpg
     For scripts: you can leave the extension off for .txt
+    For movies: you can leave the extension off for .mpg or .mpeg
     For all types: if you include the extension it should work
+    Exception: char - you never include an extension for char as they are a bit special
     - cleanup of the big arrow code, should be less buggy in general
 *   - The variable _version will be set to the PyWright version. You can use this to version
         lock your games if you like:

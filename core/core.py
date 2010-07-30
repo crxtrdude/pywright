@@ -33,7 +33,8 @@ spd = 6
 ext_map = {"image":["png","jpg"],
 "script":["txt"],
 "music":["wav","mid","mod","ogg","s3m","it","xm"],
-"sound":["wav","ogg"]}
+"sound":["wav","ogg"],
+"movie":["mpeg","mpg"]}
 def ext_for(types=["image","script","music","sound"]):
     for et in types:
         for e in ext_map[et]:
@@ -49,6 +50,7 @@ def onlyext(p,types=["image","script","music","sound"]):
     for ext in ext_for(types):
         if p.endswith(ext):
             return ext
+    return ""
 assert noext("something.png",["image"])=="something"
 assert noext("something.png",["music"])=="something.png"
 assert onlyext("something.png")==".png"
@@ -480,50 +482,53 @@ class Assets(object):
                 self.sound_init = -1
         if self.sound_init==1: return True
         return False
-    def get_music_path(self,track,pre=None):
-        if pre is None: pre = "music/"
+    def get_path(self,track,type,pre=""):
+        tries = [track]
+        #Unknown extension, make sure to check all extension types
+        if noext(track)==track:
+            for ext in ext_for([type]):
+                tries.insert(0,track+ext)
+        #Get parent game folder, in case we are in a case folder
         game = self.game.replace("\\","/").rsplit("/",1)[0]
-        if os.path.exists(game+"/music/"+track):
-            pre = game+"/music/"
-        if os.path.exists(self.game+"/music/"+track):
-            pre = self.game+"/music/"
+        if pre: pre = "/"+pre+"/"
+        else: pre = "/"
+        for t in tries:
+            if os.path.exists(self.game+pre+t):
+                return self.game+pre+t
+            if os.path.exists(game+pre+t):
+                return game+pre+t
+            if os.path.exists(pre[1:]+t):
+                return pre[1:]+t
         return pre+track
-    def open_music(self,track,pre=None):
-        path = self.get_music_path(track,pre)
+    def open_music(self,track,pre="music"):
         try:
-            pygame.mixer.music.load(path)
+            pygame.mixer.music.load(self.get_path(track,"music",pre))
+            return True
         except:
-            pass
+            return False
     def open_movie(self,movie):
-        game = self.game.replace("\\","/").rsplit("/",1)[0]
-        for folder in [self.game+"/",game+"/",""]:
-            for ext in [".mpeg",".mpg"]:
-                name = folder+"movies/"+movie+ext
-                if os.path.exists(name):
-                    mov = pygame.movie.Movie(name)
-                    return mov
-        raise art_error("Movie is missing or corrupt:"+movie)
+        movie = self.get_path(movie,"movie","movies")
+        try:
+            mov = pygame.movie.Movie(movie)
+            return mov
+        except:
+            import traceback
+            traceback.print_exc()
+            raise art_error("Movie is missing or corrupt:"+movie)
     def list_casedir(self):
         return os.listdir(self.game)
     def play_sound(self,name,wait=False,volume=1.0,offset=0,frequency=1):
         #self.init_sound()
         if self.sound_init == -1: return
-        pre = "sfx/"
-        game = self.game.replace("\\","/").rsplit("/",1)[0]
-        if os.path.exists(game+"/"+name):
-            pre = game+"/"
-        if os.path.exists(game+"/sfx/"+name):
-            pre = game+"/sfx/"
-        if os.path.exists(self.game+"/sfx/"+name):
-            pre = self.game+"/sfx/"
         if self.snds.get(name,None):
             snd = self.snds[name]
         else:
+            path = self.get_path(name,"sound","sfx")
             try:
-                if name.endswith(".mp3") and audiere:
-                    snd = aud.open_file(pre+name)
+                if path.endswith(".mp3") and audiere:
+                    snd = aud.open_file(path)
                 else:
-                    snd = pygame.mixer.Sound(pre+name)
+                    snd = pygame.mixer.Sound(path)
             except:
                 import traceback
                 traceback.print_exc()
@@ -536,7 +541,7 @@ class Assets(object):
             snd.volume = (self.sound_volume/100.0)*volume
         channel = snd.play()
         return channel
-    def play_music(self,track=None,loop=0,pre=None,reset_track=True):
+    def play_music(self,track=None,loop=0,pre="music",reset_track=True):
         if reset_track:
             assets.variables["_music_loop"] = track
         self.init_sound()
@@ -544,12 +549,15 @@ class Assets(object):
         self._track=track
         self._loop=loop
         if track:
-            self.open_music(track,pre)
-        try:
-            pygame.mixer.music.play(loop)
-        except:
-            import traceback
-            traceback.print_exc()
+            track = self.open_music(track,pre)
+        if track:
+            try:
+                pygame.mixer.music.play(loop)
+            except:
+                import traceback
+                traceback.print_exc()
+        else:
+            self.stop_music()
         pygame.mixer.music.set_endevent(150)
     def stop_music(self):
         if self.sound_init == -1: return
@@ -1262,8 +1270,6 @@ class portrait(object):
         def loadfrom(path):
             if not path.endswith("/"):path+="/"
 
-            def noext(x):
-                return x.rsplit(".",1)[0]
             available = [x for x in os.listdir(path) if (noext(x)==blinkemo+"(blink)")]
             if available and not hasattr(self.blink_sprite,"img"):
                 self.blink_sprite.load(shrink(path+available[0]))
