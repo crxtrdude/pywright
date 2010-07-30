@@ -2150,6 +2150,15 @@ def load_game_menu():
     title = gui.editbox(None,"Choose save to load")
     title.draw_back = False
     list.add_child(title)
+    list.add_child(gui.button(root,"cancel",pos=[200,0]))
+    cb = list.children[-1]
+    def cancel(*args):
+        print "canceling"
+        root.kill = 1
+    setattr(root,"cancel",cancel)
+    cb.bgcolor = [0, 0, 0]
+    cb.textcolor = [255,255,255]
+    cb.highlightcolor = [50,75,50]
     assets.cur_script.obs.append(root)
     saves = []
     for f in ["save","autosave"]:
