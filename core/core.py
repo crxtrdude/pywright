@@ -1681,6 +1681,7 @@ class textbox(gui.widget):
         self.pressb.kill = 1
         self.presentb.kill = 1
         self.kill = 1
+        assets.cur_script.refresh_arrows(self)
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
         if assets.portrait:
@@ -3175,7 +3176,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.kill = 1
         for o in assets.cur_script.obs:
             if isinstance(o,textbox):
-                o.kill = 1
+                o.delete()
             if isinstance(o,uglyarrow):
                 o.kill = 1
         assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),backup=self.fail)

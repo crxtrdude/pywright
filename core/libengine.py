@@ -550,6 +550,26 @@ class Script(gui.widget):
         if test is None:
             return True
         return vtrue(assets.variables.get(test,"false"))
+    def refresh_arrows(self,tbox):
+        print "refresh",tbox.text
+        arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
+        for a in arrows:
+            if a.textbox == tbox:
+                a.kill = 1
+        arrows = []
+        if vtrue(assets.variables.get("_cr_button","true")):
+            if not arrows:
+                arrows = [uglyarrow()]
+                self.obs.append(arrows[0])
+            arrows[0].textbox = tbox
+            if assets.variables.get("_statements",[]):
+                statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
+                if statements and statements[0]["words"] == self.statement:
+                    arrows[0].showleft = False
+                else:
+                    arrows[0].showleft = True
+        else:
+            [setattr(x,"kill",1) for x in arrows]
     def interpret(self):
         self.buildmode = True
         while self.buildmode:
@@ -575,20 +595,8 @@ class Script(gui.widget):
                     tbox.can_skip = True
                 self.viewed[assets.game+self.scene+str(self.si)] = True
                 addob(tbox)
-                arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
-                if vtrue(assets.variables.get("_cr_button","true")):
-                    if not arrows:
-                        arrows = [uglyarrow()]
-                        self.obs.append(arrows[0])
-                    arrows[0].textbox = tbox
-                    if assets.variables.get("_statements",[]):
-                        statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
-                        if statements and statements[0]["words"] == self.statement:
-                            arrows[0].showleft = False
-                        else:
-                            arrows[0].showleft = True
-                else:
-                    [setattr(x,"kill",1) for x in arrows]
+                print "refresh from libengine"
+                self.refresh_arrows(tbox)
                 self.tboff()
                 if self.cross is not None and self.instatement:
                     self.tbon()
@@ -2482,8 +2490,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         for o in assets.cur_script.world.all[:]:
             if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
-                if hasattr(o,"delete"):
-                    o.delete()
         pygame.screen.blit(pygame.blank,[0,0])
         assets.cur_script.draw(pygame.screen)
         if assets.flash:

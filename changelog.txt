@@ -66,6 +66,8 @@
         in the last year or so you shouldn't have any old saves anyway.
     - Script loading errors don't crash
     - Game folders with spaces are supported by the downloader
+    
+
 
 *PyWright 0.974: June 11, 2010*
     - preliminary gamepad/joystick support
