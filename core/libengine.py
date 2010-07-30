@@ -2140,6 +2140,8 @@ class choose_game(gui.widget):
         return True
         
 def load_game_menu():
+    if [1 for o in assets.cur_script.obs if isinstance(o,choose_game)]:
+        return
     root = choose_game()
     root.pri = -1000
     root.z = 5000
