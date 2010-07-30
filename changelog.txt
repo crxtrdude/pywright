@@ -6,6 +6,8 @@
         newer saves should always be at the top of the list from now on)
     - more clear when there is an update
     - more clear to restart the game after update
+    - user can turn autosaving off as well
+    - configure the hit regions of the court record button
     - autosave respects _allow_saveload variable
 *    - savegame and loadgame command dont alter the _allow_saveload variable
         (You can turn off saves, call savegame at checkpoints or when prompted by 

@@ -1615,7 +1615,7 @@ class record_button(fadesprite,gui.widget):
                 assets.save_game()
                 return True
             elif mp[0]<=self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_load","true")):
-                assets.load_game()
+                assets.load_game_menu()
                 return True
     def showmenu(self):
         if not vtrue(assets.variables.get("_cr_button","on")):
