@@ -925,7 +925,7 @@ class Script(gui.widget):
             d = eval(txt)
             assets.variables.update(d)
     def autosave(self):
-        if assets.autosave:
+        if assets.autosave and vtrue(assets.variables.get("_allow_autosave","true")):
             assets.save_game("autosave")
     @category([VALUE("filename","File to save to, relative to case folder. Saved games may not be named 'hide'","save"),
             TOKEN("hide","If hide token is included, the interface wont inform the user of the save.")])

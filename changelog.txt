@@ -16,11 +16,10 @@
         newer saves should always be at the top of the list from now on)
 *    - more clear when there is an update
 *    - more clear to restart the game after update
-    - user can turn autosaving off as well
+*    - user can turn autosaving off
 *    - configure the hit regions of the court record button
-        set _cr_button_loadsave off
-      will make it so the button only shows the menu
-      
+                set _cr_button_loadsave off
+                will make it so the court record button ONLY handles the court record (no save or load)
 *    - added a new defaults macro, load_defaults. These are values that should be set after
         a game is loaded, in order to force certain settings even if a save is "corrupted". Not that
         useful for the first version, but can be useful to include things here for game updates. All you
@@ -36,7 +35,16 @@
             This will force the court record to not have the save and load click regions, even 
             if someone has previously saved without that variable set
             
-    - autosave respects _allow_saveload variable
+*    - autosave respects _allow_saveload variable
+*    - the _allow_autosave variable can be set to off, to allow the user to save but prevent
+            autosaves. Not really recommended, users can turn off autosave or not if they
+            like, and if you want to control whether they save or not you should use
+            _allow_saveload. However if you have a lot of very short scenes, the autosaving
+            can be pretty bad, and you should probably turn it off for that. You could also
+            handle your own autosaves by doing a "save autosave" at set points, rather
+            than having autosaves happen with scene changes. In this case it makes sense
+            to turn this off. Note that the players autosave setting will not affect your
+            own autosaves.
 *    - savegame and loadgame command dont alter the _allow_saveload variable
         (You can turn off saves, call savegame at checkpoints or when prompted by 
         a custom save interface, and not have to worry about the player trying to
