@@ -3172,11 +3172,13 @@ class evidence_menu(fadesprite,gui.widget):
         if not self.can_present(): return
         assets.variables["_selected"] = self.chosen
         assets.cur_script.cross = "presenting"
-        assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),backup=self.fail)
         self.kill = 1
         for o in assets.cur_script.obs:
             if isinstance(o,textbox):
                 o.kill = 1
+            if isinstance(o,uglyarrow):
+                o.kill = 1
+        assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),backup=self.fail)
     def next_screen(self):
         if len(self.pages_set)==1:
             return ""

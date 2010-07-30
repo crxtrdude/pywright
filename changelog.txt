@@ -14,6 +14,7 @@
             For all types: if you include the extension it should work
             Exception: char - you never include an extension for char as they are a bit special
     - cleanup of the big arrow code, should be less buggy in general
+    - fix left and right arrows remaining when not in a cross examine
     - The variable _version will be set to the PyWright version. You can use this to version
         lock your games if you like:
         

@@ -2482,6 +2482,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         for o in assets.cur_script.world.all[:]:
             if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
+                if hasattr(o,"delete"):
+                    o.delete()
         pygame.screen.blit(pygame.blank,[0,0])
         assets.cur_script.draw(pygame.screen)
         if assets.flash:
