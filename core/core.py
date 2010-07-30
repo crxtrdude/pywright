@@ -1043,23 +1043,6 @@ class sprite(gui.button):
         self.delays = {}
         self.start = 0
         self.end = None
-    def save(self):
-        if not hasattr(self,"name"): self.name = ""
-        id_name = getattr(self,"id_name",None)
-        return pickle.dumps([self.name,self.key,self.scale,self.loopmode,self.z,self.next,self.pos,self.sounds,id_name,self.delays,self.x])
-    def restore(self,s):
-        vars = pickle.loads(s)
-        self.name,self.key,self.scale,self.loopmode,self.z,self.next,self.pos,self.sounds = vars[:8]
-        self.load(self.name,self.key,self.scale)
-        if len(vars)>8:
-            if vars[8]:
-                self.id_name = vars[8]
-        if len(vars)>9:
-            if vars[9]:
-                self.delays = vars[9]
-        if len(vars)>10:
-            if vars[10]:
-                self.x = vars[10]
     def draw(self,dest):
         if not getattr(self,"img",None): return
         img = self.img
@@ -1173,8 +1156,6 @@ class fadesprite(sprite):
             #~ self.img = self.tenpercent
             #~ sprite.draw(self, dest)
         #~ self.img = img
-    def restore(self,s):
-        sprite.restore(self,s)
     def update(self):
         sprite.update(self)
 
@@ -1337,23 +1318,6 @@ class portrait(object):
     def get_dim(self):
         return self.blink_sprite.dim
     dim = property(get_dim,set_dim)
-    def save(self):
-        return pickle.dumps([self.charname,self.emoname,self.modename,self.hide,self.pos,self.nametag,
-            getattr(self,"id_name",None)])
-    def restore(self,s):
-        vals = pickle.loads(s)
-        self.charname,self.emoname,self.modename,self.hide = vals[:4]
-        nametag = self.charname
-        self.__init__(self.charname+"/"+self.emoname+"("+self.modename+")",self.hide)
-        if len(vals)>4:
-            self.pos = vals[4]
-            print "LOADED POS",self.pos
-        if len(vals)>5:
-            self.nametag = vals[5]
-            print "LOADED NT",self.nametag
-        if len(vals)>6:
-            self.id_name = vals[6]
-            print "LOADED ID",self.id_name
     def draw(self,dest):
         if not self.hide and getattr(self.cur_sprite,"img",None):
             pos = self.pos[:]
@@ -1439,10 +1403,6 @@ class penalty(fadesprite):
         if end<0: end = 0
         self.end = end
         self.delay = 50
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def gv(self):
         v = assets.variables.get(self.var,100)
         try:
@@ -1523,10 +1483,6 @@ class testimony_blink(fg):
         if self.time>20 and vtrue(assets.variables.get("_testimony_blinker", "true")):
             w,h = self.img.get_size()
             dest.blit(pygame.transform.scale(self.img,[int(w//1.5),int(h//1.5)]),self.pos)
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     
 class press_button(fadesprite,gui.widget):
     def __init__(self,parent):
@@ -1708,10 +1664,6 @@ class textbox(gui.widget):
     def ssound(self,v):
         self._clicksound = v
     clicksound = property(gsound,ssound)
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def can_continue(self):
         if not self.blocking: return
         if not self.can_skip:
@@ -2149,10 +2101,6 @@ class menu(fadesprite,gui.widget):
         o = self.over(mp)
         if self.selected==o and o is not None:
             self.enter_down()
-    def save(self):
-        return pickle.dumps([self.z,self.pri,self.options,self.selected,self.scene])
-    def restore(self,s):
-        self.z,self.pri,self.options,self.selected,self.scene = pickle.loads(s)
     def __init__(self):
         self.bg = None
         oy = other_screen(0)
@@ -2338,10 +2286,6 @@ class listmenu(fadesprite,gui.widget):
         if getattr(self,"kill",0):
             return False
         self.recordb.click_down_over([256,0])
-    def save(self):
-        return pickle.dumps([self.options,self.si,self.selected,self.hidden,self.tag])
-    def restore(self,s):
-        self.options,self.si,self.selected,self.hidden,self.tag = pickle.loads(s)
     def delete(self):
         self.kill = 1
         if hasattr(self,"bck"):
@@ -2578,11 +2522,6 @@ class case_menu(fadesprite,gui.widget):
                 self.option_imgs.append([None,None])
             x+=sw
         self.children = self.option_imgs
-    def save(self):
-        return pickle.dumps([self.path,self.options,self.width,self.height,self.choice])
-    def restore(self,s):
-        self.path,self.options,self.width,self.height,self.choice = pickle.loads(s)
-        self.init_options()
     def update(self):
         if self.reload:
             self.option_imgs = []
@@ -2723,10 +2662,6 @@ class examine_menu(sprite,gui.widget):
                 screens = 3
         self.width = screens*sw
         return screens
-    def save(self):
-        return pickle.dumps([self.regions,self.hide])
-    def restore(self,s):
-        self.regions,self.hide = pickle.loads(s)
     def addregion(self,x,y,width,height,label):
         reg = [int(x),int(y),int(width),int(height),label]
         self.regions.append(reg)
@@ -2992,10 +2927,6 @@ class evidence_menu(fadesprite,gui.widget):
             self.kill = 1
         self.item_set = self.pages_set[0]
         self.layout()
-    def save(self):
-        return ""
-    def restore(self,s):
-        return
     def update(self):
         self.choose()
         if not getattr(self,"kill",None) and not getattr(self,"hidden",None):
@@ -3361,10 +3292,6 @@ class textblock(sprite):
         self.surf = surf
         self.color = color
         self.width,self.height = self.size
-    def save(self):
-        return pickle.dumps([self.text,self.lines,self.pos,self.size,self.color])
-    def restore(self,s):
-        self.text,self.lines,self.pos,self.size,self.color = pickle.loads(s)
     def update(self):
         pass
     def draw(self,dest):
@@ -3394,10 +3321,6 @@ class waitenter(sprite):
     def __init__(self):
         super(waitenter,self).__init__()
         self.pri = ulayers.index(self.__class__.__name__)
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest): pass
     def update(self):
         return True
@@ -3409,10 +3332,6 @@ class delay(sprite):
         super(delay,self).__init__()
         self.ticks = abs(ticks)
         self.pri = ulayers.index(self.__class__.__name__)
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest): pass
     def update(self):
         if self.ticks<=0:
@@ -3470,10 +3389,6 @@ class scroll(effect):
         self.obs = assets.cur_script.obs
         self.filter = filter
         self.wait = wait
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest): pass
     def update(self):
         if self.amtx<=0 and self.amty<=0:
@@ -3519,10 +3434,6 @@ class zoomanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
@@ -3559,10 +3470,6 @@ class rotateanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
@@ -3600,10 +3507,6 @@ class fadeanim(effect):
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
         self.update()
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
@@ -3636,10 +3539,6 @@ class flash(effect):
         self.surf = pygame.Surface(pygame.screen.get_size())
         if vtrue(assets.variables.get("_flash_sound","false")):
             assets.play_sound("Slash.ogg")
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest):
         self.surf.fill(self.color)
         dest.blit(self.surf,[0,0])
@@ -3657,10 +3556,6 @@ class shake(effect):
         if vtrue(assets.variables.get("_shake_sound","false")):
             assets.play_sound("Shock.ogg")
         self.wait = True
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest):
         dest.blit(dest.copy(),[random.randint(-self.offset,self.offset),random.randint(-self.offset,self.offset)])
     def update(self):
@@ -3676,10 +3571,6 @@ class notguilty(sprite):
         self.ttl = 120
         self.pri = ulayers.index(self.__class__.__name__)
         self.obs = []
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest):
         if self.ttl == 100:
             img = pygame.transform.scale(assets.open_art("general/Not")[0],[70,40])
@@ -3704,10 +3595,6 @@ class guilty(sprite):
         self.img = assets.open_art("general/guilty")[0]
         self.xes = [0,41,79,104,129,160,197]
         self.obs = []
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def draw(self,dest):
         amt = [0,]
         if self.ttl%30==0 and self.i<len(self.xes)-1:
@@ -3748,10 +3635,6 @@ class guiBack(sprite,gui.widget):
         self.load(self.image+"_high"+assets.appendgba)
     def unhighlight(self):
         self.load(self.image+assets.appendgba)
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def k_space(self):
         self.kill = 1
         print "only kill back button"
@@ -3769,10 +3652,6 @@ class guiScroll(sprite,gui.widget):
         self.pos = [sw//2-self.img.get_width()//2,other_screen(sh-self.img.get_height())]
         gui.widget.__init__(self,self.pos,self.img.get_size())
         self.direction = direction
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def k_z(self):
         self.kill = 1
         self.parent.xscrolling = self.direction*sw
@@ -3790,10 +3669,6 @@ class guiWait(sprite):
         self.pos = [0,0]
         self.run = run
         self.script = assets.cur_script
-    def save(self):
-        return ""
-    def restore(self,s):
-        pass
     def update(self):
         if self.run:
             ns = self.script.execute_macro(self.run)
@@ -3809,10 +3684,6 @@ class saved(fadesprite):
         self.pos[0]=0
         self.pos[1]=0
         self.block = block
-    def save(self):
-        return ""
-    def restore(self,s):
-        self.kill = 1
     def draw(self,dest):
         txt1 = arial14.render(self.text,1,[230,230,230])
         txt2 = arial14.render(self.text,1,[30,30,30])
