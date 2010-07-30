@@ -1876,18 +1876,26 @@ class screen_settings(gui.pane):
         self.z = 1001
         self.align = False
         getattr(self,self.firstpane)()
+    def make_button(self,text,pos):
+        b = gui.button(self,text,pos)
+        if screen_settings.firstpane == text:
+            b.bgcolor = [50,50,50]
+            b.highlightcolor = [50,50,50]
+            b.textcolor = [255,255,255]
+            print "changed settings for",text
+        self.children.append(b)
     def base(self):
-        self.children = []
-        self.children.append(gui.button(self,"close",[0,sh-17]))
-        self.children.append(gui.button(self,"quit game",[100,sh-17]))
-        self.children.append(gui.button(self,"quit pywright",[sw-74,sh-17]))
-        self.children.append(gui.button(self,"view",[0,0]))
-        self.children.append(gui.button(self,"saves",[50,0]))
-        self.children.append(gui.button(self,"resolution",[100,0]))
-        self.children.append(gui.button(self,"sound",[170,0]))
+        self.children[:] = []
+        self.make_button("close",[0,sh-17])
+        self.make_button("quit game",[100,sh-17])
+        self.make_button("quit pywright",[sw-74,sh-17])
+        self.make_button("view",[0,0])
+        self.make_button("saves",[50,0])
+        self.make_button("resolution",[100,0])
+        self.make_button("sound",[170,0])
     def saves(self):
-        self.base()
         screen_settings.firstpane = "saves"
+        self.base()
         line = gui.pane([0,30],[sw,20])
         line.align = "horiz"
         self.children.append(line)
@@ -1909,8 +1917,8 @@ class screen_settings(gui.pane):
         self.children.append(line)
         line.children.append(gui.label("   (All saves make backups)"))
     def sound(self):
-        self.base()
         screen_settings.firstpane = "sound"
+        self.base()
         ermsg = gui.label("")
         ermsg.rpos = [0,140]
         ermsg.textcol = [255,0,0]
@@ -2019,8 +2027,8 @@ class screen_settings(gui.pane):
 
         self.children.append(ermsg)
     def view(self):
-        self.base()
         screen_settings.firstpane = "view"
+        self.base()
         guiline = gui.pane([0,30],[sw,20])
         guiline.align = "horiz"
         self.children.append(guiline)
@@ -2036,8 +2044,8 @@ class screen_settings(gui.pane):
         elif assets.gbamode==1:
             guiline.children[-1].checked = True
     def resolution(self):
-        self.base()
         screen_settings.firstpane = "resolution"
+        self.base()
         res_box = gui.scrollpane([10,20])
         res_box.width = 200
         res_box.height = 120
