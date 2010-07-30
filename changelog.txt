@@ -15,7 +15,7 @@
         (The sorting and dates may not be completely accurate with older saves, but
         newer saves should always be at the top of the list from now on)
 *    - more clear when there is an update
-    - more clear to restart the game after update
+*    - more clear to restart the game after update
     - user can turn autosaving off as well
 *    - configure the hit regions of the court record button
         set _cr_button_loadsave off

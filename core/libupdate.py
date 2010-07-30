@@ -194,6 +194,7 @@ print get_url
 class Engine:
     mode = "port"
     quit_threads = 0
+    root = root
     def Download_X(self,mode,path,url,check_folder=None):
         def t():
             self.mode = mode
@@ -353,6 +354,9 @@ class Engine:
             os.remove("downloads/last")
         except:
             pass
+        if self.mode == "engine":
+            self.root.children[:] = [editbox(None,"In order to complete upgrade you must restart.")]
+            self.need_restart = True
         return "FINISHED"
     def download(self):
         t = threading.Thread(target=self.do_downloads)
@@ -425,5 +429,7 @@ def run():
         if quit:
             Engine.quit_threads = True
             e.running = False
+            if getattr(e,"need_restart",False):
+                sys.exit()
 if __name__=="__main__":
     run()
