@@ -64,7 +64,7 @@ import cStringIO
 iconcache = {}
 def load_image(path):
     if path not in iconcache:
-        f = urllib2.urlopen(path)
+        f = urllib2.urlopen(path.replace(" ","%20"))
         txt = f.read()
         f.close()
         f = cStringIO.StringIO(txt)
@@ -261,7 +261,7 @@ class Engine:
             seek = 0
             cli = open("downloads/"+filename,"wb")
             print "opened new file"
-        req = urllib2.Request(url,None,headers)
+        req = urllib2.Request(url.replace(" ","%20"),None,headers)
         try:
             serv = urllib2.urlopen(req)
             print "opened resume"

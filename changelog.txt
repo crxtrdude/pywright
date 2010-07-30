@@ -66,7 +66,8 @@
         version of Turnabout Substitution for instance) If you have used PyWright
         in the last year or so you shouldn't have any old saves anyway.
 *   - Script open errors don't crash pywright
-   - Simple preprocessor to catch errors. Will get more checks later on. Don't assume that
+*  - Game folders with spaces are supported by the downloader
+    - Simple preprocessor to catch errors. Will get more checks later on. Don't assume that
         if it doesn't find any errors, that there aren't any! It can be accessed from the escape
         menu if _debug is on
 
