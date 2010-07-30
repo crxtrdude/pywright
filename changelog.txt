@@ -1,11 +1,20 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.975: July 29, 2010*
+*   - The variable _version will be set to the PyWright version. You can use this to version
+        lock your games if you like:
+        
+            is _version < 0.974 bad_ver
+            script scene1
+            label bad_ver
+            "I'm sorry, you will need to update PyWright to at least version 0.974 to play"
+        
+        Rather than locking, I suggest displaying a message that updating would be a good idea
 *   - Some issues with object priorities were fixed, specificlally timers now run at all times
 *    - interface for loading a saved game
         (The sorting and dates may not be completely accurate with older saves, but
         newer saves should always be at the top of the list from now on)
-    - more clear when there is an update
+*    - more clear when there is an update
     - more clear to restart the game after update
     - user can turn autosaving off as well
 *    - configure the hit regions of the court record button
