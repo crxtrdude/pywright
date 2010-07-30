@@ -427,14 +427,25 @@ class Script(gui.widget):
         if scriptlines:
             self.scriptlines = scriptlines
         self.macros = {}
+        self.si = 0
+        self.cross = None
+        self.statement = ""
+        self.instatement = False
+        self.lastline = 0
+        self.pri = 0
+        
+        self.held = []
+        #~ if vtrue(assets.variables.get("_preload","on")):
+            #~ self.preload()
         if scene:
             try:
                 self.scriptlines = assets.open_script(scene,macros,ext)
             except Exception,e:
                 import traceback
                 traceback.print_exc()
-                self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
-                return
+                #@self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
+                self.scriptlines = ['"error opening script{n}\'%s\'"'%scene]
+                return True
             self.macros = assets.macros
         self.labels = []
         for i,line in enumerate(self.scriptlines):
@@ -446,17 +457,7 @@ class Script(gui.widget):
                 rn = line.split(" ",1)[1].strip().replace(" ","_")
                 if rn:
                     self.labels.append([rn,i-1])
-        self.si = 0
 
-        self.cross = None
-        self.statement = ""
-        self.instatement = False
-        self.lastline = 0
-        self.pri = 0
-        
-        self.held = []
-        #~ if vtrue(assets.variables.get("_preload","on")):
-            #~ self.preload()
         return True
     def preload(self):
         old = self.obs[:]
