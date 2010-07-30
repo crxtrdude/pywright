@@ -2,18 +2,19 @@
 
 *PyWright 0.975: July 29, 2010*
     - Standardized resource loading routings - anytime you load a resource, or set a resource to be
-    loaded, you may leave the extension off, or include the extension - your choice. Before, some commands
-    needed a file extension, some commands needed them off, and some commands worked either way.
-    Now it is consistent.
-    For music: you can leave off the extension for .wav, .mid, .mod, .xm, .s3m, .it, .ogg
-    For sound effects: you can leave off the extension for .wav, .ogg
-    For graphics: you can leave the extension off for .png or .jpg
-    For scripts: you can leave the extension off for .txt
-    For movies: you can leave the extension off for .mpg or .mpeg
-    For all types: if you include the extension it should work
-    Exception: char - you never include an extension for char as they are a bit special
+            loaded, you may leave the extension off, or include the extension - your choice. Before, some commands
+            needed a file extension, some commands needed them off, and some commands worked either way.
+            Now it is consistent. 
+            For music: you can leave off the extension for .wav*, .mid, .mod, .xm, .s3m, .it, .ogg
+            For sound effects: you can leave off the extension for .wav*, .ogg
+                *Only uncompressed wave is supported
+            For graphics: you can leave the extension off for .png or .jpg
+            For scripts: you can leave the extension off for .txt
+            For movies: you can leave the extension off for .mpg or .mpeg
+            For all types: if you include the extension it should work
+            Exception: char - you never include an extension for char as they are a bit special
     - cleanup of the big arrow code, should be less buggy in general
-*   - The variable _version will be set to the PyWright version. You can use this to version
+    - The variable _version will be set to the PyWright version. You can use this to version
         lock your games if you like:
         
             is _version < 0.974 bad_ver
@@ -22,17 +23,17 @@
             "I'm sorry, you will need to update PyWright to at least version 0.974 to play"
         
         Rather than locking, I suggest displaying a message that updating would be a good idea
-*   - Some issues with object priorities were fixed, specificlally timers now run at all times
-*    - interface for loading a saved game
+    - Some issues with object priorities were fixed, specificlally timers now run at all times
+    - interface for loading a saved game
         (The sorting and dates may not be completely accurate with older saves, but
         newer saves should always be at the top of the list from now on)
-*    - more clear when there is an update
-*    - more clear to restart the game after update
-*    - user can turn autosaving off
-*    - configure the hit regions of the court record button
+    - more clear when there is an update
+    - more clear to restart the game after update
+    - user can turn autosaving off
+    - configure the hit regions of the court record button
                 set _cr_button_loadsave off
                 will make it so the court record button ONLY handles the court record (no save or load)
-*    - added a new defaults macro, load_defaults. These are values that should be set after
+    - added a new defaults macro, load_defaults. These are values that should be set after
         a game is loaded, in order to force certain settings even if a save is "corrupted". Not that
         useful for the first version, but can be useful to include things here for game updates. All you
         have to do is define a load_defaults macro, and set variables in there:
@@ -47,8 +48,8 @@
             This will force the court record to not have the save and load click regions, even 
             if someone has previously saved without that variable set
             
-*    - autosave respects _allow_saveload variable
-*    - the _allow_autosave variable can be set to off, to allow the user to save but prevent
+    - autosave respects _allow_saveload variable
+    - the _allow_autosave variable can be set to off, to allow the user to save but prevent
             autosaves. Not really recommended, users can turn off autosave or not if they
             like, and if you want to control whether they save or not you should use
             _allow_saveload. However if you have a lot of very short scenes, the autosaving
@@ -57,19 +58,15 @@
             than having autosaves happen with scene changes. In this case it makes sense
             to turn this off. Note that the players autosave setting will not affect your
             own autosaves.
-*    - savegame and loadgame command dont alter the _allow_saveload variable
+    - savegame and loadgame command dont alter the _allow_saveload variable
         (You can turn off saves, call savegame at checkpoints or when prompted by 
         a custom save interface, and not have to worry about the player trying to
         save in other ways, or autosave)
-    - autowait animations (with default)
-*    - save games from very old versions of PyWright are not supported (the first released
+    - save games from very old versions of PyWright are not supported (the first released
         version of Turnabout Substitution for instance) If you have used PyWright
         in the last year or so you shouldn't have any old saves anyway.
-*   - Script open errors don't crash pywright
-*  - Game folders with spaces are supported by the downloader
-    - Simple preprocessor to catch errors. Will get more checks later on. Don't assume that
-        if it doesn't find any errors, that there aren't any! It can be accessed from the escape
-        menu if _debug is on
+    - Script open errors don't crash pywright
+    - Game folders with spaces are supported by the downloader
 
 *PyWright 0.974: June 11, 2010*
     - preliminary gamepad/joystick support

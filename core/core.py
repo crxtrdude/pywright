@@ -453,9 +453,8 @@ class Assets(object):
         frame images"""
         self.real_path = None
         tries = [name]
-        if name==noext(name):
-            for ext in ext_for(["image"]):
-                tries.append(name+ext)
+        for ext in ext_for(["image"]):
+            tries.append(name+ext)
         for t in tries:
             try:
                 return self._open_art_(t,key)
@@ -501,10 +500,15 @@ class Assets(object):
                 return pre[1:]+t
         return pre+track
     def open_music(self,track,pre="music"):
+        p = self.get_path(track,"music",pre)
+        if not p:
+            return False
         try:
-            pygame.mixer.music.load(self.get_path(track,"music",pre))
+            pygame.mixer.music.load(p)
             return True
         except:
+            import traceback
+            traceback.print_exc()
             return False
     def open_movie(self,movie):
         movie = self.get_path(movie,"movie","movies")
@@ -517,13 +521,13 @@ class Assets(object):
             raise art_error("Movie is missing or corrupt:"+movie)
     def list_casedir(self):
         return os.listdir(self.game)
-    def play_sound(self,name,wait=False,volume=1.0,offset=0,frequency=1):
+    def play_sound(self,name,wait=False,volume=1.0,offset=0,frequency=1,layer=0):
         #self.init_sound()
         if self.sound_init == -1: return
-        if self.snds.get(name,None):
-            snd = self.snds[name]
+        path = self.get_path(name,"sound","sfx")
+        if self.snds.get(path,None):
+            snd = self.snds[path]
         else:
-            path = self.get_path(name,"sound","sfx")
             try:
                 if path.endswith(".mp3") and audiere:
                     snd = aud.open_file(path)
@@ -533,8 +537,9 @@ class Assets(object):
                 import traceback
                 traceback.print_exc()
                 return
-            self.snds[name] = snd
-        snd.stop()
+            self.snds[path] = snd
+        if not layer:
+            snd.stop()
         try:
             snd.set_volume(float(self.sound_volume/100.0)*volume)
         except:

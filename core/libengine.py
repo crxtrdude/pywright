@@ -71,8 +71,14 @@ def addob(ob):
                 o2.kill = 1
     assets.cur_script.obs.append(ob)
 def addevmenu():
-    em = evidence_menu(assets.items)
-    addob(em)
+    try:
+        em = evidence_menu(assets.items)
+        addob(em)
+    except art_error,e:
+        assets.cur_script.obs.append(error_msg(e.value,"",0,assets.cur_script))
+        import traceback
+        traceback.print_exc()
+        return
     return em
 def add_s(scene):
     s = Script()
