@@ -2163,12 +2163,12 @@ def load_game_menu():
     cb.highlightcolor = [50,75,50]
     assets.cur_script.obs.append(root)
     saves = []
-    for f in ["save","autosave"]:
-        for ext in [".ns",""]:
-            p = f+ext
-            fp = assets.game+"/"+p
-            if os.path.exists(fp):
-                saves.append((fp,os.path.getmtime(fp)))
+    for p in os.listdir(assets.game+"/"):
+        if not p.endswith(".ns"):
+            continue
+        fp = assets.game+"/"+p
+        if os.path.exists(fp):
+            saves.append((fp,os.path.getmtime(fp)))
     if os.path.isdir(assets.game+"/save_backup"):
         for f in os.listdir(assets.game+"/save_backup"):
             p = f
