@@ -1,6 +1,14 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.975: July 29, 2010*
+    - Standardized resource loading routings - anytime you load a resource, or set a resource to be
+    loaded, you may leave the extension off, or include the extension - your choice. Before, some commands
+    needed a file extension, some commands needed them off, and some commands worked either way.
+    Now it is consistent.
+    For music: you can leave off the extension for .ogg
+    For sound effects: you can leave off the extension for .wav or .mp3
+    For graphics: you can leave the extension off for .png or .jpg
+    For all types: if you include the extension it should work
 *   - The variable _version will be set to the PyWright version. You can use this to version
         lock your games if you like:
         
