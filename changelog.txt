@@ -1,6 +1,6 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.975: July 29, 2010*
+*PyWright 0.975: July 30, 2010*
     - Standardized resource loading routings - anytime you load a resource, or set a resource to be
             loaded, you may leave the extension off, or include the extension - your choice. Before, some commands
             needed a file extension, some commands needed them off, and some commands worked either way.
@@ -17,12 +17,10 @@
     - fix left and right arrows remaining when not in a cross examine
     - The variable _version will be set to the PyWright version. You can use this to version
         lock your games if you like:
-        
             is _version < 0.974 bad_ver
             script scene1
             label bad_ver
             "I'm sorry, you will need to update PyWright to at least version 0.974 to play"
-        
         Rather than locking, I suggest displaying a message that updating would be a good idea
     - Some issues with object priorities were fixed, specificlally timers now run at all times
     - interface for loading a saved game
