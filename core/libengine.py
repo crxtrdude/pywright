@@ -925,7 +925,8 @@ class Script(gui.widget):
             d = eval(txt)
             assets.variables.update(d)
     def autosave(self):
-        assets.save_game("autosave")
+        if assets.autosave:
+            assets.save_game("autosave")
     @category([VALUE("filename","File to save to, relative to case folder. Saved games may not be named 'hide'","save"),
             TOKEN("hide","If hide token is included, the interface wont inform the user of the save.")])
     def _savegame(self,command,*args):
@@ -1857,10 +1858,11 @@ sound_bits=%s
 sound_buffer=%s
 sound_volume=%s
 music_volume=%s
-screen_compress=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
+screen_compress=%s
+autosave=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
 assets.gbamode,int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
-int(assets.screen_compress)))
+int(assets.screen_compress),int(assets.autosave)))
     f.close()
 
 class screen_settings(gui.pane):
@@ -1879,8 +1881,32 @@ class screen_settings(gui.pane):
         self.children.append(gui.button(self,"quit game",[100,sh-17]))
         self.children.append(gui.button(self,"quit pywright",[sw-74,sh-17]))
         self.children.append(gui.button(self,"view",[0,0]))
+        self.children.append(gui.button(self,"saves",[50,0]))
         self.children.append(gui.button(self,"resolution",[100,0]))
         self.children.append(gui.button(self,"sound",[170,0]))
+    def saves(self):
+        self.base()
+        screen_settings.firstpane = "saves"
+        line = gui.pane([0,30],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        line.children.append(gui.label("Autosave on scene changes"))
+        class myb(gui.checkbox):
+            def click_down_over(self,*args):
+                super(myb,self).click_down_over(*args)
+                if self.checked:
+                    assets.autosave = 1
+                else:
+                    assets.autosave = 0
+                wini()
+        line.children.append(myb("autosave"))
+        cb = line.children[-1]
+        if assets.autosave: cb.checked = True
+
+        line = gui.pane([0,60],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        line.children.append(gui.label("   (All saves make backups)"))
     def sound(self):
         self.base()
         screen_settings.firstpane = "sound"
@@ -2359,6 +2385,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.gbamode = 0
     assets.num_screens = 2
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
+    assets.autosave = 1
     pygame.USE_GL=1
     pygame.DISPLAY_LIST=1
     pygame.TEXTURE_CACHE=0
@@ -2381,6 +2408,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if spl[0]=="sound_volume": assets.sound_volume = float(spl[1])
             if spl[0]=="music_volume": assets.music_volume = float(spl[1])
             if spl[0]=="screen_compress": assets.screen_compress = int(spl[1])
+            if spl[0]=="autosave": assets.autosave = int(spl[1])
     wini()
     
     pygame.USE_GL=0
