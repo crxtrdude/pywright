@@ -647,7 +647,7 @@ class Assets(object):
         try:
             f = open(self.game+"/"+filename+".ns")
         except:
-            self.cur_script.obs.append(saved(text="You have not yet saved, no game to load.",ticks=240))
+            self.cur_script.obs.append(saved(text="No game to load.",ticks=240))
             return
         save_text = f.read()
         f.close()
@@ -724,10 +724,7 @@ class Assets(object):
             chkpath=path+"/"
         if filename == "save":
             filename = self.check_autosave(chkpath)
-        if not os.path.exists(chkpath+filename+".ns"):
-            self.load_game_old(path,filename,hide)
-        else:
-            self.load_game_new(path,filename,hide)
+        self.load_game_new(path,filename,hide)
     def check_autosave(self,path):
         if not os.path.exists(path+"/autosave.ns"):
             return "save"
@@ -738,42 +735,6 @@ class Assets(object):
         if mt1>mt2:
             return 'autosave'
         return "save"
-    def load_game_old(self,path=None,filename="save",hide=False):
-        if not vtrue(self.variables.get("_allow_saveload","true")):
-            return
-        if "\\" in filename or "/" in filename:
-            raise script_error("Invalid save file path:'%s'"%(filename,))
-        if not hide:
-            self.show_load()
-        if path:
-            self.game = path
-        try:
-            f = open(self.game+"/"+filename)
-        except:
-            self.cur_script.obs.append(saved(text="You have not yet saved, no game to load.",ticks=240))
-            return
-        self.stack = []
-        self.load(f.readline()[:-1].replace("..--..","\n"))
-        mode = 0
-        for line in f.readlines():
-            if mode==0:
-                s = assets.Script()
-                s.load(line[:-1].replace("..--..","\n"))
-                self.stack.append(s)
-                mode += 1
-            elif mode==1:
-                if line=="end\n":
-                    mode = 0
-                else:
-                    o,rest = line.split(";",1)
-                    o = eval(o)()
-                    try:
-                        o.restore(rest.replace("..--..","\n"))
-                    except:
-                        continue
-                    s.obs.append(o)
-        f.close()
-        self.cur_script.obs.append(saved(text="Game restored",block=False))
 
         
 def vtrue(variable):

@@ -51,7 +51,7 @@
         save in other ways, or autosave)
     - autowait animations (with default)
     - find characters used and package them
-    - save games from very old versions of PyWright are not supported (the first released
+*    - save games from very old versions of PyWright are not supported (the first released
         version of Turnabout Substitution for instance) If you have used PyWright
         in the last year or so you shouldn't have any old saves anyway.
     - the fg command used to wait for animations to finish
