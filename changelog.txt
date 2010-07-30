@@ -1,6 +1,7 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.975: July 29, 2010*
+*   - Some issues with object priorities were fixed, specificlally timers now run at all times
 *    - interface for loading a saved game
         (The sorting and dates may not be completely accurate with older saves, but
         newer saves should always be at the top of the list from now on)

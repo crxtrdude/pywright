@@ -14,6 +14,12 @@ try:
     aud = audiere.open_device()
 except:
     audiere = None
+    
+from pwvlib import *
+
+d = get_data_from_folder(".")
+__version__ = cver_s(d["version"])
+VERSION = "Version "+cver_s(d["version"])
 
 try:
     from numpy import array
@@ -185,12 +191,16 @@ for line in sort.readlines():
             ulayers[level]=x
         
 class Variables(dict):
-    def __getitem__(self,key,*args):
+    def __getitem__(self,key):
+        return self.get(key)
+    def get(self,key,*args):
         if key.startswith("_layer_"):
             layer = zlayers.index(key[7:])
             if layer is not None:
                 return str(layer)
-        return dict.__getitem__(self,key,*args)
+        if key=="_version":
+            return __version__
+        return dict.get(self,key,*args)
     def __setitem__(self,key,value,*args):
         if key=="_speaking":
             dict.__setitem__(self,key,value,*args)
@@ -199,6 +209,8 @@ class Variables(dict):
             except:
                 pass
         return dict.__setitem__(self,key,value,*args)
+
+assert Variables().get("_version",None)
         
 class ImgFrames(list):
     pass
