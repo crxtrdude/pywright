@@ -73,6 +73,8 @@ set _nt_text_x 0
 set _nt_text_y 0
 set _nt_text_color  
 
+set _cr_button_loadsave on
+
 {defaults}
 endmacro
 
@@ -139,4 +141,11 @@ set _evidence_present true
 #Whether the user can back out of some interface
 set _cr_back_button true
 set _list_back_button true
+
+{load_defaults}
+endmacro
+
+
+#These values are set when a saved game is loaded, use these to force certain settings at all times
+macro load_defaults
 endmacro

@@ -676,6 +676,7 @@ class Assets(object):
 
             assets.stack.append(stack[k])
         self.cur_script.obs.append(saved(text="Game restored",block=False))
+        self.cur_script.execute_macro("load_defaults")
     def backup(self,path,save):
         if not os.path.exists(path+"/"+save):
             return
@@ -1608,7 +1609,7 @@ class record_button(fadesprite,gui.widget):
             return
         if mp[0]>=self.pos[0] and mp[0]<=self.pos[0]+self.normal.get_width() and\
             mp[1]>=self.pos[1] and mp[1]<=self.pos[1]+self.height:
-            if mp[0]>self.pos[0]+38:
+            if mp[0]>self.pos[0]+38 or not vtrue(assets.variables.get("_cr_button_loadsave","on")):
                 self.showmenu()
                 return True
             elif mp[0]>self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_save","true")):

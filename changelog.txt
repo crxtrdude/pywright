@@ -1,13 +1,31 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.975: July 17, 2010*
+*PyWright 0.975: July 29, 2010*
 *    - interface for loading a saved game
         (The sorting and dates may not be completely accurate with older saves, but
         newer saves should always be at the top of the list from now on)
     - more clear when there is an update
     - more clear to restart the game after update
     - user can turn autosaving off as well
-    - configure the hit regions of the court record button
+*    - configure the hit regions of the court record button
+        set _cr_button_loadsave off
+      will make it so the button only shows the menu
+      
+    - added a new defaults macro, load_defaults. These are values that should be set after
+        a game is loaded, in order to force certain settings even if a save is "corrupted". Not that
+        useful for the first version, but can be useful to include things here for game updates. All you
+        have to do is define a load_defaults macro, and set variables in there:
+        
+        Example:
+            
+            games/mygame/mydefaults.mcro:
+            macro load_defaults
+            set _cr_button_loadsave off
+            endmacro
+            
+            This will force the court record to not have the save and load click regions, even 
+            if someone has previously saved without that variable set
+            
     - autosave respects _allow_saveload variable
 *    - savegame and loadgame command dont alter the _allow_saveload variable
         (You can turn off saves, call savegame at checkpoints or when prompted by 
