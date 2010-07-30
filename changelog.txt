@@ -11,7 +11,7 @@
         set _cr_button_loadsave off
       will make it so the button only shows the menu
       
-    - added a new defaults macro, load_defaults. These are values that should be set after
+*    - added a new defaults macro, load_defaults. These are values that should be set after
         a game is loaded, in order to force certain settings even if a save is "corrupted". Not that
         useful for the first version, but can be useful to include things here for game updates. All you
         have to do is define a load_defaults macro, and set variables in there:

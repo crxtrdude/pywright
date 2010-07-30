@@ -175,14 +175,14 @@ for line in sort.readlines():
         sortmode = "pri"
     elif line:
         x = line.split(" ")
+        level = int(x[0])
         del x[0]
         while not x[0]: del x[0]
         if sortmode == "z":
             zlayers[zi]=x
             zi += 1
         elif sortmode == "pri":
-            ulayers[ui]=x
-            ui += 1
+            ulayers[level]=x
         
 class Variables(dict):
     def __getitem__(self,key,*args):
@@ -3655,9 +3655,9 @@ class fadeanim(effect):
             return True
 
 class flash(effect):
-    pri = -1000
     def __init__(self):
         super(flash,self).__init__()
+        self.pri = ulayers.index(self.__class__.__name__)
         self.ttl = 5
         self.color = [255,255,255]
         self.surf = pygame.Surface(pygame.screen.get_size())
@@ -3676,9 +3676,9 @@ class flash(effect):
         return True
     
 class shake(effect):
-    pri = -1000
     def __init__(self):
         super(shake,self).__init__()
+        self.pri = ulayers.index(self.__class__.__name__)
         self.ttl = 15
         self.offset = 15
         if vtrue(assets.variables.get("_shake_sound","false")):

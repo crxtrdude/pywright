@@ -17,8 +17,7 @@
 [pri]
 -10000	error_msg
 -5000 saved
--3000 scroll
--1000	waitenter scroll rotateanim fadeanim guiBack guiScroll timer zoomanim uglyarrow
+-1000	waitenter scroll rotateanim fadeanim guiBack guiScroll timer zoomanim uglyarrow flash shake
 -500 examine_menu
 0	fg evidence_menu movie sprite fadesprite
 20	portrait
