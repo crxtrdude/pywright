@@ -1,5 +1,5 @@
 version 0.975
-version_date 7/29/2010
+version_date 7/30/2010
 version_notes Saving issues, timing issues
 author saluk
 website http://pywright.dawnsoft.org/
