@@ -554,22 +554,17 @@ class Script(gui.widget):
         print "refresh",tbox.text
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
         for a in arrows:
-            if a.textbox == tbox:
-                a.kill = 1
-        arrows = []
+            a.kill = 1
         if vtrue(assets.variables.get("_cr_button","true")):
-            if not arrows:
-                arrows = [uglyarrow()]
-                self.obs.append(arrows[0])
-            arrows[0].textbox = tbox
+            u = uglyarrow()
+            self.obs.append(u)
+            u.textbox = tbox
             if assets.variables.get("_statements",[]):
                 statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
                 if statements and statements[0]["words"] == self.statement:
-                    arrows[0].showleft = False
+                    u.showleft = False
                 else:
-                    arrows[0].showleft = True
-        else:
-            [setattr(x,"kill",1) for x in arrows]
+                    u.showleft = True
     def interpret(self):
         self.buildmode = True
         while self.buildmode:
@@ -1643,11 +1638,13 @@ class Script(gui.widget):
         char = None
         if not name:
             char = assets.variables.get("_speaking", None)
+            print "found char by _speaking",char,char.name
         if name:
             for c in self.obs:
                 if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
                     char = c
                     break
+            print "found char by name",char,char.name
         if char:
             nametag = char.nametag
             err = None
@@ -2545,6 +2542,11 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         #print [o.z for o in assets.cur_script.obs]
                 if e.type == pygame.QUIT:
                     running = False
+                if e.type == pygame.KEYDOWN and e.key == pygame.K_c:
+                    print "scripts",assets.stack
+                    print "objects",[len(x.obs) for x in assets.stack]
+                    print assets.cur_script.obs
+                    print [getattr(o,"kill",0) for o in assets.cur_script.obs]
                 if (e.type==pygame.KEYUP and\
                 e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONUP and\
                 e.button==1):
