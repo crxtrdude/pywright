@@ -567,7 +567,8 @@ class Script(gui.widget):
                     u.showleft = True
     def interpret(self):
         self.buildmode = True
-        while self.buildmode:
+        exit = False
+        while self.buildmode and not exit:
             line = self.getline()
             while not line:
                 if line is None: 
@@ -575,8 +576,9 @@ class Script(gui.widget):
                 self.si += 1
                 line = self.getline()
             #print "exec(",repr(line),")"
-            assets.variables["_currentline"] = str(self.si+1)
-            self.execute_line(line)
+            self.si += 1
+            assets.variables["_currentline"] = str(self.si)
+            exit = self.execute_line(line)
     def execute_line(self,line):
         if line.startswith('"') and len(line)>1:
             line = line[1:]
@@ -584,13 +586,13 @@ class Script(gui.widget):
                 line = line[:-1]
             text = line.replace("{n}","\n")
             tbox = textbox(text)
-            if not self.viewed.get(assets.game+self.scene+str(self.si)):
+            if not self.viewed.get(assets.game+self.scene+str(self.si-1)):
                 tbox.can_skip = False
             if vtrue(assets.variables.get("_debug","false")):
                 tbox.can_skip = True
             if vtrue(assets.variables.get("_textbox_allow_skip","false")):
                 tbox.can_skip = True
-            self.viewed[assets.game+self.scene+str(self.si)] = True
+            self.viewed[assets.game+self.scene+str(self.si-1)] = True
             addob(tbox)
             print "refresh from libengine"
             self.refresh_arrows(tbox)
@@ -602,9 +604,7 @@ class Script(gui.widget):
                     nt,t = tbox._text.split("\n",1)
                     tbox._text = nt+"\n{c283}"+t
                     #tbox.color = (20,200,40)
-            self.si += 1
-            return
-        self.si += 1
+            return True
         def repvar(x):
             if x.startswith("$") and not x[1].isdigit():
                 return assets.variables[x[1:]]
@@ -620,15 +620,15 @@ class Script(gui.widget):
             args = [repvar(x) for x in line.split(" ")]
         except KeyError:
             self.obs.append(error_msg("Variable not defined:",line,self.si,self))
-            return
+            return True
         if self.execute_macro(args[0]):
-            return
+            return True
         func = getattr(self,"_"+args[0],None)
         if func: 
             func(*args)
         elif vtrue(assets.variables.get("_debug","false")): 
             self.obs.append(error_msg("Invalid command",line,self.si,self))
-            return
+            return True
     def execute_macro(self,macroname,args="",obs=None):
         mlines = self.macros.get(macroname,None)
         if not mlines: return
