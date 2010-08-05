@@ -1906,6 +1906,21 @@ class screen_settings(gui.pane):
         self.make_button("saves",[50,0])
         self.make_button("resolution",[100,0])
         self.make_button("sound",[170,0])
+        if assets.vtrue("_debug"):
+            self.make_button("debug",[220,0])
+    def debug(self):
+        screen_settings.firstpane = "debug"
+        self.base()
+        line = gui.pane([0,30],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        self.go_script = ""
+        line.children.append(gui.editbox(self,"go_script"))
+        class myb(gui.button):
+            def click_down_over(s,*args):
+                assets.cur_script.execute_line(self.go_script)
+        line.children.append(myb(None,"execute"))
+        cb = line.children[-1]
     def saves(self):
         screen_settings.firstpane = "saves"
         self.base()
@@ -2637,12 +2652,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     e.button==6):
                     assets.cur_screen = 1-assets.cur_screen
                     make_screen()
-                #~ if e.type==pygame.KEYDOWN and\
-                #~ e.key==pygame.K_BACKSPACE:
-                    #~ ex = [x.split("_") for x in sorted(os.listdir("")) if x.startswith("screen_")]
-                    #~ if not ex: name = "screen_001_.png"
-                    #~ else: name = "screen_"+("00"+str(int(ex[-1][1])+1))[-3:]+"_.png"
-                    #~ pygame.image.save(pygame.screen,name)
+                if e.type==pygame.KEYDOWN and e.key==pygame.K_d and e.mod&pygame.K_LCTRL:
+                    assets.variables["_debug"] = "true"
                 if e.type==pygame.KEYDOWN and\
                 e.key==pygame.K_F5 and assets.game!="menu":
                     assets.save_game()
