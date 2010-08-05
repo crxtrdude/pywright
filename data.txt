@@ -1,6 +1,6 @@
-version 0.975
-version_date 7/30/2010
-version_notes Saving issues, timing issues
+version 0.976
+version_date 7/31/2010
+version_notes Memory leak
 author saluk
 website http://pywright.dawnsoft.org/
 title PyWright Game Engine

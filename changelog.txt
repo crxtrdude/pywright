@@ -1,5 +1,18 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.977: August 11, 2010*
+    - _textbox_show_button works correctly, _cr_button no longer hides the bottom
+        screen
+    - fade music, sound effects in and out
+    - rotate and fade can't set a particular object
+    - Undefined: List Index out of range
+games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screensize but I assume it says "Scapegoat"]
+""{c090}{center}{sound /sfx-typewriter.wav}
+    - debug menu
+
+*PyWright 0.976: July 31, 2010*
+    - Fixed a memory leak that would slow a game down over time until a "clear"
+
 *PyWright 0.975: July 30, 2010*
     - Standardized resource loading routings - anytime you load a resource, or set a resource to be
             loaded, you may leave the extension off, or include the extension - your choice. Before, some commands

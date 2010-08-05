@@ -555,7 +555,7 @@ class Script(gui.widget):
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
         for a in arrows:
             a.kill = 1
-        if vtrue(assets.variables.get("_cr_button","true")):
+        if vtrue(assets.variables.get("_textbox_show_button","true")):
             u = uglyarrow()
             self.obs.append(u)
             u.textbox = tbox
