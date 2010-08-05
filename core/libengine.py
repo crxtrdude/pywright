@@ -576,57 +576,59 @@ class Script(gui.widget):
                 line = self.getline()
             #print "exec(",repr(line),")"
             assets.variables["_currentline"] = str(self.si+1)
-            if line.startswith('"') and len(line)>1:
-                line = line[1:]
-                if line.rstrip()[-1]=='"':
-                    line = line[:-1]
-                text = line.replace("{n}","\n")
-                tbox = textbox(text)
-                if not self.viewed.get(assets.game+self.scene+str(self.si)):
-                    tbox.can_skip = False
-                if vtrue(assets.variables.get("_debug","false")):
-                    tbox.can_skip = True
-                if vtrue(assets.variables.get("_textbox_allow_skip","false")):
-                    tbox.can_skip = True
-                self.viewed[assets.game+self.scene+str(self.si)] = True
-                addob(tbox)
-                print "refresh from libengine"
-                self.refresh_arrows(tbox)
-                self.tboff()
-                if self.cross is not None and self.instatement:
-                    self.tbon()
-                    if self.cross == "proceed":
-                        tbox.statement = self.statement
-                        nt,t = tbox._text.split("\n",1)
-                        tbox._text = nt+"\n{c283}"+t
-                        #tbox.color = (20,200,40)
-                self.si += 1
-                return
+            self.execute_line(line)
+    def execute_line(self,line):
+        if line.startswith('"') and len(line)>1:
+            line = line[1:]
+            if line.rstrip()[-1]=='"':
+                line = line[:-1]
+            text = line.replace("{n}","\n")
+            tbox = textbox(text)
+            if not self.viewed.get(assets.game+self.scene+str(self.si)):
+                tbox.can_skip = False
+            if vtrue(assets.variables.get("_debug","false")):
+                tbox.can_skip = True
+            if vtrue(assets.variables.get("_textbox_allow_skip","false")):
+                tbox.can_skip = True
+            self.viewed[assets.game+self.scene+str(self.si)] = True
+            addob(tbox)
+            print "refresh from libengine"
+            self.refresh_arrows(tbox)
+            self.tboff()
+            if self.cross is not None and self.instatement:
+                self.tbon()
+                if self.cross == "proceed":
+                    tbox.statement = self.statement
+                    nt,t = tbox._text.split("\n",1)
+                    tbox._text = nt+"\n{c283}"+t
+                    #tbox.color = (20,200,40)
             self.si += 1
-            def repvar(x):
-                if x.startswith("$") and not x[1].isdigit():
-                    return assets.variables[x[1:]]
-                elif x.startswith("$"):
-                    return ""
-                if "=" in x:
-                    spl = x.split("=",1)
-                    if spl[1].startswith("$"):
-                        return spl[0]+"="+assets.variables[spl[1][1:]]
-                return x
-            args = []
-            try:
-                args = [repvar(x) for x in line.split(" ")]
-            except KeyError:
-                self.obs.append(error_msg("Variable not defined:",line,self.si,self))
-                return
-            if self.execute_macro(args[0]):
-                return
-            func = getattr(self,"_"+args[0],None)
-            if func: 
-                func(*args)
-            elif vtrue(assets.variables.get("_debug","false")): 
-                self.obs.append(error_msg("Invalid command",line,self.si,self))
-                return
+            return
+        self.si += 1
+        def repvar(x):
+            if x.startswith("$") and not x[1].isdigit():
+                return assets.variables[x[1:]]
+            elif x.startswith("$"):
+                return ""
+            if "=" in x:
+                spl = x.split("=",1)
+                if spl[1].startswith("$"):
+                    return spl[0]+"="+assets.variables[spl[1][1:]]
+            return x
+        args = []
+        try:
+            args = [repvar(x) for x in line.split(" ")]
+        except KeyError:
+            self.obs.append(error_msg("Variable not defined:",line,self.si,self))
+            return
+        if self.execute_macro(args[0]):
+            return
+        func = getattr(self,"_"+args[0],None)
+        if func: 
+            func(*args)
+        elif vtrue(assets.variables.get("_debug","false")): 
+            self.obs.append(error_msg("Invalid command",line,self.si,self))
+            return
     def execute_macro(self,macroname,args="",obs=None):
         mlines = self.macros.get(macroname,None)
         if not mlines: return
