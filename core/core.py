@@ -1865,7 +1865,10 @@ class textbox(gui.widget):
             self.next_char = 1
             command = None
             while addchar:
-                char = self.text[len(self.written)]
+                try:
+                    char = self.text[len(self.written)]
+                except IndexError:
+                    raise script_error("Problem with text formatting")
                 self.written+=char
                 if char == "{":
                     addchar = "getcolor"
