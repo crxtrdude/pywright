@@ -764,6 +764,20 @@ class Assets(object):
         if mt1>mt2:
             return 'autosave'
         return "save"
+    def vdefault(self,var):
+        """Return default value for a variable"""
+        if var == "_debug":
+            return "off"
+        return None
+    def v(self,var,default="_NOT GIVEN_"):
+        """Return a variable value, or it's default value"""
+        if default == "_NOT_GIVEN_":
+            default = self.vdefault(var)
+        v = self.variables.get(var,default)
+        return v
+    def vtrue(self,var,default="_NOT_GIVEN_"):
+        v = self.v(var,default)
+        return vtrue(v)
 
         
 def vtrue(variable):
