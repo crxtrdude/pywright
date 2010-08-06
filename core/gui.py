@@ -16,6 +16,7 @@ window = Window()
 
 class widget(object):
     visible = 1
+    mouse_pos = property(lambda x: pygame.mouse.get_pos())
     def __init__(self,pos=[0,0],size=[0,0],parent=None):
         try:
             self.rpos = pos[:]
@@ -77,7 +78,11 @@ class widget(object):
     def click_up(self,pos):
         if window.focused == self:
             window.focused = None
+    def hold_down_over(self,pos,*args):
+        pass
     def handle_events(self,evts):
+        if pygame.mouse.get_pressed()[0]:
+            self.event("hold_down_over",self.mouse_pos)
         quit = False
         for evt in evts:
             if evt.type == pygame.KEYUP and evt.key == pygame.K_ESCAPE:

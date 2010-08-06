@@ -372,6 +372,7 @@ class Script(gui.widget):
                 d["pos"] = dp(e.pos)
                 e = pygame.event.Event(pygame.MOUSEBUTTONDOWN,d)
             n.append(e)
+        gui.widget.mouse_pos = dp(pygame.mouse.get_pos())
         gui.widget.handle_events(self,n)
     def save(self):
         props = {}
@@ -594,7 +595,6 @@ class Script(gui.widget):
                 tbox.can_skip = True
             self.viewed[assets.game+self.scene+str(self.si-1)] = True
             addob(tbox)
-            print "refresh from libengine"
             self.refresh_arrows(tbox)
             self.tboff()
             if self.cross is not None and self.instatement:
@@ -1376,6 +1376,7 @@ class Script(gui.widget):
             macroname=args[0]; del args[0]
             graphic = None
             width = None
+            hold = None
             while args:
                 a = args[0]
                 print a
@@ -1386,6 +1387,7 @@ class Script(gui.widget):
                 elif a.startswith("height="): height=int(a[7:])
                 elif a.startswith("name="): name=a[5:]
                 elif a.startswith("graphic="): graphic = a[8:]
+                elif a == "hold": hold = True
                 else:
                     break
                 del args[0]
@@ -1407,6 +1409,9 @@ class Script(gui.widget):
             def func(*args):
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
+            if hold:
+                btn.z=10000
+                btn.hold_down_over = func
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
