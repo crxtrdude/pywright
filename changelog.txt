@@ -9,6 +9,12 @@
 games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screensize but I assume it says "Scapegoat"]
 ""{c090}{center}{sound /sfx-typewriter.wav}
     - debug menu
+        Find badly formatted text
+        Find missing brackets in text
+        Find unknown commands (requires mapping macros)
+        Find missing character poses
+        Find typos with name= (Attempt to do something to a named object that doesn't exist)
+    - repeatable code for buttons
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"
