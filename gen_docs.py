@@ -59,7 +59,9 @@ def make_func_block(func):
         for c in expand_cat(func.cat):
             if not hasattr(c,"name"):
                 continue
-            s+="<tr><td>"+c.name+"</td><td>"+c.description+"</td><td>"+repr(c.default)+"</td></tr>"
+            s+="<tr><td>"+c.name+"</td><td>"+c.description+"</td>"
+            if c.default is not None:
+                s+="<td>"+str(c.default)+"</td></tr>"
         s+="</table>"
     s+=make_doc(func.__doc__)
     s+="<br><br>"

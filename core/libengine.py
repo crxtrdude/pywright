@@ -1074,14 +1074,16 @@ would set 'x' to 12."""
         args = [OR(x) for x in args]
         if False in args: return self.succeed(label)
         self.fail(label,fail)
-    @category("control")
+    @category([VALUE('variable',"Variable to check if it doesn't exist"),
+                    CHOICE([VALUE('label','a label to jump to if the variable has not been set or is blank'),TOKEN('?','execute next line only if variable is unset or blank')])],type="logic")
     def _isempty(self,command,variable,label=None):
         if variable.endswith("?"):
             variable = variable[:-1]
             label = "?"
         if not assets.variables.get(variable,None): return self.succeed(label)
         self.fail(label)
-    @category("control")
+    @category([VALUE('variable','Variable to check if it exists'),
+                    CHOICE([VALUE('label','a label to jump to if the variable has been set and is not blank'),TOKEN('?','execute next line only if variable is set and not blank')])],type="logic")
     def _isnotempty(self,command,variable,label=None):
         if variable.endswith("?"):
             variable = variable[:-1]
@@ -1103,7 +1105,8 @@ would set 'x' to 12."""
             pass
         else:
             self.si += 1
-    @category("control")
+    @category([VALUE('variable','Variable to check if it exists'),
+                    CHOICE([VALUE('label','a label to jump to if the variable has been set and is not blank'),TOKEN('?','execute next line only if variable is set and not blank')])],type="logic")
     def _isnumber(self,command,*args):
         args = list(args)
         label = args.pop(-1)
@@ -1114,12 +1117,13 @@ would set 'x' to 12."""
         if value.isdigit():
             return self.succeed(label)
         return self.fail(label)
-    @category("control")
-    def _nopenalty(self,command,*args):
-        if assets.variables.get("penalty",100)<=0:
-            self._goto(None,args[1])
-    @category("control")
+    @category([VALUE('ticks','How many ticks (1/60 of a second) to wait'),
+TOKEN('all','Pause EVERYTHING','default behavior pauses script execution but lets animation continue'),
+TOKEN('script','Pause only the script','this is the default behavior'),
+KEYWORD('priority','Fine tune what gets paused and what doesnt.','10000 (such a high number for priority means that most objects will not be paused')
+],type="animation")
     def _pause(self,command,*args):
+        """This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing."""
         self.buildmode = False
         ticks = None
         pri = 10000  #Will pause the script but nothing else
@@ -1136,18 +1140,38 @@ would set 'x' to 12."""
         do = delay(ticks)
         do.pri=pri
         self.obs.append(do)
-    @category("blah")
+    @category([
+VALUE('ticks','How many ticks (1/60 of a second) before the command will be run'),
+VALUE('command','The name of a macro to be run after the timer runs out')],type="gameflow")
     def _timer(self,command,ticks,run):
+        """Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
+        fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
+        completed."""
         self.obs.append(timer(int(ticks),run))
-    @category("control")
+    @category([],type="gameflow")
     def _waitenter(self,command):
+        """The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
+        it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred."""
         self.buildmode = False
         self.obs.append(waitenter())
-    @category("control")
+    @category([],type="gameflow")
     def _exit(self,command):
+        """Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
+        resume."""
         del assets.stack[-1]
-    @category("control")
+    @category([VALUE("scene_name","Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'"),
+    KEYWORD('examine','whether to show the examine button','true'),
+    KEYWORD('talk','whether to show the talk button','true'),
+    KEYWORD('present','whether to show the present button','true'),
+    KEYWORD('move','whether to show the move button','true')],type="interface")
     def _menu(self,command,ascene,*args):
+        """Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, a separate script will be run for that action, as determined by the value of scene_name. When that
+        external script is finished, the game won't return to this spot automatically, so you will need to be sure
+        you can create the proper menu from the external screen as well. People usually do this by creating a script
+        [scene_name].txt which loads the background and shows the menu. Then, any external script can
+        instantly load the proper scene with "script [scene_name]". You can control which options
+        are shown through the keywords described."""
         self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
@@ -1169,8 +1193,15 @@ would set 'x' to 12."""
         self.obs.append(m)
         self.execute_macro("defaults")
         self.autosave()
-    @category("control")
+    @category([KEYWORD('examine','whether to show the examine button','false'),
+    KEYWORD('talk','whether to show the talk button','false'),
+    KEYWORD('present','whether to show the present button','false'),
+    KEYWORD('move','whether to show the move button','false'),
+    KEYWORD('fail','label to jump to if the label for an action was not found','none')],type="interface")
     def _localmenu(self,command,*args):
+        """Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
+        are shown through the keywords described."""
         self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
