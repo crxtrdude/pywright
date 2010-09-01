@@ -29,9 +29,12 @@ def pauseandquit():
 #~ import psyco
 #~ pscyo.full()
     
-def category(cat):
+def category(cat,type=None):
     def _dec(f):
         f.cat = cat
+        if type:
+            f.ftype = type
+        f.name = [""]
         return f
     return _dec
 class DOCTYPE():
@@ -705,19 +708,19 @@ class Script(gui.widget):
         if name>=len(self.scriptlines) or name<0:
             raise script_error,"Trying to go to invalid line number"
         self.si = name+1
-    @category([])
+    @category([],type="drawing")
     def _draw_on(self,*args):
         """Turns engine drawing on."""
         assets.variables["render"] = 1
-    @category([])
+    @category([],type="drawing")
     def _draw_off(self,*args):
         """Turns engine drawing off."""
         assets.variables["render"] = 0
-    @category([COMBINED("text","Some text to print")])
+    @category([COMBINED("text","Some text to print")],type="debug")
     def _print(self,*args):
         """Prints some text to the logfile. Only useful for debugging purposes."""
         print " ".join(args[1:])
-    @category([])
+    @category([],type="gameflow")
     def _endscript(self,*args):
         """Ends the currently running script and pops it off the stack. Multiple scripts
         may be running in PyWright, in which case the next script on the stack will
@@ -735,7 +738,7 @@ class Script(gui.widget):
             assets.stack[:] = []
             make_start_script(False)
         return
-    @category([CHOICE([TOKEN("true","turns on debug mode"),TOKEN("false","turns off debug mode")])])
+    @category([CHOICE([TOKEN("true","turns on debug mode"),TOKEN("false","turns off debug mode")])],type="debug")
     def _debug(self,command,value):
         """Used to turn debug mode on or off. Debug mode will print more errors to the screen,
         and allow you to skip through any text."""
@@ -743,13 +746,13 @@ class Script(gui.widget):
             assets.variables["_debug"] = "on"
         else:
             assets.variables["_debug"] = "off"
-    @category([COMBINED("label text","The name of this section of code")])
+    @category([COMBINED("label text","The name of this section of code")],type="logic")
     def _label(self,command,*name):
         """Used to mark a spot in a wrightscript file. Other code can then refer to this spot,
         specifically for making the code reader "goto" this spot."""
         assets.variables["_lastlabel"] = " ".join(name)
     @category([VALUE("game","Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase"),
-                    VALUE("script","Script to look for in the game folder to run first","intro")])
+                    VALUE("script","Script to look for in the game folder to run first","intro")],type="gameflow")
     def _game(self,command,game,script="intro"):
         """Can be used to start a new game or case."""
         for o in self.obs[:]:
@@ -762,7 +765,7 @@ class Script(gui.widget):
         #assets.addscene(scene)
         self.init(scene)
     @category([COMBINED("destination","The destination label to move to"),
-                    KEYWORD("fail","A label to jump to if the destination can't be found")])
+                    KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
     def _goto(self,command,place,*args):
         """Makes the script go to a different section, based on the label name."""
         fail = None
@@ -772,11 +775,11 @@ class Script(gui.widget):
                 if k == "fail":
                     fail = v
         self.goto_result(place,wrap=True,backup=fail)
-    @category([COMBINED("flag expression","list of flag names joined with AND or OR"),
+    @category([COMBINED("flag_expression","list of flag names joined with AND or OR"),
                     CHOICE([
                     TOKEN("?"),VALUE("label","label to jump to if the evaluation is true")
                     ]),
-                    KEYWORD("fail","label to jump to if evaluation is false","none")])
+                    KEYWORD("fail","label to jump to if evaluation is false","none")],type="logic")
     def flag_logic(self,value,*args):
         fail=None
         args = list(args)
@@ -815,35 +818,35 @@ class Script(gui.widget):
         with a '?', it will execute the next line and the next line only
         when the flag expression is true."""
         self.flag_logic(True,*args)
-    @category([VALUE('flag name','flag to set')])
+    @category([VALUE('flag_name','flag to set')],type="logic")
     def _setflag(self,command,flag):
         """Sets a flag. Shorthand for setting a variable equal to true. Flags
         will remain set for the remainder of the game, and can be used to
         track what a player has done."""
         if flag not in assets.variables: assets.variables[flag]="true"
-    @category([VALUE('flag name','flag to unset')])
+    @category([VALUE('flag_name','flag to unset')],type="logic")
     def _delflag(self,command,flag):
         """Deletes a flag. Flags will remain set for the remainder of the game, but
         can be forgotten with delflag."""
         if flag in assets.variables: del assets.variables[flag]
-    @category([VALUE("variable","variable name to set"),COMBINED("value","Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.")])
+    @category([VALUE("variable","variable name to set"),COMBINED("value","Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.")],type="logic")
     def _set(self,command,variable,*args):
         """Sets a variable to some value."""
         value = " ".join(args)
         assets.variables[variable]=value
-    @category([VALUE("variable","variable name to set"),COMBINED("expression2","The results of the expression will be stored in the variable.")])
+    @category([VALUE("variable","variable name to set"),COMBINED("expression2","The results of the expression will be stored in the variable.")],type="logic")
     def _set_ex(self,command,variable,*args):
         """Sets a variable to some value based on an expression"""
         value = EVAL_EXPR(EXPR(" ".join(args)))
         assets.variables[variable]=value
-    @category([VALUE("destination variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")])
+    @category([VALUE("destination variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")],type="logic")
     def _getvar(self,command,variable,*args):
         """Copies the value of one variable into another."""
         value = "".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
     _setvar_ex = _set_ex
-    @category([VALUE("variable","variable name to save random value to"),VALUE("start","smallest number to generate"),VALUE("end","largest number to generate")])
+    @category([VALUE("variable","variable name to save random value to"),VALUE("start","smallest number to generate"),VALUE("end","largest number to generate")],type="logic")
     def _random(self,command,variable,start,end):
         """Generates a random integer with a minimum
         value of START, a maximum value of END, and
@@ -851,62 +854,62 @@ class Script(gui.widget):
         random.seed(pygame.time.get_ticks()+random.random())
         value = random.randint(int(start),int(end))
         assets.variables[variable]=str(value)
-    @category([VALUE("variable","variable to save value to"),COMBINED("words","words to join together")])
+    @category([VALUE("variable","variable to save value to"),COMBINED("words","words to join together")],type="logic")
     def _joinvar(self,command,variable,*args):
         """Takes a series of words and joins them together, save the joined
-        string to a variable. For instance 
-        {{{setvar hour 3
-        setvar minut 15
-        joinvar time $hour : $minute
-        "{$time}"}}}
-        will output "3:15"
-        """
+string to a variable. For instance:
+{{{setvar hour 3
+setvar minute 15
+joinvar time $hour : $minute
+"{$time}"}}}
+will output "3:15"
+"""
         value = "".join(args)
         assets.variables[variable]=value
-    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to add to the variable")])
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to add to the variable")],type="logic")
     def _addvar(self,command,variable,value):
-        """Adds an amount to a variable. If the variable 'x' were set to 4, the script
-        {{{addvar x 1}}}
-        would set 'x' to 5."""
+        """Adds an amount to a variable. If the variable 'x' were set to 4, the script:
+{{{addvar x 1}}}
+would set 'x' to 5."""
         oldvalue = int(assets.variables.get(variable,0))
         oldvalue += int(value)
         assets.variables[variable] = str(oldvalue)
-    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to subtract from the variable")])
+    @category([VALUE("variable","variable to subtract from and save to"),VALUE("amount","amount to subtract from the variable")],type="logic")
     def _subvar(self,command,variable,value):
-        """Subtract an amount from a variable. If the variable 'x' were set to 33, the script
-        {{{subvar x 3}}}
-        would set 'x' to 30."""
+        """Subtract an amount from a variable. If the variable 'x' were set to 33, the script:
+{{{subvar x 3}}}
+would set 'x' to 30."""
         oldvalue = int(assets.variables[variable])
         oldvalue -= int(value)
         assets.variables[variable] = str(oldvalue)
-    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to multiply the variable by")])
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to multiply the variable by")],type="logic")
     def _mulvar(self,command,variable,value):
-        """Multiply a variable by a number. If the variable 'x' were set to 5, the script
-        {{{mulvar x 3}}}
-        would set 'x' to 15."""
+        """Multiply a variable by a number. If the variable 'x' were set to 5, the script:
+{{{mulvar x 3}}}
+would set 'x' to 15."""
         oldvalue = int(assets.variables[variable])
         oldvalue *= int(value)
         assets.variables[variable] = str(int(oldvalue))
-    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to divide the variable by")])
+    @category([VALUE("variable","variable to save to"),VALUE("amount","amount to divide the variable by")],type="logic")
     def _divvar(self,command,variable,value):
-        """Divide a variable by a number. If the variable 'x' were set to 10, the script
-        {{{divvar x 2}}}
-        would set 'x' to 5."""
+        """Divide a variable by a number. If the variable 'x' were set to 10, the script:
+{{{divvar x 2}}}
+would set 'x' to 5."""
         oldvalue = int(assets.variables[variable])
         oldvalue /= float(value)
         assets.variables[variable] = str(int(oldvalue))
     @category([VALUE("variable","variable to save to")])
     def _absvar(self,command,variable):
-        """Force a variable to be positive. If the variable 'x' were set to -12, the script
-        {{{absvar x}}}
-        would set 'x' to 12."""
+        """Force a variable to be positive. If the variable 'x' were set to -12, the script:
+{{{absvar x}}}
+would set 'x' to 12."""
         oldvalue = int(assets.variables.get(variable,0))
         oldvalue = abs(int(oldvalue))
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("filename","file to export variables into, relative to the case folder"),
-            ETC("variable names",
+            ETC("variable_names",
                 "The names of variables to export. If none are listed, all variables will be exported",
-                "all variables")])
+                "all variables")],type="files")
     def _exportvars(self,command,filename,*vars):
         """Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
         ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses."""
@@ -921,7 +924,7 @@ class Script(gui.widget):
         f = open(assets.game+"/"+filename,"w")
         f.write(repr(d))
         f.close()
-    @category([VALUE("filename","file to import variables from, relative to the case folder")])
+    @category([VALUE("filename","file to import variables from, relative to the case folder")],type="files")
     def _importvars(self,command,filename):
         """Restores previously exported variables from the file."""
         filename = filename.replace("..","").replace(":","")
@@ -940,7 +943,7 @@ class Script(gui.widget):
         if assets.autosave and vtrue(assets.variables.get("_allow_autosave","true")):
             assets.save_game("autosave")
     @category([VALUE("filename","File to save to, relative to case folder. Saved games may not be named 'hide'","save"),
-            TOKEN("hide","If hide token is included, the interface wont inform the user of the save.")])
+            TOKEN("hide","If hide token is included, the interface wont inform the user of the save.")],type="files")
     def _savegame(self,command,*args):
         """Creates a new saved game in the case folder."""
         filename = "save"
@@ -958,7 +961,7 @@ class Script(gui.widget):
         assets.variables["_allow_saveload"] = old
         self.si -= 1
     @category([VALUE("filename","Saved game to load, relative to case folder. Saved games may not be named 'hide'","save"),
-            TOKEN("hide","If hide token is included, the interface wont inform the user of the load.")])
+            TOKEN("hide","If hide token is included, the interface wont inform the user of the load.")],type="files")
     def _loadgame(self,command,*args):
         """Restores a save file."""
         filename = "save"
@@ -975,12 +978,12 @@ class Script(gui.widget):
         assets.variables["_allow_saveload"] = old
         return self._endscript()
     @category([VALUE("path","path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)"),
-                    KEYWORD("width","shrink screenshot to this width"),
-                    KEYWORD("height","shrink screenshot to this height"),
-                    KEYWORD("x","x-value of region to screenshot"),
-                    KEYWORD("y","y-value of region to screenshot"),
-                    KEYWORD("rwidth","width of region to screenshot"),
-                    KEYWORD("rheight","height of region to screenshot")])
+                    KEYWORD("width","shrink screenshot to this width",256),
+                    KEYWORD("height","shrink screenshot to this height",192),
+                    KEYWORD("x","x-value of region to screenshot",0),
+                    KEYWORD("y","y-value of region to screenshot",0),
+                    KEYWORD("rwidth","width of region to screenshot",256),
+                    KEYWORD("rheight","height of region to screenshot",192)],type="files")
     def _screenshot(self,command,path,*args):
         """Takes a screenshot and saves the image. Can select a specific region of the screen to
         snapshot. Useful for custom interfaces, or just providing a snapshot feature."""
@@ -1017,7 +1020,7 @@ class Script(gui.widget):
     @category(
                     [COMBINED('expression2'),
                     CHOICE([VALUE('label'),TOKEN('?')]),
-                    KEYWORD('fail','label to jump to if expression fails')])
+                    KEYWORD('fail','label to jump to if expression fails')],type="logic")
     def _is_ex(self,command,*args):
         fail = None
         args = list(args)
@@ -1034,7 +1037,7 @@ class Script(gui.widget):
         return self.fail(label,fail)
     @category([COMBINED('expression'),
                     KEYWORD('fail','label to jump to if expression fails'),
-                    CHOICE([VALUE('label'),TOKEN('?')])])
+                    CHOICE([VALUE('label'),TOKEN('?')])],type="logic")
     def _is(self,command,*args):
         fail = None
         args = list(args)
@@ -1050,9 +1053,9 @@ class Script(gui.widget):
         args = [OR(x) for x in args]
         if False in args: return self.fail(label,fail)
         self.succeed(label)
-    @category([COMBINED('expression'),
+    @category([COMBINED('expression','An expression that evaluates to true or false'),
                     KEYWORD('fail','label to jump to if expression fails'),
-                    CHOICE([VALUE('label'),TOKEN('?')])])
+                    CHOICE([VALUE('label','a label to jump to if the expression evaluates to false'),TOKEN('?','execute next line only if expression evaluates to false')])],type="logic")
     def _isnot(self,command,*args):
         """If the expression is false, will jump to the success label.
         Otherwise, it will either continue to the next line, or jump to

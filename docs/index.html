@@ -1,0 +1,83 @@
+<html><body><h2>debug</h2><p>
+    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>true</td><td>turns on debug mode</td><td>None</td></tr><tr><td>false</td><td>turns off debug mode</td><td>None</td></tr></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
+        and allow you to skip through any text.</p><br><br><p>
+    <b>print</b> [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Some text to print</td><td>None</td></tr></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p><br><br><h2>drawing</h2><p>
+    <b>draw_off</b> 
+    </p><p>Turns engine drawing off.</p><br><br><p>
+    <b>draw_on</b> 
+    </p><p>Turns engine drawing on.</p><br><br><h2>files</h2><p>
+    <b>exportvars</b> filename (variable_names) 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>file to export variables into, relative to the case folder</td><td>None</td></tr><tr><td>variable_names</td><td>The names of variables to export. If none are listed, all variables will be exported</td><td>'all variables'</td></tr></table><p>Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
+        ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p><br><br><p>
+    <b>importvars</b> filename 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>file to import variables from, relative to the case folder</td><td>None</td></tr></table><p>Restores previously exported variables from the file.</p><br><br><p>
+    <b>loadgame</b> filename <i>hide</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>Saved game to load, relative to case folder. Saved games may not be named 'hide'</td><td>'save'</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the load.</td><td>None</td></tr></table><p>Restores a save file.</p><br><br><p>
+    <b>savegame</b> filename <i>hide</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>File to save to, relative to case folder. Saved games may not be named 'hide'</td><td>'save'</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the save.</td><td>None</td></tr></table><p>Creates a new saved game in the case folder.</p><br><br><p>
+    <b>screenshot</b> path width=VALUE height=VALUE x=VALUE y=VALUE rwidth=VALUE rheight=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>path</td><td>path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)</td><td>None</td></tr><tr><td>width</td><td>shrink screenshot to this width</td><td>256</td></tr><tr><td>height</td><td>shrink screenshot to this height</td><td>192</td></tr><tr><td>x</td><td>x-value of region to screenshot</td><td>0</td></tr><tr><td>y</td><td>y-value of region to screenshot</td><td>0</td></tr><tr><td>rwidth</td><td>width of region to screenshot</td><td>256</td></tr><tr><td>rheight</td><td>height of region to screenshot</td><td>192</td></tr></table><p>Takes a screenshot and saves the image. Can select a specific region of the screen to
+        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><h2>gameflow</h2><p>
+    <b>endscript</b> 
+    </p><p>Ends the currently running script and pops it off the stack. Multiple scripts
+        may be running in PyWright, in which case the next script on the stack will
+        resume running.</p><br><br><p>
+    <b>game</b> game script 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>game</td><td>Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase</td><td>None</td></tr><tr><td>script</td><td>Script to look for in the game folder to run first</td><td>'intro'</td></tr></table><p>Can be used to start a new game or case.</p><br><br><h2>logic</h2><p>
+    <b>addvar</b> variable amount 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save to</td><td>None</td></tr><tr><td>amount</td><td>amount to add to the variable</td><td>None</td></tr></table><p>Adds an amount to a variable. If the variable 'x' were set to 4, the script:
+<br><pre>addvar x 1</pre>
+would set 'x' to 5.</p><br><br><p>
+    <b>delflag</b> flag_name 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>flag_name</td><td>flag to unset</td><td>None</td></tr></table><p>Deletes a flag. Flags will remain set for the remainder of the game, but
+        can be forgotten with delflag.</p><br><br><p>
+    <b>divvar</b> variable amount 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save to</td><td>None</td></tr><tr><td>amount</td><td>amount to divide the variable by</td><td>None</td></tr></table><p>Divide a variable by a number. If the variable 'x' were set to 10, the script:
+<br><pre>divvar x 2</pre>
+would set 'x' to 5.</p><br><br><p>
+    <b>getvar</b> destination variable [source variable] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>destination variable</td><td>The variable to save the value into</td><td>None</td></tr><tr><td>source variable</td><td>The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.</td><td>None</td></tr></table><p>Copies the value of one variable into another.</p><br><br><p>
+    <b>goto</b> [destination] fail=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>destination</td><td>The destination label to move to</td><td>None</td></tr><tr><td>fail</td><td>A label to jump to if the destination can't be found</td><td>None</td></tr></table><p>Makes the script go to a different section, based on the label name.</p><br><br><p>
+    <b>isnot</b> [expression] fail=VALUE &lt;label  OR <i>?</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>expression</td><td>An expression that evaluates to true or false</td><td>None</td></tr><tr><td>fail</td><td>label to jump to if expression fails</td><td>None</td></tr><tr><td>label</td><td>a label to jump to if the expression evaluates to false</td><td>None</td></tr><tr><td>?</td><td>execute next line only if expression evaluates to false</td><td>None</td></tr></table><p>If the expression is false, will jump to the success label.
+        Otherwise, it will either continue to the next line, or jump to
+        the label set by the fail keyword</p><br><br><p>
+    <b>joinvar</b> variable [words] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save value to</td><td>None</td></tr><tr><td>words</td><td>words to join together</td><td>None</td></tr></table><p>Takes a series of words and joins them together, save the joined
+string to a variable. For instance:
+<br><pre>setvar hour 3
+setvar minute 15
+joinvar time $hour : $minute
+"{$time}"</pre>
+will output "3:15"
+</p><br><br><p>
+    <b>label</b> [label text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>label text</td><td>The name of this section of code</td><td>None</td></tr></table><p>Used to mark a spot in a wrightscript file. Other code can then refer to this spot,
+        specifically for making the code reader "goto" this spot.</p><br><br><p>
+    <b>mulvar</b> variable amount 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save to</td><td>None</td></tr><tr><td>amount</td><td>amount to multiply the variable by</td><td>None</td></tr></table><p>Multiply a variable by a number. If the variable 'x' were set to 5, the script:
+<br><pre>mulvar x 3</pre>
+would set 'x' to 15.</p><br><br><p>
+    <b>random</b> variable start end 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable name to save random value to</td><td>None</td></tr><tr><td>start</td><td>smallest number to generate</td><td>None</td></tr><tr><td>end</td><td>largest number to generate</td><td>None</td></tr></table><p>Generates a random integer with a minimum
+        value of START, a maximum value of END, and
+        stores that value to VARIABLE</p><br><br><p>
+    <b>setvar</b> variable [value] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable name to set</td><td>None</td></tr><tr><td>value</td><td>Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.</td><td>None</td></tr></table><p>Sets a variable to some value.</p><br><br><p>
+    <b>setvar_ex</b> variable [expression2] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable name to set</td><td>None</td></tr><tr><td>expression2</td><td>The results of the expression will be stored in the variable.</td><td>None</td></tr></table><p>Sets a variable to some value based on an expression</p><br><br><p>
+    <b>setflag</b> flag_name 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>flag_name</td><td>flag to set</td><td>None</td></tr></table><p>Sets a flag. Shorthand for setting a variable equal to true. Flags
+        will remain set for the remainder of the game, and can be used to
+        track what a player has done.</p><br><br><p>
+    <b>setvar</b> variable [value] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable name to set</td><td>None</td></tr><tr><td>value</td><td>Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.</td><td>None</td></tr></table><p>Sets a variable to some value.</p><br><br><p>
+    <b>setvar_ex</b> variable [expression2] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable name to set</td><td>None</td></tr><tr><td>expression2</td><td>The results of the expression will be stored in the variable.</td><td>None</td></tr></table><p>Sets a variable to some value based on an expression</p><br><br><p>
+    <b>subvar</b> variable amount 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to subtract from and save to</td><td>None</td></tr><tr><td>amount</td><td>amount to subtract from the variable</td><td>None</td></tr></table><p>Subtract an amount from a variable. If the variable 'x' were set to 33, the script:
+<br><pre>subvar x 3</pre>
+would set 'x' to 30.</p><br><br></body></html>
