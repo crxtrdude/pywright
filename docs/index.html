@@ -1,15 +1,4 @@
-<html><body><h2>animation</h2><p>
-    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p><br><br><h2>debug</h2><p>
-    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
-        and allow you to skip through any text.</p><br><br><p>
-    <b>print</b> [text] 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p><br><br><h2>drawing</h2><p>
-    <b>draw_off</b> 
-    </p><p>Turns engine drawing off.</p><br><br><p>
-    <b>draw_on</b> 
-    </p><p>Turns engine drawing on.</p><br><br><h2>files</h2><p>
+<html><body><div style=''><a href=#files>files</a><br><a href=#animation>animation</a><br><a href=#debug>debug</a><br><a href=#gameflow>gameflow</a><br><a href=#objects>objects</a><br><a href=#logic>logic</a><br><a href=#interface>interface</a><br><a href=#drawing>drawing</a><br></div><div style=''><a name='files'><h2>files</h2><p>
     <b>exportvars</b> filename (variable_names) 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>file to export variables into, relative to the case folder</td><tr><td>variable_names</td><td>The names of variables to export. If none are listed, all variables will be exported</td><td>all variables</td></tr></table><p>Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
         ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p><br><br><p>
@@ -21,7 +10,23 @@
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>File to save to, relative to case folder. Saved games may not be named 'hide'</td><td>save</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the save.</td></table><p>Creates a new saved game in the case folder.</p><br><br><p>
     <b>screenshot</b> path width=VALUE height=VALUE x=VALUE y=VALUE rwidth=VALUE rheight=VALUE 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>path</td><td>path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)</td><tr><td>width</td><td>shrink screenshot to this width</td><td>256</td></tr><tr><td>height</td><td>shrink screenshot to this height</td><td>192</td></tr><tr><td>x</td><td>x-value of region to screenshot</td><td>0</td></tr><tr><td>y</td><td>y-value of region to screenshot</td><td>0</td></tr><tr><td>rwidth</td><td>width of region to screenshot</td><td>256</td></tr><tr><td>rheight</td><td>height of region to screenshot</td><td>192</td></tr></table><p>Takes a screenshot and saves the image. Can select a specific region of the screen to
-        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><h2>gameflow</h2><p>
+        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><a name='animation'><h2>animation</h2><p>
+    <b>controlanim</b> name=VALUE start=VALUE end=VALUE jumpto=VALUE <i>loop</i> <i>noloop</i> <i>b</i> <i>t</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Named object to control</td><td>Will alter animation of all current objects - not recommended to use the default value.</td></tr><tr><td>start</td><td>Alter the starting frame of the animation</td><td>Leave starting frame what it was.</td></tr><tr><td>end</td><td>Alter ending frame of the animation</td><td>Leave ending frame what it was.</td></tr><tr><td>jumpto</td><td>Instantly set an animations frame to this value</td><td>Don't change frames</td></tr><tr><td>loop</td><td>Force animation to loop</td><tr><td>noloop</td><td>Force animation not to loop</td><tr><td>b</td><td>Alter blink animation of chars</td><tr><td>t</td><td>Alter talk animation of chars</td></table><p>Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
+the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
+as having a non looping animation play several times, or only playing a portion of a longer animation.</p><br><br><p>
+    <b>globaldelay</b> speed name=VALUE <i>b</i> <i>t</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>speed</td><td>The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame.</td><tr><td>name</td><td>Only change the animation speed of objects with the given name</td><td>Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)</td></tr><tr><td>b</td><td>Select blinking animation for char objects</td><tr><td>t</td><td>Select talking animation for char objects</td></table><p>Changes the default delay value for either all running animations or specific ones. First create the animation 
+with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
+blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
+in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower.</p><br><br><p>
+    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p><br><br><a name='debug'><h2>debug</h2><p>
+    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
+        and allow you to skip through any text.</p><br><br><p>
+    <b>print</b> [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p><br><br><a name='gameflow'><h2>gameflow</h2><p>
     <b>endscript</b> 
     </p><p>Ends the currently running script and pops it off the stack. Multiple scripts
         may be running in PyWright, in which case the next script on the stack will
@@ -31,25 +36,47 @@
         resume.</p><br><br><p>
     <b>game</b> game script 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>game</td><td>Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase</td><tr><td>script</td><td>Script to look for in the game folder to run first</td><td>intro</td></tr></table><p>Can be used to start a new game or case.</p><br><br><p>
+    <b>script</b> script_name label=VALUE <i>noclear</i> <i>stack</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>script_name</td><td>name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder.</td><tr><td>label</td><td>A label in the loading script to jump to after it loads.</td><td>Execution starts at the top of the script instead of a label</td></tr><tr><td>noclear</td><td>If this token is present, all the objects that exist will carry over into the new script.</td><td>Otherwise, the scene will be cleared.</td></tr><tr><td>stack</td><td>Puts the new script on top of the current script, instead of replacing it. When the new script exits, the current script will resume following this "script" command.</td><td>The new script will replace the current script.</td></tr></table><p>Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
+resume when the new script exits, otherwise, the current script will vanish.</p><br><br><p>
     <b>timer</b> ticks command 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) before the command will be run</td><tr><td>command</td><td>The name of a macro to be run after the timer runs out</td></table><p>Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
         fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
         completed.</p><br><br><p>
     <b>waitenter</b> 
     </p><p>The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
-        it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred.</p><br><br><h2>interface</h2><p>
-    <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
-        is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
-        are shown through the keywords described.</p><br><br><p>
-    <b>menu</b> scene_name examine=VALUE talk=VALUE present=VALUE move=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>scene_name</td><td>Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'</td><tr><td>examine</td><td>whether to show the examine button</td><td>true</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>true</td></tr><tr><td>present</td><td>whether to show the present button</td><td>true</td></tr><tr><td>move</td><td>whether to show the move button</td><td>true</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
-        is clicked, a separate script will be run for that action, as determined by the value of scene_name. When that
-        external script is finished, the game won't return to this spot automatically, so you will need to be sure
-        you can create the proper menu from the external screen as well. People usually do this by creating a script
-        [scene_name].txt which loads the background and shows the menu. Then, any external script can
-        instantly load the proper scene with "script [scene_name]". You can control which options
-        are shown through the keywords described.</p><br><br><h2>logic</h2><p>
+        it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred.</p><br><br><a name='objects'><h2>objects</h2><p>
+    <b>bemo</b> emotion name 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>emotion</td><td>Blinking emotion animation to set character to</td><tr><td>name</td><td>Object name of character to change blinking emotion of</td><td>Chooses currently speaking character (value of _speaking_name)</td></tr></table><p>Sets a current char object to a specific blinking emotion animation.</p><br><br><p>
+    <b>bg</b> bg_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>stack</i> <i>fade</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>bg_path</td><td>Path to the graphics file relative to case/art/bg and without extension; such as scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default bg z values</td></tr><tr><td>loops</td><td>alter the loops of the bg animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the bg a unique name to be used for other commands</td><td>Default name will be the bg path</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>stack</td><td>The scene won't be cleared when the background is loaded</td><tr><td>fade</td><td>Background will fade in instead of popping in</td></table><p>Creates a background object. If 'stack' is not included, the scene will be cleared before the background is loaded. Backgrounds also
+default to a lower z value than other objects, ensuring that they will be in the background (though this can be modified). Other than that,
+backgrounds have the same properties as other graphic objects, and may be animated or manipulated.</p><br><br><p>
+    <b>char</b> character_name nametag=VALUE e=VALUE be=VALUE x=VALUE y=VALUE z=VALUE name=VALUE pri=VALUE <i>fade</i> <i>stack</i> <i>hide</i> <i>noauto</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>character_name</td><td>Name of character folder in art/port. If the character is to be hidden, the character_name doesn't need to match up to any actual directory. Graphics will be loaded from that directory according to the visible emotion</td><tr><td>nametag</td><td>The name to actually display to the player as this character's name.</td><td>character_name</td></tr><tr><td>e</td><td>The character's starting emotion</td><td>normal</td></tr><tr><td>be</td><td>The emotion to use while character is in the blink pose</td><tr><td>x</td><td>set the x value</td><td>default x places character in the center of the screen</td></tr><tr><td>y</td><td>set the y value</td><td>default y places the bottom of the character graphic at the bottom of the screen</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default char z values</td></tr><tr><td>name</td><td>Gives the object a unique name to be used for other commands</td><td>Default name will be character_name</td></tr><tr><td>pri</td><td>Alter the default priority of the character animation</td><td>sorting.txt lists default pri values</td></tr><tr><td>fade</td><td>Character will fade in instead of popping in</td><tr><td>stack</td><td>Don't delete other characters before adding this one</td><td>All other characters are deleted</td></tr><tr><td>hide</td><td>Don't actually show the character, just set who is talking</td><tr><td>noauto</td><td>Just play the animation, don't let textboxes set talk/blink modes or do lip syncing.</td></table><p>Create a character object, and set that object as the currently speaking character. (The variable _speaking_name contains
+the object name of the currently speaking character). Character's in pywright refer to a folder containing various animations belonging
+to the character. This "emotion" can be set with the e= keyword on the char command, as well as modified during text. Textboxes
+also will control the animation of the currently speaking character to make the mouth movements match the speed the text is
+printing.</p><br><br><p>
+    <b>emo</b> emotion name 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>emotion</td><td>Emotion animation to set character to</td><tr><td>name</td><td>Object name of character to change emotion of</td><td>Chooses currently speaking character (value of _speaking_name)</td></tr></table><p>Sets a current char object to a specific emotion animation.</p><br><br><p>
+    <b>ev</b> evidencekey x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>fade</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>evidencekey</td><td>Evidence id key. PyWright will look at the 'evidencekey_pic' variable to determine what graphic file to load</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default ev z values</td></tr><tr><td>loops</td><td>alter the loops of the animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the object a unique name to be used for other commands</td><td>Default name will be the evidence key</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>fade</td><td>Object will fade in instead of popping in</td></table><p>Creates a graphic for an evidence key. The graphic is based on whatever you set for that specific evidence key. You can easily
+add an item to the court record and then display the same item on screen. Example:
+<br><pre>set housekey_pic key1
+set housekey_name House Key
+set housekey_desc The key to the victim's house
+addev housekey
+ev housekey
+"House key added to court record"
+</pre></p><br><br><p>
+    <b>fg</b> fg_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>nowait</i> <i>fade</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>fg_path</td><td>Path to the graphics file relative to case/art/fg and without extension; such as fence for games/mygame/mycase/art/fg/fence.png and fence.txt</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default fg z values</td></tr><tr><td>loops</td><td>alter the loops of the fg animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the fg object a unique name to be used for other commands</td><td>Default name will be the fg path</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>nowait</td><td>Continue game execution without waiting for foreground animation to finish.</td><tr><td>fade</td><td>Object will fade in instead of popping in</td></table><p>Creates a foreground object. These are just like any other object, except the default z value will place them in front of most of the
+objects in the scene.</p><br><br><p>
+    <b>obj</b> graphic_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>fade</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>graphic_path</td><td>Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default object z values</td></tr><tr><td>loops</td><td>alter the loops of the object animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the object a unique name to be used for other commands</td><td>Default name will be the graphic path</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>fade</td><td>Object will fade in instead of popping in</td></table><p>Creates a generic graphics object and places it in the scene. It will be drawn on a layer according to it's z value.
+graphics objects may or may not be animated, which is defined in metadata files stored along with the graphics. ball.png will
+have a ball.txt describing it's animation qualities, if it has any.</p><br><br><a name='logic'><h2>logic</h2><p>
     <b>addvar</b> variable amount 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to add to the variable</td></table><p>Adds an amount to a variable. If the variable 'x' were set to 4, the script:
 <br><pre>addvar x 1</pre>
@@ -104,4 +131,28 @@ would set 'x' to 15.</p><br><br><p>
     <b>subvar</b> variable amount 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to subtract from and save to</td><tr><td>amount</td><td>amount to subtract from the variable</td></table><p>Subtract an amount from a variable. If the variable 'x' were set to 33, the script:
 <br><pre>subvar x 3</pre>
-would set 'x' to 30.</p><br><br></body></html>
+would set 'x' to 30.</p><br><br><p>
+    <b>top</b> 
+    </p><p>Jumps to the top of the currently running script.</p><br><br><a name='interface'><h2>interface</h2><p>
+    <b>casemenu</b> pri=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>pri</td><td>What priority to update the case menu</td><td>Default casemenu priority listed in core/sorting.txt</td></tr></table><p>Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
+and choose one to play. The priority might need to be adjusted if you have any special animation going on, but don't modify it unless
+you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
+run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
+folder be the same, and not show a case menu at all.</p><br><br><p>
+    <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
+        are shown through the keywords described.</p><br><br><p>
+    <b>menu</b> scene_name examine=VALUE talk=VALUE present=VALUE move=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>scene_name</td><td>Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'</td><tr><td>examine</td><td>whether to show the examine button</td><td>true</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>true</td></tr><tr><td>present</td><td>whether to show the present button</td><td>true</td></tr><tr><td>move</td><td>whether to show the move button</td><td>true</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, a separate script will be run for that action, as determined by the value of scene_name. When that
+        external script is finished, the game won't return to this spot automatically, so you will need to be sure
+        you can create the proper menu from the external screen as well. People usually do this by creating a script
+        [scene_name].txt which loads the background and shows the menu. Then, any external script can
+        instantly load the proper scene with "script [scene_name]". You can control which options
+        are shown through the keywords described.</p><br><br><a name='drawing'><h2>drawing</h2><p>
+    <b>draw_off</b> 
+    </p><p>Turns engine drawing off.</p><br><br><p>
+    <b>draw_on</b> 
+    </p><p>Turns engine drawing on.</p><br><br></div></body></html>

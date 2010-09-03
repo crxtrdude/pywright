@@ -1216,15 +1216,27 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                     m.addm(arg)
         m.open_script = False
         self.obs.append(m)
-    @category("control")
+    @category([KEYWORD('pri','What priority to update the case menu','Default casemenu priority listed in core/sorting.txt')],type="interface")
     def _casemenu(self,command,*args):
+        """Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
+and choose one to play. The priority might need to be adjusted if you have any special animation going on, but don't modify it unless
+you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
+run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
+folder be the same, and not show a case menu at all."""
         self.buildmode = False
         kwargs = {}
         pri = ([x[4:] for x in args if x.startswith("pri=")] or [None])[0]
         if pri is not None: kwargs["pri"] = pri
         self.obs.append(case_menu(assets.game,**kwargs))
-    @category("control")
+    @category(
+    [VALUE('script_name',"name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder."),
+KEYWORD('label','A label in the loading script to jump to after it loads.','Execution starts at the top of the script instead of a label'),
+TOKEN('noclear','If this token is present, all the objects that exist will carry over into the new script.','Otherwise, the scene will be cleared.'),
+TOKEN('stack','Puts the new script on top of the current script, instead of replacing it. When the new script exits, the current script will resume following this "script" command.','The new script will replace the current script.')],
+type="gameflow")
     def _script(self,command,scriptname,*args):
+        """Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
+resume when the new script exits, otherwise, the current script will vanish."""
         label = None
         for a in args:
             if a.startswith("label="):
@@ -1251,11 +1263,19 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
             self.goto_result(label,backup=None)
         self.execute_macro("defaults")
         self.autosave()
-    @category("control")
+    @category([],type="logic")
     def _top(self,command):
+        """Jumps to the top of the currently running script."""
         self.si = 0
-    @category("blah")
+    @category([VALUE("speed","The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame."),
+    KEYWORD("name","Only change the animation speed of objects with the given name","Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)"),
+    TOKEN("b","Select blinking animation for char objects"),
+    TOKEN("t","Select talking animation for char objects")],type="animation")
     def _globaldelay(self,command,spd,*args):
+        """Changes the default delay value for either all running animations or specific ones. First create the animation 
+with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
+blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
+in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower."""
         name = None
         for a in args:
             if a.startswith("name="):
@@ -1270,8 +1290,18 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                     o = o.talk_sprite
             if hasattr(o,"spd"):
                 o.spd = float(spd)
-    @category("blah")
+    @category([KEYWORD("name","Named object to control","Will alter animation of all current objects - not recommended to use the default value."),
+    KEYWORD("start","Alter the starting frame of the animation","Leave starting frame what it was."),
+    KEYWORD("end","Alter ending frame of the animation","Leave ending frame what it was."),
+    KEYWORD("jumpto","Instantly set an animations frame to this value","Don't change frames"),
+    TOKEN("loop","Force animation to loop"),
+    TOKEN("noloop","Force animation not to loop"),
+    TOKEN("b","Alter blink animation of chars"),
+    TOKEN("t","Alter talk animation of chars")],type="animation")
     def _controlanim(self,command,*args):
+        """Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
+the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
+as having a non looping animation play several times, or only playing a portion of a longer animation."""
         start = None
         end = None
         name = None
@@ -1317,8 +1347,19 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                         o.loopmode = "stop"
                 if jumpto is not None:
                     o.x = jumpto
-    @category("graphics")
+    @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
+KEYWORD("x","set the x value",0),
+KEYWORD("y","set the y value",0),
+KEYWORD("z","set the z value (check PyWright/core/sorting.txt for idea of z values)","sorting.txt lists default object z values"),
+KEYWORD("loops","alter the loops of the object animation"),
+TOKEN("flipx","Mirror the image on the x axis"),
+KEYWORD("name","Gives the object a unique name to be used for other commands","Default name will be the graphic path"),
+KEYWORD("rotz","rotate the object on the z axis",0),
+TOKEN("fade","Object will fade in instead of popping in")],type="objects")
     def _obj(self,command,*args):
+        """Creates a generic graphics object and places it in the scene. It will be drawn on a layer according to it's z value.
+graphics objects may or may not be animated, which is defined in metadata files stored along with the graphics. ball.png will
+have a ball.txt describing it's animation qualities, if it has any."""
         func = {"bg":bg,"fg":fg,"ev":evidence,"obj":graphic}[command]
         wait = {"fg":1}.get(command,0)
         clear = 1
@@ -1375,15 +1416,160 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         self.buildmode = False
         m = movie(file,sound)
         self.obs.append(m)
-    @category("graphics")
+    @category([VALUE("bg_path","Path to the graphics file relative to case/art/bg and without extension; such as scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
+KEYWORD("x","set the x value",0),
+KEYWORD("y","set the y value",0),
+KEYWORD("z","set the z value (check PyWright/core/sorting.txt for idea of z values)","sorting.txt lists default bg z values"),
+KEYWORD("loops","alter the loops of the bg animation"),
+TOKEN("flipx","Mirror the image on the x axis"),
+KEYWORD("name","Gives the bg a unique name to be used for other commands","Default name will be the bg path"),
+KEYWORD("rotz","rotate the object on the z axis",0),
+TOKEN("stack","The scene won't be cleared when the background is loaded"),
+TOKEN("fade","Background will fade in instead of popping in")],type="objects")
     def _bg(self,command,*args):
+        """Creates a background object. If 'stack' is not included, the scene will be cleared before the background is loaded. Backgrounds also
+default to a lower z value than other objects, ensuring that they will be in the background (though this can be modified). Other than that,
+backgrounds have the same properties as other graphic objects, and may be animated or manipulated."""
         self._obj(command,*args)
-    @category("graphics")
+    @category([VALUE("fg_path","Path to the graphics file relative to case/art/fg and without extension; such as fence for games/mygame/mycase/art/fg/fence.png and fence.txt"),
+KEYWORD("x","set the x value",0),
+KEYWORD("y","set the y value",0),
+KEYWORD("z","set the z value (check PyWright/core/sorting.txt for idea of z values)","sorting.txt lists default fg z values"),
+KEYWORD("loops","alter the loops of the fg animation"),
+TOKEN("flipx","Mirror the image on the x axis"),
+KEYWORD("name","Gives the fg object a unique name to be used for other commands","Default name will be the fg path"),
+KEYWORD("rotz","rotate the object on the z axis",0),
+TOKEN("nowait","Continue game execution without waiting for foreground animation to finish."),
+TOKEN("fade","Object will fade in instead of popping in")],type="objects")
     def _fg(self,command,*args):
+        """Creates a foreground object. These are just like any other object, except the default z value will place them in front of most of the
+objects in the scene."""
         self._obj(command,*args)
-    @category("graphics")
+    @category([VALUE("evidencekey","Evidence id key. PyWright will look at the 'evidencekey_pic' variable to determine what graphic file to load"),
+KEYWORD("x","set the x value",0),
+KEYWORD("y","set the y value",0),
+KEYWORD("z","set the z value (check PyWright/core/sorting.txt for idea of z values)","sorting.txt lists default ev z values"),
+KEYWORD("loops","alter the loops of the animation"),
+TOKEN("flipx","Mirror the image on the x axis"),
+KEYWORD("name","Gives the object a unique name to be used for other commands","Default name will be the evidence key"),
+KEYWORD("rotz","rotate the object on the z axis",0),
+TOKEN("fade","Object will fade in instead of popping in")],type="objects")
     def _ev(self,command,*args):
+        """Creates a graphic for an evidence key. The graphic is based on whatever you set for that specific evidence key. You can easily
+add an item to the court record and then display the same item on screen. Example:
+{{{set housekey_pic key1
+set housekey_name House Key
+set housekey_desc The key to the victim's house
+addev housekey
+ev housekey
+"House key added to court record"
+}}}"""
         self._obj(command,*args)
+    @category([VALUE("character_name","Name of character folder in art/port. If the character is to be hidden, the character_name doesn't need to match up to any actual directory. Graphics will be loaded from that directory according to the visible emotion"),
+KEYWORD("nametag","The name to actually display to the player as this character's name.","character_name"),
+KEYWORD("e","The character's starting emotion","normal"),
+KEYWORD("be","The emotion to use while character is in the blink pose"),
+KEYWORD("x","set the x value","default x places character in the center of the screen"),
+KEYWORD("y","set the y value","default y places the bottom of the character graphic at the bottom of the screen"),
+KEYWORD("z","set the z value (check PyWright/core/sorting.txt for idea of z values)","sorting.txt lists default char z values"),
+KEYWORD("name","Gives the object a unique name to be used for other commands","Default name will be character_name"),
+KEYWORD("pri","Alter the default priority of the character animation","sorting.txt lists default pri values"),
+TOKEN("fade","Character will fade in instead of popping in"),
+TOKEN("stack","Don't delete other characters before adding this one","All other characters are deleted"),
+TOKEN("hide","Don't actually show the character, just set who is talking"),
+TOKEN("noauto","Just play the animation, don't let textboxes set talk/blink modes or do lip syncing.")],type="objects")
+    def _char(self,command,character="",*args):
+        """Create a character object, and set that object as the currently speaking character. (The variable _speaking_name contains
+the object name of the currently speaking character). Character's in pywright refer to a folder containing various animations belonging
+to the character. This "emotion" can be set with the e= keyword on the char command, as well as modified during text. Textboxes
+also will control the animation of the currently speaking character to make the mouth movements match the speed the text is
+printing."""
+        assets.character = character
+        z = None
+        e = "normal(blink)"
+        be = ""
+        x = 0
+        y = 0
+        pri = None
+        name = None
+        nametag = character+"\n"
+        for a in args:
+            if a.startswith("z="): z = int(a[2:])
+            if a.startswith("e="): e = a[2:]+"(blink)"
+            if a.startswith("be="): be = a[3:]
+            if a.startswith("x="): x = int(a[2:])
+            if a.startswith("y="): y = int(a[2:])
+            if a.startswith("priority="): pri = int(a[9:])
+            if a.startswith("name="): name = a[5:]
+            if a.startswith("nametag="): nametag = a[8:]+"\n"
+        assets.px = x
+        assets.py = y
+        assets.pz = z
+        p = assets.add_portrait(character+"/"+e,fade=("fade" in args),stack=("stack" in args),hide=("hide" in args))
+        if pri:
+            p.pri = pri
+        if name:
+            p.id_name = name
+        else:
+            p.id_name = character
+        p.nametag = nametag
+        if "fade" in args: 
+            self._fade("fade","wait","name="+p.id_name,"speed=5")
+            p.extrastr = " fade"
+        assets.variables["_speaking_name"] = nametag
+        if be:
+            p.set_blink_emotion(be)
+        p.single = "noauto" in args
+    @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
+    def _emo(self,command,emotion,name=None):
+        """Sets a current char object to a specific emotion animation."""
+        char = None
+        if not name:
+            char = assets.variables.get("_speaking", None)
+            print "found char by _speaking",char,char.name
+        if name:
+            for c in self.obs:
+                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
+                    char = c
+                    break
+            print "found char by name",char,char.name
+        if char:
+            nametag = char.nametag
+            err = None
+            try:
+                char.set_emotion(emotion)
+            except (script_error,art_error),e:
+                err = e
+            char.nametag = nametag
+            assets.variables["_speaking_name"] = nametag
+            if err:
+                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
+                import traceback
+                traceback.print_exc()
+    @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
+    def _bemo(self,command,emotion,name=None):
+        """Sets a current char object to a specific blinking emotion animation."""
+        char = None
+        if not name:
+            char = assets.variables.get("_speaking", None)
+        if name:
+            for c in self.obs:
+                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
+                    char = c
+                    break
+        if char:
+            nametag = char.nametag
+            err = None
+            try:
+                char.set_blink_emotion(emotion)
+            except (script_error,art_error),e:
+                err = e
+            char.nametag = nametag
+            assets.variables["_speaking_name"] = nametag
+            if err:
+                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
+                import traceback
+                traceback.print_exc()
     @category("graphics")
     def _gui(self,command,guitype,*args):
         args = list(args)
@@ -1635,93 +1821,6 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         nametag = " ".join(name)+"\n"
         assets.variables["_speaking"] = ""
         assets.variables["_speaking_name"] = nametag
-    @category("text")
-    def _char(self,command,character="",*args):
-        assets.character = character
-        #first arg is z value (or top for highest z)
-        z = None
-        e = "normal(blink)"
-        be = ""
-        x = 0
-        y = 0
-        pri = None
-        name = None
-        nametag = character+"\n"
-        for a in args:
-            if a.startswith("z="): z = int(a[2:])
-            if a.startswith("e="): e = a[2:]+"(blink)"
-            if a.startswith("be="): be = a[3:]
-            if a.startswith("x="): x = int(a[2:])
-            if a.startswith("y="): y = int(a[2:])
-            if a.startswith("priority="): pri = int(a[9:])
-            if a.startswith("name="): name = a[5:]
-            if a.startswith("nametag="): nametag = a[8:]+"\n"
-        assets.px = x
-        assets.py = y
-        assets.pz = z
-        p = assets.add_portrait(character+"/"+e,fade=("fade" in args),stack=("stack" in args),hide=("hide" in args))
-        if pri:
-            p.pri = pri
-        if name:
-            p.id_name = name
-        else:
-            p.id_name = character
-        p.nametag = nametag
-        if "fade" in args: 
-            self._fade("fade","wait","name="+p.id_name,"speed=5")
-            p.extrastr = " fade"
-        assets.variables["_speaking_name"] = nametag
-        if be:
-            p.set_blink_emotion(be)
-        p.single = "noauto" in args
-    @category("blah")
-    def _emo(self,command,emotion,name=None):
-        char = None
-        if not name:
-            char = assets.variables.get("_speaking", None)
-            print "found char by _speaking",char,char.name
-        if name:
-            for c in self.obs:
-                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
-                    char = c
-                    break
-            print "found char by name",char,char.name
-        if char:
-            nametag = char.nametag
-            err = None
-            try:
-                char.set_emotion(emotion)
-            except (script_error,art_error),e:
-                err = e
-            char.nametag = nametag
-            assets.variables["_speaking_name"] = nametag
-            if err:
-                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
-                import traceback
-                traceback.print_exc()
-    @category("blah")
-    def _bemo(self,command,emotion,name=None):
-        char = None
-        if not name:
-            char = assets.variables.get("_speaking", None)
-        if name:
-            for c in self.obs:
-                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
-                    char = c
-                    break
-        if char:
-            nametag = char.nametag
-            err = None
-            try:
-                char.set_blink_emotion(emotion)
-            except (script_error,art_error),e:
-                err = e
-            char.nametag = nametag
-            assets.variables["_speaking_name"] = nametag
-            if err:
-                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
-                import traceback
-                traceback.print_exc()
     @category("init")
     def _addev(self,command,ev,page=None):
         evob = evidence(ev,page=page)

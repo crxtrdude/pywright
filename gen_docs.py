@@ -72,7 +72,7 @@ commands = {}
 f = open("docs/index.html","w")
 f.write("<html><body>")
 
-funcs = []
+funcs = {}
 
 #First, get all commands. This is relatively easy. Relatively...
 scr = libengine.Script
@@ -85,15 +85,20 @@ for fname in dir(scr):
         continue
     func = getattr(scr,fname)
     if hasattr(func,"ftype") and func.__doc__:
+        list = funcs.get(func.ftype,[])
+        list.append(func)
         func.name[0] = fname[1:]
-        funcs.append(func)
-        
-funcs.sort(key=lambda x: x.ftype)
-lt = None
-for func in funcs:
-    if lt!=func.ftype:
-        f.write("<h2>"+func.ftype+"</h2>")
-        lt = func.ftype
-    f.write(make_func_block(func))
+        funcs[func.ftype] = list
 
+f.write("<div style=''>")
+for group in funcs:
+    f.write("<a href=#"+group+">"+group+"</a><br>")
+f.write("</div><div style=''>")
+        
+for group in funcs:
+    f.write("<a name='"+group+"'>")
+    f.write("<h2>"+group+"</h2>")
+    for func in funcs[group]:
+        f.write(make_func_block(func))
+f.write("</div>")
 f.write("</body></html>")
