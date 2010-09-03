@@ -17,6 +17,11 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     repeatable code for buttons
     check difference between "exit" and "endscript"
     "fail" for menu as opposed to localmenu
+    controlanim overload to support delay and individual frame delays
+    a way to query properties of objects
+    fadeout for delete?
+    wait/nowait for objects
+    better unification of object commands - char command missing flipx for instance, no pri for other objects
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"
