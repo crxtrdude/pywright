@@ -27,6 +27,10 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     include the fixed court record buttons (all art/general to be safe)
     skip more errors when not in debug mode - maybe have a release mode too?
     list accurate modes
+    -production mode: "set _production true" will turn on production mode.
+        in production mode, errors will be logged but not displayed to the user (and
+        no clicking will be needed by them to bypass the error)
+    more clear when debug mode is on
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"

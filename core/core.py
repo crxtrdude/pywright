@@ -3786,6 +3786,8 @@ class error_msg(gui.pane):
         self.script = script
         self.width=256
         self.height=100
+        if vtrue(assets.variables.get("_production","false")):
+            self.kill = 1
     def update(self):
         return True
         
