@@ -2643,7 +2643,10 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
         pygame.screen.blit(pygame.blank,[0,0])
-        assets.cur_script.draw(pygame.screen)
+        try:
+            assets.cur_script.draw(pygame.screen)
+        except (art_error,script_error),e:
+            assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
         if assets.flash:
             fl = flash()
             assets.cur_script.obs.append(fl)
