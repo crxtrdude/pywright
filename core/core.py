@@ -3759,33 +3759,29 @@ class error_msg(gui.pane):
         self.pri = ulayers.index(self.__class__.__name__)
         self.z = zlayers.index(self.__class__.__name__)
         gui.pane.__init__(self)
+        b = gui.editbox(None,"Runtime error, click to continue")
+        b.textcol = [255,0,0]
+        b.draw_back = False
+        b.draw(assets.Surface([64,64]))
+        self.children.append(b)
+        msg+="\nscene:'"+script.scene+"', line '"+str(lineno)+"'"
+        msg+="\ncurrent game:"+assets.game
         msg_lines = [""]
         for c in msg:
             msg_lines[-1]+=c
-            if len(msg_lines[-1])>45 or c == "\n":
+            if (len(msg_lines[-1])>35 or c == "\n") and msg_lines[-1].strip():
+                if len(msg_lines[-1])>35:
+                    msg_lines[-1]+=" - "
                 msg_lines.append("")
         for msg_line in msg_lines:
             msg = gui.editbox(None,msg_line)
             msg.draw(assets.Surface([64,64]))
             msg.draw_back=False
             self.children.append(msg)
-        lineno = gui.editbox(None,assets.game+"/"+script.scene+" : line "+str(lineno))
-        lineno.draw(assets.Surface([64,64]))
-        lineno.draw_back=False
-        self.children.append(lineno)
-        self.line = '"'+line+'"'
-        self.editline = gui.editbox(self,"line")
-        self.editline.draw(assets.Surface([64,64]))
-        self.editline.draw_back = False
-        self.children.append(self.editline)
-        b = gui.editbox(None,"(click to skip line)")
-        b.draw(assets.Surface([64,64]))
-        b.draw_back = False
-        self.children.append(b)
         self.lineno = lineno
         self.script = script
         self.width=256
-        self.height=100
+        self.height=len(msg_lines)*20
         if vtrue(assets.variables.get("_production","false")):
             self.kill = 1
     def update(self):
