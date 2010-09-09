@@ -1143,6 +1143,8 @@ class sprite(gui.button):
         
 class fadesprite(sprite):
     real_path=None
+    invert = 0
+    tint = None
     def setfade(self,val=255):
         if getattr(self,"fade",None) is None: self.fade = 255
         self.lastfade = self.fade
@@ -1152,10 +1154,12 @@ class fadesprite(sprite):
         if getattr(self,"fade",None) is None: self.fade = 255
         if self.fade == 0:
             return
-        if self.fade == 255:
+        if self.fade == 255 and not self.invert and not self.tint:
             return sprite.draw(self, dest)
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
+                self.origa = pygame.surfarray.array_alpha(self.img)
+                self.origc = pygame.surfarray.array3d(self.img)
                 self.draw_func = self.numpydraw
                 self.mockimg = self.img.convert_alpha()
             else:
@@ -1191,9 +1195,14 @@ class fadesprite(sprite):
                 self.mockimg = None
             raise art_error("Problem with fading code, switching to older fade technology")
     def numpydraw(self,dest):
-        orig = pygame.surfarray.array_alpha(self.img)
         px = pygame.surfarray.pixels_alpha(self.mockimg)
-        px[:] = orig[:]*(self.fade/255.0)
+        px[:] = self.origa[:]*(self.fade/255.0)
+        del px
+        px = pygame.surfarray.pixels3d(self.mockimg)
+        if self.invert:
+            px[:] = 255-self.origc[:]
+        if self.tint:
+            px[:] = self.tint*self.origc[:]
         del px
         img = self.img
         self.img = self.mockimg
