@@ -22,10 +22,12 @@ __version__ = cver_s(d["version"])
 VERSION = "Version "+cver_s(d["version"])
 
 try:
-    from numpy import array
+    import numpy
     pygame.sndarray.use_arraytype("numpy")
+    pygame.use_numpy = True
 except:
-    array = None
+    numpy = None
+    pygame.use_numpy = False
 sw,sh = 256,192
 #sw,sh = 640,480
 spd = 6
@@ -1153,50 +1155,56 @@ class fadesprite(sprite):
         if self.fade == 255:
             return sprite.draw(self, dest)
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
-            self.draw_func = self.mockdraw
-            nn = self.name.replace("/","sl")
-            exists = os.path.exists("core/cache/"+nn+".mock.png")
-            if exists and self.real_path:
-                cache_t = os.stat("core/cache/"+nn+".mock.png").st_mtime
-                content_t = os.stat(self.real_path).st_mtime
-                if content_t>cache_t:
-                    exists = False
-            if not exists:
-                self.mockimg = self.img.convert()
-                #self.tenpercent = self.img.convert_alpha()
-                invis = [255,0,255]
-                for y in range(self.img.get_height()):
-                    for x in range(self.img.get_width()):
-                        rgba = self.img.get_at([x,y])
-                        if rgba[3]==0:
-                            self.mockimg.set_at([x,y],invis)
-                        rgba=rgba[0],rgba[1],rgba[2],int(0.1*rgba[3])
-                        #self.tenpercent.set_at([x,y],rgba)
-                        #~ if [rgba[0],rgba[1],rgba[2]] == [255,0,255]:
-                            #~ self.draw_func = self.layerdraw
-                pygame.image.save(self.mockimg,"core/cache/"+nn+".mock.png")
-                self.mockimg.set_colorkey(invis)
+            if pygame.use_numpy:
+                self.draw_func = self.numpydraw
+                self.mockimg = self.img.convert_alpha()
             else:
                 self.draw_func = self.mockdraw
-                self.mockimg = pygame.image.load("core/cache/"+nn+".mock.png").convert()
-                self.mockimg.set_colorkey([255,0,255])
-        self.draw_func(dest)
+                nn = self.name.replace("/","sl")
+                exists = os.path.exists("core/cache/"+nn+".mock.png")
+                if exists and self.real_path:
+                    cache_t = os.stat("core/cache/"+nn+".mock.png").st_mtime
+                    content_t = os.stat(self.real_path).st_mtime
+                    if content_t>cache_t:
+                        exists = False
+                if not exists:
+                    self.mockimg = self.img.convert()
+                    #self.tenpercent = self.img.convert_alpha()
+                    invis = [255,0,255]
+                    for y in range(self.img.get_height()):
+                        for x in range(self.img.get_width()):
+                            rgba = self.img.get_at([x,y])
+                            if rgba[3]==0:
+                                self.mockimg.set_at([x,y],invis)
+                            rgba=rgba[0],rgba[1],rgba[2],int(0.1*rgba[3])
+                    pygame.image.save(self.mockimg,"core/cache/"+nn+".mock.png")
+                    self.mockimg.set_colorkey(invis)
+                else:
+                    self.draw_func = self.mockdraw
+                    self.mockimg = pygame.image.load("core/cache/"+nn+".mock.png").convert()
+                    self.mockimg.set_colorkey([255,0,255])
+        try:
+            self.draw_func(dest)
+        except Exception:
+            if pygame.use_numpy:
+                pygame.use_numpy = False
+                self.mockimg = None
+            #raise art_error("Problem with fading code, switching to older fade technology")
+    def numpydraw(self,dest):
+        orig = pygame.surfarray.array_alpha(self.img)
+        px = pygame.surfarray.pixels_alpha(self.mockimg)
+        px[:] = orig[:]*(self.fade/255.0)
+        del px
+        img = self.img
+        self.img = self.mockimg
+        sprite.draw(self,dest)
+        self.img = img
     def mockdraw(self, dest):
         self.mockimg.set_alpha(self.fade)
         img = self.img
         self.img = self.mockimg
         sprite.draw(self,dest)
         self.img = img
-    #~ def layerdraw(self, dest):
-        #~ percent = self.fade/255.0
-        #~ per_tens = int(percent*10)
-        #~ if per_tens>=9:
-            #~ return sprite.draw(self,dest)
-        #~ img = self.img
-        #~ for i in range(per_tens):
-            #~ self.img = self.tenpercent
-            #~ sprite.draw(self, dest)
-        #~ self.img = img
     def update(self):
         sprite.update(self)
 
