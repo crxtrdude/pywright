@@ -21,7 +21,12 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     a way to query properties of objects
     fadeout for delete?
     wait/nowait for objects
+    synced tiny/big arrow
+    left/right tiny arrow for CE
     better unification of object commands - char command missing flipx for instance, no pri for other objects
+    include the fixed court record buttons (all art/general to be safe)
+    skip more errors when not in debug mode - maybe have a release mode too?
+    list accurate modes
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"
