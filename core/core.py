@@ -1189,7 +1189,7 @@ class fadesprite(sprite):
             if pygame.use_numpy:
                 pygame.use_numpy = False
                 self.mockimg = None
-            #raise art_error("Problem with fading code, switching to older fade technology")
+            raise art_error("Problem with fading code, switching to older fade technology")
     def numpydraw(self,dest):
         orig = pygame.surfarray.array_alpha(self.img)
         px = pygame.surfarray.pixels_alpha(self.mockimg)
