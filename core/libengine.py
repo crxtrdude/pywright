@@ -555,7 +555,6 @@ class Script(gui.widget):
             return True
         return vtrue(assets.variables.get(test,"false"))
     def refresh_arrows(self,tbox):
-        print "refresh",tbox.text
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
         for a in arrows:
             a.kill = 1
@@ -584,10 +583,8 @@ class Script(gui.widget):
             assets.variables["_currentline"] = str(self.si)
             exit = self.execute_line(line)
     def execute_line(self,line):
-        if line.startswith('"') and len(line)>1:
-            line = line[1:]
-            if line.rstrip()[-1]=='"':
-                line = line[:-1]
+        if line[0] in [u'"',u'\u201C'] and len(line)>1:
+            line = line[1:-1]
             text = line.replace("{n}","\n")
             tbox = textbox(text)
             if not self.viewed.get(assets.game+self.scene+str(self.si-1)):
