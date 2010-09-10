@@ -1726,6 +1726,11 @@ printing."""
                                                 setzero={"nowait":"wait"})
         self.obs.append(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    def _invert(self,command,*args):
+        kwargs,args = parseargs(args,intvals=["start","end"],
+                                                defaults={"start":0,"end":1,"name":None})
+        print kwargs
+        self.obs.append(invertanim(obs=self.obs,**kwargs))
     @category("event")
     def _shake(self,command,*args):
         args = list(args)

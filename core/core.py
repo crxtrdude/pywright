@@ -1145,7 +1145,7 @@ class fadesprite(sprite):
     real_path=None
     invert = 0
     tint = None
-    greyscale = 1
+    greyscale = 0
     def setfade(self,val=255):
         if getattr(self,"fade",None) is None: self.fade = 255
         self.lastfade = self.fade
@@ -1425,6 +1425,9 @@ class portrait(object):
     def setfade(self,*args):
         self.blink_sprite.setfade(*args)
         self.talk_sprite.setfade(*args)
+    invert = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"invert",v) for o in [self.blink_sprite,self.talk_sprite]])
+    tint = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"tint",v) for o in [self.blink_sprite,self.talk_sprite]])
+    grey = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"greyscale",v) for o in [self.blink_sprite,self.talk_sprite]])
         
 class evidence(fadesprite):
     autoclear = True
@@ -3612,6 +3615,47 @@ class fadeanim(effect):
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
                 o.setfade(int((self.start/100.0)*255.0))
+        if self.wait:
+            return True
+            
+    #~ invert = 0
+    #~ tint = None
+    #~ greyscale = 1
+    
+class invertanim(effect):
+    def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[]):
+        super(invertanim,self).__init__()
+        self.start = start
+        self.end = end
+        self.pri = ulayers.index("fadeanim")
+        self.speed = speed
+        self.obs = obs
+        self.wait = wait
+        self.kill = 0
+        if name:
+            self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+            print self.obs
+        self.update()
+    def draw(self,dest): pass
+    def update(self):
+        if self.kill: return False
+        amt = self.speed
+        if self.start<self.end:
+            self.start+=amt
+            if self.start>self.end:
+                amt -= (self.start-self.end)
+                self.kill = 1
+        elif self.start>self.end:
+            self.start-=amt
+            if self.start<self.end:
+                amt-=(self.end-self.start)
+                self.kill=1
+        else:
+            self.kill=1
+        for o in self.obs:
+            if getattr(o,"kill",0): continue
+            if hasattr(o,"setfade"):
+                o.invert = self.start
         if self.wait:
             return True
 
