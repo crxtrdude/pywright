@@ -35,6 +35,8 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     can invert graphics
     can greyscale graphics
     more clear when debug mode is on
+    unicode and multiple font support
+    proxy support
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"

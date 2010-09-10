@@ -267,15 +267,21 @@ class Assets(object):
         if not self.gbamode: return ""
         return "_gba"
     appendgba = property(_appendgba)
-    def raw_lines(self,name,ext=".txt",start="game"):
+    def raw_lines(self,name,ext=".txt",start="game",use_unicode=False):
         if start=="game":
             start = self.game
         if name.endswith(".txt"):
             ext = ""
         try:
-            return open(start+"/"+name+ext).read().replace("\r\n","\n").split("\n")
+            file = open(start+"/"+name+ext,"rU")
         except IOError:
             raise file_error("File named "+start+"/"+name+ext+" could not be read.")
+        text = file.read()
+        if use_unicode:
+            text = text.decode("utf8")
+            #Replace the BOM
+            text = text.replace(u'\ufeff',u'')
+        return text.split("\n")
     def parse_macros(self,lines):
         """Alters lines to not include macro definitions, and returns macros"""
         macros = {}
@@ -337,7 +343,7 @@ class Assets(object):
         [getchars(pth) for pth in scripts]
         return chars
     def open_script(self,name,macros=True,ext=".txt"):
-        lines = self.raw_lines(name,ext)
+        lines = self.raw_lines(name,ext,use_unicode=True)
         reallines = []
         block_comment = False
         for line in lines:
@@ -836,58 +842,17 @@ class ImgFont(object):
             self.colors[tuple(color)] = pygame.Surface(self.img.get_size())
             self.colors[tuple(color)].fill(color)
             self.colors[tuple(color)].blit(self.img,[0,0])
-        surf = None
-        if t not in self.chars:
-            if (t,tuple(color)) in self.colors:
-                return self.colors[(t,tuple(color))]
-            surf = pwinternational.render(t,0,color)
-            start = 0
-            edge = 0
-            starty = 0
-            for y in xrange(surf.get_height()):
-                for x in xrange(surf.get_width()):
-                    if surf.get_at((x,y)) != (0,0,0,255):
-                        if not starty:
-                            starty = y-2
-                            break
-            for x in xrange(surf.get_width()):
-                for y in xrange(surf.get_height()):
-                    if surf.get_at((x,y)) != (0,0,0,255):
-                        edge = x
-                        if not start:
-                            start = x
-            edge += 3
-            self.width[t] = edge-start
-            self.start[t] = start
-            surf = surf.subsurface([[start,starty],[edge-start-1,surf.get_height()-starty-1]])
-            self.colors[t,tuple(color)] = surf
-            return surf
-        i = self.chars.find(t)
-        if t=='"':
-            i += self.quote
-            self.quote = 1-self.quote
-        y = i//8
-        x = i-y*8
-        w,h = [16,16]
-        if not self.width.get(t,None):
-            surf = self.img.subsurface([[x*17+1,y*17+1],[16,16]])
-            start = 0
-            edge = 0
-            for x in xrange(surf.get_width()):
-                for y in xrange(surf.get_height()):
-                    if surf.get_at((x,y)) != (0,0,0,255):
-                        edge = x
-                        if not start:
-                            start = x
-            edge += 3
-            self.width[t] = edge-start
-            self.start[t] = start
-        y = i//8
-        x = i-y*8
-        w,h = [16,16]
-        start = self.start[t]
-        color = self.colors[tuple(color)].subsurface([[x*17+1+start,y*17+1],[self.width[t]-2,h]])
-        return color
+        if (t,tuple(color)) in self.colors:
+            return self.colors[(t,tuple(color))]
+        surf = pwinternational.render(t,0,color)
+        metrics = pwinternational.metrics(t)[0]
+        start = metrics[0]
+        starty = max(metrics[2],0)
+        edge = min(metrics[4],surf.get_width())
+        self.width[t] = edge+1-start
+        self.start[t] = start
+        self.colors[t,tuple(color)] = surf
+        return surf
     def split_line(self,text,max_width):
         """Returns the line split at the point to equal a desired width"""
         left = [""]
@@ -1041,7 +1006,7 @@ class sprite(gui.button):
             self.blinkspeed = [int(x) for x in assets.variables["_blinkspeed_global"].split(" ")]
     def load(self,name,key=[255,0,255]):
         self.key = key
-        if type(name)==type(""):
+        if type(name)==type("") or type(name)==type(u""):
             path = ""
             self.base = assets.open_art(name,key)
             self.load_extra(assets.meta)
