@@ -1729,8 +1729,11 @@ printing."""
     def _invert(self,command,*args):
         kwargs,args = parseargs(args,intvals=["start","end"],
                                                 defaults={"start":0,"end":1,"name":None})
-        print kwargs
         self.obs.append(invertanim(obs=self.obs,**kwargs))
+    def _grey(self,command,*args):
+        kwargs,args = parseargs(args,intvals=["start","end"],
+                                                defaults={"start":0,"end":1,"name":None})
+        self.obs.append(greyscaleanim(obs=self.obs,**kwargs))
     @category("event")
     def _shake(self,command,*args):
         args = list(args)

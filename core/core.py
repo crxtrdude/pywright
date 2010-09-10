@@ -1427,7 +1427,7 @@ class portrait(object):
         self.talk_sprite.setfade(*args)
     invert = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"invert",v) for o in [self.blink_sprite,self.talk_sprite]])
     tint = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"tint",v) for o in [self.blink_sprite,self.talk_sprite]])
-    grey = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"greyscale",v) for o in [self.blink_sprite,self.talk_sprite]])
+    greyscale = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"greyscale",v) for o in [self.blink_sprite,self.talk_sprite]])
         
 class evidence(fadesprite):
     autoclear = True
@@ -3634,7 +3634,6 @@ class invertanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
-            print self.obs
         self.update()
     def draw(self,dest): pass
     def update(self):
@@ -3656,6 +3655,42 @@ class invertanim(effect):
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
                 o.invert = self.start
+        if self.wait:
+            return True
+            
+class greyscaleanim(effect):
+    def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[]):
+        super(greyscaleanim,self).__init__()
+        self.start = start
+        self.end = end
+        self.pri = ulayers.index("fadeanim")
+        self.speed = speed
+        self.obs = obs
+        self.wait = wait
+        self.kill = 0
+        if name:
+            self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+        self.update()
+    def draw(self,dest): pass
+    def update(self):
+        if self.kill: return False
+        amt = self.speed
+        if self.start<self.end:
+            self.start+=amt
+            if self.start>self.end:
+                amt -= (self.start-self.end)
+                self.kill = 1
+        elif self.start>self.end:
+            self.start-=amt
+            if self.start<self.end:
+                amt-=(self.end-self.start)
+                self.kill=1
+        else:
+            self.kill=1
+        for o in self.obs:
+            if getattr(o,"kill",0): continue
+            if hasattr(o,"setfade"):
+                o.greyscale = self.start
         if self.wait:
             return True
 
