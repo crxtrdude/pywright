@@ -1162,7 +1162,8 @@ class fadesprite(sprite):
                 self.mockimg = self.img.convert_alpha()
                 self.origa = pygame.surfarray.array_alpha(self.img)
                 self.origc = pygame.surfarray.array3d(self.img)
-                #self.bw = self.bw.mean()
+                self.gs = self.origc[:]
+                self.gs = [y*numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]]) for y in self.gs]
                 self.draw_func = self.numpydraw
             else:
                 self.draw_func = self.mockdraw
@@ -1201,19 +1202,20 @@ class fadesprite(sprite):
     def numpydraw(self,dest):
         px = pygame.surfarray.pixels_alpha(self.mockimg)
         px[:] = self.origa[:]*(self.fade/255.0)
+        del px
         px = pygame.surfarray.pixels3d(self.mockimg)
-        px[:] = self.origc[:]
-        #~ if self.greyscale:
-            #~ mat = [numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]]) for i in range(len(px))]
-            #~ def f(row):
-                #~ def ff(row):
-                    #~ return row*mat
-                #~ return numpy.apply_along_axis(ff,0,row)
-            #~ px[:] = numpy.apply_along_axis(f,0,px)
-        if self.invert:
-            px[:] = 255-px[:]
-        if self.tint:
-            px[:] = self.tint*px[:]
+        change = getattr(self,"lgs",None)!=self.greyscale or getattr(self,"li",None)!=self.invert or getattr(self,"lt",None)!=self.tint
+        if change:
+            px[:] = self.origc
+            if self.greyscale:
+                px[:] = self.gs[:]
+            self.lgs = self.greyscale
+            if self.invert:
+                px[:] = 255-px[:]
+            self.li = self.invert
+            if self.tint:
+                px*=self.tint
+            self.lt = self.tint
         del px
         img = self.img
         self.img = self.mockimg
