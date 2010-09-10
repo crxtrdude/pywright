@@ -1356,6 +1356,9 @@ class portrait(object):
     dim = property(get_dim,set_dim)
     def draw(self,dest):
         if not self.hide and getattr(self.cur_sprite,"img",None):
+            self.cur_sprite.tint = self.tint
+            self.cur_sprite.greyscale = self.greyscale
+            self.cur_sprite.invert = self.invert
             pos = self.pos[:]
             pos[0] += (sw-(self.cur_sprite.offsetx+self.cur_sprite.img.get_width()))//2
             pos[1] += (sh-(self.cur_sprite.img.get_height()-self.cur_sprite.offsety))
@@ -1392,9 +1395,9 @@ class portrait(object):
     def setfade(self,*args):
         self.blink_sprite.setfade(*args)
         self.talk_sprite.setfade(*args)
-    invert = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"invert",v) for o in [self.blink_sprite,self.talk_sprite]])
-    tint = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"tint",v) for o in [self.blink_sprite,self.talk_sprite]])
-    greyscale = property(lambda self: self.blink_sprite.invert, lambda self,v: [setattr(o,"greyscale",v) for o in [self.blink_sprite,self.talk_sprite]])
+    invert = 0
+    tint = None
+    greyscale = 0
         
 class evidence(fadesprite):
     autoclear = True

@@ -21,6 +21,8 @@ def save(ob):
         oprops["fail"] = ob.fail
     if isinstance(ob,(sprite,portrait,listmenu,menu)):
         cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd","blinkspeed","loops","loopmode","start","end"],ob,oprops)
+    if isinstance(ob,fadesprite) or isinstance(ob,portrait):
+        cp(["invert","tint","greyscale"],ob,oprops)
     if isinstance(ob,bg):
         return ["bg",[],oprops]
     elif isinstance(ob,testimony_blink):
@@ -62,6 +64,10 @@ def save(ob):
         cp(["start","end","speed","wait"],ob,oprops)
         oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
         return ["fadeanim",[],oprops]
+    elif isinstance(ob,tintanim):
+        cp(["start","end","speed","wait"],ob,oprops)
+        oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
+        return ["tintanim",[],oprops]
     elif isinstance(ob,textbox):
         cp(["z","num_lines","kill","skipping","statement","wait","pressing","presenting","can_skip","blocking","_clicksound","go"],ob,oprops)
         t = getattr(ob,"text","")

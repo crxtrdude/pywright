@@ -57,8 +57,9 @@ def load(script,olist):
             for o2 in script.obs:
                 if getattr(o2,"id_name",None) in props["ob_ids"]:
                     o.obs.append(o2)
-    if cls == "fadeanim":
-        o = fadeanim()
+    if cls in ["fadeanim","tintanim"]:
+        print cls
+        o = {"fadeanim":fadeanim,"tintanim":tintanim}[cls]()
         def f(o=o,props=props):
             o.obs = []
             for o2 in script.obs:
