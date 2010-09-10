@@ -430,8 +430,10 @@ class Assets(object):
             img,self.meta = load_gif_anim(pre+name,self.meta.framecompress)
         else:
             texture = pygame.image.load(pre+name)
-            if texture.get_flags()&pygame.SRCALPHA: texture = texture.convert_alpha()
-            else: texture = texture.convert()
+            if texture.get_flags()&pygame.SRCALPHA: 
+                texture = texture.convert_alpha()
+            else:
+                texture = texture.convert()
             if key:
                 texture.set_colorkey(key)
             img = []
@@ -1125,8 +1127,8 @@ class fadesprite(sprite):
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
                 self.mockimg = self.img.convert_alpha()
-                self.origa = pygame.surfarray.array_alpha(self.img)
-                self.origc = pygame.surfarray.array3d(self.img)
+                self.origa = pygame.surfarray.array_alpha(self.mockimg)
+                self.origc = pygame.surfarray.array3d(self.mockimg)
                 self.gs = self.origc[:]
                 self.gs = [y*numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]]) for y in self.gs]
                 self.draw_func = self.numpydraw
