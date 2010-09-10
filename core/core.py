@@ -3664,7 +3664,7 @@ class tintanim(effect):
             return True
     
 class invertanim(effect):
-    def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[]):
+    def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[],**kw):
         super(invertanim,self).__init__()
         self.start = start
         self.end = end
@@ -3700,7 +3700,7 @@ class invertanim(effect):
             return True
             
 class greyscaleanim(effect):
-    def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[]):
+    def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[],**kw):
         super(greyscaleanim,self).__init__()
         self.start = start
         self.end = end

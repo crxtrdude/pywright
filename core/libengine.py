@@ -1712,33 +1712,61 @@ printing."""
     def _guilty(self,command,*args):
         self.obs.append(guilty())
         self.buildmode = False
-    @category("event")
+    @category([KEYWORD("degrees","How many degrees to rotate"),KEYWORD("speed","How many degrees to rotate per frame"),
+    KEYWORD("axis","which axis to rotate on, z is the only valid value","z"),
+    KEYWORD("name","Name a specific object to rotate","Will try to rotate all objects (not what you might expect)"),
+    TOKEN("nowait","Continue script while rotation happens","The script will pause until rotation is finished")],type="effect")
     def _rotate(self,command,*args):
+        """Begins an object rotation animation. Will wait for rotation to finish unless
+        'nowait' is included."""
         kwargs,args = parseargs(args,intvals=["degrees","speed","wait"],
                                                 defaults={"axis":"z",'wait':1},
                                                 setzero={"nowait":"wait"})
         self.obs.append(rotateanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
-    @category("event")
+    @category([KEYWORD("start","What fade level to start at",0),
+    KEYWORD("end","What fade level to end at",100),
+    KEYWORD("speed","How many fade steps per frame",1),
+    KEYWORD("name","Name a specific object to fade","Will try to fade all objects"),
+    TOKEN("nowait","Continue script while fade happens","The script will pause until fade is finished")],type="effect")
     def _fade(self,command,*args):
+        """Fade an object or objects in or out"""
         kwargs,args = parseargs(args,intvals=["start","end","speed","wait"],
                                                 defaults={"start":0,"end":100,"speed":1,"wait":1},
                                                 setzero={"nowait":"wait"})
         self.obs.append(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    @category([KEYWORD("start","Color tint to start at","'ffffff' or no tint (full color)"),
+    KEYWORD("end","Color tint to end at","'000000' or full black tint"),
+    KEYWORD("speed","How many color steps per frame",1),
+    KEYWORD("name","Name a specific object to tint","Will try to tint all objects"),
+    TOKEN("nowait","Continue script while fade happens","The script will pause until fade is finished")],type="effect")
     def _tint(self,command,*args):
+        """Animate an object's tint from one color to another. You can make an object darker but not brighter. Tinting an object
+        to red subtly can make a blush effect, tinting objects darker if there is a cloud overhead, or mixing tint with greyscale
+        to make a sepia toned flashback scene are different ways this can be used."""
         kwargs,args = parseargs(args,intvals=["speed","wait"],
                                                 defaults={"start":"ffffff","end":"000000","speed":1,"wait":1},
                                                 setzero={"nowait":"wait"})
         self.obs.append(tintanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    @category([KEYWORD("value","Whether an object should be inverted or not: 1=inverted 0=not","1"),
+    KEYWORD("name","Name a specific object to tint","Will try to tint all objects")],type="effect")
     def _invert(self,command,*args):
-        kwargs,args = parseargs(args,intvals=["start","end"],
-                                                defaults={"start":0,"end":1,"name":None})
+        """Invert the colors of an object."""
+        kwargs,args = parseargs(args,intvals=["value"],
+                                                defaults={"value":1,"name":None})
+        kwargs["start"] = 1-kwargs["value"]
+        kwargs["end"] = kwargs["value"]
         self.obs.append(invertanim(obs=self.obs,**kwargs))
+    @category([KEYWORD("value","Whether an object should be greyscale or not: 1=greyscale 0=not","1"),
+    KEYWORD("name","Name a specific object to set to greyscale","Will try to greyscale all objects")],type="effect")
     def _grey(self,command,*args):
-        kwargs,args = parseargs(args,intvals=["start","end"],
-                                                defaults={"start":0,"end":1,"name":None})
+        """Makes an object display in greyscale."""
+        kwargs,args = parseargs(args,intvals=["value"],
+                                                defaults={"value":1,"name":None})
+        kwargs["start"] = 1-kwargs["value"]
+        kwargs["end"] = kwargs["value"]
         self.obs.append(greyscaleanim(obs=self.obs,**kwargs))
     @category("event")
     def _shake(self,command,*args):
