@@ -31,6 +31,9 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
         in production mode, errors will be logged but not displayed to the user (and
         no clicking will be needed by them to bypass the error)
     -small changes to error display
+    can tint graphics
+    can invert graphics
+    can greyscale graphics
     more clear when debug mode is on
 
 *PyWright 0.976: July 31, 2010*

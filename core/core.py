@@ -1145,6 +1145,7 @@ class fadesprite(sprite):
     real_path=None
     invert = 0
     tint = None
+    greyscale = 1
     def setfade(self,val=255):
         if getattr(self,"fade",None) is None: self.fade = 255
         self.lastfade = self.fade
@@ -1154,14 +1155,15 @@ class fadesprite(sprite):
         if getattr(self,"fade",None) is None: self.fade = 255
         if self.fade == 0:
             return
-        if self.fade == 255 and not self.invert and not self.tint:
+        if self.fade == 255 and not self.invert and not self.tint and not self.greyscale:
             return sprite.draw(self, dest)
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
+                self.mockimg = self.img.convert_alpha()
                 self.origa = pygame.surfarray.array_alpha(self.img)
                 self.origc = pygame.surfarray.array3d(self.img)
+                #self.bw = self.bw.mean()
                 self.draw_func = self.numpydraw
-                self.mockimg = self.img.convert_alpha()
             else:
                 self.draw_func = self.mockdraw
                 nn = self.name.replace("/","sl")
@@ -1193,16 +1195,25 @@ class fadesprite(sprite):
             if pygame.use_numpy:
                 pygame.use_numpy = False
                 self.mockimg = None
-            raise art_error("Problem with fading code, switching to older fade technology")
+                import traceback
+                traceback.print_exc()
+                raise art_error("Problem with fading code, switching to older fade technology")
     def numpydraw(self,dest):
         px = pygame.surfarray.pixels_alpha(self.mockimg)
         px[:] = self.origa[:]*(self.fade/255.0)
-        del px
         px = pygame.surfarray.pixels3d(self.mockimg)
+        px[:] = self.origc[:]
+        #~ if self.greyscale:
+            #~ mat = [numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]]) for i in range(len(px))]
+            #~ def f(row):
+                #~ def ff(row):
+                    #~ return row*mat
+                #~ return numpy.apply_along_axis(ff,0,row)
+            #~ px[:] = numpy.apply_along_axis(f,0,px)
         if self.invert:
-            px[:] = 255-self.origc[:]
+            px[:] = 255-px[:]
         if self.tint:
-            px[:] = self.tint*self.origc[:]
+            px[:] = self.tint*px[:]
         del px
         img = self.img
         self.img = self.mockimg
