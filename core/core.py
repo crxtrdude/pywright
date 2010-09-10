@@ -3621,6 +3621,47 @@ class fadeanim(effect):
     #~ invert = 0
     #~ tint = None
     #~ greyscale = 1
+
+class tintanim(effect):
+    def __init__(self,start="ffffff",end="000000",speed=1,wait=1,name=None,obs=[]):
+        super(tintanim,self).__init__()
+        self.start = color_str(start)
+        self.end = color_str(end)
+        self.pri = ulayers.index(self.__class__.__name__)
+        self.speed = speed
+        self.obs = obs
+        self.wait = wait
+        self.kill = 0
+        if name:
+            self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+        self.update()
+    def draw(self,dest): pass
+    def update(self):
+        if self.kill: return False
+        amt = self.speed
+        col = self.start
+        done = 0
+        for r in range(3):
+            if col[r]<self.end[r]:
+                col[r]+=amt
+                if col[r]>self.end[r]:
+                    amt -= (col[r]-self.end[r])
+                    done+=1
+            elif col[r]>self.end[r]:
+                col[r]-=amt
+                if col[r]<self.end[r]:
+                    amt-=(self.end[r]-col[r])
+                    done+=1
+            else:
+                done+=1
+        if done==3:
+            self.kill = 1
+        for o in self.obs:
+            if getattr(o,"kill",0): continue
+            if hasattr(o,"setfade"):
+                o.tint = [x/255.0 for x in col]
+        if self.wait:
+            return True
     
 class invertanim(effect):
     def __init__(self,start=0,end=1,speed=1,wait=0,name=None,obs=[]):

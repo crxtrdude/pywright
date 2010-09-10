@@ -1726,6 +1726,12 @@ printing."""
                                                 setzero={"nowait":"wait"})
         self.obs.append(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
+    def _tint(self,command,*args):
+        kwargs,args = parseargs(args,intvals=["speed","wait"],
+                                                defaults={"start":"ffffff","end":"000000","speed":1,"wait":1},
+                                                setzero={"nowait":"wait"})
+        self.obs.append(tintanim(obs=self.obs,**kwargs))
+        if kwargs['wait']: self.buildmode = False
     def _invert(self,command,*args):
         kwargs,args = parseargs(args,intvals=["start","end"],
                                                 defaults={"start":0,"end":1,"name":None})
