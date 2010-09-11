@@ -371,7 +371,6 @@ class Assets(object):
         case = self.game
         game = self.game.rsplit("/",1)[0]
         for pth in [game,case]:
-            print pth
             if os.path.exists(pth+"/macros.txt"):
                 the_macros.update(self.parse_macros(self.raw_lines("macros.txt","",start=pth)))
             for f in os.listdir(pth):
@@ -1346,7 +1345,7 @@ class portrait(object):
             if mode=="blink":self.set_blinking()
             #if mode=="talk":self.set_talking()
         else:
-            raise art_error("Can't load '"+charname+"' '"+emo+"' '"+mode+"'")
+            raise art_error("Can't load character "+charname+"/"+emo+"("+mode+")")
         self.blinkspeed = self.blink_sprite.blinkspeed
     def set_dim(self,amt):
         self.blink_sprite.dim = amt
@@ -1615,13 +1614,13 @@ class textbox(gui.widget):
                     raise "markup error"
                 varname = x[:x.find("}")][1:]
                 try:
-                    t = "}"+assets.variables.get(varname,"").replace("{","(").replace("}",")")
+                    t = u"}"+assets.variables.get(varname,"").replace("{","(").replace("}",")")
                     t = t+x[x.find("}")+1:]
                     nt[i+1]=t
                 except TypeError:
                     pass
-        text = "{".join(nt)
-        lines = text.split("\n")
+        text = u"{".join(nt)
+        lines = text.split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
@@ -1637,13 +1636,13 @@ class textbox(gui.widget):
             page.append(left)
             if right.strip():
                 if not lines: lines.append("")
-                lines[0]=right+" "+lines[0]
+                lines[0]=right+u" "+lines[0]
             if len(page)==3:
-                pages.append(self.nametag+"\n".join(page))
+                pages.append(self.nametag+u"\n".join(page))
                 page = []
         if [1 for x in page if x]:
             pages.append(self.nametag+"\n".join(page))
-        self._text = "\n".join(pages)
+        self._text = u"\n".join(pages)
     text = property(lambda self: self._text,set_text)
     def __init__(self,text="",color=[255,255,255],delay=2,speed=1,rightp=True,leftp=False,nametag="\n"):
         self.nametag = nametag
@@ -3873,6 +3872,8 @@ class saved(fadesprite):
         return self.block
         
 class error_msg(gui.pane):
+    def __repr__(self):
+        return self.msg
     def click_down_over(self,mp):
         self.kill = 1
     def __init__(self,msg,line,lineno,script):
@@ -3886,6 +3887,7 @@ class error_msg(gui.pane):
         self.children.append(b)
         msg+="\nscene:'"+script.scene+"', line '"+str(lineno)+"'"
         msg+="\ncurrent game:"+assets.game
+        self.msg = msg
         msg_lines = [""]
         for c in msg:
             msg_lines[-1]+=c
