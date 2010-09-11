@@ -582,28 +582,29 @@ class Script(gui.widget):
             self.si += 1
             assets.variables["_currentline"] = str(self.si)
             exit = self.execute_line(line)
+    def _textbox(self,line):
+        text = line.replace("{n}","\n")
+        tbox = textbox(text)
+        if not self.viewed.get(assets.game+self.scene+str(self.si-1)):
+            tbox.can_skip = False
+        if vtrue(assets.variables.get("_debug","false")):
+            tbox.can_skip = True
+        if vtrue(assets.variables.get("_textbox_allow_skip","false")):
+            tbox.can_skip = True
+        self.viewed[assets.game+self.scene+str(self.si-1)] = True
+        addob(tbox)
+        self.refresh_arrows(tbox)
+        self.tboff()
+        if self.cross is not None and self.instatement:
+            self.tbon()
+            if self.cross == "proceed":
+                tbox.statement = self.statement
+                nt,t = tbox._text.split("\n",1)
+                tbox._text = nt+"\n{c283}"+t
+                #tbox.color = (20,200,40)
     def execute_line(self,line):
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
-            line = line[1:-1]
-            text = line.replace("{n}","\n")
-            tbox = textbox(text)
-            if not self.viewed.get(assets.game+self.scene+str(self.si-1)):
-                tbox.can_skip = False
-            if vtrue(assets.variables.get("_debug","false")):
-                tbox.can_skip = True
-            if vtrue(assets.variables.get("_textbox_allow_skip","false")):
-                tbox.can_skip = True
-            self.viewed[assets.game+self.scene+str(self.si-1)] = True
-            addob(tbox)
-            self.refresh_arrows(tbox)
-            self.tboff()
-            if self.cross is not None and self.instatement:
-                self.tbon()
-                if self.cross == "proceed":
-                    tbox.statement = self.statement
-                    nt,t = tbox._text.split("\n",1)
-                    tbox._text = nt+"\n{c283}"+t
-                    #tbox.color = (20,200,40)
+            self._textbox(line[1:-1])
             return True
         def repvar(x):
             if x.startswith("$") and not x[1].isdigit():
@@ -623,7 +624,9 @@ class Script(gui.widget):
             return True
         if self.execute_macro(args[0]):
             return True
-        func = getattr(self,"_"+args[0],None)
+        self.call_func(args[0],args)
+    def call_func(self,command,args):
+        func = getattr(self,"_"+command,None)
         if func: 
             func(*args)
         elif vtrue(assets.variables.get("_debug","false")): 
@@ -757,7 +760,6 @@ class Script(gui.widget):
         assets.clear()
         assets.game = game
         self.held = []
-        print "load script",script
         scene = script
         #assets.addscene(scene)
         self.init(scene)
@@ -1002,11 +1004,8 @@ would set 'x' to 12."""
                 subrect.y = int(a.split("=")[1])
             if a.startswith("rwidth="):
                 subrect.width = int(a.split("=")[1])
-                print "set width",subrect.width
             if a.startswith("rheight="):
                 subrect.height = int(a.split("=")[1])
-                print "set height",subrect.height
-        print subrect.x,subrect.y,subrect.width,subrect.height
         image = image.subsurface(subrect)
         if resize:
             image = pygame.transform.scale(image,resize)
@@ -1408,11 +1407,13 @@ have a ball.txt describing it's animation qualities, if it has any."""
         if "fade" in args: self._fade("fade","wait","name="+o.id_name,"speed=5")
         if loops is not None:
             o.loops = int(loops)
+        return o
     @category("blah")
     def _movie(self,command,file,sound=None):
         self.buildmode = False
         m = movie(file,sound)
         self.obs.append(m)
+        return m
     @category([VALUE("bg_path","Path to the graphics file relative to case/art/bg and without extension; such as scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -1427,7 +1428,7 @@ TOKEN("fade","Background will fade in instead of popping in")],type="objects")
         """Creates a background object. If 'stack' is not included, the scene will be cleared before the background is loaded. Backgrounds also
 default to a lower z value than other objects, ensuring that they will be in the background (though this can be modified). Other than that,
 backgrounds have the same properties as other graphic objects, and may be animated or manipulated."""
-        self._obj(command,*args)
+        return self._obj(command,*args)
     @category([VALUE("fg_path","Path to the graphics file relative to case/art/fg and without extension; such as fence for games/mygame/mycase/art/fg/fence.png and fence.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -1441,7 +1442,7 @@ TOKEN("fade","Object will fade in instead of popping in")],type="objects")
     def _fg(self,command,*args):
         """Creates a foreground object. These are just like any other object, except the default z value will place them in front of most of the
 objects in the scene."""
-        self._obj(command,*args)
+        return self._obj(command,*args)
     @category([VALUE("evidencekey","Evidence id key. PyWright will look at the 'evidencekey_pic' variable to determine what graphic file to load"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -1517,6 +1518,7 @@ printing."""
         if be:
             p.set_blink_emotion(be)
         p.single = "noauto" in args
+        return p
     @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
     def _emo(self,command,emotion,name=None):
         """Sets a current char object to a specific emotion animation."""
@@ -2031,6 +2033,65 @@ printing."""
         self.statement = ""
         self.instatement = False
 assets.Script = Script
+
+class DebugScript(Script):
+    def __init__(self):
+        super(DebugScript,self).__init__()
+        self.char_cache = {}
+    def update_objects(self):
+        #~ for o in self.obs:
+            #~ if isinstance(o,textbox):
+                #~ for i in range(400):
+                    #~ o.update()
+                #~ o.forward()
+            #~ else:
+                #~ o.update()
+        [x.update() for x in self.obs]
+        return True
+    def _textbox(self,*args):
+        pass
+    def call_func(self,command,args):
+        if command in ["set","setvar"]:
+            super(DebugScript,self).call_func(command,args)
+        if command == "char":
+            if "hide" in args:
+                return
+            if "stack" not in args:
+                for o in self.obs:
+                    if isinstance(o,portrait):
+                        o.kill = 1
+            if tuple(args) in self.char_cache:
+                c = self.char_cache[tuple(args)]
+                self.obs.append(c)
+            else:
+                c = self._char(*args)
+            assets.variables["_speaking_name"] = c.nametag
+            assets.variables["_speaking"] = c
+            self.char_cache[tuple(args)] = c
+    def init(self,*args,**kwargs):
+        self.old_stack = assets.stack[:]
+        super(DebugScript,self).init(*args,**kwargs)
+        self.si2 = 0
+        self.kill = 0
+        self.o = assets.variables.copy()
+        assets.variables["_debug"] = "true"
+    def interpret(self):
+        if self.si2>=len(self.scriptlines):
+            self.kill = 1
+            assets.variables.clear()
+            assets.variables.update(self.o)
+            assets.stack[:] = self.old_stack
+            return True
+        self.si = self.si2
+        line = self.getline()
+        self.si2 += 1
+        if line:
+            self.execute_line(line)
+    def run_it(self):
+        while not self.kill:
+            self.update()
+        errors = [o for o in self.obs if isinstance(o,error_msg)]
+        return errors
 
 def wini():
     f = open("display.ini","w")
@@ -2841,6 +2902,21 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key == pygame.K_F7 and assets.game!="menu":
                     load_game_menu()
                     #assets.load_game(assets.game)
+                if e.type==pygame.KEYDOWN and\
+                e.key == pygame.K_F9:
+                    s = DebugScript()
+                    for scene in os.listdir(assets.game):
+                        if not scene.endswith(".txt"):
+                            continue
+                        print scene
+                        s.world.all = []
+                        s.init(assets.cur_script.scene)
+                        s.scriptlines = assets.cur_script.scriptlines
+                        assets.stack.append(s)
+                        errors = s.run_it()
+                        print errors
+                        for err in errors:
+                            assets.cur_script.obs.append(err)
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
