@@ -2037,7 +2037,16 @@ class textbox(gui.widget):
             color = self.color
             center = False
             lines = self.written.split("\n")
-            for i,line in enumerate(lines):
+            nlines = assets.variables["_textbox_lines"]
+            if nlines == "auto":
+                if len(lines)==4:
+                    nlines = "3"
+                elif len(lines)==3:
+                    nlines = "2"
+            nlines = int(nlines)
+            if nlines == 2:
+                y,inc = 8,24
+            for i,line in enumerate(lines[:nlines+1]):
                 if title:
                     if line.strip():
                         ncolor = assets.variables.get("_nt_text_color","")
