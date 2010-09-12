@@ -270,12 +270,14 @@ class Assets(object):
     def raw_lines(self,name,ext=".txt",start="game",use_unicode=False):
         if start=="game":
             start = self.game
+        if start:
+            start = start+"/"
         if name.endswith(".txt"):
             ext = ""
         try:
-            file = open(start+"/"+name+ext,"rU")
+            file = open(start+name+ext,"rU")
         except IOError:
-            raise file_error("File named "+start+"/"+name+ext+" could not be read.")
+            raise file_error("File named "+start+name+ext+" could not be read.")
         text = file.read()
         if use_unicode:
             text = text.decode("utf8")
@@ -357,14 +359,14 @@ class Assets(object):
             if block_comment:
                 continue
             if macros and line.startswith("include "):
-                reallines.extend(self.open_script(line[8:].strip(),False))
+                reallines.extend(self.open_script(line[8:].strip(),False,use_unicode=True))
             else:
                 reallines.append(line)
         lines = reallines
         the_macros = {}
         for f in os.listdir("core/macros"):
             if f.endswith(".mcro"):
-                mlines = open("core/macros/"+f).read().replace("\r\n","\n").split("\n")
+                mlines = self.raw_lines("core/macros/"+f,"","",True)
                 parse = self.parse_macros(mlines)
                 the_macros.update(parse)
         self.game = self.game.replace("\\","/")
@@ -372,10 +374,10 @@ class Assets(object):
         game = self.game.rsplit("/",1)[0]
         for pth in [game,case]:
             if os.path.exists(pth+"/macros.txt"):
-                the_macros.update(self.parse_macros(self.raw_lines("macros.txt","",start=pth)))
+                the_macros.update(self.parse_macros(self.raw_lines("macros.txt","",start=pth,use_unicode=True)))
             for f in os.listdir(pth):
                 if f.endswith(".mcro"):
-                    the_macros.update(self.parse_macros(self.raw_lines(f,"",start=pth)))
+                    the_macros.update(self.parse_macros(self.raw_lines(f,"",start=pth,use_unicode=True)))
         if macros:
             the_macros.update(self.parse_macros(lines))
             self.replace_macros(lines,the_macros)
@@ -1960,7 +1962,9 @@ class textbox(gui.widget):
                     if char in ")":
                         self.in_paren = 0
                     if assets.portrait:
-                        if not self.in_paren and char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                        punctuation = [x for x in assets.variables.get("_punctuation",u".,?!")]
+                        print punctuation
+                        if not self.in_paren and not char in punctuation:
                             assets.portrait.set_talking()
                         if self.in_paren:
                             assets.portrait.set_blinking()

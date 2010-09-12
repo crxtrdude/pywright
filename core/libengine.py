@@ -98,6 +98,7 @@ def parseargs(arglist,intvals=[],defaults = {},setzero = {}):
     for a in arglist:
         if "=" in a:
             a = a.split("=",1)
+            a[0] = str(a[0])
             if a[0] in intvals: 
                 try:
                     kwargs[a[0]] = int(a[1])
@@ -610,15 +611,15 @@ class Script(gui.widget):
             if x.startswith("$") and not x[1].isdigit():
                 return assets.variables[x[1:]]
             elif x.startswith("$"):
-                return ""
-            if "=" in x:
-                spl = x.split("=",1)
-                if spl[1].startswith("$"):
-                    return spl[0]+"="+assets.variables[spl[1][1:]]
+                return u""
+            if u"=" in x:
+                spl = x.split(u"=",1)
+                if spl[1].startswith(u"$"):
+                    return spl[0]+u"="+assets.variables[spl[1][1:]]
             return x
         args = []
         try:
-            args = [repvar(x) for x in line.split(" ")]
+            args = [repvar(x) for x in line.split(u" ")]
         except KeyError:
             self.obs.append(error_msg("Variable not defined:",line,self.si,self))
             return True
@@ -627,7 +628,7 @@ class Script(gui.widget):
         self.call_func(args[0],args)
     def call_func(self,command,args):
         func = getattr(self,"_"+command,None)
-        if func: 
+        if func:
             func(*args)
         elif vtrue(assets.variables.get("_debug","false")): 
             self.obs.append(error_msg("Invalid command",line,self.si,self))
@@ -702,9 +703,7 @@ class Script(gui.widget):
         try:
             name = int(name)-1
         except:
-            print self.labels
-            print name
-            raise script_error,"no label \""+name+"\" to go to."
+            raise script_error,"no label \"%s\" to go to in %s"%(name,self.labels)
         if name>=len(self.scriptlines) or name<0:
             raise script_error,"Trying to go to invalid line number"
         self.si = name+1
@@ -831,7 +830,7 @@ class Script(gui.widget):
     @category([VALUE("variable","variable name to set"),COMBINED("value","Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.")],type="logic")
     def _set(self,command,variable,*args):
         """Sets a variable to some value."""
-        value = " ".join(args)
+        value = u" ".join(args)
         assets.variables[variable]=value
     @category([VALUE("variable","variable name to set"),COMBINED("expression2","The results of the expression will be stored in the variable.")],type="logic")
     def _set_ex(self,command,variable,*args):
@@ -841,7 +840,7 @@ class Script(gui.widget):
     @category([VALUE("destination variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")],type="logic")
     def _getvar(self,command,variable,*args):
         """Copies the value of one variable into another."""
-        value = "".join(args)
+        value = u"".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
     _setvar_ex = _set_ex
@@ -1381,7 +1380,7 @@ have a ball.txt describing it's animation qualities, if it has any."""
             if a.startswith("name="):
                 name = a[5:]
             if a.split("=")[0] in more.keys():
-                more[a.split("=")[0]] = a.split("=")[1]
+                more[str(a.split("=")[0])] = a.split("=")[1]
             if a=="stack":
                 clear = 0
             if a=="nowait":

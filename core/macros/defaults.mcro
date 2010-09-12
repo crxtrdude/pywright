@@ -13,7 +13,10 @@ set _debug off
 #When on, players can fastforward through all text
 set _textbox_allow_skip false
 
-#Not currently used
+#The punctuation characters in texts that should not be lip synced
+set _punctuation .。?!,;、
+
+#Not currently used, preload used characters at the beginning of the game so they pop in faster
 set _preload off
 
 #Sets global animation speed when it is not controlled via art text files or in-game
