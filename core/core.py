@@ -384,7 +384,8 @@ class Assets(object):
         self.macros = the_macros
         return lines
     def open_font(self,name,size):
-        return pygame.font.Font("fonts/"+name,size)
+        pth = self.search_locations("fonts",name)
+        return pygame.font.Font(pth,size)
     fonts = {}
     def get_font(self,name):
         defs = {"_font_gametitle":"arial.ttf",
