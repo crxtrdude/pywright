@@ -40,6 +40,28 @@ set _textbox_wrap true
 #Whether text containing {n} follows the above wrap rules
 set _textbox_wrap_avoid_controlled true
 
+#Various fonts
+set _font_tb pwinternational.ttf
+set _font_tb_size 10
+set _font_block arial.ttf
+set _font_block_size 10
+set _font_nt arial.ttf
+set _font_nt_size 10
+set _font_list pwinternational.ttf
+set _font_list_size 10
+set _font_itemset pwinternational.ttf
+set _font_itemset_size 10
+set _font_itemset_big arial.ttf
+set _font_itemset_big_size 14
+set _font_itemname pwinternational.ttf
+set _font_itemname_size 10
+set _font_loading arial.ttf
+set _font_loading_size 16
+set _font_gametitle arial.ttf
+set _font_gametitle_size 16
+set _font_new_resume arial.ttf
+set _font_new_resume_size 14
+
 #Change the examine cursor color
 set _examine_cursor_col FFFFFF
 
@@ -151,4 +173,9 @@ endmacro
 
 #These values are set when a saved game is loaded, use these to force certain settings at all times
 macro load_defaults
+
+#make sure to include the court record layout settings
+#If you have a modified court record layout, replace the macro below with your settings
+init_court_record_settings
+
 endmacro
