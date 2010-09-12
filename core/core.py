@@ -387,11 +387,32 @@ class Assets(object):
         pth = self.search_locations("fonts",name)
         return pygame.font.Font(pth,size)
     fonts = {}
+    deffonts = {}
+    for line in """set _font_tb pwinternational.ttf
+set _font_tb_size 10
+set _font_block arial.ttf
+set _font_block_size 10
+set _font_nt arial.ttf
+set _font_nt_size 10
+set _font_list pwinternational.ttf
+set _font_list_size 10
+set _font_itemset pwinternational.ttf
+set _font_itemset_size 10
+set _font_itemset_big arial.ttf
+set _font_itemset_big_size 14
+set _font_itemname pwinternational.ttf
+set _font_itemname_size 10
+set _font_loading arial.ttf
+set _font_loading_size 16
+set _font_gametitle arial.ttf
+set _font_gametitle_size 16
+set _font_new_resume arial.ttf
+set _font_new_resume_size 14""".split("\n"):
+        args = line.split(" ")
+        deffonts[args[1]] = args[2]
     def get_font(self,name):
-        defs = {"_font_gametitle":"arial.ttf",
-        "_font_gametitle_size":'16',
-        "_font_new_resume":"arial.ttf",
-        "_font_new_resume_size":'14'}
+        defs = {}
+        defs.update(self.deffonts)
         defs.update(self.variables)
         fn = defs.get("_font_%s"%name,"pwinternational.ttf")
         size = defs.get("_font_%s_size"%name,"10")
