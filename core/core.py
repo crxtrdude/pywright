@@ -385,6 +385,31 @@ class Assets(object):
         return lines
     def open_font(self,name,size):
         return pygame.font.Font("fonts/"+name,size)
+    fonts = {}
+    def get_font(self,name):
+        defs = {"_font_gametitle":"arial.ttf",
+        "_font_gametitle_size":'16',
+        "_font_new_resume":"arial.ttf",
+        "_font_new_resume_size":'14'}
+        defs.update(self.variables)
+        fn = defs.get("_font_%s"%name,"pwinternational.ttf")
+        size = defs.get("_font_%s_size"%name,"10")
+        full = fn+"."+size
+        if full in self.fonts:
+            return self.fonts[full]
+        font = self.open_font(fn,int(size))
+        self.fonts[full] = font
+        return font
+    def get_image_font(self,name):
+        fn = self.variables.get("_font_%s"%name,"pwinternational.ttf")
+        size = self.variables.get("_font_%s_size"%name,"10")
+        full = fn+"."+size+".i"
+        if full in self.fonts:
+            return self.fonts[full]
+        font = self.get_font(name)
+        imgfont = ImgFont("fonts/p.png",font)
+        self.fonts[full] = imgfont
+        return imgfont
     def Surface(self,size,flags=0):
         if pygame.USE_GL:
             import gl
@@ -643,6 +668,7 @@ class Assets(object):
             assets.items.pop(0)
         assets.stop_music()
         assets.lists = {}
+        self.fonts = {}
     def save(self):
         props = {}
         for reg in ["character","_track","_loop","lists"]:
@@ -672,7 +698,7 @@ class Assets(object):
             self.play_music(self._track,self._loop,reset_track=False)
     def show_load(self):
         self.make_screen()
-        txt = assets.open_font("arial.ttf",16).render("LOADING",1,[200,100,100])
+        txt = assets.get_font("loading").render("LOADING",1,[200,100,100])
         pygame.screen.blit(txt,[50,50])
         self.draw_screen()
     def load_game_new(self,path=None,filename="save",hide=False):
@@ -813,8 +839,6 @@ class SoundEvent(object):
         return False
     def draw(self,*args):
         pass
-        
-pwinternational = pygame.font.Font("fonts/pwinternational.ttf",10)
 
 def color_str(rgbstring):
     if rgbstring.startswith(" "):
@@ -830,7 +854,7 @@ def color_str(rgbstring):
 class ImgFont(object):
     lastcolor = [255,255,255]
     prevcolor = [255,255,255]
-    def __init__(self,img):
+    def __init__(self,img,pwfont=None):
         self.img = pygame.image.load(img)
         self.img.set_colorkey([255,255,255])
         self.colors = {}
@@ -840,6 +864,10 @@ class ImgFont(object):
         self.width = {"":0}
         self.start = {}
         self.quote = 0
+        if pwfont:
+            self.fnt = pwfont
+        else:
+            self.fnt = assets.get_font("tb")
     def get_char(self,t,color=[255,255,255]):
         if not self.colors.get(tuple(color),None):
             self.colors[tuple(color)] = pygame.Surface(self.img.get_size())
@@ -847,8 +875,8 @@ class ImgFont(object):
             self.colors[tuple(color)].blit(self.img,[0,0])
         if (t,tuple(color)) in self.colors:
             return self.colors[(t,tuple(color))]
-        surf = pwinternational.render(t,0,color)
-        metrics = pwinternational.metrics(t)[0]
+        surf = self.fnt.render(t,0,color)
+        metrics = self.fnt.metrics(t)[0]
         start = metrics[0]
         starty = max(metrics[2],0)
         edge = min(metrics[4],surf.get_width())
@@ -947,11 +975,6 @@ class ImgFont(object):
         """return hieght in pixels from font baseline to top"""
     def get_descent(self):
         """return number of pixels from font baseline to bottom"""
-
-font = ImgFont("fonts/p.png")
-verase8 = pygame.font.Font("fonts/VeraSe.ttf",8)
-arial10 = pygame.font.Font("fonts/arial.ttf",10)
-arial14 = pygame.font.Font("fonts/arial.ttf",14)
 
 class sprite(gui.button):
     blinkspeed = [100,200]
@@ -1632,7 +1655,7 @@ class textbox(gui.widget):
         while lines:
             line = lines.pop(0)
             if wrap:
-                left,right = font.split_line(line,250)
+                left,right = assets.get_image_font("tb").split_line(line,250)
             else:
                 left,right = line,""
             page.append(left)
@@ -1963,7 +1986,6 @@ class textbox(gui.widget):
                         self.in_paren = 0
                     if assets.portrait:
                         punctuation = [x for x in assets.variables.get("_punctuation",u".,?!")]
-                        print punctuation
                         if not self.in_paren and not char in punctuation:
                             assets.portrait.set_talking()
                         if self.in_paren:
@@ -2001,12 +2023,12 @@ class textbox(gui.widget):
                             ncolor = color_str(ncolor)
                         else:
                             ncolor = color
-                        nt_image = arial10.render(line.capitalize().replace("_"," "),1,ncolor)
+                        nt_image = assets.get_font("nt").render(line.capitalize().replace(u"_",u" "),1,ncolor)
                         self.nt_text_image = nt_image
                     title = False
                 else:
-                    img = font.render(line,color)
-                    color = font.lastcolor
+                    img = assets.get_image_font("tb").render(line,color)
+                    color = ImgFont.lastcolor
                     if "{center}" in line:
                         center = not center
                     if center:
@@ -2415,7 +2437,7 @@ class listmenu(fadesprite,gui.widget):
             rt = c[0]
             if (not (checkmark and checkmark.width)) and self.tag and assets.lists[self.tag].get(rt,None):
                 rt = "("+rt+")"
-            txt = font.render(rt,[110,20,20])
+            txt = assets.get_image_font("list").render(rt,[110,20,20])
             img.blit(txt,[(img.get_width()-txt.get_width())/2,
                 (img.get_height()-txt.get_height())/2])
             dest.blit(img,[x,y])
@@ -2542,7 +2564,7 @@ class case_menu(fadesprite,gui.widget):
             lines = [[]]
             wd_sp = 2
             for word in title.split(" "):
-                word = assets.open_font("arial.ttf",16).render(word,1,[200,100,100])
+                word = assets.get_font("gametitle").render(word,1,[200,100,100])
                 if sum([wd.get_width() for wd in lines[-1]])+wd_sp*len(lines[-1])+word.get_width()>160:
                     lines.append([])
                 lines[-1].append(word)
@@ -2554,26 +2576,25 @@ class case_menu(fadesprite,gui.widget):
                     spr.blit(word,[wd_x,wd_y])
                     wd_x += word.get_width()+wd_sp
                 wd_y += 16
-            #txt = assets.open_font("arial.ttf",16).render(o.replace("_"," "),1,[200,100,100])
-            #spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
             self.option_imgs.append([spr,[x,y]])
             
-            txt = assets.open_font("arial.ttf",14).render("New game",1,[200,100,100])
+            fnt = assets.get_font("new_resume")
+            txt = fnt.render("New game",1,[200,100,100])
             spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
             spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
             self.option_imgs.append([spr,[x,y+60]])
             if os.path.exists(self.path+"/"+o+"/save.ns"):
-                txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
+                txt = fnt.render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
                 spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
                 self.option_imgs.append([spr,[x,y+90]])
             elif os.path.exists(self.path+"/"+o+"/save"):
-                txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
+                txt = fnt.render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
                 spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
                 self.option_imgs.append([spr,[x,y+90]])
             elif os.path.exists(self.path+"/"+o+"/autosave.ns"):
-                txt = assets.open_font("arial.ttf",14).render("Resume Game",1,[200,100,100])
+                txt = fnt.render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
                 spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
                 self.option_imgs.append([spr,[x,y+90]])
@@ -2903,47 +2924,7 @@ class evidence_menu(fadesprite,gui.widget):
         #~ gui.window.focused = None
     def load(self,*args,**kwargs):
         fadesprite.load(self,*args,**kwargs)
-    def init_vars(self):
-        defs = {"ev_present_x":90, "ev_present_y":0, #Where present button placed
-        "ev_show_mode_text":"true", #Show the text describing the mode
-        "ev_mode_bg_evidence":"general/evidence", #Background image in evidence mode
-        "ev_mode_bg_profiles":"general/evidence", #Background image in profile mode
-        "ev_mode_x":4,
-        "ev_mode_y":20,
-        "ev_cursor_img":"general/cursor_ev",
-        "ev_currentname_x":40,"ev_currentname_y":39,
-        "ev_modebutton_x":196,"ev_modebutton_y":7,
-        "ev_items_x":38,
-        "ev_items_y":63,
-        "ev_spacing_x":48,
-        "ev_spacing_y":46,
-        "ev_larrow_x":2,
-        "ev_larrow_y":90,
-        "ev_rarrow_x":240,
-        "ev_rarrow_y":90,
-        "ev_arrow_img":"general/arrow_right",
-        "ev_zarrow_img":"general/arrow_right",
-        "ev_zlarrow_x":2,
-        "ev_zlarrow_y":90,
-        "ev_zrarrow_x":240,
-        "ev_zrarrow_y":90,
-        "ev_check_img":"general/check",
-        "ev_z_textbox_x": 100,
-        "ev_z_textbox_y": 70,
-        "ev_z_textbox_w": 130,
-        "ev_z_textbox_h": 100,
-        "ev_z_icon_x": 25,
-        "ev_z_icon_y": 60,
-        "ev_z_bg": "general/evidence_zoom",
-        "ev_z_bg_x": 0,
-        "ev_z_bg_y": 0,
-        "ev_z_text_col":"FFFFFF",
-        }
-        for k in defs:
-            if not k in assets.variables:
-                assets.variables[k] = defs[k]
     def __init__(self,items=[],gba=True):
-        self.init_vars()
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,other_screen(0)
         fadesprite.__init__(self,x=x,y=y)
@@ -3239,16 +3220,16 @@ class evidence_menu(fadesprite,gui.widget):
         x,y=self.pos
         if not assets.gbamode:
             if vtrue(assets.variables["ev_show_mode_text"]):
-                dest.blit(font.render(self.item_set.capitalize(),[255,255,255]),
-                [x+assets.variables["ev_mode_x"],y+assets.variables["ev_mode_y"]])
+                dest.blit(assets.get_image_font("itemset").render(self.item_set.capitalize(),[255,255,255]),
+                [x+int(assets.variables["ev_mode_x"]),y+int(assets.variables["ev_mode_y"])])
         name = ""
         if self.chosen:
             name = assets.variables.get(self.chosen+"_name",self.chosen).replace("$","")
         if not assets.gbamode or self.mode != "zoomed":
-            dest.blit(font.render(name,[255,255,255]),
+            dest.blit(assets.get_image_font("itemname").render(name,[255,255,255]),
             [x+int(assets.variables["ev_currentname_x"]),y+int(assets.variables["ev_currentname_y"])])
         if vtrue(assets.variables.get("_evidence_enabled","true")) and vtrue(assets.variables.get("_profiles_enabled","true")):
-            dest.blit(arial14.render(
+            dest.blit(assets.get_font("itemset_big").render(
                 self.next_screen().capitalize(),1,[255,255,255]),
                 [x+int(assets.variables["ev_modebutton_x"]),y+int(assets.variables["ev_modebutton_y"])])
         if self.can_present():
@@ -3332,7 +3313,7 @@ class evidence_menu(fadesprite,gui.widget):
                                     int(assets.variables["ev_z_bg_y"])])
             name = icon.name
             if assets.gbamode:
-                newsurf.blit(font.render(name,[255,255,0]),[103,65])
+                newsurf.blit(assets.get_image_font("itemname").render(name,[255,255,0]),[103,65])
             tb = textblock(icon.desc,[tbpos[0],tbpos[1]],tbsize,color_str(assets.variables["ev_z_text_col"]))
             newsurf.blit(icon.scaled,[back_pos[0],back_pos[1]])
             tb.pos = [tbpos[0],tbpos[1]]
@@ -3363,7 +3344,7 @@ class textblock(sprite):
             for word in line:
                 nl = False
                 if word.strip():
-                    wordi = arial10.render(word,1,self.color)
+                    wordi = assets.get_font("block").render(word,1,self.color)
                 else:
                     wordi = pygame.Surface([4,10]).convert_alpha()
                     wordi.fill([0,0,0,0])
@@ -3863,8 +3844,8 @@ class saved(fadesprite):
         self.pos[1]=0
         self.block = block
     def draw(self,dest):
-        txt1 = arial14.render(self.text,1,[230,230,230])
-        txt2 = arial14.render(self.text,1,[30,30,30])
+        txt1 = assets.get_font("itemset_big").render(self.text,1,[230,230,230])
+        txt2 = assets.get_font("itemset_big").render(self.text,1,[30,30,30])
         txt2 = pygame.transform.scale(txt2,[txt2.get_width()-4,txt2.get_height()-4])
         dest.blit(txt1,self.pos)
         dest.blit(txt2,[self.pos[0]+2,self.pos[1]+2])

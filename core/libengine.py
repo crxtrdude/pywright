@@ -1489,7 +1489,7 @@ printing."""
         y = 0
         pri = None
         name = None
-        nametag = character+"\n"
+        nametag = character+u"\n"
         for a in args:
             if a.startswith("z="): z = int(a[2:])
             if a.startswith("e="): e = a[2:]+"(blink)"
@@ -1498,7 +1498,7 @@ printing."""
             if a.startswith("y="): y = int(a[2:])
             if a.startswith("priority="): pri = int(a[9:])
             if a.startswith("name="): name = a[5:]
-            if a.startswith("nametag="): nametag = a[8:]+"\n"
+            if a.startswith("nametag="): nametag = a[8:]+u"\n"
         assets.px = x
         assets.py = y
         assets.pz = z
