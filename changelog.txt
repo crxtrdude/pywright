@@ -35,7 +35,8 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     can invert graphics
     can greyscale graphics
     more clear when debug mode is on
-    unicode and multiple font support: set _punctuation
+    unicode and multiple font support: set _punctuation, set _font_tb _font_tb_size
+    _textbox_lines
     maybe hardcoded support for setting talk/blink
 
 *PyWright 0.976: July 31, 2010*

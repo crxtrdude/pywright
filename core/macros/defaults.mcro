@@ -32,8 +32,8 @@ set _bigbutton_img general/buttonpress
 #Change to bg/main2 for horizontal bars
 set _bigbutton_bg bg/main
 
-#How many lines to fit text into, can be 2, 3, or auto
-set _textbox_lines auto
+#How many lines to fit text into, can be 2, or 3
+set _textbox_lines 3
 
 #Whether text is automatically wrapped
 set _textbox_wrap true
