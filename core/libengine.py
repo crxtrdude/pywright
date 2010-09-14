@@ -583,7 +583,21 @@ class Script(gui.widget):
             self.si += 1
             assets.variables["_currentline"] = str(self.si)
             exit = self.execute_line(line)
+    @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="interface")
     def _textbox(self,line):
+        """Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
+        drop. The letters of the textbox will print one by one at a set rate, which can be modified
+        with the markup commands. If there is a character speaking (the _speaking variable is set, a char
+        command has just been issued, etc) then the character will animate as the text is output.
+        The game script will pause until the player (or the textbox via markup) tells the game to 
+        continue. This command can also be issued by having a blank line surrounded by quotes. Ex:
+{{{
+char test
+textbox This is some text that is printing
+#The same text could be printed this way:
+char test
+"This is some text that is printing."
+}}}"""
         text = line.replace("{n}","\n")
         tbox = textbox(text)
         if not self.viewed.get(assets.game+self.scene+str(self.si-1)):
@@ -707,14 +721,6 @@ class Script(gui.widget):
         if name>=len(self.scriptlines) or name<0:
             raise script_error,"Trying to go to invalid line number"
         self.si = name+1
-    @category([],type="drawing")
-    def _draw_on(self,*args):
-        """Turns engine drawing on."""
-        assets.variables["render"] = 1
-    @category([],type="drawing")
-    def _draw_off(self,*args):
-        """Turns engine drawing off."""
-        assets.variables["render"] = 0
     @category([COMBINED("text","Some text to print")],type="debug")
     def _print(self,*args):
         """Prints some text to the logfile. Only useful for debugging purposes."""
@@ -1017,6 +1023,14 @@ would set 'x' to 12."""
                     CHOICE([VALUE('label'),TOKEN('?')]),
                     KEYWORD('fail','label to jump to if expression fails')],type="logic")
     def _is_ex(self,command,*args):
+        """Evaluates the expression. If the expression is true, will either jump to 'label' or execute the next
+        line if a '?' is used instead of a label name. If 'fail=' is given, will jump to that label when the expression
+        is false.
+        
+        Expressions are modelled after ace attorney online, and support () - + / * == < > <= >= AND and OR for
+        operations, and var1 (variables), 'blah' (text) or 239 (numbers) for values. Functions are not 
+        supported, use pywright operations to manipulate variables before using the 
+        variable in an expression."""
         fail = None
         args = list(args)
         label = args.pop(-1)
@@ -1034,6 +1048,12 @@ would set 'x' to 12."""
                     KEYWORD('fail','label to jump to if expression fails'),
                     CHOICE([VALUE('label'),TOKEN('?')])],type="logic")
     def _is(self,command,*args):
+        """Evaluates the expression. If the expression is true, will either jump to 'label' or execute the next
+        line if a '?' is used instead of a label name. If 'fail=' is given, will jump to that label when the expression
+        is false.
+        
+        Expressions are very simplistic, supporting only AND and OR for operations, and numbers/text
+        or $variables for operands."""
         fail = None
         args = list(args)
         label = args.pop(-1)
@@ -1054,7 +1074,10 @@ would set 'x' to 12."""
     def _isnot(self,command,*args):
         """If the expression is false, will jump to the success label.
         Otherwise, it will either continue to the next line, or jump to
-        the label set by the fail keyword"""
+        the label set by the fail keyword
+        
+        Expressions are very simplistic, supporting only AND and OR for operations, and numbers/text
+        or $variables for operands."""
         fail = None
         args = list(args)
         label = args.pop(-1)
@@ -1072,6 +1095,8 @@ would set 'x' to 12."""
     @category([VALUE('variable',"Variable to check if it doesn't exist"),
                     CHOICE([VALUE('label','a label to jump to if the variable has not been set or is blank'),TOKEN('?','execute next line only if variable is unset or blank')])],type="logic")
     def _isempty(self,command,variable,label=None):
+        """If the variable has not been set (it is equal to "") then either jump to the given label or 
+        execute the next line if the given label is a '?'."""
         if variable.endswith("?"):
             variable = variable[:-1]
             label = "?"
@@ -1080,6 +1105,8 @@ would set 'x' to 12."""
     @category([VALUE('variable','Variable to check if it exists'),
                     CHOICE([VALUE('label','a label to jump to if the variable has been set and is not blank'),TOKEN('?','execute next line only if variable is set and not blank')])],type="logic")
     def _isnotempty(self,command,variable,label=None):
+        """If the variable has been set (it is not equal to "") then either jump to the given label or 
+        execute the next line if the given label is a '?'."""
         if variable.endswith("?"):
             variable = variable[:-1]
             label = "?"
@@ -1103,6 +1130,8 @@ would set 'x' to 12."""
     @category([VALUE('variable','Variable to check if it exists'),
                     CHOICE([VALUE('label','a label to jump to if the variable has been set and is not blank'),TOKEN('?','execute next line only if variable is set and not blank')])],type="logic")
     def _isnumber(self,command,*args):
+        """If the variable contains a number jump to the given label or execute the next line if the given
+        label is a '?'"""
         args = list(args)
         label = args.pop(-1)
         if label.endswith("?"):
@@ -1568,8 +1597,29 @@ printing."""
                 assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
                 import traceback
                 traceback.print_exc()
-    @category("graphics")
+    @category([VALUE('type','type of gui to create. (Back, Button, Input, or Wait)'),
+VALUE('macro','First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)'),
+VALUE('var_name','Variable name to save input text into, valid for (Input)'),
+KEYWORD('x','x position of created item, valid for (Back, Button, Input)'),
+KEYWORD('y','y position of created item, valid for (Back, Button, Input)'),
+KEYWORD('z', 'z position of created item, valid for (Back, Button, Input)'),
+KEYWORD('width','pixel width of input box, valid for (Input)'),
+KEYWORD('name','id to give object for later reference, valid for (Back, Button, Input)'),
+KEYWORD('graphic','path to graphic file, valid for (Button)','default for buttons is to have an outline with the text of the button label'),
+TOKEN('hold','hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)','default is that it only executes with each distinct click'),
+TOKEN('password','typed text will be displayed with stars *****, valid for (Input)','default is to show text'),
+KEYWORD('run','repeatedly execute this macro, valid for (Wait)','default is no macro will be run'),
+COMBINED('text','remaining text will display for Button if there is no graphic, valid for (Button)','default is no text')],type="interface")
     def _gui(self,command,guitype,*args):
+        """This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
+don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
+The four types of gui you can create are:
+
+* Button - This creates a button that can be clicked. When clicked a macro will run.
+* Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
+* Input - this will show an input box allowing the player to input text. This text will be saved into a variable which you define.
+* Wait - this command will pause the script and optionally execute a macro each frame
+"""
         args = list(args)
         x=None
         y=None
@@ -1583,8 +1633,6 @@ printing."""
                 if a.startswith("x="): x=int(a[2:])
                 elif a.startswith("y="): y=int(a[2:])
                 elif a.startswith("z="): z=int(a[2:])
-                elif a.startswith("width="): width=int(a[6:])
-                elif a.startswith("height="): height=int(a[7:])
                 elif a.startswith("name="): name=a[5:]
             if y>=192 and assets.num_screens == 1 and assets.screen_compress:
                 y -= 192
@@ -1593,7 +1641,6 @@ printing."""
         if guitype=="Button":
             macroname=args[0]; del args[0]
             graphic = None
-            width = None
             hold = None
             while args:
                 a = args[0]
@@ -1601,8 +1648,6 @@ printing."""
                 if a.startswith("x="): x=int(a[2:])
                 elif a.startswith("y="): y=int(a[2:])
                 elif a.startswith("z="): z=int(a[2:])
-                elif a.startswith("width="): width=int(a[6:])
-                elif a.startswith("height="): height=int(a[7:])
                 elif a.startswith("name="): name=a[5:]
                 elif a.startswith("graphic="): graphic = a[8:]
                 elif a == "hold": hold = True
@@ -1646,7 +1691,6 @@ printing."""
                 elif a.startswith("z="): z=int(a[2:])
                 elif a.startswith("name="): name=a[5:]
                 elif a.startswith("width="): width=int(a[6:])
-                elif a.startswith("height="): height=int(a[7:])
                 #elif a.startswith("graphic="): graphic = args[0][8:]
                 elif a == "password":
                     type = "password"
@@ -1671,8 +1715,14 @@ printing."""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
             self.obs.append(guiWait(run=run))
             self.buildmode = False
-    @category("graphics")
+    @category([VALUE('x','x value to place text'),VALUE('y','y value to place text'),VALUE('width','width of text block'),
+    VALUE('height','height of text block (determines rows but the value is in pixels)'),
+    KEYWORD('color','color of the text'),
+    KEYWORD('name','id of textblock object for later reference'),
+    COMBINED('text','text to display')],type='interface')
     def _textblock(self,command,x,y,width,height,*text):
+        """Displays a block of text all at once on the screen somewhere. Used to create custom interfaces. The text doesn't
+        support markup in the same way that textboxes do."""
         id_name = None
         color = None
         if text and text[0].startswith("color="):

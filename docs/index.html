@@ -1,4 +1,4 @@
-<html><body><div style=''><a href=#files>files</a><br><a href=#animation>animation</a><br><a href=#effect>effect</a><br><a href=#debug>debug</a><br><a href=#gameflow>gameflow</a><br><a href=#objects>objects</a><br><a href=#logic>logic</a><br><a href=#interface>interface</a><br><a href=#drawing>drawing</a><br></div><div style=''><a name='files'><h2>files</h2><p>
+<html><body><div style=''><a href=#files>files</a><br><a href=#effect>effect</a><br><a href=#debug>debug</a><br><a href=#gameflow>gameflow</a><br><a href=#objects>objects</a><br><a href=#logic>logic</a><br><a href=#interface>interface</a><br><a href=#animation>animation</a><br></div><div style=''><a name='files'><h2>files</h2><p>
     <b>exportvars</b> filename (variable_names) 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>file to export variables into, relative to the case folder</td><tr><td>variable_names</td><td>The names of variables to export. If none are listed, all variables will be exported</td><td>all variables</td></tr></table><p>Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
         ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p><br><br><p>
@@ -10,18 +10,7 @@
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>File to save to, relative to case folder. Saved games may not be named 'hide'</td><td>save</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the save.</td></table><p>Creates a new saved game in the case folder.</p><br><br><p>
     <b>screenshot</b> path width=VALUE height=VALUE x=VALUE y=VALUE rwidth=VALUE rheight=VALUE 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>path</td><td>path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)</td><tr><td>width</td><td>shrink screenshot to this width</td><td>256</td></tr><tr><td>height</td><td>shrink screenshot to this height</td><td>192</td></tr><tr><td>x</td><td>x-value of region to screenshot</td><td>0</td></tr><tr><td>y</td><td>y-value of region to screenshot</td><td>0</td></tr><tr><td>rwidth</td><td>width of region to screenshot</td><td>256</td></tr><tr><td>rheight</td><td>height of region to screenshot</td><td>192</td></tr></table><p>Takes a screenshot and saves the image. Can select a specific region of the screen to
-        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><a name='animation'><h2>animation</h2><p>
-    <b>controlanim</b> name=VALUE start=VALUE end=VALUE jumpto=VALUE <i>loop</i> <i>noloop</i> <i>b</i> <i>t</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Named object to control</td><td>Will alter animation of all current objects - not recommended to use the default value.</td></tr><tr><td>start</td><td>Alter the starting frame of the animation</td><td>Leave starting frame what it was.</td></tr><tr><td>end</td><td>Alter ending frame of the animation</td><td>Leave ending frame what it was.</td></tr><tr><td>jumpto</td><td>Instantly set an animations frame to this value</td><td>Don't change frames</td></tr><tr><td>loop</td><td>Force animation to loop</td><tr><td>noloop</td><td>Force animation not to loop</td><tr><td>b</td><td>Alter blink animation of chars</td><tr><td>t</td><td>Alter talk animation of chars</td></table><p>Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
-the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
-as having a non looping animation play several times, or only playing a portion of a longer animation.</p><br><br><p>
-    <b>globaldelay</b> speed name=VALUE <i>b</i> <i>t</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>speed</td><td>The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame.</td><tr><td>name</td><td>Only change the animation speed of objects with the given name</td><td>Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)</td></tr><tr><td>b</td><td>Select blinking animation for char objects</td><tr><td>t</td><td>Select talking animation for char objects</td></table><p>Changes the default delay value for either all running animations or specific ones. First create the animation 
-with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
-blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
-in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower.</p><br><br><p>
-    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p><br><br><a name='effect'><h2>effect</h2><p>
+        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><a name='effect'><h2>effect</h2><p>
     <b>fade</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>start</td><td>What fade level to start at</td><td>0</td></tr><tr><td>end</td><td>What fade level to end at</td><td>100</td></tr><tr><td>speed</td><td>How many fade steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to fade</td><td>Will try to fade all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Fade an object or objects in or out</p><br><br><p>
     <b>grey</b> value=VALUE name=VALUE 
@@ -105,10 +94,38 @@ would set 'x' to 5.</p><br><br><p>
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>destination variable</td><td>The variable to save the value into</td><tr><td>source variable</td><td>The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.</td></table><p>Copies the value of one variable into another.</p><br><br><p>
     <b>goto</b> [destination] fail=VALUE 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>destination</td><td>The destination label to move to</td><tr><td>fail</td><td>A label to jump to if the destination can't be found</td></table><p>Makes the script go to a different section, based on the label name.</p><br><br><p>
+    <b>is</b> [expression] fail=VALUE &lt;label  OR <i>?</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>expression</td><td></td><tr><td>fail</td><td>label to jump to if expression fails</td><tr><td>label</td><td></td><tr><td>?</td><td></td></table><p>Evaluates the expression. If the expression is true, will either jump to 'label' or execute the next
+        line if a '?' is used instead of a label name. If 'fail=' is given, will jump to that label when the expression
+        is false.
+        
+        Expressions are very simplistic, supporting only AND and OR for operations, and numbers/text
+        or $variables for operands.</p><br><br><p>
+    <b>is_ex</b> [expression2] &lt;label  OR <i>?</i> &gt; fail=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>expression2</td><td></td><tr><td>label</td><td></td><tr><td>?</td><td></td><tr><td>fail</td><td>label to jump to if expression fails</td></table><p>Evaluates the expression. If the expression is true, will either jump to 'label' or execute the next
+        line if a '?' is used instead of a label name. If 'fail=' is given, will jump to that label when the expression
+        is false.
+        
+        Expressions are modelled after ace attorney online, and support () - + / * == < > <= >= AND and OR for
+        operations, and var1 (variables), 'blah' (text) or 239 (numbers) for values. Functions are not 
+        supported, use pywright operations to manipulate variables before using the 
+        variable in an expression.</p><br><br><p>
+    <b>isempty</b> variable &lt;label  OR <i>?</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>Variable to check if it doesn't exist</td><tr><td>label</td><td>a label to jump to if the variable has not been set or is blank</td><tr><td>?</td><td>execute next line only if variable is unset or blank</td></table><p>If the variable has not been set (it is equal to "") then either jump to the given label or 
+        execute the next line if the given label is a '?'.</p><br><br><p>
     <b>isnot</b> [expression] fail=VALUE &lt;label  OR <i>?</i> &gt; 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>expression</td><td>An expression that evaluates to true or false</td><tr><td>fail</td><td>label to jump to if expression fails</td><tr><td>label</td><td>a label to jump to if the expression evaluates to false</td><tr><td>?</td><td>execute next line only if expression evaluates to false</td></table><p>If the expression is false, will jump to the success label.
         Otherwise, it will either continue to the next line, or jump to
-        the label set by the fail keyword</p><br><br><p>
+        the label set by the fail keyword
+        
+        Expressions are very simplistic, supporting only AND and OR for operations, and numbers/text
+        or $variables for operands.</p><br><br><p>
+    <b>isnotempty</b> variable &lt;label  OR <i>?</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>Variable to check if it exists</td><tr><td>label</td><td>a label to jump to if the variable has been set and is not blank</td><tr><td>?</td><td>execute next line only if variable is set and not blank</td></table><p>If the variable has been set (it is not equal to "") then either jump to the given label or 
+        execute the next line if the given label is a '?'.</p><br><br><p>
+    <b>isnumber</b> variable &lt;label  OR <i>?</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>Variable to check if it exists</td><tr><td>label</td><td>a label to jump to if the variable has been set and is not blank</td><tr><td>?</td><td>execute next line only if variable is set and not blank</td></table><p>If the variable contains a number jump to the given label or execute the next line if the given
+        label is a '?'</p><br><br><p>
     <b>joinvar</b> variable [words] 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save value to</td><tr><td>words</td><td>words to join together</td></table><p>Takes a series of words and joins them together, save the joined
 string to a variable. For instance:
@@ -153,6 +170,16 @@ and choose one to play. The priority might need to be adjusted if you have any s
 you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
 run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
 folder be the same, and not show a case menu at all.</p><br><br><p>
+    <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE <i>hold</i> <i>password</i> run=VALUE [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
+don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
+The four types of gui you can create are:
+
+* Button - This creates a button that can be clicked. When clicked a macro will run.
+* Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
+* Input - this will show an input box allowing the player to input text. This text will be saved into a variable which you define.
+* Wait - this command will pause the script and optionally execute a macro each frame
+</p><br><br><p>
     <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
         is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
@@ -164,8 +191,32 @@ folder be the same, and not show a case menu at all.</p><br><br><p>
         you can create the proper menu from the external screen as well. People usually do this by creating a script
         [scene_name].txt which loads the background and shows the menu. Then, any external script can
         instantly load the proper scene with "script [scene_name]". You can control which options
-        are shown through the keywords described.</p><br><br><a name='drawing'><h2>drawing</h2><p>
-    <b>draw_off</b> 
-    </p><p>Turns engine drawing off.</p><br><br><p>
-    <b>draw_on</b> 
-    </p><p>Turns engine drawing on.</p><br><br></div></body></html>
+        are shown through the keywords described.</p><br><br><p>
+    <b>textblock</b> x y width height color=VALUE name=VALUE [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>x</td><td>x value to place text</td><tr><td>y</td><td>y value to place text</td><tr><td>width</td><td>width of text block</td><tr><td>height</td><td>height of text block (determines rows but the value is in pixels)</td><tr><td>color</td><td>color of the text</td><tr><td>name</td><td>id of textblock object for later reference</td><tr><td>text</td><td>text to display</td></table><p>Displays a block of text all at once on the screen somewhere. Used to create custom interfaces. The text doesn't
+        support markup in the same way that textboxes do.</p><br><br><p>
+    <b>textbox</b> [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Text to be print in the textbox, with markup.</td><td></td></tr></table><p>Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
+        drop. The letters of the textbox will print one by one at a set rate, which can be modified
+        with the markup commands. If there is a character speaking (the _speaking variable is set, a char
+        command has just been issued, etc) then the character will animate as the text is output.
+        The game script will pause until the player (or the textbox via markup) tells the game to 
+        continue. This command can also be issued by having a blank line surrounded by quotes. Ex:
+<br><pre>
+char test
+textbox This is some text that is printing
+#The same text could be printed this way:
+char test
+"This is some text that is printing."
+</pre></p><br><br><a name='animation'><h2>animation</h2><p>
+    <b>controlanim</b> name=VALUE start=VALUE end=VALUE jumpto=VALUE <i>loop</i> <i>noloop</i> <i>b</i> <i>t</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Named object to control</td><td>Will alter animation of all current objects - not recommended to use the default value.</td></tr><tr><td>start</td><td>Alter the starting frame of the animation</td><td>Leave starting frame what it was.</td></tr><tr><td>end</td><td>Alter ending frame of the animation</td><td>Leave ending frame what it was.</td></tr><tr><td>jumpto</td><td>Instantly set an animations frame to this value</td><td>Don't change frames</td></tr><tr><td>loop</td><td>Force animation to loop</td><tr><td>noloop</td><td>Force animation not to loop</td><tr><td>b</td><td>Alter blink animation of chars</td><tr><td>t</td><td>Alter talk animation of chars</td></table><p>Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
+the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
+as having a non looping animation play several times, or only playing a portion of a longer animation.</p><br><br><p>
+    <b>globaldelay</b> speed name=VALUE <i>b</i> <i>t</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>speed</td><td>The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame.</td><tr><td>name</td><td>Only change the animation speed of objects with the given name</td><td>Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)</td></tr><tr><td>b</td><td>Select blinking animation for char objects</td><tr><td>t</td><td>Select talking animation for char objects</td></table><p>Changes the default delay value for either all running animations or specific ones. First create the animation 
+with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
+blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
+in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower.</p><br><br><p>
+    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p><br><br></div></body></html>
