@@ -46,6 +46,8 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
         "penalty -10 delay=0" Will show a normal bar deleting 10 points of health, but it will
             stay and let the script continue. Do other animations while losing health!
         delete name=penalty will delete a penalty bar that stays
+    - notguilty command moved to core/macros/guilty.mcro, copy the macro and edit if you want to customize notguilty
+    guilty command moved to core/macros/guilty.mcro copy the macro and edit if you want to customize guilty
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"

@@ -1792,14 +1792,6 @@ The four types of gui you can create are:
         pen.delay = delay
         self.obs.append(pen)
         self.buildmode = False
-    @category("event")
-    def _notguilty(self,command,*args):
-        self.obs.append(notguilty())
-        self.buildmode = False
-    @category("event")
-    def _guilty(self,command,*args):
-        self.obs.append(guilty())
-        self.buildmode = False
     @category([KEYWORD("degrees","How many degrees to rotate"),KEYWORD("speed","How many degrees to rotate per frame"),
     KEYWORD("axis","which axis to rotate on, z is the only valid value","z"),
     KEYWORD("name","Name a specific object to rotate","Will try to rotate all objects (not what you might expect)"),

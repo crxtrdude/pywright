@@ -3771,27 +3771,6 @@ class shake(effect):
         if self.ttl<=0: self.kill = 1
         return self.wait
     
-class notguilty(sprite):
-    def __init__(self):
-        sprite.__init__(self)
-        self.ttl = 120
-        self.pri = ulayers.index(self.__class__.__name__)
-        self.obs = []
-    def draw(self,dest):
-        if self.ttl == 100:
-            img = pygame.transform.scale(assets.open_art("general/Not")[0],[70,40])
-            self.obs.append([img,[0,60]])
-            assets.play_sound("Whaaa.ogg")
-        if self.ttl == 50:
-            img = pygame.transform.scale(assets.open_art("general/guilty")[0],[176,40])
-            self.obs.append([img,[80,60]])
-            assets.play_sound("Whaaa.ogg")
-        [dest.blit(o[0],o[1]) for o in self.obs]
-    def update(self):
-        self.ttl -= 1
-        if self.ttl<=0: self.kill = 1
-        return True
-    
 class guilty(sprite):
     def __init__(self):
         sprite.__init__(self)
