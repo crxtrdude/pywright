@@ -12,7 +12,7 @@ delete name=____1
 delete name=____2
 endmacro
 
-macro guilty
+macro guilty_words
 set _x 49
 pause 20
 
@@ -54,4 +54,21 @@ delete name=____3
 delete name=____4
 delete name=____5
 delete name=____6
+endmacro
+
+macro guilty_door
+obj general/guiltydoor name=d1 x=-128 z=4
+obj general/guiltydoor name=d2 x=256 z=4 flipx
+scroll name=d1 x=128 speed=14 nowait
+scroll name=d2 x=-128 speed=14 nowait
+sfx Owned.ogg
+pause 50
+fg black fade z=5
+pause 50
+clear
+endmacro
+
+macro guilty
+{guilty_words}
+{guilty_door}
 endmacro
