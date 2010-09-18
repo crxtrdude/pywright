@@ -1479,7 +1479,8 @@ class evidence(fadesprite):
         self.desc = assets.variables.get(self.id+"_desc",self.id.replace("$",""))
         
 class penalty(fadesprite):
-    def __init__(self,end=100,var="penalty"):
+    def __init__(self,end=100,var="penalty",flash_amount=None):
+        self.id_name = "penalty"
         self.var = var
         super(penalty,self).__init__()
         self.gfx = assets.open_art("general/healthbar",key=[255,0,255])[0]
@@ -1491,6 +1492,9 @@ class penalty(fadesprite):
         if end<0: end = 0
         self.end = end
         self.delay = 50
+        self.flash_amount = flash_amount
+        self.flash_color = [255,242,129,150]
+        self.flash_dir = 1
     def gv(self):
         v = assets.variables.get(self.var,100)
         try:
@@ -1510,6 +1514,17 @@ class penalty(fadesprite):
         for i in range(100-v):
             dest.blit(self.bad,[x,2]); x += 1
         dest.blit(self.right,[x,2])
+        if self.flash_amount:
+            fx = sw-108+v-self.flash_amount
+            fw = self.flash_amount
+            fy = 4
+            fh = 10
+            surf = pygame.Surface([fw,fh]).convert_alpha()
+            surf.fill(self.flash_color)
+            dest.blit(surf,[fx,fy])
+            self.flash_color[3]+=self.flash_dir*8
+            if self.flash_color[3]>200 or self.flash_color[3]<100:
+                self.flash_dir = -self.flash_dir
         self.sv(v)
     def update(self):
         v = self.gv()
@@ -1519,13 +1534,14 @@ class penalty(fadesprite):
         elif self.end>v:
             v += 1
             if v>100: v = 100
-        else:
+        elif self.delay:
             self.delay -= 1
-            if self.delay<0:
+            if self.delay==0:
                 self.die()
                 self.delete()
         self.sv(v)
-        return True
+        if self.delay:
+            return True
     def die(self):
         if self.gv()<=0:
             print "bad penalty about to die"

@@ -1741,16 +1741,37 @@ The four types of gui you can create are:
         if color:
             tb.color = color
     @category("event")
-    def _penalty(self,command,amt,*args):
+    def _penalty(self,command,*args):
         var = "penalty"
-        for a in args:
+        flash_amount = 0
+        delay = None
+        args = list(args)
+        for a in args[:]:
             if a.split("=")[0] == "variable":
                 var = a.split("=",1)[1]
-        if not amt.isdigit():
+                args.remove(a)
+            if a.split("=")[0] == "threat":
+                flash_amount = int(a.split("=",1)[1])
+                args.remove(a)
+            if a.split("=")[0] == "delay":
+                delay = int(a.split("=",1)[1])
+                args.remove(a)
+        amt = "NONE"
+        if args:
+            amt = args[0]
+        if not delay:
+            delay = 50
+            if amt=="NONE" or flash_amount:
+                delay = 0
+        if amt=="NONE":
+            end = int(assets.variables.get(var,100))
+        elif not amt.isdigit():
             end = int(assets.variables.get(var,100))+int(amt)
         else:
             end = int(amt)
-        self.obs.append(penalty(end,var))
+        pen = penalty(end,var,flash_amount=flash_amount)
+        pen.delay = delay
+        self.obs.append(pen)
         self.buildmode = False
     @category("event")
     def _notguilty(self,command,*args):

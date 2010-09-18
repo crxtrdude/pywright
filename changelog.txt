@@ -38,6 +38,14 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     unicode and multiple font support: set _punctuation, set _font_tb _font_tb_size
     _textbox_lines
     maybe hardcoded support for setting talk/blink
+    - penalty bar options: 
+        "penalty threaten=10" will show a flashing reminder of how much health they will lose (and it stays
+            by default)
+        "penalty" by itself will just show the penalty bar (and it stays)
+        "penalty delay=100" shows the penalty bar for 100 frames before it goes away
+        "penalty -10 delay=0" Will show a normal bar deleting 10 points of health, but it will
+            stay and let the script continue. Do other animations while losing health!
+        delete name=penalty will delete a penalty bar that stays
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"
