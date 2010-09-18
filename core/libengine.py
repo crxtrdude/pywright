@@ -93,23 +93,23 @@ assets.addscene = add_s
 
 def parseargs(arglist,intvals=[],defaults = {},setzero = {}):
     kwargs = {}
-    kwargs.update(defaults)
+    for k in defaults:
+        kwargs[str(k)] = defaults[k]
     args = []
     for a in arglist:
         if "=" in a:
             a = a.split("=",1)
-            a[0] = str(a[0])
             if a[0] in intvals: 
                 try:
-                    kwargs[a[0]] = int(a[1])
+                    kwargs[str(a[0])] = int(a[1])
                 except:
-                    kwargs[a[0]] = float(a[1])
+                    kwargs[str(a[0])] = float(a[1])
             else: 
-                kwargs[a[0]]=a[1]
+                kwargs[str(a[0])]=a[1]
         elif setzero.has_key(a):
-            kwargs[setzero[a]]=0
+            kwargs[str(setzero[a])]=0
         else:
-            kwargs[a] = 1
+            kwargs[str(a)] = 1
     return kwargs,args
     
 def argsort(list,arg="pri",get=getattr):
