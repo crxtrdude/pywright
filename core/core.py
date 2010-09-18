@@ -3486,11 +3486,11 @@ class scroll(effect):
         ndx,ndy = self.dx,self.dy
         self.amtx-=abs(self.dx)
         if self.amtx<0: 
-            ndx+=self.amtx
+            ndx+=self.amtx*(self.dx/abs(self.dx))
             self.amtx=0
         self.amty-=abs(self.dy)
         if self.amty<0:
-            ndy+=self.amty
+            ndy+=self.amty*(self.dy/abs(self.dy))
             self.amty=0
         for o in self.obs:
             if getattr(o,"kill",0): continue
