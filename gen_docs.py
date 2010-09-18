@@ -12,6 +12,7 @@ sys.path.insert(0,"core")
 import libengine
 import core
 import inspect
+import re
 
 def write_cat(c):
     s = ""
@@ -42,6 +43,7 @@ def expand_cat(cats):
 def make_doc(txt):
     txt = txt.replace("{{{","<br><pre>")
     txt = txt.replace("}}}","</pre>")
+    txt = re.sub("\n *\n","<br><br>",txt)
     s = "<p>"
     s+=txt
     s += "</p>"

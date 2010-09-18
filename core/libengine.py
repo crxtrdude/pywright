@@ -1740,8 +1740,27 @@ The four types of gui you can create are:
         else: tb.id_name = "$$"+str(id(tb))+"$$"
         if color:
             tb.color = color
-    @category("event")
+    @category([VALUE("change_amount","Amount of health to change, either adding, subtracting, or setting the health, while animating the change on the bar","By default there will be no change"),
+    KEYWORD("variable","the health variable to use",'"penalty"'),
+    KEYWORD("threat","Amount of health to threaten the player with losing (flashes this portion of the bar)","0"),
+    KEYWORD("delay","How long to delay the script before deleting the bar and continuing. A value of 0 means no delay and the bar will stay onscreen until deleted.","Default is 50 if the value is changing, and 0 if the value is not")],type="objects")
     def _penalty(self,command,*args):
+        """Display a health bar, and if change_amount is given, show the player that they are losing health, 
+        and subtract the health. If change_amount starts with a minus sign, the amount will be subtracted from
+        the current health value. If it starts with a plus sign, the amount will be added to the current health value.
+        With no minus or plus sign, it will SET the health value to this amount, but still animate the change. At 
+        your game's checkpoints, you will probably want "penalty 100", which will show the healthbar
+        filling up to that amount.
+        
+        Without change_amount, you are just showing the player their current health, and optionally threatening
+        them with an amount they may lose if they make the wrong choice.
+        
+        There is support for multiple health variables, if you were to have a multiple
+        character game, or maybe you want to keep score and have a new health bar in each case. The 'variable'
+        keyword allows you to choose which health bar the penalty command is referring to.
+        
+        Since it just uses variables, you can also change the health bar values behind the scenes without showing
+        the penalty bar at all, by just using the normal variable commands. The default penalty variable is 'penalty'."""
         var = "penalty"
         flash_amount = 0
         delay = None
