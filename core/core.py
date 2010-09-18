@@ -2041,7 +2041,7 @@ class textbox(gui.widget):
             if nlines == "auto":
                 if len(lines)==4:
                     nlines = "3"
-                elif len(lines)==3:
+                else:
                     nlines = "2"
             nlines = int(nlines)
             if nlines == 2:
