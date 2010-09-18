@@ -3770,30 +3770,6 @@ class shake(effect):
         self.ttl -= 1
         if self.ttl<=0: self.kill = 1
         return self.wait
-    
-class guilty(sprite):
-    def __init__(self):
-        sprite.__init__(self)
-        self.ttl = 5*60
-        self.pri = ulayers.index(self.__class__.__name__)
-        self.i = 0
-        self.img = assets.open_art("general/guilty")[0]
-        self.xes = [0,41,79,104,129,160,197]
-        self.obs = []
-    def draw(self,dest):
-        amt = [0,]
-        if self.ttl%30==0 and self.i<len(self.xes)-1:
-            img = self.img.subsurface([[self.xes[self.i],0],[self.xes[self.i+1]-self.xes[self.i],63]])
-            self.obs.append([img,[self.xes[self.i]+30,60]])
-            self.i += 1
-            assets.play_sound("Whaaa.ogg")
-        if self.ttl == 60:
-            assets.play_sound("Owned.ogg")
-        [dest.blit(o[0],o[1]) for o in self.obs]
-    def update(self):
-        self.ttl -= 1
-        if self.ttl<=0: self.kill = 1
-        return True
         
 class guiBack(sprite,gui.widget):
     def click_down_over(self,mp):
