@@ -1,0 +1,57 @@
+macro notguilty
+set _x 0
+pause 20
+obj general/Not x=$_x y=60 z=4 pri=1000 name=____1
+sfx Whaaa.ogg
+pause 50
+addvar _x 95
+obj general/guilty x=$_x y=60 z=4 pri=1000 name=____2
+sfx Whaaa.ogg
+pause 50
+delete name=____1
+delete name=____2
+endmacro
+
+macro guilty
+set _x 49
+pause 20
+
+obj general/guilty_g x=$_x y=60 z=4 pri=1000 name=____1
+sfx Whaaa.ogg
+pause 20
+addvar _x 37
+
+obj general/guilty_u x=$_x y=60 z=4 pri=1000 name=____2
+sfx Whaaa.ogg
+pause 20
+addvar _x 31
+
+obj general/guilty_i x=$_x y=60 z=4 pri=1000 name=____3
+sfx Whaaa.ogg
+pause 20
+addvar _x 18
+
+obj general/guilty_l x=$_x y=60 z=4 pri=1000 name=____4
+sfx Whaaa.ogg
+pause 20
+addvar _x 18
+
+obj general/guilty_t x=$_x y=60 z=4 pri=1000 name=____5
+sfx Whaaa.ogg
+pause 20
+addvar _x 22
+
+obj general/guilty_y x=$_x y=60 z=4 pri=1000 name=____6
+sfx Whaaa.ogg
+pause 20
+
+pause 50
+
+pause 50
+delete name=____1
+delete name=____2
+delete name=____3
+delete name=____4
+delete name=____5
+delete name=____6
+endmacro
