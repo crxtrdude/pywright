@@ -47,7 +47,10 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
             stay and let the script continue. Do other animations while losing health!
         delete name=penalty will delete a penalty bar that stays
     - notguilty command moved to core/macros/guilty.mcro, copy the macro and edit if you want to customize notguilty
-    guilty command moved to core/macros/guilty.mcro copy the macro and edit if you want to customize guilty
+    - guilty command moved to core/macros/guilty.mcro copy the macro and edit if you want to customize guilty
+        "guilty" for standard guilty text and doors
+        "guilty_words" for just the words
+        "guilty_doors" for just the doors (which clear the scene when they finish)
     -fixed scroll animations that went further than you told it due to the speed
 
 *PyWright 0.976: July 31, 2010*
