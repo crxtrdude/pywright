@@ -84,7 +84,7 @@ def save(ob):
             oprops["_tb"] = True
         return ["uglyarrow",[],oprops]
     elif isinstance(ob,penalty):
-        cp(["pos","delay"],ob,oprops)
+        cp(["pos","delay","flash_amount","flash_dir","flash_color"],ob,oprops)
         return ["penalty",[ob.end,ob.var],oprops]
     elif isinstance(ob,menu):
         cp(["options","scene","open_script","selected"],ob,oprops)
