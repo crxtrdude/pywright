@@ -1,6 +1,6 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.977: August 11, 2010*
+*PyWright 0.977: September 21, 2010*
     - _textbox_show_button works correctly, _cr_button no longer hides the bottom
         screen
     fade music, sound effects in and out

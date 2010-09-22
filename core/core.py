@@ -359,7 +359,7 @@ class Assets(object):
             if block_comment:
                 continue
             if macros and line.startswith("include "):
-                reallines.extend(self.open_script(line[8:].strip(),False,use_unicode=True))
+                reallines.extend(self.open_script(line[8:].strip(),False))
             else:
                 reallines.append(line)
         lines = reallines
@@ -2059,6 +2059,8 @@ class textbox(gui.widget):
                     nlines = "3"
                 else:
                     nlines = "2"
+            if not nlines:
+                nlines = "3"
             nlines = int(nlines)
             if nlines == 2:
                 y,inc = 8,24
