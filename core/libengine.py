@@ -358,10 +358,7 @@ class Script(gui.widget):
     height = property(lambda x: sh*assets.num_screens)
     def handle_events(self,evts):
         n = []
-        w = float(sw)/assets.swidth
-        h = float(sh)/assets.sheight
-        def dp(p):
-            return [int(w*p[0]),int(h*p[1])]
+        dp = translate_click
         for e in evts:
             if e.type==pygame.MOUSEMOTION:
                 d = {"rel":e.rel,"buttons":e.buttons}
@@ -2413,8 +2410,8 @@ class screen_settings(gui.pane):
         
         res_box.children.append(gui.radiobutton("DS Res (256x192)","resopt"))
         res_box.children.append(gui.radiobutton("Double scale (512x384)","resopt"))
-        res_box.children.append(gui.radiobutton("(320x240)","resopt"))
-        res_box.children.append(gui.radiobutton("(640x480)","resopt"))
+        for mode in sorted(pygame.display.list_modes()):
+            res_box.children.append(gui.radiobutton("(%sx%s)"%mode,"resopt"))
         res_box.children.append(gui.checkbox("fullscreen"))
         self.fs = res_box.children[-1]
         res_box.children.append(gui.checkbox("dualscreen"))
@@ -2641,13 +2638,13 @@ def make_screen():
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
     try:
-        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
+        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],pygame.RESIZABLE|pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
     except:
-        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight*assets.num_screens],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
+        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
     ns = assets.num_screens
     if assets.cur_screen:
         ns = 2
-    pygame.screen = pygame.Surface([sw,sh*ns]).convert()
+    pygame.screen = pygame.Surface([sw,sh*2]).convert()
     pygame.blank = pygame.screen.convert()
     pygame.blank.fill([0,0,0])
     pygame.display.set_caption("PyWright "+VERSION)
@@ -2672,29 +2669,99 @@ def make_screen():
     pygame.jsup = gu
     pygame.jsdown = gd
 
-    
+def fit(surf,size):
+    if surf.get_width()<size[0]:
+        surf = pygame.transform.scale2x(surf)
+    surf = pygame.transform.scale(surf,size)
+    return surf
+def get_screen_mode():
+    mode="two_screens"
+    if assets.num_screens == 1:
+        mode = "squished"
+        if assets.screen_compress:
+            mode = "show_one"
+    return mode
+def get_screen_dim(mode):
+    if mode == "two_screens":
+        top_pos = [0,0]
+        top_size = [1,0.5]
+        bottom_pos = [0,0.5]
+        bottom_size = [1,0.5]
+    if mode == "horizontal":
+        top_pos = [0,0]
+        top_size = [0.5,0.75]
+        bottom_pos = [0.5,0.25]
+        bottom_size = [0.5,0.75]
+    if mode == "squished":
+        top_pos = [0,0]
+        top_size = [1,1]
+        bottom_pos = None
+    if mode == "show_one":
+        if assets.cur_screen == 0:
+            top_pos = [0,0]
+            top_size = [1,1]
+            bottom_pos = None
+        else:
+            top_pos = None
+            bottom_pos = [0,0]
+            bottom_size = [1,1]
+    d = {"top":None,"bottom":None}
+    if top_pos:
+        top_pos_t = [top_pos[0]*assets.swidth,top_pos[1]*assets.sheight]
+        top_size_t = [top_size[0]*assets.swidth,top_size[1]*assets.sheight]
+        d["top"] = [top_pos,top_size,top_pos_t,top_size_t]
+    if bottom_pos:
+        bottom_pos_t = [bottom_pos[0]*assets.swidth,bottom_pos[1]*assets.sheight]
+        bottom_size_t = [bottom_size[0]*assets.swidth,bottom_size[1]*assets.sheight]
+        d["bottom"] = [bottom_pos,bottom_size,bottom_pos_t,bottom_size_t]
+    return d
+def translate_click(pos):
+    mode = get_screen_mode()
+    dim = get_screen_dim(mode)
+    def col(pp,ss):
+        if pos[0]>=pp[0] and pos[0]<=pp[0]+ss[0]\
+            and pos[1]>=pp[1] and pos[1]<=pp[1]+ss[1]:
+            x = pos[0]-pp[0]
+            x = x/float(ss[0])*sw
+            y = pos[1]-pp[1]
+            y = y/float(ss[1])*sh
+            return int(x),int(y)
+    if dim["top"]:
+        r = col(*dim["top"][2:])
+        if r:
+            print "top",r
+            return r
+    if dim["bottom"]:
+        r = col(*dim["bottom"][2:])
+        if r:
+            print "bottom",r
+            return r[0],r[1]+sh
+    return -100000,-100000
 def draw_screen():
     scale = 0
     if assets.sheight!=sh or assets.swidth!=sw: scale = 1
-    if pygame.USE_GL:
-        import gl
-        gl.draw([pygame.screen])
-    else:
-        sc = float(assets.sheight)/sh
-        sc = float(assets.sheight)/sh
-        scaled = pygame.screen
-        if scale:
-            scaled = pygame.transform.rotozoom(pygame.screen,0,sc)
-        y = 0
-        if assets.cur_screen == 1:
-            y = -192*sc
-        pygame.real_screen.blit(scaled,[0,y])
-        pygame.display.flip()
-    if assets.num_screens==2:
-        if not hasattr(assets,"grey_bottom"):
-            assets.grey_bottom = assets.Surface([256,192])
-            assets.grey_bottom.fill([0,0,0])
-        pygame.screen.blit(assets.grey_bottom,[0,192])
+    scaled = pygame.screen
+    top = scaled.subsurface([[0,0],[sw,sh]])
+    bottom = top
+    mode = get_screen_mode()
+    dim = get_screen_dim(mode)
+    if mode == "two_screens" or mode == "horizontal" or mode == "show_one":
+        bottom = scaled.subsurface([[0,sh],[sw,sh]])
+    if assets.swidth>256 and scale:
+        scaled = pygame.transform.scale2x(pygame.screen)
+    if scale:
+        scaled = pygame.transform.scale(scaled,[assets.swidth,assets.sheight])
+    pygame.real_screen.fill([0,0,0])
+    def draw_segment(dest,surf,pos,size):
+        rp = [pos[0]*assets.swidth,pos[1]*assets.sheight]
+        rs = [size[0]*assets.swidth,size[1]*assets.sheight]
+        surf = fit(surf,rs)
+        dest.blit(surf,rp)
+    if dim["top"]:
+        draw_segment(pygame.real_screen,top,dim["top"][0],dim["top"][1])
+    if dim["bottom"]:
+        draw_segment(pygame.real_screen,bottom,dim["bottom"][0],dim["bottom"][1])
+    pygame.display.flip()
 assets.make_screen = make_screen
 assets.draw_screen = draw_screen
 
@@ -2760,7 +2827,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.init_sound()
     assets.fullscreen = 0
     assets.swidth = 256
-    assets.sheight = 192
+    assets.sheight = 192*2
     assets.filter = 0
     assets.gbamode = 0
     assets.num_screens = 2
@@ -2877,9 +2944,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         assets.play_music(assets.variables["_music_loop"])
                 if e.type==pygame.VIDEORESIZE:
                     w,h = e.w,e.h
-                    if assets.num_screens == 2:
-                        h = h//2
-                    w = (256/192.0)*h
+                    #w = (256/192.0)*h
                     assets.swidth = w
                     assets.sheight = h
                     make_screen()
@@ -2998,6 +3063,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     #assets.load_game(assets.game)
                 if e.type==pygame.KEYDOWN and\
                 e.key == pygame.K_F9:
+                    print "debugging game"
                     s = DebugScript()
                     s.debug_game()
                     print "finished"
