@@ -619,7 +619,7 @@ char test
                 #tbox.color = (20,200,40)
     def execute_line(self,line):
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
-            self._textbox(line[1:-1])
+            self.call_func("textbox",[line[1:-1]])
             return True
         def repvar(x):
             if x.startswith("$") and not x[1].isdigit():
@@ -2129,8 +2129,6 @@ class DebugScript(Script):
                 #~ o.update()
         [x.update() for x in self.obs]
         return True
-    def _textbox(self,*args):
-        pass
     def call_func(self,command,args):
         if command in ["set","setvar"]:
             super(DebugScript,self).call_func(command,args)
@@ -2149,6 +2147,8 @@ class DebugScript(Script):
             assets.variables["_speaking_name"] = c.nametag
             assets.variables["_speaking"] = c
             self.char_cache[tuple(args)] = c
+        if command == "textbox":
+            pass
     def init(self,*args,**kwargs):
         self.old_stack = assets.stack[:]
         super(DebugScript,self).init(*args,**kwargs)
@@ -2173,6 +2173,19 @@ class DebugScript(Script):
             self.update()
         errors = [o for o in self.obs if isinstance(o,error_msg)]
         return errors
+    def debug_game(self):
+        for scene in os.listdir(assets.game):
+            if not scene.endswith(".txt"):
+                continue
+            print scene
+            self.world.all = []
+            self.init(assets.cur_script.scene)
+            self.scriptlines = assets.cur_script.scriptlines
+            assets.stack.append(self)
+            errors = self.run_it()
+            print errors
+            for err in errors:
+                assets.cur_script.obs.append(err)
 
 def wini():
     f = open("display.ini","w")
@@ -2986,18 +2999,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 if e.type==pygame.KEYDOWN and\
                 e.key == pygame.K_F9:
                     s = DebugScript()
-                    for scene in os.listdir(assets.game):
-                        if not scene.endswith(".txt"):
-                            continue
-                        print scene
-                        s.world.all = []
-                        s.init(assets.cur_script.scene)
-                        s.scriptlines = assets.cur_script.scriptlines
-                        assets.stack.append(s)
-                        errors = s.run_it()
-                        print errors
-                        for err in errors:
-                            assets.cur_script.obs.append(err)
+                    s.debug_game()
+                    print "finished"
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
