@@ -43,7 +43,7 @@ def read_pwv(txt):
         if not line:
             continue
         key,val = line.strip().split(" ",1)
-        if key == "version":
+        if key in ["version","min_pywright_version"]:
             val = cver_t(val)
         d[key] = val
     return d

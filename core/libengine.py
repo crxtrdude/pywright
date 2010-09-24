@@ -16,7 +16,7 @@ import load
 from pwvlib import *
 
 d = get_data_from_folder(".")
-__version__ = cver_s(d["version"])
+__version__ = d["version"]
 VERSION = "Version "+cver_s(d["version"])
 
 def pauseandquit():
@@ -2614,10 +2614,21 @@ def make_start_script(logo=True):
         if d.get("author",""):
             title += " by "+d["author"]
         txt = item.font.render(title,1,[0,0,0])
-        image = pygame.Surface([max(graphic.get_width(),txt.get_width()),graphic.get_height()+txt.get_height()])
+        req = d.get("min_pywright_version","0")
+        reqs = cver_s(req)
+        height = graphic.get_height()+txt.get_height()
+        width = max(graphic.get_width(),txt.get_width())
+        txt2 = None
+        if __version__ < req:
+            txt2 = item.font.render("Requires PyWright "+reqs,1,[200,20,30])
+            height += txt2.get_height()
+            width = max(graphic.get_width(),txt.get_width(),txt2.get_width())
+        image = pygame.Surface([width,height])
         image.fill([200,200,255])
         image.blit(graphic,[0,0])
         image.blit(txt,[0,graphic.get_height()])
+        if txt2:
+            image.blit(txt2,[0,graphic.get_height()+txt.get_height()])
         item.graphic = image
         list.add_child(item)
         def _play_game(func=f):
@@ -2632,7 +2643,11 @@ def make_start_script(logo=True):
             case_select = case_menu(gamedir)
             case_select.reload = True
             scr.obs.append(case_select)
-        setattr(make_start_script,f.replace(" ","_"),_play_game)
+        if __version__ >= req:
+            setattr(make_start_script,f.replace(" ","_"),_play_game)
+        else:
+            setattr(make_start_script,f.replace(" ","_"),lambda: 1)
+            
 
 def make_screen():
     if not hasattr(assets,"cur_screen"):
@@ -2729,12 +2744,10 @@ def translate_click(pos):
     if dim["top"]:
         r = col(*dim["top"][2:])
         if r:
-            print "top",r
             return r
     if dim["bottom"]:
         r = col(*dim["bottom"][2:])
         if r:
-            print "bottom",r
             return r[0],r[1]+sh
     return -100000,-100000
 def draw_screen():
