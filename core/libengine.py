@@ -2408,8 +2408,8 @@ class screen_settings(gui.pane):
         res_box.height = 120
         self.children.append(res_box)
         
-        res_box.children.append(gui.radiobutton("DS Res (256x192)","resopt"))
-        res_box.children.append(gui.radiobutton("Double scale (512x384)","resopt"))
+        res_box.children.append(gui.radiobutton("DS Res (256x384)","resopt"))
+        res_box.children.append(gui.radiobutton("Double scale (512x768)","resopt"))
         for mode in sorted(pygame.display.list_modes()):
             res_box.children.append(gui.radiobutton("(%sx%s)"%mode,"resopt"))
         res_box.children.append(gui.checkbox("fullscreen"))
@@ -2696,12 +2696,20 @@ def get_screen_mode():
         if assets.screen_compress:
             mode = "show_one"
     return mode
-def get_screen_dim(mode):
+def get_screen_dim(mode,aspect=True):
+    raspect = assets.swidth/float(assets.sheight)
     if mode == "two_screens":
+        aspect = 256.0/(192.0*2)
         top_pos = [0,0]
         top_size = [1,0.5]
         bottom_pos = [0,0.5]
         bottom_size = [1,0.5]
+        if aspect:
+            top_size[0]*=aspect/raspect
+            bottom_size[0]*=aspect/raspect
+            top_pos[0]=(1-top_size[0])/2.0
+            print top_pos
+            bottom_pos[0]=(1-bottom_size[0])/2.0
     if mode == "horizontal":
         top_pos = [0,0]
         top_size = [0.5,0.75]
@@ -2740,7 +2748,7 @@ def translate_click(pos):
             x = x/float(ss[0])*sw
             y = pos[1]-pp[1]
             y = y/float(ss[1])*sh
-            return int(x),int(y)
+            return [int(x),int(y)]
     if dim["top"]:
         r = col(*dim["top"][2:])
         if r:
@@ -2748,8 +2756,8 @@ def translate_click(pos):
     if dim["bottom"]:
         r = col(*dim["bottom"][2:])
         if r:
-            return r[0],r[1]+sh
-    return -100000,-100000
+            return [r[0],r[1]+sh]
+    return [-100000,-100000]
 def draw_screen():
     scale = 0
     if assets.sheight!=sh or assets.swidth!=sw: scale = 1
@@ -2764,7 +2772,7 @@ def draw_screen():
         scaled = pygame.transform.scale2x(pygame.screen)
     if scale:
         scaled = pygame.transform.scale(scaled,[assets.swidth,assets.sheight])
-    pygame.real_screen.fill([0,0,0])
+    pygame.real_screen.fill([10,10,10])
     def draw_segment(dest,surf,pos,size):
         rp = [pos[0]*assets.swidth,pos[1]*assets.sheight]
         rs = [size[0]*assets.swidth,size[1]*assets.sheight]
