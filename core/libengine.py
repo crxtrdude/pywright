@@ -355,7 +355,7 @@ class Script(gui.widget):
     def _gchildren(self): return self.world.click_order()
     children = property(_gchildren)
     width = property(lambda x: sw)
-    height = property(lambda x: sh*assets.num_screens)
+    height = property(lambda x: sh*2)
     def handle_events(self,evts):
         n = []
         dp = translate_click
@@ -2770,8 +2770,9 @@ def translate_click(pos):
             return r
     if dim["bottom"]:
         r = col(*dim["bottom"][2:])
+        r[1]+=sh
         if r:
-            return [r[0],r[1]+sh]
+            return r
     return [-100000,-100000]
 def draw_screen():
     scale = 0
