@@ -2406,22 +2406,19 @@ class screen_settings(gui.pane):
         res_box = gui.scrollpane([10,20])
         res_box.width = 200
         res_box.height = 120
+        self.res_box = res_box
         self.children.append(res_box)
         
-        res_box.children.append(gui.radiobutton("DS Res (256x384)","resopt"))
-        res_box.children.append(gui.radiobutton("Double scale (512x768)","resopt"))
-        for mode in sorted(pygame.display.list_modes()):
-            res_box.children.append(gui.radiobutton("(%sx%s)"%mode,"resopt"))
         res_box.children.append(gui.checkbox("fullscreen"))
         self.fs = res_box.children[-1]
         res_box.children.append(gui.checkbox("dualscreen"))
         self.ds = res_box.children[-1]
         res_box.children.append(gui.checkbox("virtual_dualscreen"))
         self.vds = res_box.children[-1]
+        res_box.children.append(gui.radiobutton("Change resolution (%sx%s)"%(assets.swidth,assets.sheight),"resopt"))
+        res_box.children[-1].checked = True
+        res_box.children[-1].click_down_over = self.popup_resolution
         self.reses = gui.radiobutton.groups["resopt"]
-        for r in self.reses:
-            if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
-                r.checked = True
         if assets.fullscreen:
             self.fs.checked = True
         if assets.num_screens==2:
@@ -2430,6 +2427,20 @@ class screen_settings(gui.pane):
             self.vds.checked = True
                 
         self.children.append(gui.button(self,"apply",[10,140]))
+    def popup_resolution(self,mp):
+        self.res_box.children[:] = []
+        h = 192
+        if get_screen_mode()=="two_screens":
+            h*=2
+        h2 = h*2
+        self.res_box.children.append(gui.radiobutton("DS Res (256x%s)"%h,"resopt"))
+        self.res_box.children.append(gui.radiobutton("Double scale (512x%s)"%h2,"resopt"))
+        for mode in sorted(pygame.display.list_modes()):
+            self.res_box.children.append(gui.radiobutton("(%sx%s)"%mode,"resopt"))
+        for r in self.reses:
+            if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
+                r.checked = True
+        self.res_box.updatescroll()
     def setgui(self,v):
         v = {"DS":0,"GBA":1}[v]
         assets.gbamode = v
@@ -2444,6 +2455,7 @@ class screen_settings(gui.pane):
                 self.oldwidth,self.oldheight = assets.swidth,assets.sheight
                 self.timer = 5.0
                 self.really_applyb = gui.pane()
+                self.really_applyb.is_applyb = True
                 self.really_applyb.width = 1000
                 self.really_applyb.height = 1000
                 self.really_applyb.pri = -1002
@@ -2469,11 +2481,15 @@ class screen_settings(gui.pane):
         if self.vds.checked:
             assets.screen_compress = 0
         make_screen()
+        self.resolution()
     def save_resolution(self):
-        assets.cur_script.world.remove(self.really_applyb)
+        for o in assets.cur_script.obs:
+            if hasattr(o,"is_applyb"):
+                assets.cur_script.world.remove(o)
         self.really_applyb = None
         self.timer = 0
         wini()
+        self.resolution()
     def reset_res(self):
         assets.swidth,assets.sheight = self.oldwidth,self.oldheight
         assets.fullscreen = self.old_fullscreen
@@ -2708,7 +2724,6 @@ def get_screen_dim(mode,aspect=True):
             top_size[0]*=aspect/raspect
             bottom_size[0]*=aspect/raspect
             top_pos[0]=(1-top_size[0])/2.0
-            print top_pos
             bottom_pos[0]=(1-bottom_size[0])/2.0
     if mode == "horizontal":
         top_pos = [0,0]
