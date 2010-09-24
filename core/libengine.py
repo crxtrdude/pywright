@@ -2420,7 +2420,7 @@ class screen_settings(gui.pane):
         self.vds = res_box.children[-1]
         self.reses = gui.radiobutton.groups["resopt"]
         for r in self.reses:
-            if str(assets.swidth) in r.text:
+            if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
                 r.checked = True
         if assets.fullscreen:
             self.fs.checked = True
