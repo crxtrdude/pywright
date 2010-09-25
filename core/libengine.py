@@ -2281,7 +2281,6 @@ width=%s
 height=%s
 scale2x=%s
 fullscreen=%s
-gbamode=%s
 opengl=%s
 displaylists=%s
 screens=%s
@@ -2292,7 +2291,7 @@ sound_volume=%s
 music_volume=%s
 screen_compress=%s
 autosave=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
-assets.gbamode,int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
+int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
 int(assets.screen_compress),int(assets.autosave)))
     f.close()
@@ -2320,7 +2319,6 @@ class screen_settings(gui.pane):
         self.make_button("close",[0,sh-17])
         self.make_button("quit game",[100,sh-17])
         self.make_button("quit pywright",[sw-74,sh-17])
-        self.make_button("view",[0,0])
         self.make_button("saves",[50,0])
         self.make_button("resolution",[100,0])
         self.make_button("sound",[170,0])
@@ -2472,23 +2470,6 @@ class screen_settings(gui.pane):
         line.children[-1].more = mod(10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
 
         self.children.append(ermsg)
-    def view(self):
-        screen_settings.firstpane = "view"
-        self.base()
-        guiline = gui.pane([0,30],[sw,20])
-        guiline.align = "horiz"
-        self.children.append(guiline)
-        guiline.children.append(gui.label("GUI:"))
-        class newr(gui.radiobutton):
-            def click_down_over(s,*args):
-                gui.radiobutton.click_down_over(s,*args)
-                self.setgui(s.text)
-        guiline.children.append(newr("DS","guichoice"))
-        guiline.children.append(newr("GBA","guichoice"))
-        if assets.gbamode==0:
-            guiline.children[-2].checked = True
-        elif assets.gbamode==1:
-            guiline.children[-1].checked = True
     def resolution(self):
         screen_settings.firstpane = "resolution"
         self.base()
@@ -2530,10 +2511,6 @@ class screen_settings(gui.pane):
             if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
                 r.checked = True
         self.res_box.updatescroll()
-    def setgui(self,v):
-        v = {"DS":0,"GBA":1}[v]
-        assets.gbamode = v
-        wini()
     def setdl(self,v):
         self.dislis.checked = 1-self.dislis.checked
         pygame.DISPLAY_LIST = self.dislis.checked
@@ -2955,7 +2932,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.swidth = 256
     assets.sheight = 192*2
     assets.filter = 0
-    assets.gbamode = 0
     assets.num_screens = 2
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
     assets.autosave = 1
@@ -2971,7 +2947,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if spl[0]=='height': assets.sheight = int(float(spl[1]))
             if spl[0]=='scale2x': assets.filter = int(spl[1])
             if spl[0]=='fullscreen': assets.fullscreen = int(spl[1])
-            if spl[0]=="gbamode": assets.gbamode = int(spl[1])
             if spl[0]=="opengl": pygame.USE_GL = int(spl[1])
             if spl[0]=="screens": assets.num_screens = int(spl[1])
             if spl[0]=="displaylists": pygame.DISPLAY_LIST = int(spl[1])
