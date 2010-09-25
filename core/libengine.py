@@ -2836,8 +2836,8 @@ def translate_click(pos):
             return r
     if dim["bottom"]:
         r = col(*dim["bottom"][2:])
-        r[1]+=sh
         if r:
+            r[1]+=sh
             return r
     return [-100000,-100000]
 def draw_screen():
