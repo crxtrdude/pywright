@@ -146,7 +146,10 @@ class meta:
         self.speed = 6
         self.blinkspeed = [100,200]
     def load_from(self,f):
-        lines = f.read().replace("\r\n","\n").split("\n")
+        text = f.read()
+        text = text.decode("utf8","ignore")
+        text = text.replace(u'\ufeff',u'')
+        lines = text.replace("\r\n","\n").split("\n")
         setlength = False
         for l in lines:
             spl = l.split(" ")
@@ -280,7 +283,7 @@ class Assets(object):
             raise file_error("File named "+start+name+ext+" could not be read.")
         text = file.read()
         if use_unicode:
-            text = text.decode("utf8")
+            text = text.decode("utf8","ignore")
             #Replace the BOM
             text = text.replace(u'\ufeff',u'')
         return text.split("\n")
