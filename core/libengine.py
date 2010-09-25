@@ -580,7 +580,7 @@ class Script(gui.widget):
             self.si += 1
             assets.variables["_currentline"] = str(self.si)
             exit = self.execute_line(line)
-    @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="interface")
+    @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
     def _textbox(self,line):
         """Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
         drop. The letters of the textbox will print one by one at a set rate, which can be modified
@@ -1716,7 +1716,7 @@ The four types of gui you can create are:
     VALUE('height','height of text block (determines rows but the value is in pixels)'),
     KEYWORD('color','color of the text'),
     KEYWORD('name','id of textblock object for later reference'),
-    COMBINED('text','text to display')],type='interface')
+    COMBINED('text','text to display')],type='text')
     def _textblock(self,command,x,y,width,height,*text):
         """Displays a block of text all at once on the screen somewhere. Used to create custom interfaces. The text doesn't
         support markup in the same way that textboxes do."""
@@ -1845,8 +1845,11 @@ The four types of gui you can create are:
         kwargs["start"] = 1-kwargs["value"]
         kwargs["end"] = kwargs["value"]
         self.obs.append(greyscaleanim(obs=self.obs,**kwargs))
-    @category("event")
+    @category([VALUE("ttl","Time for shake to last in frames","30"),
+    VALUE("offset","How many pixels away to move the screen (how violent)","15"),
+    TOKEN("nowait","Continue executing script during shake")],type="effect")
     def _shake(self,command,*args):
+        """Shake the screen for effect."""
         args = list(args)
         ttl = 30
         offset = 15
@@ -1863,8 +1866,19 @@ The four types of gui you can create are:
         sh.offset = offset
         sh.wait = wait
         self.obs.append(sh)
-    @category("blah")
+    @category([KEYWORD("mag","How many times to magnify","1 (will magnify 1 time, which is 2x magnification)"),
+    KEYWORD("frames","how many frames for the zoom to take","1"),
+    KEYWORD("name","Which object to magnify","tries to magnify everything"),
+    TOKEN("nowait","continue script during magnification"),
+    TOKEN("last","Choose last added object as target")],type="effect")
     def _zoom(self,command,*args):
+        """Causes a single object or all objects to be magnified. The value for 'mag' will be added to the current magnification
+        value of an object, and it will take 'frames' frames to get to the new value. By default, all objects are at a magnification
+        of 1. To shrink an object to half it's size for instance, you would use this command:
+{{{
+zoom mag=-0.5 frames=10
+}}}
+        This will subtract half magnification from an object over 10 frames: 1x - 0.5x = 0.5x."""
         mag = 1
         frames = 1
         wait = 1
@@ -1889,8 +1903,18 @@ The four types of gui you can create are:
             zzzooom.control(name)
         self.obs.append(zzzooom)
         if wait: self.buildmode = False
-    @category("event")
+    @category([KEYWORD("name","Name of object to scroll","scrolls everything"),
+    KEYWORD("filter","select only objects on the 'top' screen or 'bottom' screen, leave blank for either","'top'"),
+    KEYWORD("x","amount to scroll horizontally","0"),
+    KEYWORD("y","amount to scroll vertically","0"),
+    KEYWORD("speed","pixels per frame to scroll","1"),
+    TOKEN("last","select last added object as scroll target"),
+    TOKEN("nowait","continue script while scrolling")],type="effect")
     def _scroll(self,command,*args):
+        """Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
+(consider moving the viewpoint/camera RIGHT) and positive values for y will move objects UP (moving the viewpoint/camera DOWN) If the
+scroll amount does not divide evenly by the speed, it will still stop at the right place. (In older versions you needed to make sure
+the speed would divide evenly over the distance)."""
         x=0
         y=0
         speed = 1
@@ -1920,41 +1944,91 @@ The four types of gui you can create are:
         if name:
             scr.control(name)
         if wait: self.buildmode = False
-    @category("event")
+    @category([COMBINED("filename","Filename of song, searches game/case/music, game/music, and PyWright/music","If no path is listed, music will stop")],type="music")
     def _mus(self,command,*song):
+        """Stops currently playing music file, and if 'filename' is given, starts playing a new one. If you want to queue up a song to play when the current
+        song is finished, used for situations where you want an intro to a looping track, run this code anytime after the mus command: {{{set _music_loop track_name}}}.
+        
+        Songs can be .ogg, .mod, .it, .mid, .xm, .s3m, or uncompressed .wav"""
         track = " ".join(song)
         if not track:
             assets.stop_music()
         else:
             assets.play_music(track)
-    @category("event")
+    @category([COMBINED("filename","Filename of sound file, searches game/case/sfx, game/sfx, and PyWright/sfx"),
+    KEYWORD("after","Delay sound for this many frames")],type="sounds")
     def _sfx(self,command,*sound):
+        """Play a sound effect. If 'after' will play the sound after a certain number of frames (useful to time an effect with a specific
+        frame of an animation).
+        
+        Sound files can be .ogg or uncompressed .wav"""
         after = 0
         if sound and sound[0].startswith("after="):
             after = float(sound[0].replace("after=","",1))
             sound = sound[1:]
         sound = " ".join(sound)
         self.obs.append(SoundEvent(sound,after))
-    @category("text")
+    @category([COMBINED("nametag","Text to set for the next nametag","If no text is given, the next nametag will be invisible")],type="text")
     def _nt(self,command,*name):
+        """Sets or clears the next nametag. Must be called immediately before the textbox it alters. Other commands like "char" or "set _speaking" which alter the
+        nametag may conflict with this command."""
         nametag = " ".join(name)+"\n"
         assets.variables["_speaking"] = ""
         assets.variables["_speaking_name"] = nametag
-    @category("init")
+    @category([VALUE("tag","Name of evidence to add to the court record"),VALUE("page","Which page to add evidence to","Default is to add to the evidence page, unless the tag ends with a '$' in which case it will add to profiles")],type="evidence")
     def _addev(self,command,ev,page=None):
+        """Adds evidence to the court record based on an evidence 'tag'. The various properties of the evidence should be stored in variables based on this tag:
+
+set [tag]_name: the name displayed to the player on court record screen for this item, defaults to the tag itself
+
+set [tag]_pic: the image to use, should be in game/case/art/ev, or game/art/ev, defaults to the tag ([tag].png in art/ev)
+
+set [tag]_desc: the long description of the evidence, shown on zoomed court record view, defaults to blank
+
+set [tag]_check: name of a script to run if item is checked by player"""
         evob = evidence(ev,page=page)
         if ev not in [x.id for x in assets.items]: assets.items.append(evob)
-    @category("init")
+    @category([VALUE("tag","name of evidence to delete from court record")],type="evidence")
     def _delev(self,command,ev):
+        """Delete an item from the court record."""
         ids = [x.id for x in assets.items]
         if ev in ids: del assets.items[ids.index(ev)]
-    @category("list")
+    @category([VALUE("tag","Tag this list with some name so PyWright can keep track of which list options the player has tried already","Default is to name the list based on what script it's found in and on what line")],type="interface")
     def _list(self,command,tag=None):
+        """Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
+        they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
+        'goto [tag]' to jump straight to the list without any other labels. To actually build the list requires a series of 'li' commands, and then displaying the list 
+        will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
+        under 'li' and 'showlist'.
+{{{
+"What is your favorite food?"
+
+list faveorite_food
+li hamburger
+li HAMBURGER
+li hamburger?
+showlist
+
+label hamburger
+"Wow you like hamburgers too?"
+exit
+
+label HAMBURGER
+"Gee, you don't have to be so grumpy about it."
+exit
+
+label hamburger?
+"Yes, that is correct. Don't be timid."
+exit}}}
+"""
         if tag:
             assets.lists[tag] = assets.lists.get(tag,{})
         self.obs.append(listmenu(tag))
-    @category("list")
+    @category([COMBINED("option","text to display, and if 'result' not given, label to jump to if option is selected"),
+    KEYWORD('result','specifically named label to jump to if this option is chosen')],type="interface")
     def _li(self,command,*label):
+        """Add an item to the current list. When clicked, PyWright will go to a label either matching the option text, or matching the value of 'result'
+        if that was given. Must be used between 'list' and 'showlist' commands."""
         if label[-1].startswith("result="):
             result = label[-1][7:]
             label = " ".join(label[:-1])
@@ -1963,8 +2037,10 @@ The four types of gui you can create are:
         for o in self.obs:
             if isinstance(o,listmenu):
                 o.options.append([label,result])
-    @category("list")
+    @category([],type="interface")
     def _showlist(self,command,*args):
+        """Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
+        a series of 'li' commands."""
         fail = None
         for a in args:
             if "=" in a:
@@ -1977,22 +2053,29 @@ The four types of gui you can create are:
                 if fail:
                     o.fail = fail
         self.buildmode = False
-    @category("list")
+    @category([VALUE("tag","list tag to forget")],type="gameflow")
     def _forgetlist(self,command,tag):
+        """Clears the memory of which options player has chosen from a specific list. Normally, chosen options from a list
+        will be shown with a checkmark to remind the player which options they have tried, and which ones are new. You
+        can make all the options for a list not show checkmarks by clearing the memory."""
         if tag in assets.lists:
             del assets.lists[tag]
-    @category("list")
-    def _forgetlistitem(self,command,tag,item):
+    @category([VALUE("tag","list to forget item from"),COMBINED("option","option from list to forget state of")],type="gameflow")
+    def _forgetlistitem(self,command,tag,*item):
+        """Forget checkmark status of a specific option from a specific list."""
         if tag in assets.lists:
             if item in assets.lists[tag]:
-                del assets.lists[tag][item]
-    @category("event")
+                del assets.lists[tag][" ".join(item)]
+    @category([],type="objects")
     def _clear(self,command):
+        """Clears all objects from the scene."""
         for o in self.obs:
             o.kill = 1
         pygame.screen.fill([0,0,0])
-    @category("event")
+    @category([KEYWORD("name","Unique name of object to delete.")],type="objects")
     def _delete(self,command,*args):
+        """Deletes the named object from the scene. (Any time you give an object a name, such as 'ev bloody_knife name=bk' you can
+        use this command to delete it later, such as 'delete name=bk'."""
         name = None
         for a in args:
             if a.startswith("name="):
@@ -2001,8 +2084,11 @@ The four types of gui you can create are:
             if getattr(o,"id_name",None)==name:
                 o.kill = 1
                 break
-    @category("present")
+    @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _present(self,command,*args):
+        """Displays the court record and allows the player to present evidence. After the presentation,
+        will jump to the label named after the selected evidence tag. If a label for the chosen evidence
+        is not found, will either jump to 'label none', or the value of 'fail'."""
         self.statement = ""
         self.cross = "proceed"
         ob = evidence_menu(assets.items)
@@ -2013,8 +2099,11 @@ The four types of gui you can create are:
                     ob.fail = v
         addob(ob)
         self.buildmode = False
-    @category("examine")
+    @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _examine(self,command,*args):
+        """Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
+        based on the spot. Immediately following the examine command, you must use region commands to define where the
+        player can click."""
         em = examine_menu(hide=("hide" in args),name=self.scene+":%s"%self.si)
         self.obs.append(em)
         while self.si<len(self.scriptlines):

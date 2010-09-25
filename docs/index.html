@@ -1,4 +1,4 @@
-<html><body><div style=''><a href=#files>files</a><br><a href=#effect>effect</a><br><a href=#debug>debug</a><br><a href=#gameflow>gameflow</a><br><a href=#objects>objects</a><br><a href=#logic>logic</a><br><a href=#interface>interface</a><br><a href=#animation>animation</a><br></div><div style=''><a name='files'><h2>files</h2><p>
+<html><body><div style=''><a href=#files>files</a><br><a href=#objects>objects</a><br><a href=#text>text</a><br><a href=#effect>effect</a><br><a href=#evidence>evidence</a><br><a href=#debug>debug</a><br><a href=#gameflow>gameflow</a><br><a href=#animation>animation</a><br><a href=#music>music</a><br><a href=#logic>logic</a><br><a href=#interface>interface</a><br><a href=#sounds>sounds</a><br></div><div style=''><a name='files'><h2>files</h2><p>
     <b>exportvars</b> filename (variable_names) 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>file to export variables into, relative to the case folder</td><tr><td>variable_names</td><td>The names of variables to export. If none are listed, all variables will be exported</td><td>all variables</td></tr></table><p>Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
         ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p><br><br><p>
@@ -10,44 +10,7 @@
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>File to save to, relative to case folder. Saved games may not be named 'hide'</td><td>save</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the save.</td></table><p>Creates a new saved game in the case folder.</p><br><br><p>
     <b>screenshot</b> path width=VALUE height=VALUE x=VALUE y=VALUE rwidth=VALUE rheight=VALUE 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>path</td><td>path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)</td><tr><td>width</td><td>shrink screenshot to this width</td><td>256</td></tr><tr><td>height</td><td>shrink screenshot to this height</td><td>192</td></tr><tr><td>x</td><td>x-value of region to screenshot</td><td>0</td></tr><tr><td>y</td><td>y-value of region to screenshot</td><td>0</td></tr><tr><td>rwidth</td><td>width of region to screenshot</td><td>256</td></tr><tr><td>rheight</td><td>height of region to screenshot</td><td>192</td></tr></table><p>Takes a screenshot and saves the image. Can select a specific region of the screen to
-        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><a name='effect'><h2>effect</h2><p>
-    <b>fade</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>start</td><td>What fade level to start at</td><td>0</td></tr><tr><td>end</td><td>What fade level to end at</td><td>100</td></tr><tr><td>speed</td><td>How many fade steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to fade</td><td>Will try to fade all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Fade an object or objects in or out</p><br><br><p>
-    <b>grey</b> value=VALUE name=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>value</td><td>Whether an object should be greyscale or not: 1=greyscale 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to set to greyscale</td><td>Will try to greyscale all objects</td></tr></table><p>Makes an object display in greyscale.</p><br><br><p>
-    <b>invert</b> value=VALUE name=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>value</td><td>Whether an object should be inverted or not: 1=inverted 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr></table><p>Invert the colors of an object.</p><br><br><p>
-    <b>rotate</b> degrees=VALUE speed=VALUE axis=VALUE name=VALUE <i>nowait</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>degrees</td><td>How many degrees to rotate</td><tr><td>speed</td><td>How many degrees to rotate per frame</td><tr><td>axis</td><td>which axis to rotate on, z is the only valid value</td><td>z</td></tr><tr><td>name</td><td>Name a specific object to rotate</td><td>Will try to rotate all objects (not what you might expect)</td></tr><tr><td>nowait</td><td>Continue script while rotation happens</td><td>The script will pause until rotation is finished</td></tr></table><p>Begins an object rotation animation. Will wait for rotation to finish unless
-        'nowait' is included.</p><br><br><p>
-    <b>tint</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>start</td><td>Color tint to start at</td><td>'ffffff' or no tint (full color)</td></tr><tr><td>end</td><td>Color tint to end at</td><td>'000000' or full black tint</td></tr><tr><td>speed</td><td>How many color steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Animate an object's tint from one color to another. You can make an object darker but not brighter. Tinting an object
-        to red subtly can make a blush effect, tinting objects darker if there is a cloud overhead, or mixing tint with greyscale
-        to make a sepia toned flashback scene are different ways this can be used.</p><br><br><a name='debug'><h2>debug</h2><p>
-    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
-        and allow you to skip through any text.</p><br><br><p>
-    <b>print</b> [text] 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p><br><br><a name='gameflow'><h2>gameflow</h2><p>
-    <b>endscript</b> 
-    </p><p>Ends the currently running script and pops it off the stack. Multiple scripts
-        may be running in PyWright, in which case the next script on the stack will
-        resume running.</p><br><br><p>
-    <b>exit</b> 
-    </p><p>Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
-        resume.</p><br><br><p>
-    <b>game</b> game script 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>game</td><td>Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase</td><tr><td>script</td><td>Script to look for in the game folder to run first</td><td>intro</td></tr></table><p>Can be used to start a new game or case.</p><br><br><p>
-    <b>script</b> script_name label=VALUE <i>noclear</i> <i>stack</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>script_name</td><td>name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder.</td><tr><td>label</td><td>A label in the loading script to jump to after it loads.</td><td>Execution starts at the top of the script instead of a label</td></tr><tr><td>noclear</td><td>If this token is present, all the objects that exist will carry over into the new script.</td><td>Otherwise, the scene will be cleared.</td></tr><tr><td>stack</td><td>Puts the new script on top of the current script, instead of replacing it. When the new script exits, the current script will resume following this "script" command.</td><td>The new script will replace the current script.</td></tr></table><p>Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
-resume when the new script exits, otherwise, the current script will vanish.</p><br><br><p>
-    <b>timer</b> ticks command 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) before the command will be run</td><tr><td>command</td><td>The name of a macro to be run after the timer runs out</td></table><p>Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
-        fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
-        completed.</p><br><br><p>
-    <b>waitenter</b> 
-    </p><p>The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
-        it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred.</p><br><br><a name='objects'><h2>objects</h2><p>
+        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p><br><br><a name='objects'><h2>objects</h2><p>
     <b>bemo</b> emotion name 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>emotion</td><td>Blinking emotion animation to set character to</td><tr><td>name</td><td>Object name of character to change blinking emotion of</td><td>Chooses currently speaking character (value of _speaking_name)</td></tr></table><p>Sets a current char object to a specific blinking emotion animation.</p><br><br><p>
     <b>bg</b> bg_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>stack</i> <i>fade</i> 
@@ -60,6 +23,11 @@ the object name of the currently speaking character). Character's in pywright re
 to the character. This "emotion" can be set with the e= keyword on the char command, as well as modified during text. Textboxes
 also will control the animation of the currently speaking character to make the mouth movements match the speed the text is
 printing.</p><br><br><p>
+    <b>clear</b> 
+    </p><p>Clears all objects from the scene.</p><br><br><p>
+    <b>delete</b> name=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Unique name of object to delete.</td></table><p>Deletes the named object from the scene. (Any time you give an object a name, such as 'ev bloody_knife name=bk' you can
+        use this command to delete it later, such as 'delete name=bk'.</p><br><br><p>
     <b>emo</b> emotion name 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>emotion</td><td>Emotion animation to set character to</td><tr><td>name</td><td>Object name of character to change emotion of</td><td>Chooses currently speaking character (value of _speaking_name)</td></tr></table><p>Sets a current char object to a specific emotion animation.</p><br><br><p>
     <b>ev</b> evidencekey x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>fade</i> 
@@ -89,7 +57,103 @@ have a ball.txt describing it's animation qualities, if it has any.</p><br><br><
         them with an amount they may lose if they make the wrong choice.<br><br>        There is support for multiple health variables, if you were to have a multiple
         character game, or maybe you want to keep score and have a new health bar in each case. The 'variable'
         keyword allows you to choose which health bar the penalty command is referring to.<br><br>        Since it just uses variables, you can also change the health bar values behind the scenes without showing
-        the penalty bar at all, by just using the normal variable commands. The default penalty variable is 'penalty'.</p><br><br><a name='logic'><h2>logic</h2><p>
+        the penalty bar at all, by just using the normal variable commands. The default penalty variable is 'penalty'.</p><br><br><a name='text'><h2>text</h2><p>
+    <b>nt</b> [nametag] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>nametag</td><td>Text to set for the next nametag</td><td>If no text is given, the next nametag will be invisible</td></tr></table><p>Sets or clears the next nametag. Must be called immediately before the textbox it alters. Other commands like "char" or "set _speaking" which alter the
+        nametag may conflict with this command.</p><br><br><p>
+    <b>textblock</b> x y width height color=VALUE name=VALUE [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>x</td><td>x value to place text</td><tr><td>y</td><td>y value to place text</td><tr><td>width</td><td>width of text block</td><tr><td>height</td><td>height of text block (determines rows but the value is in pixels)</td><tr><td>color</td><td>color of the text</td><tr><td>name</td><td>id of textblock object for later reference</td><tr><td>text</td><td>text to display</td></table><p>Displays a block of text all at once on the screen somewhere. Used to create custom interfaces. The text doesn't
+        support markup in the same way that textboxes do.</p><br><br><p>
+    <b>textbox</b> [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Text to be print in the textbox, with markup.</td><td></td></tr></table><p>Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
+        drop. The letters of the textbox will print one by one at a set rate, which can be modified
+        with the markup commands. If there is a character speaking (the _speaking variable is set, a char
+        command has just been issued, etc) then the character will animate as the text is output.
+        The game script will pause until the player (or the textbox via markup) tells the game to 
+        continue. This command can also be issued by having a blank line surrounded by quotes. Ex:
+<br><pre>
+char test
+textbox This is some text that is printing
+#The same text could be printed this way:
+char test
+"This is some text that is printing."
+</pre></p><br><br><a name='effect'><h2>effect</h2><p>
+    <b>fade</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>start</td><td>What fade level to start at</td><td>0</td></tr><tr><td>end</td><td>What fade level to end at</td><td>100</td></tr><tr><td>speed</td><td>How many fade steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to fade</td><td>Will try to fade all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Fade an object or objects in or out</p><br><br><p>
+    <b>grey</b> value=VALUE name=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>value</td><td>Whether an object should be greyscale or not: 1=greyscale 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to set to greyscale</td><td>Will try to greyscale all objects</td></tr></table><p>Makes an object display in greyscale.</p><br><br><p>
+    <b>invert</b> value=VALUE name=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>value</td><td>Whether an object should be inverted or not: 1=inverted 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr></table><p>Invert the colors of an object.</p><br><br><p>
+    <b>rotate</b> degrees=VALUE speed=VALUE axis=VALUE name=VALUE <i>nowait</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>degrees</td><td>How many degrees to rotate</td><tr><td>speed</td><td>How many degrees to rotate per frame</td><tr><td>axis</td><td>which axis to rotate on, z is the only valid value</td><td>z</td></tr><tr><td>name</td><td>Name a specific object to rotate</td><td>Will try to rotate all objects (not what you might expect)</td></tr><tr><td>nowait</td><td>Continue script while rotation happens</td><td>The script will pause until rotation is finished</td></tr></table><p>Begins an object rotation animation. Will wait for rotation to finish unless
+        'nowait' is included.</p><br><br><p>
+    <b>scroll</b> name=VALUE filter=VALUE x=VALUE y=VALUE speed=VALUE <i>last</i> <i>nowait</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Name of object to scroll</td><td>scrolls everything</td></tr><tr><td>filter</td><td>select only objects on the 'top' screen or 'bottom' screen, leave blank for either</td><td>'top'</td></tr><tr><td>x</td><td>amount to scroll horizontally</td><td>0</td></tr><tr><td>y</td><td>amount to scroll vertically</td><td>0</td></tr><tr><td>speed</td><td>pixels per frame to scroll</td><td>1</td></tr><tr><td>last</td><td>select last added object as scroll target</td><tr><td>nowait</td><td>continue script while scrolling</td></table><p>Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
+(consider moving the viewpoint/camera RIGHT) and positive values for y will move objects UP (moving the viewpoint/camera DOWN) If the
+scroll amount does not divide evenly by the speed, it will still stop at the right place. (In older versions you needed to make sure
+the speed would divide evenly over the distance).</p><br><br><p>
+    <b>shake</b> ttl offset <i>nowait</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ttl</td><td>Time for shake to last in frames</td><td>30</td></tr><tr><td>offset</td><td>How many pixels away to move the screen (how violent)</td><td>15</td></tr><tr><td>nowait</td><td>Continue executing script during shake</td></table><p>Shake the screen for effect.</p><br><br><p>
+    <b>tint</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>start</td><td>Color tint to start at</td><td>'ffffff' or no tint (full color)</td></tr><tr><td>end</td><td>Color tint to end at</td><td>'000000' or full black tint</td></tr><tr><td>speed</td><td>How many color steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Animate an object's tint from one color to another. You can make an object darker but not brighter. Tinting an object
+        to red subtly can make a blush effect, tinting objects darker if there is a cloud overhead, or mixing tint with greyscale
+        to make a sepia toned flashback scene are different ways this can be used.</p><br><br><p>
+    <b>zoom</b> mag=VALUE frames=VALUE name=VALUE <i>nowait</i> <i>last</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>mag</td><td>How many times to magnify</td><td>1 (will magnify 1 time, which is 2x magnification)</td></tr><tr><td>frames</td><td>how many frames for the zoom to take</td><td>1</td></tr><tr><td>name</td><td>Which object to magnify</td><td>tries to magnify everything</td></tr><tr><td>nowait</td><td>continue script during magnification</td><tr><td>last</td><td>Choose last added object as target</td></table><p>Causes a single object or all objects to be magnified. The value for 'mag' will be added to the current magnification
+        value of an object, and it will take 'frames' frames to get to the new value. By default, all objects are at a magnification
+        of 1. To shrink an object to half it's size for instance, you would use this command:
+<br><pre>
+zoom mag=-0.5 frames=10
+</pre>
+        This will subtract half magnification from an object over 10 frames: 1x - 0.5x = 0.5x.</p><br><br><a name='evidence'><h2>evidence</h2><p>
+    <b>addev</b> tag page 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>tag</td><td>Name of evidence to add to the court record</td><tr><td>page</td><td>Which page to add evidence to</td><td>Default is to add to the evidence page, unless the tag ends with a '$' in which case it will add to profiles</td></tr></table><p>Adds evidence to the court record based on an evidence 'tag'. The various properties of the evidence should be stored in variables based on this tag:<br><br>set [tag]_name: the name displayed to the player on court record screen for this item, defaults to the tag itself<br><br>set [tag]_pic: the image to use, should be in game/case/art/ev, or game/art/ev, defaults to the tag ([tag].png in art/ev)<br><br>set [tag]_desc: the long description of the evidence, shown on zoomed court record view, defaults to blank<br><br>set [tag]_check: name of a script to run if item is checked by player</p><br><br><p>
+    <b>delev</b> tag 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>tag</td><td>name of evidence to delete from court record</td></table><p>Delete an item from the court record.</p><br><br><a name='debug'><h2>debug</h2><p>
+    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
+        and allow you to skip through any text.</p><br><br><p>
+    <b>print</b> [text] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p><br><br><a name='gameflow'><h2>gameflow</h2><p>
+    <b>endscript</b> 
+    </p><p>Ends the currently running script and pops it off the stack. Multiple scripts
+        may be running in PyWright, in which case the next script on the stack will
+        resume running.</p><br><br><p>
+    <b>exit</b> 
+    </p><p>Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
+        resume.</p><br><br><p>
+    <b>forgetlist</b> tag 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>tag</td><td>list tag to forget</td></table><p>Clears the memory of which options player has chosen from a specific list. Normally, chosen options from a list
+        will be shown with a checkmark to remind the player which options they have tried, and which ones are new. You
+        can make all the options for a list not show checkmarks by clearing the memory.</p><br><br><p>
+    <b>forgetlistitem</b> tag [option] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>tag</td><td>list to forget item from</td><tr><td>option</td><td>option from list to forget state of</td></table><p>Forget checkmark status of a specific option from a specific list.</p><br><br><p>
+    <b>game</b> game script 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>game</td><td>Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase</td><tr><td>script</td><td>Script to look for in the game folder to run first</td><td>intro</td></tr></table><p>Can be used to start a new game or case.</p><br><br><p>
+    <b>script</b> script_name label=VALUE <i>noclear</i> <i>stack</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>script_name</td><td>name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder.</td><tr><td>label</td><td>A label in the loading script to jump to after it loads.</td><td>Execution starts at the top of the script instead of a label</td></tr><tr><td>noclear</td><td>If this token is present, all the objects that exist will carry over into the new script.</td><td>Otherwise, the scene will be cleared.</td></tr><tr><td>stack</td><td>Puts the new script on top of the current script, instead of replacing it. When the new script exits, the current script will resume following this "script" command.</td><td>The new script will replace the current script.</td></tr></table><p>Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
+resume when the new script exits, otherwise, the current script will vanish.</p><br><br><p>
+    <b>timer</b> ticks command 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) before the command will be run</td><tr><td>command</td><td>The name of a macro to be run after the timer runs out</td></table><p>Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
+        fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
+        completed.</p><br><br><p>
+    <b>waitenter</b> 
+    </p><p>The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
+        it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred.</p><br><br><a name='animation'><h2>animation</h2><p>
+    <b>controlanim</b> name=VALUE start=VALUE end=VALUE jumpto=VALUE <i>loop</i> <i>noloop</i> <i>b</i> <i>t</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Named object to control</td><td>Will alter animation of all current objects - not recommended to use the default value.</td></tr><tr><td>start</td><td>Alter the starting frame of the animation</td><td>Leave starting frame what it was.</td></tr><tr><td>end</td><td>Alter ending frame of the animation</td><td>Leave ending frame what it was.</td></tr><tr><td>jumpto</td><td>Instantly set an animations frame to this value</td><td>Don't change frames</td></tr><tr><td>loop</td><td>Force animation to loop</td><tr><td>noloop</td><td>Force animation not to loop</td><tr><td>b</td><td>Alter blink animation of chars</td><tr><td>t</td><td>Alter talk animation of chars</td></table><p>Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
+the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
+as having a non looping animation play several times, or only playing a portion of a longer animation.</p><br><br><p>
+    <b>globaldelay</b> speed name=VALUE <i>b</i> <i>t</i> 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>speed</td><td>The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame.</td><tr><td>name</td><td>Only change the animation speed of objects with the given name</td><td>Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)</td></tr><tr><td>b</td><td>Select blinking animation for char objects</td><tr><td>t</td><td>Select talking animation for char objects</td></table><p>Changes the default delay value for either all running animations or specific ones. First create the animation 
+with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
+blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
+in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower.</p><br><br><p>
+    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p><br><br><a name='music'><h2>music</h2><p>
+    <b>mus</b> [filename] 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>Filename of song, searches game/case/music, game/music, and PyWright/music</td><td>If no path is listed, music will stop</td></tr></table><p>Stops currently playing music file, and if 'filename' is given, starts playing a new one. If you want to queue up a song to play when the current
+        song is finished, used for situations where you want an intro to a looping track, run this code anytime after the mus command: <br><pre>set _music_loop track_name</pre>.<br><br>        Songs can be .ogg, .mod, .it, .mid, .xm, .s3m, or uncompressed .wav</p><br><br><a name='logic'><h2>logic</h2><p>
     <b>addvar</b> variable amount 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to add to the variable</td></table><p>Adds an amount to a variable. If the variable 'x' were set to 4, the script:
 <br><pre>addvar x 1</pre>
@@ -175,6 +239,10 @@ and choose one to play. The priority might need to be adjusted if you have any s
 you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
 run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
 folder be the same, and not show a case menu at all.</p><br><br><p>
+    <b>examine</b> fail=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
+        based on the spot. Immediately following the examine command, you must use region commands to define where the
+        player can click.</p><br><br><p>
     <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE <i>hold</i> <i>password</i> run=VALUE [text] 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
 don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
@@ -182,6 +250,28 @@ The four types of gui you can create are:<br><br>* Button - This creates a butto
 * Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
 * Input - this will show an input box allowing the player to input text. This text will be saved into a variable which you define.
 * Wait - this command will pause the script and optionally execute a macro each frame
+</p><br><br><p>
+    <b>li</b> [option] result=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>option</td><td>text to display, and if 'result' not given, label to jump to if option is selected</td><tr><td>result</td><td>specifically named label to jump to if this option is chosen</td></table><p>Add an item to the current list. When clicked, PyWright will go to a label either matching the option text, or matching the value of 'result'
+        if that was given. Must be used between 'list' and 'showlist' commands.</p><br><br><p>
+    <b>list</b> tag 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>tag</td><td>Tag this list with some name so PyWright can keep track of which list options the player has tried already</td><td>Default is to name the list based on what script it's found in and on what line</td></tr></table><p>Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
+        they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
+        'goto [tag]' to jump straight to the list without any other labels. To actually build the list requires a series of 'li' commands, and then displaying the list 
+        will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
+        under 'li' and 'showlist'.
+<br><pre>
+"What is your favorite food?"<br><br>list faveorite_food
+li hamburger
+li HAMBURGER
+li hamburger?
+showlist<br><br>label hamburger
+"Wow you like hamburgers too?"
+exit<br><br>label HAMBURGER
+"Gee, you don't have to be so grumpy about it."
+exit<br><br>label hamburger?
+"Yes, that is correct. Don't be timid."
+exit</pre>
 </p><br><br><p>
     <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
     </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
@@ -195,31 +285,13 @@ The four types of gui you can create are:<br><br>* Button - This creates a butto
         [scene_name].txt which loads the background and shows the menu. Then, any external script can
         instantly load the proper scene with "script [scene_name]". You can control which options
         are shown through the keywords described.</p><br><br><p>
-    <b>textblock</b> x y width height color=VALUE name=VALUE [text] 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>x</td><td>x value to place text</td><tr><td>y</td><td>y value to place text</td><tr><td>width</td><td>width of text block</td><tr><td>height</td><td>height of text block (determines rows but the value is in pixels)</td><tr><td>color</td><td>color of the text</td><tr><td>name</td><td>id of textblock object for later reference</td><tr><td>text</td><td>text to display</td></table><p>Displays a block of text all at once on the screen somewhere. Used to create custom interfaces. The text doesn't
-        support markup in the same way that textboxes do.</p><br><br><p>
-    <b>textbox</b> [text] 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>text</td><td>Text to be print in the textbox, with markup.</td><td></td></tr></table><p>Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
-        drop. The letters of the textbox will print one by one at a set rate, which can be modified
-        with the markup commands. If there is a character speaking (the _speaking variable is set, a char
-        command has just been issued, etc) then the character will animate as the text is output.
-        The game script will pause until the player (or the textbox via markup) tells the game to 
-        continue. This command can also be issued by having a blank line surrounded by quotes. Ex:
-<br><pre>
-char test
-textbox This is some text that is printing
-#The same text could be printed this way:
-char test
-"This is some text that is printing."
-</pre></p><br><br><a name='animation'><h2>animation</h2><p>
-    <b>controlanim</b> name=VALUE start=VALUE end=VALUE jumpto=VALUE <i>loop</i> <i>noloop</i> <i>b</i> <i>t</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>name</td><td>Named object to control</td><td>Will alter animation of all current objects - not recommended to use the default value.</td></tr><tr><td>start</td><td>Alter the starting frame of the animation</td><td>Leave starting frame what it was.</td></tr><tr><td>end</td><td>Alter ending frame of the animation</td><td>Leave ending frame what it was.</td></tr><tr><td>jumpto</td><td>Instantly set an animations frame to this value</td><td>Don't change frames</td></tr><tr><td>loop</td><td>Force animation to loop</td><tr><td>noloop</td><td>Force animation not to loop</td><tr><td>b</td><td>Alter blink animation of chars</td><tr><td>t</td><td>Alter talk animation of chars</td></table><p>Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
-the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
-as having a non looping animation play several times, or only playing a portion of a longer animation.</p><br><br><p>
-    <b>globaldelay</b> speed name=VALUE <i>b</i> <i>t</i> 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>speed</td><td>The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame.</td><tr><td>name</td><td>Only change the animation speed of objects with the given name</td><td>Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)</td></tr><tr><td>b</td><td>Select blinking animation for char objects</td><tr><td>t</td><td>Select talking animation for char objects</td></table><p>Changes the default delay value for either all running animations or specific ones. First create the animation 
-with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
-blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
-in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower.</p><br><br><p>
-    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
-    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p><br><br></div></body></html>
+    <b>present</b> fail=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the court record and allows the player to present evidence. After the presentation,
+        will jump to the label named after the selected evidence tag. If a label for the chosen evidence
+        is not found, will either jump to 'label none', or the value of 'fail'.</p><br><br><p>
+    <b>showlist</b> 
+    </p><p>Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
+        a series of 'li' commands.</p><br><br><a name='sounds'><h2>sounds</h2><p>
+    <b>sfx</b> [filename] after=VALUE 
+    </p><table border=1><tr><td>Name</td><td>Description</td><td>Default value</td></tr><tr><td>filename</td><td>Filename of sound file, searches game/case/sfx, game/sfx, and PyWright/sfx</td><tr><td>after</td><td>Delay sound for this many frames</td></table><p>Play a sound effect. If 'after' will play the sound after a certain number of frames (useful to time an effect with a specific
+        frame of an animation).<br><br>        Sound files can be .ogg or uncompressed .wav</p><br><br></div></body></html>
