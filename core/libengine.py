@@ -2285,7 +2285,7 @@ useful to use 'resume' in the 'fail' case, because you won't know where the play
         characters. 'filename' cannot contain spaces or be located earlier than the current game on the path.
         
         See <fileclear> and <fileseek> for other file commands."""
-        f = open(filename,"a")
+        f = open(filename,"ab")
         f.write(text)
         f.flush()
         
