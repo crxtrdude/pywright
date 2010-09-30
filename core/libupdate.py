@@ -76,6 +76,7 @@ class my_o_dict(dict):
     pass
         
 def names(url):
+    url = url.replace("(","%28").replace(")","%29").replace(" ","%20")
     print "accessing","http://pywright.dawnsoft.org/"+url
     if 1:#try:
         f = urllib2.urlopen("http://pywright.dawnsoft.org/"+url)
