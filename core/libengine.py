@@ -1209,9 +1209,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         for a in args:
             if "=" in a:
                 arg,val = a.split("=")
-                if arg=="fail":
-                    m.fail = val
-                elif not vtrue(val):
+                if not vtrue(val):
                     m.delm(arg)
         self.scriptlines = []
         self.si = 0
