@@ -2124,13 +2124,54 @@ exit}}}
                 k,v = a.split("=",1)
                 if k == "fail":
                     em.fail = v
-    @category("cross")
+    @category([VALUE("label","label the cross exam so that you can 'goto label' later to start from the top"),
+    KEYWORD("fail","label to jump to if no label is defined for an action, when pressing or presenting",'"none"')],type="crossexam")
     def _cross(self,command,*args):
+        """Begin a cross examination. You may tag this cross examination, such as 'cross testimony1' which will
+allow you to jump to the beginning of the testimony again with 'goto testimony1'. Aftter the 'cross' line,
+you will have a series of 'statement's which define each line of text that the witness says which make up the testimony.
+When statements are finished, you will have the line 'endcross' which signifies that responses for player action
+during the testimony, in the form of 'label's, will follow.
+
+General layout of a cross examination:
+{{{cross [label]
+statement [statement tag]
+[text]
+statement [statement tag]
+[text]
+statement [statement tag]
+endcross
+
+[defense and helper discussing about difficuly]
+goto [label]
+
+[label for user action]
+[text]
+resume
+
+[label for another user action]
+[text]
+resume
+
+[label for successful user action (probably a present)]
+[text]
+goto continue
+
+label none
+[general text for a bad present]
+resume
+
+label continue
+[rest of game]}}}
+
+See <statement> for more info on hiding and revealing statements. Also, <endcross>.
+<resume> has a special use for cross examinations, in that it will jump back to the next statement
+the user was on, after handling logic outside of cross/endcross. It is better to use 'resume' than
+'goto top' or 'goto [label]', which will restart the cross examination from the beginning. It's especially
+useful to use 'resume' in the 'fail' case, because you won't know where the player came from."""
         assets.variables["_court_fail_label"] = "none"
         self.statement = ""
         for a in args:
-            if a=="start":
-                self.cross = "proceed"
             if "=" in a:
                 k,v = a.split("=",1)
                 if k == "fail":
@@ -2150,18 +2191,23 @@ exit}}}
                 #Add a dummy last statement so that next_statement can exit the cross/endcross section
                 assets.variables["_statements"].append({"words":"$$$","test":None,"index":self.si+ni})
                 break
-    @category("blah")
+    @category([],type="crossexam")
     def _cross_restart(self,command,*args):
+        """Go to the first line in the current cross examination"""
         if assets.variables.get("currentcross",None) is not None:
             self.si = assets.variables.get("currentcross",None)
-    @category("blah")
+    @category([],type="crossexam")
     def _next_statement(self,command,*args):
+        """Go to the next statement, usually not needed (the user is usually in control of navigating statements)"""
         self.next_statement()
-    @category("blah")
+    @category([],type="crossexam")
     def _prev_statement(self,command,*args):
+        """Go to the previous statement, usually not needed (the user is usually in control of navigating statements)"""
         self.prev_statement()
-    @category("cross")
+    @category([],type="crossexam")
     def _endcross(self,command):
+        """End the current cross examination section. Usually followed by labels for responding to user action.
+        See <cross> and <statement> for more info on cross examinations."""
         self.statement = ""
         self.cross = None
     def parse_statement(self,statement):
@@ -2171,8 +2217,19 @@ exit}}}
             test = statement.pop(-1)[5:]
         statement = " ".join(statement)
         return statement,test
-    @category("blah")
+    @category([COMBINED("tag","Name the statement so you can match up user action results with it"),
+    KEYWORD("test","Name of a variable. Only show this statement if that variable is true.","all statements shown by default")],type="crossexam")
     def _statement(self,command,*statement):
+        """Must be between 'cross' and 'endcross'. Defines a specific statement within a witness testimony for 
+        cross examination. Usually followed by a line of text spoken by the witness. The 'tag' will be refered to by labels
+        which follow the 'endcross' of this cross examination (although it is also possible to put the response label
+        immediately following the line of text).
+        
+        label press [tag] - PyWright will jump to a label that looks like this if the user "presses" this statement
+        
+        label [evidence_tag] [tag] - PyWright will jump to this label when the user presents this evidence to this statement
+        
+        If no matching label is found, PyWright will jump to the value of 'fail=' given to '<cross>'."""
         statement,test = self.parse_statement(statement)
         if not self.state_test_true(test):
             self.next_statement()
@@ -2180,8 +2237,25 @@ exit}}}
         self.instatement = True
         self.statement = statement
         self.cross = "proceed"
-    @category("cross")
+    @category([],type="logic")
     def _resume(self,command):
+        """Returns to the next line after a jump. Also, in cross examinations, will
+        return the the proper statement.
+        
+        Example:
+        {{{"This is just a test. Jumping elsewhere in the code..."
+        goto test
+        "And now we are back."
+        
+        label test
+        "Here we have jumped, but now we go back..."
+        resume}}}
+        
+        This will print:
+        {{{
+        "This is just a test. Jumping elsewhere in the code..."
+        "Here we have jumped, but now we go back..."
+        "And now we are back."}}}"""
         if self.statement:
             for x in assets.variables["_statements"]:
                 if x["words"]==self.statement:
@@ -2190,8 +2264,11 @@ exit}}}
             self.cross = "proceed"
             return
         self.si = self.lastline
-    @category("cross")
+    @category([],type="crossexam")
     def _clearcross(self,command):
+        """Clears all cross exam related variables. A good idea to call this after a testimony
+        is officially over, to ensure that 'resumes' don't mistakenly go back to the cross exam, 
+        and prevent other bugs from occuring."""
         self.cross = None
         self.lastline = 0
         self.statement = ""
