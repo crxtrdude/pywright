@@ -3133,6 +3133,23 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 if e.type==150:
                     if assets.variables.get("_music_loop",None):
                         assets.play_music(assets.variables["_music_loop"])
+                if e.type==pygame.ACTIVEEVENT:
+                    if e.gain==0 and (e.state==6 or e.state==2):
+                        print "minimize"
+                        assets.mini_vol = (assets.sound_volume,assets.music_volume)
+                        assets.sound_volume = 0
+                        assets.music_volume = 0
+                        gw = guiWait()
+                        gw.minimized = True
+                        assets.cur_script.obs.append(gw)
+                    if e.gain==1 and e.state==6:
+                        print "maximize"
+                        if hasattr(assets,"mini_vol"):
+                            (assets.sound_volume,assets.music_volume) = assets.mini_vol
+                            del assets.mini_vol
+                        for ob in assets.cur_script.obs:
+                            if hasattr(ob,"minimized"):
+                                assets.cur_script.world.all.remove(ob)
                 if e.type==pygame.VIDEORESIZE:
                     w,h = e.w,e.h
                     #w = (256/192.0)*h
