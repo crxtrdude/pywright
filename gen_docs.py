@@ -41,6 +41,13 @@ def expand_cat(cats):
     return options
     
 def make_doc(txt):
+    while 1:
+        m = re.search("<\w*?>",txt)
+        if not m:
+            break
+        ot = txt[m.start():m.end()]
+        nt = '<a href="#%(x)s">%(x)s</a>'%{"x":ot[1:-1]}
+        txt = txt.replace(ot,nt)
     txt = txt.replace("{{{","<br><pre>")
     txt = txt.replace("}}}","</pre>")
     txt = re.sub("\n *\n","<br><br>",txt)
@@ -53,7 +60,7 @@ def make_func_block(func):
     s = ""
     if not func.__doc__:
         return
-    s = """<p>
+    s = """<a name="%(fname)s"><p>
     <b>%(fname)s</b> %(cats)s
     </p>"""%{"fname":func.name[0],"cats":"".join([write_cat(c) for c in func.cat])}
     if func.cat:
