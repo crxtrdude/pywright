@@ -28,11 +28,15 @@ def pauseandquit():
 
 #~ import psyco
 #~ pscyo.full()
-    
+ALLTYPES = ["crossexam","files","objects",
+"text","effect","evidence","debug",
+"gameflow","animation","music","logic",
+"interface","sounds"]
 def category(cat,type=None):
     def _dec(f):
         f.cat = cat
         if type:
+            assert type in ALLTYPES
             f.ftype = type
         f.name = [""]
         return f
@@ -2273,6 +2277,18 @@ useful to use 'resume' in the 'fail' case, because you won't know where the play
         self.lastline = 0
         self.statement = ""
         self.instatement = False
+    @category([VALUE("filename","file to write to"),
+    COMBINED("text","text to write")],type="files")
+    def _filewrite(self,command,filename,*text):
+        """Writes text to the end of the specified file. Text is immediately flushed, files written to in
+        this way do not need to be explicitly "saved". Use "\n" for carriage return in the file, "\t" for tab
+        characters. 'filename' cannot contain spaces or be located earlier than the current game on the path.
+        
+        See <fileclear> and <fileseek> for other file commands."""
+        f = open(filename,"a")
+        f.write(text)
+        f.flush()
+        
 assets.Script = Script
 
 class DebugScript(Script):
