@@ -2163,10 +2163,7 @@ exit}}}
     @category("cross")
     def _endcross(self,command):
         self.statement = ""
-        if self.cross!="proceed" and self.cross is not None:
-            self.goto_result("First")
-        else:
-            self.cross = None
+        self.cross = None
     def parse_statement(self,statement):
         test = None
         statement = list(statement)
