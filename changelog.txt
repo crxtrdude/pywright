@@ -4,7 +4,6 @@
     - _textbox_show_button works correctly, _cr_button no longer hides the bottom
         screen
     fade music, sound effects in and out
-    rotate and fade can't set a particular object
     Undefined: List Index out of range
 games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screensize but I assume it says "Scapegoat"]
 ""{c090}{center}{sound /sfx-typewriter.wav}
