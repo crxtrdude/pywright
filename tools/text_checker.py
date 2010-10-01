@@ -29,7 +29,7 @@ def check_dirs(path):
 def check_file(path):
     f = open(path)
     for i,line in enumerate(f):
-        line = line.strip()
+        line = line.strip().decode("ascii","ignore")
         if line.startswith('"') and line.endswith('"'):
             check_line(path,i,line)
             
@@ -46,4 +46,4 @@ def check_line(path,i,line):
     if getattr(tb,"OVERAGE",0)>1:
         print path,i,tb.written
     
-check_text("ts_demo3")
+check_text("Turnabout Substitution")

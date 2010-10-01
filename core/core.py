@@ -2089,7 +2089,9 @@ class textbox(gui.widget):
                     if center:
                         x = (sw-img.get_width())//2
                     if x+img.get_width()>256:
-                        self.OVERAGE = x+img.get_width()-256
+                        if not getattr(self,"OVERAGE",None) and vtrue(assets.variables.get("_debug","false")):
+                            self.OVERAGE = x+img.get_width()-256
+                            raise script_error('Text Overflow:"%s" over by %s'%(line,self.OVERAGE))
                     self.img.blit(img,[x,y])
                     y+=inc
                     x = stx

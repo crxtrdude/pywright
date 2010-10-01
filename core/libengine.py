@@ -2326,7 +2326,12 @@ class DebugScript(Script):
             assets.variables["_speaking"] = c
             self.char_cache[tuple(args)] = c
         if command == "textbox":
-            pass
+            tb = textbox(" ".join(args).replace("{n}","\n"))
+            tb.can_skip = True
+            tb.enter_down()
+            tb.update()
+            if getattr(tb,"OVERAGE",0)>1:
+                print "over",self.scene,self.si,'"'+"{n}".join(tb.written.split("\n")[1:])+'"'
     def init(self,*args,**kwargs):
         self.old_stack = assets.stack[:]
         super(DebugScript,self).init(*args,**kwargs)
@@ -2351,18 +2356,24 @@ class DebugScript(Script):
             self.update()
         errors = [o for o in self.obs if isinstance(o,error_msg)]
         return errors
-    def debug_game(self):
-        for scene in os.listdir(assets.game):
-            if not scene.endswith(".txt"):
+    def debug_game(self,scope="current"):
+        scenes = [assets.cur_script.scene]
+        if scope == "all":
+            scenes = os.listdir(assets.game)
+        aerrors = []
+        for scene in scenes:
+            if scope=="all" and not scene.endswith(".txt"):
                 continue
             print scene
             self.world.all = []
-            self.init(assets.cur_script.scene)
-            self.scriptlines = assets.cur_script.scriptlines
+            self.init(scene)
+            #self.scriptlines = assets.cur_script.scriptlines
             assets.stack.append(self)
             errors = self.run_it()
             print errors
-            for err in errors:
+            aerrors.extend(errors)
+        if scope == "current":
+            for err in reversed(aerrors):
                 assets.cur_script.obs.append(err)
 
 def wini():
