@@ -545,6 +545,8 @@ class Script(gui.widget):
         for o in self.obs:
             if not getattr(o,"hidden",False) and not getattr(o,"kill",False):
                 o.draw(screen)
+        if vtrue(assets.variables.get("_debug","false")):
+            screen.blit(assets.get_font("nt").render("debug",1,[240,240,240]),[220,0])
     def tboff(self):
         for o in self.obs:
             if isinstance(o,testimony_blink):
