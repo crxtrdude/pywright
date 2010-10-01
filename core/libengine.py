@@ -570,8 +570,10 @@ class Script(gui.widget):
                 statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
                 if statements and statements[0]["words"] == self.statement:
                     u.showleft = False
+                    tbox.showleft = False
                 else:
                     u.showleft = True
+                    tbox.showleft = True
     def interpret(self):
         self.buildmode = True
         exit = False

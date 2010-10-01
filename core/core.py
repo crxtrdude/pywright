@@ -1840,6 +1840,9 @@ class textbox(gui.widget):
         if self.rightp and self.nextline:
             dest.blit(self.rpi.img,[self.rpos1[0]+self.width1-16,
                 self.rpos1[1]+self.height1-16])
+        if getattr(self,"showleft",False) and self.nextline:
+            dest.blit(pygame.transform.flip(self.rpi.img,1,0),[self.rpos1[0],
+                self.rpos1[1]+self.height1-16])
         #End
         x = assets.variables.get("_nt_x","")
         y = assets.variables.get("_nt_y","")
