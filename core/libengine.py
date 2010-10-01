@@ -568,9 +568,8 @@ class Script(gui.widget):
             u.textbox = tbox
             if assets.variables.get("_statements",[]):
                 statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
-                if statements and statements[0]["words"] == self.statement:
+                if statements and (statements[0]["words"] == self.statement) or not self.statement:
                     u.showleft = False
-                    tbox.showleft = False
                 else:
                     u.showleft = True
                     tbox.showleft = True
@@ -605,6 +604,7 @@ char test
 }}}"""
         text = line.replace("{n}","\n")
         tbox = textbox(text)
+        tbox.showleft=False
         if not self.viewed.get(assets.game+self.scene+str(self.si-1)):
             tbox.can_skip = False
         if vtrue(assets.variables.get("_debug","false")):
