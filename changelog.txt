@@ -14,8 +14,6 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
         Find missing character poses
         Find typos with name= (Attempt to do something to a named object that doesn't exist)
     repeatable code for buttons
-    check difference between "exit" and "endscript"
-    "fail" for menu as opposed to localmenu
     controlanim overload to support delay and individual frame delays
     a way to query properties of objects
     fadeout for delete?
@@ -32,7 +30,7 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     can tint graphics
     can invert graphics
     can greyscale graphics
-    more clear when debug mode is on
+    
     unicode and multiple font support: set _punctuation, set _font_tb _font_tb_size
     _textbox_lines
     maybe hardcoded support for setting talk/blink
