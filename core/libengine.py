@@ -2691,7 +2691,7 @@ class screen_settings(gui.pane):
         
 class choose_game(gui.widget):
     def update(self,*args):
-        return True
+        return False
         
 def load_game_menu():
     if [1 for o in assets.cur_script.obs if isinstance(o,choose_game)]:
@@ -2755,13 +2755,13 @@ def make_start_script(logo=True):
     introlines = []
     try:
         import urllib2
-        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro.txt",timeout=2)
+        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro_0977.txt",timeout=2)
         introlines = online_script.read().split("\n")
         online_script.close()
     except:
         pass
     bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 name=logo",
-                                            "zoom mag=-0.25 frames=30 nowait"] + introlines + ["add_root","gui Wait"])
+                                            "zoom mag=-0.25 frames=30 nowait","add_root"] + introlines + ["gui Wait"])
     assets.stack = [bottomscript]  #So that the root object gets tagged as in bottomscript
     def add_root(command,*args):
         bottomscript.obs.append(root)
