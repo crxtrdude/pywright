@@ -2327,8 +2327,10 @@ class DebugScript(Script):
             assets.variables["_speaking"] = c
             self.char_cache[tuple(args)] = c
         if command == "textbox":
-            tb = textbox(" ".join(args).replace("{n}","\n"))
+            txt = " ".join(args).replace("{n}","\n")
+            tb = textbox(txt)
             tb.can_skip = True
+            #tb.skipping = len(txt)
             tb.enter_down()
             tb.update()
             if getattr(tb,"OVERAGE",0)>1:
