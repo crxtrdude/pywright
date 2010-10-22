@@ -651,7 +651,7 @@ char test
         if func:
             func(*args)
         elif vtrue(assets.variables.get("_debug","false")): 
-            self.obs.append(error_msg("Invalid command",line,self.si,self))
+            self.obs.append(error_msg("Invalid command:"+command,line,self.si,self))
             return True
     def execute_macro(self,macroname,args="",obs=None):
         mlines = self.macros.get(macroname,None)
