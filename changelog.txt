@@ -1,6 +1,8 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.977: September 21, 2010*
+    test emo/bemo and error conditions
+    - Main PyWright startup script executes simultaneously with the menu
     - _textbox_show_button works correctly, _cr_button no longer hides the bottom
         screen
     fade music, sound effects in and out
@@ -12,23 +14,25 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
         Find missing brackets in text
         Find unknown commands (requires mapping macros)
         Find missing character poses
-        Find typos with name= (Attempt to do something to a named object that doesn't exist)
     repeatable code for buttons
     controlanim overload to support delay and individual frame delays
     a way to query properties of objects
-    fadeout for delete?
     wait/nowait for objects
     -left/right tiny arrow for cross examination
     better unification of object commands - char command missing flipx for instance, no pri for other objects
-    include the fixed court record buttons (all art/general to be safe)
+    -made sure to include cross examination arrows with rounded edge
     -Changed display model. On the options screen you will see a list of valid resolutions for your display. Instead of dual screen
     in effect doubling the resolution shown, the resolution chosen will be accurate and the display will shrink to fit (whether it
     is dual screen or not)
-    -debug mode displays "debug" in the corner, don't release with "debug" turned on :)
+    debug mode changes:
+        when in debug mode (set _debug true at the start of a script) "debug" is displayed in the corner of the screen
+        Many more errors are shown:
+            *anytime you interact with an object (scroll, delete, etc) by name= and the object doesn't 
+            exist you will get a warning
     -production mode: "set _production true" will turn on production mode.
         in production mode, errors will be logged but not displayed to the user (and
         no clicking will be needed by them to bypass the error)
-    -small changes to error display
+    -small changes to error display, displays a bit more text
     can tint graphics
     can invert graphics
     can greyscale graphics
