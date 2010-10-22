@@ -1308,6 +1308,7 @@ in the .txt files that go alongside the graphics. However, sometimes you may wis
         for a in args:
             if a.startswith("name="):
                 name = a.split("=",1)[1]
+        any = False
         for o in self.world.all:
             if name and getattr(o,"id_name",None)!=name:
                 continue
@@ -1318,6 +1319,9 @@ in the .txt files that go alongside the graphics. However, sometimes you may wis
                     o = o.talk_sprite
             if hasattr(o,"spd"):
                 o.spd = float(spd)
+                any = True
+        if name and not any and vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("No valid objects found by key name "+name)
     @category([KEYWORD("name","Named object to control","Will alter animation of all current objects - not recommended to use the default value."),
     KEYWORD("start","Alter the starting frame of the animation","Leave starting frame what it was."),
     KEYWORD("end","Alter ending frame of the animation","Leave ending frame what it was."),
@@ -1354,8 +1358,10 @@ as having a non looping animation play several times, or only playing a portion 
                 b = True
             elif a == "t":
                 t = True
+        any = False
         for o in self.world.all:
             if not name or getattr(o,"id_name",None)==name:
+                any = True
                 if isinstance(o,portrait):
                     if b:
                         o = o.blink_sprite
@@ -1375,6 +1381,8 @@ as having a non looping animation play several times, or only playing a portion 
                         o.loopmode = "stop"
                 if jumpto is not None:
                     o.x = jumpto
+        if name and not any and vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("No valid objects found by key name "+name)
     @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -1552,55 +1560,32 @@ printing."""
         p.single = "noauto" in args
         return p
     @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
-    def _emo(self,command,emotion,name=None):
+    def _emo(self,command,emotion,name=None,mode="talk"):
         """Sets a current char object to a specific emotion animation."""
         char = None
         if not name:
             char = assets.variables.get("_speaking", None)
-            print "found char by _speaking",char,char.name
         if name:
             for c in self.obs:
                 if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
                     char = c
                     break
-            print "found char by name",char,char.name
+            if not char and vtrue(assets.variables.get("_debug","false")):
+                raise missing_object(command+": No character found by key name "+name)
         if char:
             nametag = char.nametag
-            err = None
-            try:
+            if mode == 'talk':
                 char.set_emotion(emotion)
-            except (script_error,art_error),e:
-                err = e
+            elif mode == 'blink':
+                char.set_blink_emotion(emotion)
             char.nametag = nametag
             assets.variables["_speaking_name"] = nametag
-            if err:
-                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
-                import traceback
-                traceback.print_exc()
+        elif vtrue(assets.variables.get("_debug","false")):
+            raise missing_object(command+": No character found to set emotion!")
     @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
     def _bemo(self,command,emotion,name=None):
         """Sets a current char object to a specific blinking emotion animation."""
-        char = None
-        if not name:
-            char = assets.variables.get("_speaking", None)
-        if name:
-            for c in self.obs:
-                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
-                    char = c
-                    break
-        if char:
-            nametag = char.nametag
-            err = None
-            try:
-                char.set_blink_emotion(emotion)
-            except (script_error,art_error),e:
-                err = e
-            char.nametag = nametag
-            assets.variables["_speaking_name"] = nametag
-            if err:
-                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
-                import traceback
-                traceback.print_exc()
+        self._emo("bemo",emotion,name,"blink")
     @category([VALUE('type','type of gui to create. (Back, Button, Input, or Wait)'),
 VALUE('macro','First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)'),
 VALUE('var_name','Variable name to save input text into, valid for (Input)'),
@@ -2087,10 +2072,14 @@ exit}}}
         for a in args:
             if a.startswith("name="):
                 name = a[5:]
+        any = False
         for o in reversed(self.obs):
             if getattr(o,"id_name",None)==name:
+                any = True
                 o.kill = 1
                 break
+        if name and not any and vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("Delete: cannot find "+name+" (might not be a problem, often delete is used just in case some object is still around)")
     @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _present(self,command,*args):
         """Displays the court record and allows the player to present evidence. After the presentation,
