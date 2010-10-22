@@ -9,11 +9,6 @@
     Undefined: List Index out of range
 games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screensize but I assume it says "Scapegoat"]
 ""{c090}{center}{sound /sfx-typewriter.wav}
-    debug menu
-        Find badly formatted text
-        Find missing brackets in text
-        Find unknown commands (requires mapping macros)
-        Find missing character poses
     repeatable code for buttons
     controlanim overload to support delay and individual frame delays
     a way to query properties of objects
@@ -29,6 +24,9 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
         Many more errors are shown:
             *anytime you interact with an object (scroll, delete, etc) by name= and the object doesn't 
             exist you will get a warning
+            *non matching brackets in text: "{command{ hello there" or "this is a statement {f"
+            *text that goes offscreen
+            *invalid commands
     -production mode: "set _production true" will turn on production mode.
         in production mode, errors will be logged but not displayed to the user (and
         no clicking will be needed by them to bypass the error)
