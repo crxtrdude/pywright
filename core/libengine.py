@@ -2333,8 +2333,6 @@ class DebugScript(Script):
             #tb.skipping = len(txt)
             tb.enter_down()
             tb.update()
-            if getattr(tb,"OVERAGE",0)>1:
-                print "over",self.scene,self.si,'"'+"{n}".join(tb.written.split("\n")[1:])+'"'
     def init(self,*args,**kwargs):
         self.old_stack = assets.stack[:]
         super(DebugScript,self).init(*args,**kwargs)
