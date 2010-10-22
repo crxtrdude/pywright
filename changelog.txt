@@ -19,9 +19,9 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
     -Changed display model. On the options screen you will see a list of valid resolutions for your display. Instead of dual screen
     in effect doubling the resolution shown, the resolution chosen will be accurate and the display will shrink to fit (whether it
     is dual screen or not)
-    debug mode changes:
+    -debug mode changes:
         when in debug mode (set _debug true at the start of a script) "debug" is displayed in the corner of the screen
-        Many more errors are shown:
+        More errors are shown:
             *anytime you interact with an object (scroll, delete, etc) by name= and the object doesn't 
             exist you will get a warning
             *non matching brackets in text: "{command{ hello there" or "this is a statement {f"
