@@ -589,7 +589,7 @@ class Script(gui.widget):
             assets.variables["_currentline"] = str(self.si)
             exit = self.execute_line(line)
     @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
-    def _textbox(self,line):
+    def _textbox(self,command,line):
         """Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
         drop. The letters of the textbox will print one by one at a set rate, which can be modified
         with the markup commands. If there is a character speaking (the _speaking variable is set, a char
@@ -625,7 +625,7 @@ char test
                 #tbox.color = (20,200,40)
     def execute_line(self,line):
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
-            self.call_func("textbox",[line[1:-1]])
+            self.call_func("textbox",["textbox",line[1:-1]])
             return True
         def repvar(x):
             if x.startswith("$") and not x[1].isdigit():
