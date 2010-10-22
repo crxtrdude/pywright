@@ -16,3 +16,5 @@ class file_error(Exception):
     __repr__ = __str__
 class missing_object(script_error):
     pass
+class offscreen_text(script_error):
+    pass
