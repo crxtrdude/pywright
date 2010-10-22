@@ -1321,7 +1321,7 @@ in the .txt files that go alongside the graphics. However, sometimes you may wis
                 o.spd = float(spd)
                 any = True
         if name and not any and vtrue(assets.variables.get("_debug","false")):
-            raise missing_object("No valid objects found by key name "+name)
+            raise missing_object("globaldelay: No valid objects found by key name "+name)
     @category([KEYWORD("name","Named object to control","Will alter animation of all current objects - not recommended to use the default value."),
     KEYWORD("start","Alter the starting frame of the animation","Leave starting frame what it was."),
     KEYWORD("end","Alter ending frame of the animation","Leave ending frame what it was."),
@@ -1382,7 +1382,7 @@ as having a non looping animation play several times, or only playing a portion 
                 if jumpto is not None:
                     o.x = jumpto
         if name and not any and vtrue(assets.variables.get("_debug","false")):
-            raise missing_object("No valid objects found by key name "+name)
+            raise missing_object("controlanim: No valid objects found by key name "+name)
     @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -2079,7 +2079,8 @@ exit}}}
                 o.kill = 1
                 break
         if name and not any and vtrue(assets.variables.get("_debug","false")):
-            raise missing_object("Delete: cannot find "+name+" (might not be a problem, often delete is used just in case some object is still around)")
+            print "error"
+            raise missing_object("Delete: cannot find "+name)
     @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _present(self,command,*args):
         """Displays the court record and allows the player to present evidence. After the presentation,
