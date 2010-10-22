@@ -1921,6 +1921,15 @@ class textbox(gui.widget):
         if self.text:
             while "\n" not in self.written and len(self.written)<len(self.text):
                 self.written+=self.text[len(self.written)]
+        bracketmatch = self.written.count("{")-self.written.count("}")
+        if bracketmatch!=0:
+            while bracketmatch>0:
+                self.written = self.written + "}"
+                bracketmatch-=1
+            while bracketmatch<0:
+                self.written = "{"+self.written
+                bracketmatch+=1
+            raise script_error("Text macro brackets don't match")
         num_chars = 0
         if self.next_char==0:
             num_chars = self.speed
