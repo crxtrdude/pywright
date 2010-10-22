@@ -3523,12 +3523,16 @@ class scroll(effect):
             if hasattr(o,"pos") and not getattr(o,"kill",0):
                 self.obs = [o]
                 return
+        if vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("Scroll: no objects found to scroll")
     def control(self,name):
         self.filter = None
         for o in reversed(assets.cur_script.obs):
             if getattr(o,"id_name",None)==name:
                 self.obs = [o]
                 return
+        if vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("Scroll: no object named "+str(name)+" found")
                 
 class zoomanim(effect):
     def __init__(self,mag=1,frames=1,wait=1,name=None):
@@ -3540,8 +3544,6 @@ class zoomanim(effect):
         self.mag_per_frame = float(self.mag)/float(self.frames)
         self.wait = wait
         self.kill = 0
-        if name:
-            self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
@@ -3559,12 +3561,16 @@ class zoomanim(effect):
             if hasattr(o,"pos") and not getattr(o,"kill",0):
                 self.obs = [o]
                 return
+        if vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("zoom: no objects found to zoom")
     def control(self,name):
         self.filter = None
         for o in reversed(assets.cur_script.obs):
             if getattr(o,"id_name",None)==name:
                 self.obs = [o]
                 return
+        if vtrue(assets.variables.get("_debug","false")):
+            raise missing_object("zoom: no object named "+str(name)+" found")
 
 class rotateanim(effect):
     def __init__(self,axis="z",degrees=90,speed=1,wait=1,name=None,obs=[]):
@@ -3578,6 +3584,8 @@ class rotateanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+            if not self.obs and vtrue(assets.variables.get("_debug","false")):
+                raise missing_object("rotate: no object named "+str(name)+" found")
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
@@ -3614,6 +3622,8 @@ class fadeanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+            if not self.obs and vtrue(assets.variables.get("_debug","false")):
+                raise missing_object("fade: no object named "+str(name)+" found")
         self.update()
     def draw(self,dest): pass
     def update(self):
@@ -3653,7 +3663,11 @@ class tintanim(effect):
         self.wait = wait
         self.kill = 0
         if name:
+            print name
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+            print self.obs
+            if not self.obs and vtrue(assets.variables.get("_debug","false")):
+                raise missing_object("tint: no object named "+str(name)+" found")
         self.update()
     def draw(self,dest): pass
     def update(self):
@@ -3695,6 +3709,8 @@ class invertanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+            if not self.obs and vtrue(assets.variables.get("_debug","false")):
+                raise missing_object("invert: no object named "+str(name)+" found")
         self.update()
     def draw(self,dest): pass
     def update(self):
@@ -3731,6 +3747,8 @@ class greyscaleanim(effect):
         self.kill = 0
         if name:
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
+            if not self.obs and vtrue(assets.variables.get("_debug","false")):
+                raise missing_object("greyscale: no object named "+str(name)+" found")
         self.update()
     def draw(self,dest): pass
     def update(self):
