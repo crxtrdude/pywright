@@ -2672,12 +2672,15 @@ class case_menu(fadesprite,gui.widget):
         if self.reload:
             self.option_imgs = []
             self.__init__(self.path)
+        spd = (self.choice*256-self.x)/25.0
+        if abs(spd)>0 and abs(spd)<10:
+            spd = 10*abs(spd)/spd
         if self.x<self.choice*sw:
-            self.x+=20
+            self.x+=spd
             if self.x>self.choice*sw:
                 self.x=self.choice*sw
         if self.x>self.choice*sw:
-            self.x-=20
+            self.x+=spd
             if self.x<self.choice*sw:
                 self.x=self.choice*sw
         return True
