@@ -1748,7 +1748,7 @@ class textbox(gui.widget):
         self.leftp = leftp
         self.rpi = fg("pointer")
         self.kill = False
-        self.skipping = False
+        self.skipping = 0
         self.statement = None
         self.wait = "auto"
         
@@ -1925,7 +1925,7 @@ class textbox(gui.widget):
         if self.next_char==0:
             num_chars = self.speed
         if self.skipping:
-            num_chars = 3
+            num_chars = self.skipping
         for cnum in range(num_chars):
             if (len(self.written)<len(self.text) and 
                     len(self.written.replace("\r\n","\n").split("\n"))<\
