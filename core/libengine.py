@@ -436,9 +436,10 @@ class Script(gui.widget):
         self.imgcache.clear()
         self.scene = scene
         self.scriptlines = []
+        self.macros = {}
         if scriptlines:
             self.scriptlines = scriptlines
-        self.macros = {}
+            self.macros = assets.parse_macros(self.scriptlines)
         self.si = 0
         self.cross = None
         self.statement = ""
