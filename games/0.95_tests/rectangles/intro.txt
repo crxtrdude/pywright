@@ -17,10 +17,10 @@ set cy 0
 
 
 #Add buttons for movement
-gui Button move_left x=125 y=292 left
-gui Button move_right x=225 y=292 right
-gui Button move_up x=182 y=225 up
-gui Button move_down x=172 y=340 down
+gui Button move_left x=125 y=292 hold left
+gui Button move_right x=225 y=292 hold right
+gui Button move_up x=182 y=225 hold up
+gui Button move_down x=172 y=340 hold down
 
 label wait_input
 gui Wait
