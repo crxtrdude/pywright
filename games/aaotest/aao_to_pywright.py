@@ -1,3 +1,17 @@
+#Expression info
+#f:str_begins_with() - in parenthesis can only be an inline string not a variable
+#                       may or may not have quotes around it
+
+
+
+
+
+
+
+
+
+
+
 #TODO: show evidence at start that is never revealed
 """Limitations:
 cannot hide a statement that wasn't hidden from the start
@@ -16,6 +30,7 @@ import subprocess
 
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10711" #My dialogue test case
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
+game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
 
 def create_folders():
     if not os.path.exists("art"):
@@ -388,6 +403,11 @@ def TesterVar(vals,elements):
     vals["postcode"] += code
 def DefinirVar(vals,elements):
     """Define variable"""
+    #~ if elements[1][0].startswith("xpr="):
+        #~ parsemode = "alpha"
+        #~ parse = [""]
+        #~ for c in elements[1][0][4:]:
+            #~ if c.isalpha()
     vals["postcode"] += "\nsetvar %s %s"%(elements[0][0],elements[1][0])
 def EvaluerCondition(vals,elements):
     """Evalute condition (condition,jump_if_success,jump_if_fail)"""
