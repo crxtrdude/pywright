@@ -5,10 +5,15 @@
     - Main PyWright startup script executes simultaneously with the menu
     - _textbox_show_button works correctly, _cr_button no longer hides the bottom
         screen
-    fade music, sound effects in and out
-    Undefined: List Index out of range
-games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screensize but I assume it says "Scapegoat"]
-""{c090}{center}{sound /sfx-typewriter.wav}
+    -can fade music in and out
+        check core/macros/music.mcro for the code
+        basically:
+            mus blah
+            music_fade_in
+        and:
+            music_fade_out
+        but for more control, you can "set _music_fade" a value from 0 (no volume) to 100 (maximum
+            volume according to users volume settings)
     repeatable code for buttons
     controlanim overload to support delay and individual frame delays
     -getprop, setprop commands added to explicitly get and set properties of objects

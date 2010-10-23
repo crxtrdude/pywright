@@ -236,6 +236,10 @@ class Variables(dict):
                 self["_speaking_name"] = assets.gportrait().nametag.strip(" \n")
             except:
                 pass
+        if key=="_music_fade":
+            dict.__setitem__(self,key,value,*args)
+            assets.smus(assets.gmus())
+            return
         return dict.__setitem__(self,key,value,*args)
 
 assert Variables().get("_version",None)
@@ -260,7 +264,7 @@ class Assets(object):
     def smus(self,v):
         self._music_vol = v
         try:
-            pygame.mixer.music.set_volume(v/100.0)
+            pygame.mixer.music.set_volume(v/100.0*(int(assets.variables.get("_music_fade","1"))/100.0))
         except:
             pass
     def gmus(self):
