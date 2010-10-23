@@ -849,16 +849,16 @@ char test
         """Sets a variable to some value based on an expression"""
         value = EVAL_EXPR(EXPR(" ".join(args)))
         assets.variables[variable]=value
-    @category([VALUE("destination variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")],type="logic")
+    @category([VALUE("variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")],type="logic")
     def _getvar(self,command,variable,*args):
         """Copies the value of one variable into another."""
         value = u"".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
     _setvar_ex = _set_ex
-    @category([VALUE("destination variable","The variable to save the value into"),KEYWORD("name","The object to get the property from"),KEYWORD("prop","The property to get from the object")],type="logic")
+    @category([VALUE("variable","The variable to save the value into"),KEYWORD("name","The object to get the property from"),KEYWORD("prop","The property to get from the object")],type="logic")
     def _getprop(self,command,variable,*args):
-        """Copies the value of one variable into another."""
+        """Copies the value of some property of an object into a variable"""
         name = None
         prop = None
         for a in args:
@@ -874,9 +874,9 @@ char test
                 assets.variables[variable]=p
                 return
         raise script_error("getprop: object not found")
-    @category([VALUE("destination variable","The variable to save the value into"),KEYWORD("name","The object to get the property from"),KEYWORD("prop","The property to get from the object")],type="logic")
+    @category([VALUE("variable","The variable to save the value into"),KEYWORD("name","The object to get the property from"),KEYWORD("prop","The property to get from the object")],type="logic")
     def _setprop(self,command,*args):
-        """Copies the value of one variable into another."""
+        """Copies the value of a variable to some property of an object"""
         name = None
         prop = None
         val = []

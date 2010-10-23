@@ -59,7 +59,12 @@ useful to use 'resume' in the 'fail' case, because you won't know where the play
         immediately following the line of text).<br><br>        label press [tag] - PyWright will jump to a label that looks like this if the user "presses" this statement<br><br>        label [evidence_tag] [tag] - PyWright will jump to this label when the user presents this evidence to this statement<br><br>        If no matching label is found, PyWright will jump to the value of 'fail=' given to '<a href="#cross">cross</a>'.</p></div><br><br><a name='files'><h2>Category: files</h2><div style='background-color:#eeeeee;padding:10px'><a name="exportvars"><p>
     <b>exportvars</b> filename (variable_names) 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>file to export variables into, relative to the case folder</td><tr><td>variable_names</td><td>The names of variables to export. If none are listed, all variables will be exported</td><td>all variables</td></tr></table><p>Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
-        ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="importvars"><p>
+        ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="filewrite"><p>
+    <b>filewrite</b> filename [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>file to write to</td><tr><td>text</td><td>text to write</td></table><p>Writes text to the end of the specified file. Text is immediately flushed, files written to in
+        this way do not need to be explicitly "saved". Use "
+" for carriage return in the file, "	" for tab
+        characters. 'filename' cannot contain spaces or be located earlier than the current game on the path.<br><br>        See <a href="#fileclear">fileclear</a> and <a href="#fileseek">fileseek</a> for other file commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="importvars"><p>
     <b>importvars</b> filename 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>file to import variables from, relative to the case folder</td></table><p>Restores previously exported variables from the file.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="loadgame"><p>
     <b>loadgame</b> filename <i>hide</i> 
@@ -222,9 +227,11 @@ would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;paddin
     <b>divvar</b> variable amount 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to divide the variable by</td></table><p>Divide a variable by a number. If the variable 'x' were set to 10, the script:
 <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>divvar x 2</pre>
-would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getvar"><p>
-    <b>getvar</b> destination variable [source variable] 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>destination variable</td><td>The variable to save the value into</td><tr><td>source variable</td><td>The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.</td></table><p>Copies the value of one variable into another.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="goto"><p>
+would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getprop"><p>
+    <b>getprop</b> variable name=VALUE prop=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>name</td><td>The object to get the property from</td><tr><td>prop</td><td>The property to get from the object</td></table><p>Copies the value of some property of an object into a variable</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getvar"><p>
+    <b>getvar</b> variable [source variable] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>source variable</td><td>The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.</td></table><p>Copies the value of one variable into another.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="goto"><p>
     <b>goto</b> [destination] fail=VALUE 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>destination</td><td>The destination label to move to</td><tr><td>fail</td><td>A label to jump to if the destination can't be found</td></table><p>Makes the script go to a different section, based on the label name.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="is"><p>
     <b>is</b> [expression] fail=VALUE &lt;label  OR <i>?</i> &gt; 
@@ -292,7 +299,9 @@ would set 'x' to 15.</p></div><br><br><div style='background-color:#eeeeee;paddi
     <b>setflag</b> flag_name 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>flag_name</td><td>flag to set</td></table><p>Sets a flag. Shorthand for setting a variable equal to true. Flags
         will remain set for the remainder of the game, and can be used to
-        track what a player has done.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar"><p>
+        track what a player has done.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setprop"><p>
+    <b>setprop</b> variable name=VALUE prop=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>name</td><td>The object to get the property from</td><tr><td>prop</td><td>The property to get from the object</td></table><p>Copies the value of a variable to some property of an object</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar"><p>
     <b>setvar</b> variable [value] 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable name to set</td><tr><td>value</td><td>Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.</td></table><p>Sets a variable to some value.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar_ex"><p>
     <b>setvar_ex</b> variable [expression2] 
