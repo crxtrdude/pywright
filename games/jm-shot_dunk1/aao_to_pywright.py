@@ -13,6 +13,8 @@
 
 #TODO: art conversions in temp folder to keep things clean
 #TODO: show evidence at start that is never revealed
+#TODO: linked text
+#TODO: make sure to read as utf8
 """Limitations:
 cannot hide a statement that wasn't hidden from the start
 cannot hide regular lines, only statements:
