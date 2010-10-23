@@ -3259,11 +3259,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,"k_x") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_x()
                             break
-                if (e.type==pygame.KEYDOWN and \
-                    e.key==pygame.K_LSHIFT) or (e.type==pygame.JOYBUTTONDOWN and\
-                    e.button==6):
-                    assets.cur_screen = 1-assets.cur_screen
-                    make_screen()
                 if e.type==pygame.KEYDOWN and e.key==pygame.K_d and e.mod&pygame.K_LCTRL:
                     assets.variables["_debug"] = "true"
                 if e.type==pygame.KEYDOWN and\

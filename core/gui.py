@@ -115,35 +115,79 @@ class widget(object):
                             #~ f.writelines([str(l).replace("\n","")+"\n" for l in lines[i:]])
                             #~ f.close()
                             #~ os.system("c:/python25/python PyWright.py turnabout_zzztrial tmp")
-            elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_LEFT:
-                if window.focused and hasattr(window.focused,"carat_left"):
-                    window.focused.carat_left()
-            elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_RIGHT:
-                if window.focused and hasattr(window.focused,"carat_right"):
-                    window.focused.carat_right()
+            #~ elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_LEFT:
+                #~ if window.focused and hasattr(window.focused,"carat_left"):
+                    #~ window.focused.carat_left()
+            #~ elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_RIGHT:
+                #~ if window.focused and hasattr(window.focused,"carat_right"):
+                    #~ window.focused.carat_right()
             elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_UP:
                 if window.focused and hasattr(window.focused,"carat_up"):
                     window.focused.carat_up()
             elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_DOWN:
                 if window.focused and hasattr(window.focused,"carat_down"):
                     window.focused.carat_down()
-            elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_BACKSPACE and window.focused:
-                if hasattr(window.focused,"backspace"):
-                    window.focused.backspace()
-            elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_DELETE and window.focused:
-                if hasattr(window.focused,"delete"):
-                    window.focused.delete()
             elif evt.type == pygame.KEYDOWN and evt.key == pygame.K_RETURN and window.focused:
                 if window.focused and hasattr(window.focused,"enter_pressed"):
                     win,window.focused = window.focused,None
                     win.enter_pressed()
             elif evt.type == pygame.KEYDOWN:
-                if evt.key not in [pygame.K_LSHIFT,pygame.K_RSHIFT,pygame.K_ESCAPE] and window.focused:
+                if evt.key in self.repeat:
+                    self.start_repeat(evt.key)
+                elif evt.key not in [pygame.K_LSHIFT,pygame.K_RSHIFT,pygame.K_ESCAPE] and window.focused:
+                    print evt.unicode
                     if hasattr(window.focused,"insert") and hasattr(evt,"unicode"):
-                        window.focused.insert(evt.unicode)
+                        def t(m):
+                            if hasattr(window.focused,"insert"):
+                                window.focused.insert(m["unicode"])
+                        self.repeat[evt.key] = {"func":t,"val":0,"del":True,"unicode":evt.unicode}
+                        self.start_repeat(evt.key)
+                elif evt.key in [pygame.K_LSHIFT,pygame.K_RSHIFT]:
+                    for k in self.repeat.keys():
+                        if "unicode" in self.repeat[k]:
+                            del self.repeat[k]
+            elif evt.type == pygame.KEYUP:
+                if evt.key in [pygame.K_LSHIFT,pygame.K_RSHIFT]:
+                    for k in self.repeat.keys():
+                        if "unicode" in self.repeat[k]:
+                            del self.repeat[k]
+                if evt.key in self.repeat:
+                    self.stop_repeat(evt.key)
         return quit
+    def start_repeat(self,key):
+        self.repeat[key]['val'] = 60
+    def stop_repeat(self,key):
+        self.repeat[key]['val'] = 0
+        if self.repeat[key].get("del",False):
+            del self.repeat[key]
+    def handle_repeat(self,key):
+        if not self.repeat[key]['val']:
+            return
+        self.repeat[key]['val'] -= 1
+        if self.repeat[key]['val'] in [0,59]:
+            self.repeat[key]['func'](self.repeat[key])
+        if self.repeat[key]['val'] in [0]:
+            self.repeat[key]['val'] = 5
     def update(self):
+        for k in self.repeat:
+            self.handle_repeat(k)
         return False
+    def carat_left(m):
+        if window.focused and hasattr(window.focused,"carat_left"):
+            window.focused.carat_left()
+    def carat_right(m):
+        if window.focused and hasattr(window.focused,"carat_right"):
+            window.focused.carat_right()
+    def delete(m):
+        if hasattr(window.focused,"delete"):
+            window.focused.delete()
+    def backspace(m):
+        if hasattr(window.focused,"backspace"):
+            window.focused.backspace()
+    repeat = {pygame.K_LEFT:{"func":carat_left,"val":0},
+                pygame.K_RIGHT:{"func":carat_right,"val":0},
+                pygame.K_DELETE:{"func":delete,"val":0},
+                pygame.K_BACKSPACE:{"func":backspace,"val":0}}
 
 class editbox(widget):
     def __init__(self,target_ob,target_attr,is_dict=False):
