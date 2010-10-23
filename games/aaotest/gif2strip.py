@@ -4,10 +4,10 @@ pygame.display.set_mode([1,1])
 
 MAX_SURFACE_WIDTH=1024
 
-def go(path_to_gif,saveto=None,delete=False):
+def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     if path_to_gif.startswith("http://"):
         f = urllib2.urlopen(path_to_gif)
-        path_to_gif = "tmp/"+path_to_gif.rsplit("/",1)[1]
+        path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
         out = open(path_to_gif,"wb")
         out.write(f.read())
         f.close()
