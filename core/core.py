@@ -1013,6 +1013,15 @@ class sprite(gui.button):
     width,height = [sw,sh]
     children = []
     spd = 6
+    def getprop(self,p):
+        if p in "xy":
+            return self.pos["xy".index(p)]
+        return getattr(self,p,"")
+    def setprop(self,p,v):
+        if p in "xy":
+            self.pos["xy".index(p)] = float(v)
+        if p in "z":
+            self.z = int(v)
     def delete(self):
         self.kill = 1
     def makestr(self):

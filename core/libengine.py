@@ -856,6 +856,45 @@ char test
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
     _setvar_ex = _set_ex
+    @category([VALUE("destination variable","The variable to save the value into"),KEYWORD("name","The object to get the property from"),KEYWORD("prop","The property to get from the object")],type="logic")
+    def _getprop(self,command,variable,*args):
+        """Copies the value of one variable into another."""
+        name = None
+        prop = None
+        for a in args:
+            if a.startswith("name="):
+                name = a.split("=",1)[1]
+            if a.startswith("prop="):
+                prop = a.split("=",1)[1]
+        if not name or not prop:
+            raise script_error("getprop: need to supply an object name= and a prop= to get")
+        for o in self.obs:
+            if getattr(o,"id_name",None)==name:
+                p = str(o.getprop(prop))
+                assets.variables[variable]=p
+                return
+        raise script_error("getprop: object not found")
+    @category([VALUE("destination variable","The variable to save the value into"),KEYWORD("name","The object to get the property from"),KEYWORD("prop","The property to get from the object")],type="logic")
+    def _setprop(self,command,*args):
+        """Copies the value of one variable into another."""
+        name = None
+        prop = None
+        val = []
+        for a in args:
+            if a.startswith("name="):
+                name = a.split("=",1)[1]
+            elif a.startswith("prop="):
+                prop = a.split("=",1)[1]
+            else:
+                val.append(a)
+        val = " ".join(val)
+        if not name or not prop:
+            raise script_error("setprop: need to supply an object name= and a prop= to set")
+        for o in self.obs:
+            if getattr(o,"id_name",None)==name:
+                o.setprop(prop,val)
+                return
+        raise script_error("setprop: object not found")
     @category([VALUE("variable","variable name to save random value to"),VALUE("start","smallest number to generate"),VALUE("end","largest number to generate")],type="logic")
     def _random(self,command,variable,start,end):
         """Generates a random integer with a minimum

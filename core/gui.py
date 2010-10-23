@@ -29,6 +29,17 @@ class widget(object):
         self.visible = True
         self.children = []
         self.padding = {"top":3,"bottom":3,"left":2,"right":2}
+    def getprop(self,p):
+        """for wrightscript"""
+        if p in "xy":
+            return self.rpos["xy".index(p)]
+        return getattr(self,p,"")
+    def setprop(self,p,v):
+        """for wrightscript"""
+        if p in "xy":
+            self.rpos["xy".index(p)] = float(v)
+        if p in "z":
+            self.z = int(v)
     def setlayout(self,v):
         self.nolayout = not v
         return self

@@ -11,7 +11,18 @@ games/PW - The Contempt of Court/Turnabout [this line gets cut due to the screen
 ""{c090}{center}{sound /sfx-typewriter.wav}
     repeatable code for buttons
     controlanim overload to support delay and individual frame delays
-    a way to query properties of objects
+    -getprop, setprop commands added to explicitly get and set properties of objects
+        example:
+        #get the x value of the phoenix wright portrait
+        getprop phx name=phoenix prop=x
+        #Add 5 to the value
+        addvar phx 5
+        #Set the x property of the portrait again
+        setprop name=phoenix prop=x $phx
+        
+        Currently the only interesting properties you can manipulate are x, y, and z; but it may be more clear to do it this way
+            than using scroll in some cases. Also if you want to do your own scroll effect, this is a better way to do it.
+
     wait/nowait for objects
     -left/right tiny arrow for cross examination
     better unification of object commands - char command missing flipx for instance, no pri for other objects
