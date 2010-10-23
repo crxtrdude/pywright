@@ -11,10 +11,17 @@
 
 
 
-
+#TODO: art conversions in temp folder to keep things clean
 #TODO: show evidence at start that is never revealed
+#TODO: linked text
+#TODO: make sure to read as utf8
 """Limitations:
 cannot hide a statement that wasn't hidden from the start
+cannot hide regular lines, only statements:
+idea:
+    isnot aao_st_show_[line_num] line_[line_num+1]
+    
+Should build script first, then download and convert art, and use threads for the downloading
 
 The delay function is not accurate - in AAO it is timed from the start of the message, in pywright
 it is timed from the end. We adjust for this by guessing how long a text line will be printed,
@@ -31,6 +38,59 @@ import subprocess
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10711" #My dialogue test case
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
 game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
+game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=14571" #JM shot dunk
+#game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
+
+if os.path.exists("last.html"):
+    f = open("last.html")
+    html = f.read()
+    f.close()
+else:
+    f = urllib.urlopen(game_url)
+    html = f.read()
+    f.close()
+    f = open("last.html","w")
+    f.write(html)
+    f.close()
+
+gs = re.compile("<script.*?>(.*?)</script>",re.DOTALL|re.MULTILINE)
+js = re.findall(gs,html)
+main_code = js[6]
+def jsformat(line,context):
+    line = line.strip()
+    if line.startswith("var "):
+        line = line[4:]
+    if line.startswith("function "):
+        context["function"] = "true"
+        context["brace"] = 0
+        if "{" in line:
+            context["brace"] = 1
+        return ""
+    line = line.replace("new Array()","{}")
+    return line.strip()
+def js2py(line,context):
+    if context.get("function",""):
+        for chr in line:
+            if chr == "{":
+                context["brace"] += 1
+            elif chr == "}":
+                context["brace"] -= 1
+                if context["brace"]<=0:
+                    context["function"] = ""
+                    context["brace"] = 0
+        return ""
+    line = line.replace("<!--","").replace("-->","")
+    return jsformat(line,context)
+main_code = main_code.replace("new Array()","{}")
+main_code = main_code.replace("var ","")
+namespace = {}
+lines = main_code.split("\n")
+context = {}
+for line in lines:
+    line = js2py(line,context)
+    if line:
+        exec(line,namespace,namespace)
+print namespace["donnees_messages"][1]
 
 def create_folders():
     if not os.path.exists("art"):
@@ -63,6 +123,7 @@ def get_color(t):
         return "{c %.02x%.02x%.02x}"%tuple(c)
     if t.startswith("#"):
         return "{c "+t[1:]+"}"
+    return ""
 assert get_color("white")=="{c999}"
 assert get_color("rgb(0,0,50)")=="{c 000032}"
 
@@ -76,22 +137,6 @@ def cent_to_frame(t):
     return int(frames)
 assert cent_to_frame("300")==180
 
-if os.path.exists("last.html"):
-    f = open("last.html")
-    html = f.read()
-    f.close()
-else:
-    f = urllib.urlopen(game_url)
-    html = f.read()
-    f.close()
-    f = open("last.html","w")
-    f.write(html)
-    f.close()
-soup = BeautifulSoup(html)
-first_line = soup.find(id=re.compile("ligne_donnees_"))
-table = first_line.parent
-lines = table.contents
-
 def textify(contentlist,colorize=False,replace_line_end=None):
     t = ""
     for c in contentlist:
@@ -101,8 +146,7 @@ def textify(contentlist,colorize=False,replace_line_end=None):
             t += textify(c.contents,colorize)
         elif c.name == "span":
             if colorize:
-                s = c.attrMap.get("style","").split(";")
-                print "style:",s
+                s = c._getAttrMap().get("style","").split(";")
                 for arg in s:
                     if arg.startswith("color:"):
                         col = arg.split(":")[1].strip()
@@ -116,6 +160,7 @@ def textify(contentlist,colorize=False,replace_line_end=None):
     if replace_line_end is not None:
         t = t.replace("\n",replace_line_end)
     return t
+
 def wget(url,saveto):
     print "get",url,"to",saveto
     import urllib
@@ -127,7 +172,7 @@ def wget(url,saveto):
         if not (os.path.exists(txt_name) or os.path.exists(saveto)):
             try:
                 gif2strip.go(url,saveto)
-            except urllib2.HTTPError:
+            except (urllib2.HTTPError,urllib2.URLError):
                 pass
     elif url.endswith(".mp3"):
         prefix=saveto.rsplit(".",1)[0]
@@ -212,6 +257,7 @@ def get_ev_id(element):
     return "ev%s"%element["id"].split("_")[1]
 f = open("evidence.txt","w")
 print "search for ev"
+soup = BeautifulSoup(html)
 for ev in soup.findAll(id=re.compile("(preuve|profil)_\d")):
     evid = get_ev_id(ev)
     print ev["id"]
@@ -248,7 +294,7 @@ f.close()
 
 #Show evidence
 def AfficherElement(vals,elements):
-    type,evid = [textify(x) for x in elements]
+    type,evid = elements
     if type=="profil":
         evid+="$"
     vals["pretextcode"] = "ev ev%s"%evid
@@ -267,8 +313,8 @@ def MasquerElements(vals,elements):
 def DevoilerElements(vals,elements):
     types,ids = elements
     for i in range(len(types)):
-        evid = "ev%s"%textify(ids[i])
-        if textify(types[i])=="profil":
+        evid = "ev%s"%ids[i]
+        if types[i]=="profil":
             evid+="$"
         vals["pretextcode"] += "\naddev %s"%evid
         all_evidence[evid] = False
@@ -281,10 +327,10 @@ def RepondreQuestion(vals,elements,amt=3):
     for item in elements:
         if num:
             num -= 1
-            labels.append(textify(item))
+            labels.append(item)
         else:
             label = labels.pop(0)
-            txt+="li "+label+" result=line_"+textify(item)+"\n"
+            txt+="li "+label+" result=line_"+item+"\n"
     txt += "showlist\n"
     vals["postcode"] = txt
     
@@ -320,15 +366,19 @@ def DevoilerLieu(vals,elements):
     
 #Click position in an image
 def PointerImage(vals,elements):
-    url = textify(elements[0])
-    x1 = textify(elements[1])
-    y1 = textify(elements[2])
-    x2 = textify(elements[3])
-    y2 = textify(elements[4])
+    def g_v(x):
+        if hasattr(x,"keys"):
+            return g_v(x[0])
+        return x
+    url = g_v(elements[0])
+    x1 = g_v(elements[1])
+    y1 = g_v(elements[2])
+    x2 = g_v(elements[3])
+    y2 = g_v(elements[4])
     w = int(x2)-int(x1)
     h = int(y2)-int(y1)
-    fail = textify(elements[5])
-    success = textify(elements[6])
+    fail = g_v(elements[5])
+    success = g_v(elements[6])
     img = bg(url)
     vals["postcode"] = """bg %(image)s
 examine hide
@@ -352,7 +402,7 @@ def ReglerVie(vals,elements):
     vals["postcode"] = code
 def PerteVie(vals,elements):
     """Subtract amount from penalty"""
-    amt = int(int(textify(elements[0]))/120.0*100)
+    amt = int(int(elements[0])/120.0*100)
     vals["postcode"] = "penalty -%d"%(amt,)
 def FaireClignoterVie(vals,elements):
     """Show flashing element of penalty"""
@@ -371,13 +421,15 @@ def LancerCI(vals,elements):
     print elements
     crossexam[0] = True
     vals["postcode"] = "cross"
-    e2 = [x[0].split("_") for x in elements if x]
-    print e2
-    from_statement,ev_type,ev_id,to_statement,failure_msg = (e2 + [[],[],[]])[:5]
+    from_statement,ev_type,ev_id,to_statement,failure_msg = (elements + [[],[],[]])[:5]
+    from_statement = from_statement.split("_")
+    ev_type = ev_type.split("_")
+    ev_id = ev_id.split("_")
+    to_statement = to_statement.split("_")
     for i in range(len(from_statement)):
-        jumpto_when_present[textify(to_statement[i])] = "ev"+ev_id[i]+" st_"+textify(from_statement[i])
+        jumpto_when_present[to_statement[i]] = "ev"+ev_id[i]+" st_"+from_statement[i]
     if failure_msg:
-        label_none[failure_msg[0]] = True
+        label_none[failure_msg] = True
         
 def InputVar(vals,elements):
     """Ask user to define variable
@@ -424,7 +476,7 @@ def do_statement(vals):
 
 def AllerCI(vals,elements):
     """Start cross exam statement"""
-    jumpto_when_press[textify(elements[0])] = vals["id_num"]
+    jumpto_when_press[elements[0]] = vals["id_num"]
     
 def pauseCI(vals,elements):
     """Pause cross exam"""
@@ -445,19 +497,34 @@ def FinDuJeu(vals,elements):
     """Finish the Game"""
     vals["postcode"] = "endscript"
 
-def apply_event(vals,elements):
-    e = [e for e in elements if not e=="\n"]
-    print e
-    func = textify(e[0].contents)
+def apply_event(vals,code):
+    func = code[0]
+    l = []
+    for i in sorted(code.keys()):
+        if i!=0:
+            l.append(code[i])
     if func.strip():
+        print "calling",func.strip(),l
         func = eval(func.strip())
-        func(vals,[x.contents for x in e[1:]])
+        func(vals,l)
             
 def make_textbox(t):
-    print "make textbox of",t
+    print "make textbox of",repr(t)
     #pauses, flashes, shakes, and spaces
+    t = textify(BeautifulSoup(t),True)
+    t = t.replace("\n","{n}")
     t = t.replace("[#]","{p60}").replace("[#f]","{f}").replace("[#s]","{s}").replace("&nbsp;"," ")
+    while 1:
+        match = re.search("\[#\d*\]",t)
+        if not match:
+            break
+        found = t[match.start():match.end()]
+        t = t[:match.start()]+"{p"+found[2:-1]+"}"+t[match.end():]
     return t
+st = u'Those two years...[#30] <span style="color: red;">that trial</span>they\nwere the happiest moments\nof my life but also the saddest.'
+en = u'Those two years...{p30} {c900}that trial{c}they{n}were the happiest moments{n}of my life but also the saddest.'
+tr = make_textbox(st)
+assert tr==en,repr(tr)
     
 songs_start = html.find("liste_adresses_mp3 =")
 next = html[songs_start:]
@@ -487,132 +554,117 @@ def song(t,path):
     return nice_t
 
 f = open('intro.txt','w')
-f.write("include evidence")
-for line in lines:
-    id = None
-    try:
-        id = line['id']
-    except TypeError:
+def w(t):
+    f.write(t.encode("utf8"))
+    f.flush()
+w(u"include evidence")
+for id in sorted(namespace["donnees_messages"].keys()):
+    print id
+    id_num = str(id)
+    vals = {"id_num":id_num,"char":None,"charblink":None,
+                "text":"","color":"",
+                "nametag":"","bg":None,"fg":None,
+                "precode":"",
+                "pretextcode":"",
+                "postcode":"",
+                "skip":False,
+                "operation":None,
+                "hidden":False}
+    line_attr = namespace["donnees_messages"][id]
+    for attr_key in sorted(line_attr.keys()):
+        t = line_attr[attr_key]
+        if attr_key == "defil_auto":
+            vals['text_delay'] = int(t)
+        if attr_key == 'son':
+            vals['mus'] = t
+        if attr_key == 'type_son':
+            vals['mus_type'] = t
+        if attr_key == "texte":
+            vals["text"]+=make_textbox(t)
+        if attr_key == "couleur":
+            vals["color"] = get_color(t)
+        if attr_key == 'auteur':
+            vals["nametag"]=t.replace(" ","_")
+        if attr_key == 'fond' and t:
+            vals['bg'] = bg(t)
+            vals['fg'] = fg(t.rsplit(".",1)[0]+".gif")
+        if attr_key == 'id_auteur':
+            vals['char_id'] = t
+        if attr_key == 'image_perso':
+            if t == "no":
+                pass
+            elif vals['char_id'] == "-4":
+                vals['fg'] = fg(t)
+            else:
+                vals['char'] = t
+        if attr_key == 'image_fixe_perso':
+            if t == "no":
+                pass
+            elif vals['char_id'] == '-4':
+                pass
+            else:
+                vals["charblink"] = t
+        if attr_key == 'operation' and t:
+            vals["operation"] = t
+        if attr_key == 'cache':
+            vals["hidden"] = int(t)
+    if vals["operation"]:
+        apply_event(vals,vals["operation"])
+    do_statement(vals)
+    if id_num in label_none:
+        w("label none\n")
+    if id_num in jumpto_when_press:
+        w("label press st_"+jumpto_when_press[id_num]+"\n")
+    if id_num in jumpto_when_present:
+        w("label "+jumpto_when_present[id_num]+"\n")
+    if vals["skip"]:
+        print "skipping",id_num
         continue
-    except KeyError:
-        pass
-    if id:
-        id_num = id.replace("ligne_donnees_","")
-        vals = {"id_num":id_num,"char":None,"charblink":None,
-                    "text":"","color":"",
-                    "nametag":"","bg":None,"fg":None,
-                    "precode":"",
-                    "pretextcode":"",
-                    "postcode":"",
-                    "skip":False,
-                    "operation":None,
-                    "hidden":False}
-        for attr in line.contents:
-            try:
-                attr['id']
-            except:
-                continue
-            if not attr.contents:
-                continue
-            print attr.contents
-            t = textify(attr.contents)
-            if attr['id'] == 'cache_'+id_num:
-                if int(t):
-                    vals['skip'] = True
-            if attr['id'] == "defil_auto_"+id_num:
-                vals['text_delay'] = int(t)
-            if attr['id'] == 'son_'+id_num:
-                vals['mus'] = t
-            if attr['id'] == 'type_son_'+id_num:
-                vals['mus_type'] = t
-            if attr['id'] == "texte_"+id_num:
-                vals["text"]+=make_textbox(textify(attr.contents,True,replace_line_end="{n}"))
-            if attr['id'] == "couleur_"+id_num:
-                vals["color"] = get_color(t)
-            if attr['id'] == 'auteur_'+id_num:
-                vals["nametag"]=t.replace(" ","_")
-            if attr['id'] == 'fond_'+id_num:
-                vals['bg'] = bg(t)
-                vals['fg'] = fg(t.rsplit(".",1)[0]+".gif")
-            if attr['id'] == 'id_auteur_'+id_num:
-                vals['char_id'] = t
-            if attr['id'] == 'image_perso_'+id_num:
-                if t == "no":
-                    pass
-                elif vals['char_id'] == "-4":
-                    vals['fg'] = fg(t)
-                else:
-                    vals['char'] = t
-            if attr['id'] == 'image_fixe_perso_'+id_num:
-                if t == "no":
-                    pass
-                elif vals['char_id'] == '-4':
-                    pass
-                else:
-                    vals["charblink"] = t
-            if attr['id'] == 'operation_'+id_num:
-                content_list = attr.contents[0]
-                if content_list:
-                    vals["operation"] = content_list.contents
-            if attr['id'] == 'cache_'+id_num:
-                vals["hidden"] = int(t)
-        if vals["operation"]:
-            apply_event(vals,vals["operation"])
-        do_statement(vals)
-        if id_num in label_none:
-            f.write("label none\n")
-        if id_num in jumpto_when_press:
-            f.write("label press st_"+jumpto_when_press[id_num]+"\n")
-        if id_num in jumpto_when_present:
-            f.write("label "+jumpto_when_present[id_num]+"\n")
-        if vals["skip"]:
-            continue
-        if intromode and vals["text"]:
-            vals["text"]+="{next}"
+    if intromode and vals["text"]:
+        vals["text"]+="{next}"
 
-        #A delay from the beginning of text before continuing
-        if "text_delay" in vals and vals["text_delay"]:
-            wait_time = cent_to_frame(vals["text_delay"])
-            text_length = len(vals["text"])*3
-            wait_time = (wait_time-text_length)
-            if wait_time>0:
-                vals["text"]+="{p%s}"%wait_time
-            vals["text"]+="{next}"
+    #A delay from the beginning of text before continuing
+    if "text_delay" in vals and vals["text_delay"]:
+        wait_time = cent_to_frame(vals["text_delay"])
+        text_length = len(vals["text"])*3
+        wait_time = (wait_time-text_length)
+        if wait_time>0:
+            vals["text"]+="{p%s}"%wait_time
+        vals["text"]+="{next}"
 
-
-        f.write("\nlabel line_"+id_num+"\n")
-        if "mus" in vals and vals['mus']:
-            path = {"0":"sfx","1":"music"}[vals['mus_type']]
-            mus_name = song(vals['mus'],path)
-            if mus_name == -1:
-                f.write("\nmus\n")
-            elif path=="music":
-                f.write("\nmus "+mus_name+"\n")
-            elif path=="sfx":
-                f.write("\nsfx "+mus_name+"\n")
-        if vals["precode"]:
-            f.write("\n"+vals["precode"]+"\n")
-        if vals["bg"]:
-            f.write("\nbg "+vals["bg"])
-        if not vals["char"]:
-            f.write("\nchar "+vals["nametag"]+" hide")
-        else:
-            charname,ename = setupchar(vals["char_id"], vals["nametag"], vals["char"], vals["charblink"])
-            f.write("\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
-        if vals["fg"]:
-            f.write("\nfg "+vals["fg"]+" nowait")
-        if vals["pretextcode"]:
-            f.write("\n"+vals["pretextcode"]+"\n")
-        if vals["text"].strip():
-            vals["text"] = vals["color"]+vals["text"]
-            f.write('\n"%s"'%vals["text"])
-        if vals["postcode"]:
-            f.write("\n"+vals["postcode"]+"\n")
-f.write('\nset _speaking NO_ONE\n"THE END"\n')
+    w(u"\nlabel line_%s\n"%id_num)
+    if "mus" in vals and vals['mus']:
+        path = {"0":"sfx","1":"music"}[vals['mus_type']]
+        mus_name = song(vals['mus'],path)
+        if mus_name == -1:
+            w(u"\nmus\n")
+        elif path=="music":
+            w(u"\nmus "+mus_name+"\n")
+        elif path=="sfx":
+            w(u"\nsfx "+mus_name+"\n")
+    if vals["precode"]:
+        w(u"\n"+vals["precode"]+"\n")
+    if vals["bg"]:
+        w(u"\nbg "+vals["bg"])
+    if not vals["char"]:
+        w(u"\nchar "+vals["nametag"]+u" hide")
+    else:
+        charname,ename = setupchar(vals["char_id"], vals["nametag"], vals["char"], vals["charblink"])
+        w(u"\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
+    if vals["fg"]:
+        w(u"\nfg "+vals["fg"]+u" nowait")
+    if vals["pretextcode"]:
+        w(u"\n"+vals["pretextcode"]+u"\n")
+    if vals["text"].strip():
+        vals["text"] = vals["color"]+vals["text"]
+        w(u'\n"%s"'%vals["text"])
+    if vals["postcode"]:
+        w(u"\n"+vals["postcode"]+u"\n")
+w(u'\nset _speaking NO_ONE\n"THE END"\n')
 f.close()
 
 f = open("evidence.txt","a")
 for evid in all_evidence:
     if all_evidence[evid]:
-        f.write("\naddev %s\n"%evid)
+        f.write(("\naddev %s\n"%evid).encode('utf8'))
 f.close()
