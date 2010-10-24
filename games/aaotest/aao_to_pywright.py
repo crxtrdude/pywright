@@ -79,6 +79,10 @@ class Resources:
                 #~ t = threading.Thread(target=wget,args=(norm[name]["url"],norm[name]["dest"]))
                 #~ t.start()
                 #~ threads.append(t)
+        for name in self.port:
+            if not os.path.exists(self.rootpath+"/art/port/"+self.port[name]["charname"]):
+                os.mkdir(self.rootpath+"/art/port/"+self.port[name]["charname"])
+            wget(self.port[name]["url"],self.rootpath+"/"+self.port[name]["dest"])
         while [x for x in threads if x.isAlive()]:
             pass
         
