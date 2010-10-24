@@ -34,12 +34,56 @@ import urllib
 import urllib2
 import re
 import subprocess
+import threading
 
-game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10711" #My dialogue test case
-game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
-game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
-game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=14571" #JM shot dunk
-#game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
+game_id = 14571 #JM shot dunk
+#~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10711" #My dialogue test case
+#~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
+#~ game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
+#~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
+game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
+
+class Resources:
+    def __init__(self,rootpath,temppath):
+        self.rootpath = rootpath
+        self.temppath = temppath
+        self.bg = {}
+        self.fg = {}
+        self.ev = {}
+        self.mus = {}
+        self.sfx = {}
+        self.port = {}
+        self.create_folders()
+        self.evidence = open(self.rootpath+"/evidence.txt","w")
+        self.intro = open(self.rootpath+"/intro.txt","w")
+    def create_folders(self):
+        if not os.path.exists(self.temppath):
+            os.mkdir(self.temppath)
+        for pth in ["","art","art/fg","art/bg","art/ev","art/port","music","sfx"]:
+            pth = self.rootpath+"/"+pth
+            if not os.path.exists(pth):
+                os.mkdir(pth)
+    def close(self):
+        self.evidence.close()
+        self.intro.close()
+    def write_ev_check(self,txt,file):
+        f = open(self.rootpath+"/"+file,"w")
+        f.write(txt)
+        f.close()
+    def saveall(self):
+        threads = []
+        for norm in [self.bg,self.fg,self.ev,self.mus,self.sfx]:
+            print norm
+            for name in norm:
+                wget(norm[name]["url"],self.rootpath+"/"+norm[name]["dest"])
+                #~ t = threading.Thread(target=wget,args=(norm[name]["url"],norm[name]["dest"]))
+                #~ t.start()
+                #~ threads.append(t)
+        while [x for x in threads if x.isAlive()]:
+            pass
+        
+
+res = Resources("converted/%s"%game_id,temppath="tmp")
 
 if os.path.exists("last.html"):
     f = open("last.html")
@@ -91,23 +135,6 @@ for line in lines:
     if line:
         exec(line,namespace,namespace)
 print namespace["donnees_messages"][1]
-
-def create_folders():
-    if not os.path.exists("art"):
-        os.mkdir("art")
-    if not os.path.exists("art/fg"):
-        os.mkdir("art/fg")
-    if not os.path.exists("art/bg"):
-        os.mkdir("art/bg")
-    if not os.path.exists("art/ev"):
-        os.mkdir("art/ev")
-    if not os.path.exists("art/port"):
-        os.mkdir("art/port")
-    if not os.path.exists("music"):
-        os.mkdir("music")
-    if not os.path.exists("sfx"):
-        os.mkdir("sfx")
-create_folders()
 
 colors = {"red": "{c900}", "white":"{c999}", 
 "green":"{c090}","blue":"{c009}","skyblue":"{c339}",
@@ -175,8 +202,6 @@ def wget(url,saveto):
             except (urllib2.HTTPError,urllib2.URLError):
                 pass
     elif url.endswith(".mp3"):
-        prefix=saveto.rsplit(".",1)[0]
-        saveto=prefix+".ogg"
         if not os.path.exists(saveto):
             urllib.urlretrieve(url.replace(" ","%20"),"mp3ogg/input.mp3")
             subprocess.call(["mp3ogg\mpg123.exe","-w","mp3ogg\output.wav","mp3ogg\input.mp3"])
@@ -193,69 +218,53 @@ def wget(url,saveto):
     return saveto
 def nice_name(t):
     return t.replace("/","_").replace(":","").replace(" ","_")
+def add_art(t,type):
+    if t == "no":
+        if type=="bg":
+            return "black"
+        return None
+    url = t
+    if not url.startswith("http://"):
+        url = "http://aceattorney.sparklin.org/"+t
+    nicet = nice_name(t)
+    name = nicet.replace(".jpg",".png")
+    saveto = "art/"+type+"/"+name
+    getattr(res,type)[name] = {"url":url,"dest":saveto}
+    return name.rsplit(".",1)[0]
 def bg(t):
-    if t == "no":
-        t = "black"
-        return t
-    url = t
-    if not url.startswith("http://"):
-        url = "http://aceattorney.sparklin.org/"+t
-    nicet = nice_name(t)
-    bgname = nicet.replace(".jpg",".png")
-    print bgname,url
-    saveto = "art/bg/"+bgname
-    wget(url,saveto)
-    return bgname.rsplit(".",1)[0]
+    return add_art(t,"bg")
 def fg(t):
-    if t == "no":
-        return None
-    url = t
-    if not url.startswith("http://"):
-        url = "http://aceattorney.sparklin.org/"+t
-    nicet = nice_name(t)
-    fgname = nicet
-    saveto = "art/fg/"+fgname
-    wget(url,saveto)
-    return fgname.rsplit(".",1)[0]
+    return add_art(t,"fg")
 def makeev(t):
-    if t == "no":
-        return None
-    url = t
-    if not url.startswith("http://"):
-        url = "http://aceattorney.sparklin.org/"+t
-    try:
-        nicet = t.replace("/","_").replace(":","")
-        fgname = "aao_"+nicet
-        saveto = "art/ev/"+fgname
-        img = wget(url,saveto)
-        return fgname.replace(".jpg","").replace(".png","").replace(".gif","")
-    except:
-        raise
-        return None
+    return add_art(t,"ev")
 def setupchar(id, name, talk, blink):
     charname = "aao_"+id
-    if not os.path.exists("art/port/"+charname):
-        os.mkdir("art/port/"+charname)
     talkname = nice_name(talk).rsplit(".",1)[0]+"(talk).png"
-    if not os.path.exists("art/port/"+charname+"/"+talkname):
-        url = talk
+    blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).png"
+    for name,url in [[talkname,talk],[blinkname,blink]]:
         if not url.startswith("http://"):
             url = "http://aceattorney.sparklin.org/"+url
-        wget(url,"art/port/"+charname+"/"+talkname)
-    blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).png"
-    if blink:
-        if not os.path.exists("art/port/"+charname+"/"+blinkname):
-            url = blink
-            if not url.startswith("http://"):
-                url = "http://aceattorney.sparklin.org/"+url
-            wget(url,"art/port/"+charname+"/"+blinkname)
+        res.port[name] = {"url":url,"dest":"art/port/"+charname+"/"+name,"charname":charname}
     return charname, nice_name(talk).rsplit(".",1)[0]
-
+def song(t,path):
+    """Download song, return song name to play"""
+    if t == "-1" or t not in all_songs:
+        return -1
+    url = all_songs[t]
+    nice_t = nice_name(url)
+    saveto = (path+"/"+nice_t)
+    if not url.startswith("http://"):
+        url = "http://aceattorney.sparklin.org/"+url
+    prefix=saveto.rsplit(".",1)[0]
+    saveto=prefix+".ogg"
+    nice_t = nice_t.rsplit(".",1)[0]+".ogg"
+    res.mus[nice_t] = {"url":url,"dest":saveto}
+    return nice_t
 
 all_evidence = {}  #True for each evidence id that should be revealed at the start
 def get_ev_id(element):
     return "ev%s"%element["id"].split("_")[1]
-f = open("evidence.txt","w")
+f = res.evidence
 print "search for ev"
 soup = BeautifulSoup(html)
 for ev in soup.findAll(id=re.compile("(preuve|profil)_\d")):
@@ -287,10 +296,7 @@ for ev in soup.findAll(id=re.compile("(preuve|profil)_\d")):
             page_output+="textblock 0 180 256 12 (Press enter for next screen)\nwaitenter\n"
         if page_output:
             f.write("set %s_check %s_check\n"%(evid,evid))
-            cf = open("%s_check.txt"%evid,"w")
-            cf.write(page_output)
-            cf.close()
-f.close()
+            res.write_ev_check(page_output,"%s_check.txt"%evid)
 
 #Show evidence
 def AfficherElement(vals,elements):
@@ -539,24 +545,9 @@ while 1:
     name = cur[cur.find("'")+1:cur.rfind("'")]
     all_songs[num] = name
 
-def song(t,path):
-    """Download song, return song name to play"""
-    if t == "-1" or t not in all_songs:
-        return -1
-    url = all_songs[t]
-    nice_t = nice_name(url)
-    saveto = (path+"/"+nice_t)
-    if not url.startswith("http://"):
-        url = "http://aceattorney.sparklin.org/"+url
-    saveto = wget(url,saveto)
-    real_ext = saveto.rsplit(".",1)[1]
-    nice_t = nice_t.rsplit(".",1)[0]+"."+real_ext
-    return nice_t
-
-f = open('intro.txt','w')
 def w(t):
-    f.write(t.encode("utf8"))
-    f.flush()
+    res.intro.write(t.encode("utf8"))
+    res.intro.flush()
 w(u"include evidence")
 for id in sorted(namespace["donnees_messages"].keys()):
     print id
@@ -661,10 +652,10 @@ for id in sorted(namespace["donnees_messages"].keys()):
     if vals["postcode"]:
         w(u"\n"+vals["postcode"]+u"\n")
 w(u'\nset _speaking NO_ONE\n"THE END"\n')
-f.close()
 
-f = open("evidence.txt","a")
 for evid in all_evidence:
     if all_evidence[evid]:
-        f.write(("\naddev %s\n"%evid).encode('utf8'))
-f.close()
+        res.evidence.write(("\naddev %s\n"%evid).encode('utf8'))
+        
+res.saveall()
+res.close()
