@@ -89,6 +89,7 @@ if __name__ == "__main__":
     if len(sys.argv)<2:
         for f in os.listdir("."):
             if f.endswith(".gif"):
-                go(f)
+                saveto=f.replace("(a)","(blink)").replace("(b)","(talk)").replace("klavier-","")
+                go(f,saveto)
     else:
         go(sys.argv[1])
