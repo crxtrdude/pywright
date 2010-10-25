@@ -1,6 +1,7 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.977: September 21, 2010*
+    autosave: time between saves, saves to keep
     test emo/bemo and error conditions
     - Main PyWright startup script executes simultaneously with the menu
     - _textbox_show_button works correctly, _cr_button no longer hides the bottom
