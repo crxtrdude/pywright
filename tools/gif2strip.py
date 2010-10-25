@@ -1,6 +1,10 @@
 import os,sys,subprocess,pygame,math,urllib2
 import re
-pygame.display.set_mode([1,1])
+try:
+    pygame.display.set_mode([1,1])
+except:
+    os.environ["SDL_VIDEODRIVER"] = "dummy"
+    pygame.display.set_mode([1,1])
 
 MAX_SURFACE_WIDTH=1024
 
