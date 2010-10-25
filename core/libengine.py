@@ -2423,10 +2423,11 @@ sound_buffer=%s
 sound_volume=%s
 music_volume=%s
 screen_compress=%s
-autosave=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
+autosave=%s
+autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
 int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
-int(assets.screen_compress),int(assets.autosave)))
+int(assets.screen_compress),int(assets.autosave),int(assets.autosave_keep)))
     f.close()
 
 class screen_settings(gui.pane):
@@ -2488,11 +2489,24 @@ class screen_settings(gui.pane):
         line.children.append(myb("autosave"))
         cb = line.children[-1]
         if assets.autosave: cb.checked = True
-
-        line = gui.pane([0,60],[sw,20])
+            
+        line = gui.pane([0,50],[sw,20])
         line.align = "horiz"
         self.children.append(line)
-        line.children.append(gui.label("   (All saves make backups)"))
+        line.children.append(gui.label("Autosave backups"))
+        class mye(gui.editbox):
+            def insert(self,val):
+                if val not in u"0123456789":
+                    return
+                super(mye,self).insert(val)
+            def set(self,val):
+                super(mye,self).set(val)
+                if not val:
+                    val = 0
+                assets.autosave_keep = int(val)
+                wini()
+        self.autosave_keep = str(assets.autosave_keep)
+        line.children.append(mye(self,"autosave_keep"))
     def sound(self):
         screen_settings.firstpane = "sound"
         self.base()
@@ -2705,6 +2719,8 @@ class screen_settings(gui.pane):
                 assets.cur_script.world.remove(self.really_applyb)
                 self.really_applyb = None
                 self.reset_res()
+        for x in self.children:
+            x.update()
         return True
     def quit_game(self):
         assets.variables.clear()
@@ -3068,6 +3084,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.num_screens = 2
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
     assets.autosave = 1
+    assets.autosave_keep = 2 #how many saves to keep
     pygame.USE_GL=1
     pygame.DISPLAY_LIST=1
     pygame.TEXTURE_CACHE=0
@@ -3090,6 +3107,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if spl[0]=="music_volume": assets.music_volume = float(spl[1])
             if spl[0]=="screen_compress": assets.screen_compress = int(spl[1])
             if spl[0]=="autosave": assets.autosave = int(spl[1])
+            if spl[0]=="autosave_keep": assets.autosave_keep = int(spl[1])
     wini()
     
     pygame.USE_GL=0

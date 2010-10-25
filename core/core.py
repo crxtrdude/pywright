@@ -795,6 +795,19 @@ set _font_new_resume_size 14""".split("\n"):
         f = open(path+"/save_backup/"+save+"_"+repr(os.path.getmtime(path+"/"+save)),"w")
         f.write(t)
         f.close()
+        if save!="autosave.ns":
+            return
+        autosaves = []
+        for f in os.listdir(path+"/save_backup"):
+            if f.startswith(save):
+                autosaves.append((f,float(f.split("_")[1])))
+        autosaves.sort(key=lambda s:s[1])
+        print len(autosaves)+1,self.autosave_keep
+        while len(autosaves)+1>self.autosave_keep:
+            p,t = autosaves.pop(0)
+            print "delete",p
+            os.remove(path+"/save_backup/"+p)
+        print "autosaves",autosaves
     def save_game(self,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return

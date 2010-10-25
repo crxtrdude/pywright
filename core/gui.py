@@ -166,7 +166,7 @@ class widget(object):
                     self.stop_repeat(evt.key)
         return quit
     def start_repeat(self,key):
-        self.repeat[key]['val'] = 60
+        self.repeat[key]['val'] = 120
     def stop_repeat(self,key):
         self.repeat[key]['val'] = 0
         if self.repeat[key].get("del",False):
@@ -175,10 +175,10 @@ class widget(object):
         if not self.repeat[key]['val']:
             return
         self.repeat[key]['val'] -= 1
-        if self.repeat[key]['val'] in [0,59]:
+        if self.repeat[key]['val'] in [0,119]:
             self.repeat[key]['func'](self.repeat[key])
         if self.repeat[key]['val'] in [0]:
-            self.repeat[key]['val'] = 5
+            self.repeat[key]['val'] = 15
     def update(self):
         for k in self.repeat:
             self.handle_repeat(k)
