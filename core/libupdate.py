@@ -83,7 +83,9 @@ def names(url):
     else:#except:
         print "fail"
         return {}
-    lines = eval(f.read())
+    txt = f.read()
+    print txt
+    lines = eval(txt)
     f.close()
     files = my_o_dict()
     files.okeys = []
@@ -128,6 +130,7 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
             mn[n] = d
     cases = {"NEW":[],"UPDATED":[],"INSTALLED":[]}
     for n in an.okeys:
+        print an[n],mn[n]
         if n not in mn:
             status = "NEW"
         elif compare_versions(an[n]["version"],mn[n]["version"])>0:
