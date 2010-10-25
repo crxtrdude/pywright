@@ -7,6 +7,4 @@ addev attorneybadge
 addev bracelet
 addev apollo$
 
-script credits label=T
-script scene88
 script scene1

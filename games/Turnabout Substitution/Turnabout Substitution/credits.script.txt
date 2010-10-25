@@ -4,7 +4,6 @@ bg inmemory fade
 
 pause 120 script
 
-"{blah"
 nt
 "{sound}{c900}{center}THE TEAM:{p60}{next}"
 
