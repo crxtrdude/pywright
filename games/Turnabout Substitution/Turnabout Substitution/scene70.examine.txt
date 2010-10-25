@@ -1,0 +1,41 @@
+#-version-1
+label top
+bg policehq
+
+examine
+region 15 60 10 50 detective
+region 120 50 10 25 captain
+region 160 50 15 17 bluebadger
+menu scene70
+
+label detective
+char Apollo hide
+"These detectives must have{n}a lot of work going{n}on with the case."
+"...{sfx/Key.ogg}This one's playing video games.{n}Axel... Through, was it?"
+char nothing
+goto top
+
+label captain
+char Apollo hide
+"So, I wonder if it's a mannequin{n}again today..."
+char Chief hide
+"H-Hey! Don't poke me like that!"
+char Apollo hide
+"O-Oh! Sorry, I thought...{n}Never mind. So you gave up{n}using that mannequin?"
+char Chief hide
+"Well, not exactly...{n}He's having brunch with my{n}mother-in-law!"
+char Apollo hide
+"...{n}{c099}(The mannequin is at brunch,{n}but the dummy is right here.)"
+goto top
+
+label bluebadger
+char Apollo hide
+"The Blue Badger, police mascot,{n}defender of truth and justice."
+"Now that's unfair competition.{n}Normally I'm the one{n}badgering witnesses."
+char nothing
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+goto top

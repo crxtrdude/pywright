@@ -1,0 +1,147 @@
+#-version-1
+set _cr_button true
+set nophoneincourt 0
+setflag phone2
+mus
+nt
+"{c090}{center}{type}December 27, 4:17 PM{n}Dee Kay & Co. Funeral Directors{n}Rhea Wits's Office"
+bg ts/1deekayandcooffice fade
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Rhea e=normal
+"Well, that was easier than I thought,{n}Apollo."
+"It almost seems anticlimatic,{n}to win such a major case in a single{n}day. I think we ought to celebrate."
+char Apollo hide
+"Um...yeah.{c099} (To be honest, I thought{n}it felt a bit weird too.)"
+mus
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+char Apollo hide
+"Oh, just a minute. I've got a call.{sfx /bip.wav}{n}Hello!"
+char Poole hide nametag=???
+"{c090}Is this the office of a Mr. Lady{n}Justice?"
+char Apollo hide
+"{c099}(Lady Justice? I know only one{n}person who'd greet me like that.)"
+"This is Apollo Justice, attorney{n}at law."
+char Poole hide
+"{c090}I thought so. This is Jessica Poole.{n}You know, the Prosecutor in the{n}Chambers case."
+"{c090}I have something important that I{n}must speak with you about."
+char Apollo hide
+"{c099}(Great, it's Deadpoole. But wait,{n}what could she have to talk to me{n}about?)
+char Poole hide
+"{c090}Please meet me at the courthouse, in{n}the lobby. We can speak there."
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+char Apollo hide
+sfx /sfx general/sfx-whoops.wav
+"She didn't even ask if I wanted to{n}meet her or not. Oh well..."
+char Rhea e=mad
+"Apollo, I'm still here. It's fine to talk{n}to yourself, as long as other people{n}aren't around. Then it's just weird."
+char Apollo hide
+sfx /sfx general/sfx-whoops.wav
+"Oh, sorry! I forgot all about you."
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Rhea e=normal
+"...Anyway, I was saying that we{n}should celebrate. Do you want to{n}go out?"
+char Apollo hide
+sfx /sfx general/sfx-shock2.wav
+"G-go out!? As in, on a date?{n}{c099}(Didn't see that coming.)
+char Rhea e=mad
+"No, I meant the other thing that{n}people usually mean when they say{n}"go out." {esmiling1}Yes, on a date."
+char Apollo hide
+"Oh, uh... that's kind of sudden.{n}I mean...
+mus
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}"
+char Apollo hide
+"{c099}(Another call? At least I'll be able{n}to calmly gather my thoughts while{n}appearing to be engaged"
+"{c099}in a regular conversation.)"
+mus 06 - Phoenix Wright - Objection! 2001.ogg
+set _music_loop 06 - Phoenix Wright - Objection! 2001loop.ogg
+char Phoenix hide
+sfx /sfx general/sfx-damage2.wav
+"{s}{f}{c090}HEY APOLLO, WHERE YOU BEEN!?"
+sfx /sfx general/sfx-objection.wav
+char Apollo hide
+"{s}{f}NONE OF YOUR BUSINESS, OLD{n}MAN!"
+char Rhea e=normal
+"..."
+char Phoenix hide
+"{c090}So, how's the trial going?{n}Did you lose yet?"
+char Apollo hide
+"{c099}(He's probably expecting me over in{n}Borginia. I need to think of an excuse{n}not to go see him.)"
+"Oh, uh...n-no, I still have{n}a lot of work to do on it."
+"Sorry, but I won't be done until{n}tomorrow at the earliest." 
+char Phoenix hide
+"{c090}Oh, that's too bad. I was hoping{n}you'd be here with Trucy and me by{n}now. You sure the trial's going okay?"
+"{c090}Didn't hit a soft spot, did I?"
+mus
+char Apollo hide
+"It's going {sfx/Bwaaah.ogg}FINE!{sfx/bip.wav} Phew."
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Rhea e=normal
+"So, how about it Apollo?"
+char Apollo hide
+"Ah yes, the date. I, uh, that is ...I{n}might be interested. Y-you know,{n}maybe. Theoretically."
+char Rhea e=smiling1
+"All right, so that's a yes."
+char Apollo hide
+"No, no, it's a maybe. Maybe doesn't{n}necessarily mean-{next}"
+mus
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}"
+char Apollo hide
+"{s 10 10}{sfx/Bwaaah.ogg}WHAT IS IT? WHY WON'T YOU{n}PEOPLE JUST LEAVE ME ALONE?"
+char Ema hide
+"{c090}Well that's not very nice.{n}Scientifically speaking."
+sfx /sfx general/sfx-whoops.wav
+char Apollo hide
+"{c099}(I really need to cut down on{n}these loud outbursts.)"
+"Sorry Ema, I thought you{n}were someone else."
+char Ema hide
+"{c090}That's why science invented{n}something called "caller ID.""
+"Anyway, we've got bigger problems."
+"{c090}Robert Erlenmeyer has just escaped{n}from the Supreme Court Building!"
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+char Apollo hide
+sfx /sfx general/sfx-shock2.wav
+"WHAAAAAAAAAAT!?{c099} (Darn, that{n}makes three.)"
+"How... how is that possible? There's{n}no way he knew you were coming!"
+char Ema hide
+"{c090}We suspect that Strings already{n}knew, and he probably warned{n}Erlenmeyer, giving him time to escape."
+char Apollo hide
+"That's REALLY bad news!"
+char Rhea e=sweating
+"What is it? What's going on?"
+char Apollo hide
+"Erlenmeyer has escaped!"
+char Rhea e=sweating
+"..."
+"You mean...{p90}he's on the {f}loose!?"
+char Apollo hide
+"{c099}(And he's a serial killer! He{n}might come after us...)"
+char Ema hide
+"{c090}The police have initiated a search,{n}but so far we haven't been able to{n}find him anywhere."
+"{c090}I'm placing Strings under arrest."
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}"
+char Apollo hide
+"We need to head down to the{n}Supreme Court Building, right{n}now! We can talk about this later."
+
+
+script scene54
+
+
+
+

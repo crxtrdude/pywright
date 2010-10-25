@@ -1,0 +1,6 @@
+#-version-1
+bg aj/courtlobby
+char nothing
+mus 145 - Turnabout Substitution - Jessica Poole - To the Bitter End.ogg
+set _music_loop 145 - Turnabout Substitution - Jessica Poole - To the Bitter Endloop.ogg
+menu scene60

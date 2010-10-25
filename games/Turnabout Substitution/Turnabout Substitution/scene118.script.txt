@@ -1,0 +1,74 @@
+mus
+bg airport
+nt
+"{c090}{center}{type}December 29, 8:09 PM{n}International Departures{n}Gate 12"
+char Apollo hide
+"Yes,{p10} I got here{n}just in time!"
+char PA-System hide
+"{c090}Attention, passengers."
+"{c090}Flight HTSL-56 to Borginia{n}has been cancelled.{p20}{n}We apologize for any inconvenience."
+char Apollo hide
+"Wh-{p20}{sfx/Bwaaah.ogg}{f}{s 10 10}What?!{p20} This isn't good..."
+char ??? hide
+"Don't be so gullible.{p20} Seriously."
+char Apollo hide
+"{sfx/Ding.ogg}{f}{s 5 5}Ah!{p15} Mr. Wright!"
+char Phoenix fade e=big-eyes
+"Did you really forget my voice{n}in such a short amount{n}of time...{p30} {c900}{sfx/Ding.ogg}{f}Polly?"
+sfx /swoop.wav
+char Rhea fade
+pause 60 script
+sfx /swoop.wav
+char Phoenix e=big-eyes
+pause 60 script
+char Apollo hide
+"...{p30}Could you...{p30} {s 5 5}not call{n}me that, please?"
+char Phoenix
+"{sfx/Ding.ogg}{f}?{p15} What's wrong?{p15}{n}Something happened with the case?"
+char Apollo hide
+"It's...{p30} a long story."
+char Phoenix e=bwuh
+"It's a long plane ride."
+char Apollo hide
+"...{p20} It was kind of a {f}mess."
+"I proved the {f}{s 5 5}lunatic was completely{n}normal,{p15} got my girlfriend declared{n}guilty of {f}{s 5 5}serial murder,"
+"and caused both the {f}judge{n}and {f}prosecutor to resign."
+char Phoenix e=happy
+"But you won, right?"
+char Apollo hide
+"Well,{p15} yeah..."
+char Phoenix e=happy
+"Then {sfx/Ding.ogg}{f}{s 5 5}cheer up!{n}But man, all that, and it{n}was only your fifth case!"
+char Phoenix e=heh
+"In my fifth case I only got{n}rid of a {f}prosecutor and {f}policeman..."
+char Apollo hide
+"B-{p20}But it was the {sfx/Dunnn.ogg}{f}{s 10 10}{c900}Chief Prosecutor{c}{n}and the {sfx/Dunnn.ogg}{f}{s 10 10}{c900}Chief of Police{c}!"
+char Phoenix e=lol
+"...{p20}Yeah, I was {sfx/Key.ogg}{f}much better in{n}my fifth case than you in yours."
+char Apollo hide
+"E-{p20}{sfx/Shock.ogg}{s 10 10}Eh?{p20} That's not what--{p10}{next}"
+mus End Credits.ogg
+set _music_loop End Creditsloop.ogg
+char Phoenix
+"Come on, Apollo.{n}The flight is boarding.{p20} I'm{n}surprised you actually decided to go."
+char Apollo hide
+"...{p20}{sfx/Ding.ogg}{f}{s 5 5}Huh?"
+char Phoenix
+"I didn't think you had the{n}{s 5 5}funds to pay for it!"
+char Apollo hide
+"{sfx/Ding.ogg}{f}{s 5 5}Huh?{p15} {sfx/Ding.ogg}{f}{s 5 5}Huh?"
+char Phoenix e=heh
+"I suppose I can give you a loan{n}if you need...{p30} but I can't guarantee{n}the {s 5 5}interest will be that good."
+char Apollo hide
+"{sfx/Ding.ogg}{f}{s 5 5}Huh?{p15} {sfx/Ding.ogg}{f}{s 5 5}Huh?{p15} {sfx/Ding.ogg}{f}{s 5 5}Huh?"
+char Phoenix e=normal
+"You got something to say, Apollo?"
+char Apollo hide
+"...{p30}Just one thing."
+char Phoenix e=happy
+"Great.{p20} I've actually{n}missed it a little.{n}{s 5 5}Let it rip!"
+char Apollo hide
+"Okay, here comes Justice...{p60}{next}"
+fg ObjectionAnimApollo
+pause 60 script
+script credits

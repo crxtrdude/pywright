@@ -1,0 +1,142 @@
+#-version-1
+label top
+bg aj/wrightanything
+
+
+# MOVE MENU FOR DAY 2
+list Day2Movement
+
+# Open immediately on start of Scene 67
+  li Detention Center
+
+# Open based on events in other scenes/locations
+
+  # Dee Kay and Co Offices
+  flag openScene68 openDK
+  label DKopen
+
+  # Forest Bones Cemetery (Entrance)
+  flag openScene76 closeFBC #Delete this line when the menu is finished
+  flag openScene68 openFBC
+  label FBCopen
+
+  # Police Station
+  flag openScene69 openPoliceHQ
+  label PoliceHQopen
+
+  # Larry Butz High School
+  flag openScene79 closeLBHS #Delete this line when the menu is finished
+  flag openScene71 openLBHS
+  label LBHSopen
+
+  # Judge's Mansion (Bedroom)
+  flag openScene76 openBedroom
+  label Bedroomopen
+
+  # Clooney Prison's Asylum
+  flag openScene79 openCPA
+  label CPAopen
+
+showlist
+menu scene66
+
+# Adding menu items to the list
+label openDK
+li Dee Kay and Co Office
+goto DKopen
+
+label openFBC
+li Forest Bones Cemetery
+goto FBCopen
+
+label openPoliceHQ
+li Police Station
+goto PoliceHQopen
+
+label openLBHS
+li Larry Butz High School
+goto LBHSopen
+
+label openBedroom
+li Judge's Bedroom
+goto Bedroomopen
+
+label openCPA
+li Clooney Prison's Asylum
+goto CPAopen
+
+# Removing menu items from the list - delete these when the menu is integrated
+
+label closeFBC
+goto FBCopen
+
+label closeLBHS
+goto LBHSopen
+
+# END MENU
+
+# Handlers for where each option takes you, based on events
+
+# DEE KAY AND CO OFFICE
+label Dee Kay and Co Office
+  flag EmaGone scene74
+  script scene67
+
+  label scene74
+  script scene74rhea
+
+# DETENTION CENTER
+label Detention Center
+  flag openScene80 scene80
+  flag openScene78 scene78
+  flag openScene68 scene65
+  script scene65erlenmeyer
+
+  label scene80
+  script scene80erlenmeyer
+
+  label scene78
+  script scene78erlenmeyer
+
+  label scene65
+  script scene65menu
+
+# FOREST BONES CEMETERY
+label Forest Bones Cemetery
+  flag openScene69 scene68
+  script scene68ema
+
+  label scene68
+  script scene68menu
+
+# POLICE STATION
+label Police Station
+  flag openScene77 scene77
+  flag openScene71 scene70
+  script scene70ema
+  
+  label scene77
+  script scene77ema
+
+  label scene70
+  script scene70menu
+
+# LARRY BUTZ HIGH SCHOOL
+label Larry Butz High School
+  flag openScene73 scene73
+  script scene71
+
+  label scene73
+  script scene73rhea
+
+# JUDGE'S BEDROOM
+label Judge's Bedroom
+  script scene76
+
+# CLOONEY PRISON'S ASYLUM
+label Clooney Prison's Asylum
+  flag openScene80 scene79
+  script scene79clooney
+
+  label scene79
+  script scene79menu

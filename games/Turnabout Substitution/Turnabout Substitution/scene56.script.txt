@@ -1,0 +1,49 @@
+#-version-1
+mus
+bg aj/detentioncenter fade
+flag scene56repeat skipStrings
+nt
+"{c090}{center}{type}December 27{n}Detention Center{n}Visitor's Room"
+fg detentionfg loops=0 nowait
+pause 60
+char Strings fade e=normal
+"Ah, yes. Mr. Justice."
+char Apollo hide
+"Chief Justice Strings."
+char Strings e=normal
+"Well now, I don't think I'll be{n}Chief Justice Strings for much longer,{n}considering what's occured."
+"If you've come here to interrogate{n}me about where Erlenmeyer{n}has escaped to,"
+"I would advise against{n}wasting your breath."
+"The police have already made{n}attempts to that end without{n}success. Frankly, I do not know"
+"where he is, and even if I was privy to{n}that information, I would not share{n}it with you."
+char Apollo hide
+"But why? Why would you sacrifice{n}yourself for a convicted murderer?"
+char Strings e=normal
+"Well, Mr. Justice, I feel that I am{n}morally obligated to do just that."
+"Every man is guilty of all the{n}good he did not do, Voltaire once said."
+char Apollo hide
+"How can you think that you are{n}doing good by allowing a serial killer{n}to run amok?"
+char Strings e=normal
+"Erlenmeyer had every right to{n}freedom, as do all innocent men."
+"It is quite a shame that{n}you are solely interested in{n}that poor man's location." 
+"After all, I know other things about{n}this case that you might find far{n}more interesting."
+char Rhea hide
+sfx /ding.ogg
+"!"
+char Apollo hide
+"What do you mean by that?"
+char Strings fade e=normal
+"I suspected that you{n}would be intrigued."
+"They all think that I'm{n}delusional, but in reality it is{n}they who cannot see the truth!" 
+"But from speaking with you, Mr.{n}Justice, I receive the notion that you{n}are different."
+"You are a man who cares about{n}the truth- that much is evident in{n}your eyes."
+"And yet I wonder, are you ready to{n}face it?"
+char Apollo hide
+"Yes, of course! Just tell us{n}what you know already!"
+char Strings e=thinking
+"I'm not entirely sure that{n}you are, Mr. Justice. But, ask me{n}whatever you want."
+"After all, it's not as{n}if I have anything{n}better to do."
+setflag scene56repeat
+script scene56Stringsmenu
+label skipStrings
+script scene56Stringsmenu

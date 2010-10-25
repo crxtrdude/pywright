@@ -1,0 +1,66 @@
+#-version-1
+label top
+set _show_back_button true
+set _show_back_button true
+bg ts/1deekayandcooffice fade
+
+list scene57talk
+li What to do?
+li Any ideas?
+showlist
+menu scene57
+
+label What to do?
+char Rhea fade e=normal
+char Apollo hide
+"Well, what should we do now?"
+char Rhea e=normal
+"We obviously need to find info that{n}might help arrest Erlenmeyer. Paul{n}Strings may know something..."
+char Apollo hide
+"And Poole wanted to talk to me{n}as well...{p40} Probably something about{n}the case."
+char Rhea e=normal
+"And of course, don't forget{n}our {c900}date!"
+char Apollo hide
+"{c099}(Right, the date.)
+"{c099}(I guess I'm still so{n}caught up in this case,{n}I've been forgetting to relax.)"
+"{c099}(After all, aren't I{n}supposed to be on holiday?)"
+char nothing
+goto top
+
+label Any ideas?
+char Rhea fade
+char Apollo hide
+"Does anything come to mind that{n}could lead to Erlenmeyer?"
+char Rhea e=normal
+"I'm not sure. It's pretty clear{n}that he's awfully good at hiding."
+"Personally, I've always thought{n}that he was faking his madness."
+"To kill so many people without{n}getting caught or even being{n}suspected..."
+"No way his mind{n}wasn't fully functional."
+char Apollo hide
+"Well, it would seem that the world's{n}best psychologists disagree with{n}you in that regard."
+"But I guess you have a point."
+char Rhea e=normal
+"Well, at any rate, we have{n}to assume that he is completely{n}aware of his actions."
+"If I were the killer, I wouldn't{n}stay in the area. I would run as far{n}away as I could,"
+"and I would be constantly{n}changing appearances and staying{n}on the move."
+"So we probably won't be able{n}to find him on our own. Our{n}best chance to get him now, I think,"
+"would be to have a well-informed{n}public on the lookout for him."
+"If you ask me, we ought to{n}stop worrying about things that{n}we can't control."
+"After all, there's nothing{n}we can do about the things we{n}have to live without..."
+char Apollo hide
+"Isn't that a song?"
+char Rhea e=normal
+"What? No, I don't think so.{n}Apollo, you say some of the most{n}ridiculous things."
+char Apollo hide
+"But I could swear that's a{n}line from a song."
+char Rhea e=normal
+"Whatever. Anyway, as for me, I've{n}had enough of these murders."
+"Let's stop fussing about things{n}we can't control, and have{n}some fun while we still can."
+char Apollo hide
+"{c099}(What does she mean by {c900}things{n}we can't control?"
+"{c099}(And I don't care what{n}she says: that's definitely a{n}line from a song!)"
+"{c099}(Damn, what was the title?)"
+char nothing
+goto top
+
+

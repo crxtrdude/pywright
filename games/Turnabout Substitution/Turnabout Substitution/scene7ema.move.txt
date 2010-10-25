@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg ts/1clooneyprisonasylumcell
+
+list scene7emamove
+li Clooney Prison's Asylum
+showlist
+menu scene7ema
+
+label Clooney Prison's Asylum
+script scene8menu

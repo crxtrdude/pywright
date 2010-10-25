@@ -1,0 +1,116 @@
+#-version-1
+bg aj/wrightanything fade
+pause 30
+char ??? hide
+"Killer office."
+pause 60
+char rhea fade
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+addev rhea$
+char Rhea
+"{sfx/Ding.ogg}Hi, Apollo!{n}You don't mind me calling{n}you Apollo, do you?"
+"I'm Rhea Wits.{n}But you can call me Rhea."
+char Apollo hide
+"Er, {s 5 5}{sfx/Smack.ogg}hi!{n}{c099}(When exactly did I{n}become a star?)"
+char Rhea e=smiling1
+"Love the hair, by the way."
+char Apollo hide
+"Really?"
+char Rhea e=smiling1
+"Yes, it is eccentric yet classy.{n}You're definitely not as{n}boring as the others."
+"Anyway, I'm here to apply for the{n}position of legal aide, as advertised{n}in today's paper, etc."
+char Apollo hide
+"Are you a lawyer? {sfx/Key.ogg}{c099}({c900}As advertised?{c}{n}{c099}Why do I not remember about this?{n}It wasn't Phoenix, was it?)"
+char Rhea
+"I'm a {f}{sfx/Ding.ogg}funeral director, actually. But it{n}hasn't stopped you before, has it?"
+char Apollo hide
+"{c099}(A{sfx/Shock.ogg} funeral director? I didn't know{n}Minnie Mouse was a {s 5 5}{sfx/Smack.ogg} gravedigger!)"
+char Rhea
+"Plus, I do know a bit about law.{n}And my mind's in pretty good shape.{n} Did I mention I'm a hard worker?"
+char Apollo hide
+"Well, er, I{next}"
+char Rhea
+"Here's my business card."
+char game hide
+nt 
+addev rheabusinesscard
+"{sfx/evidence.wav}{c099}Rhea's Business Card{n}added to the Court Record."
+char Rhea 
+"So, {f}{sfx/Ding.ogg}will you hire me?"
+char Apollo hide
+"{c099}(Gosh, that was quick!)"
+"So why exactly do you want{n}to be my assistant so much?{n}Is this about the{sfx/Key.ogg} case?"
+pause 60 script
+mus
+char Rhea
+"..."
+"{sfx/Ding.ogg}Hey. You are as good as they say.{n}Yes, it is about {sfx/Key.ogg}{c900}that{c} case."
+pause 30 script
+"Chambers. He didn't do it."
+"I know it's all over the news, but I{n}won't buy it. He wouldn't murder{n} anyone, I just know it."
+pause 30 script
+char Apollo hide
+"...You sound like you{n}know him personally."
+pause 60 script
+char Rhea
+"I do.{n}{esad}I was involved in the{n} {sfx/Key.ogg}Erlenmeyer trial."
+char Apollo hide
+"{sfx/Shock.ogg}{s}WHAAAAAT?!{next}"
+mus 142 - Turnabout Substitution - Recollection - Charles Darwin and Music.ogg
+set _music_loop 142 - Turnabout Substitution - Recollection - Charles Darwin and Musicloop.ogg
+char Rhea e=sad
+"Robert Erlenmeyer...{n}he killed my{sfx/Dunnn.ogg}{c900} brother{c}."
+pause 30 script
+char Apollo hide
+"I am terribly sorr{p5}{next}"
+char Rhea e=sad
+"I...I don't want to{n}talk about it."
+"Words can't describe how{n}devastated I was."
+"But life goes on.{n}I won't let his death ruin my life."
+"I think that's what he{n}would have wanted..."
+"That's why I'm trying to live{n}normally. But I also have to fight{n}for him, you know?"
+char Rhea e=mad
+"I hated Erlenmeyer.{n}I just loathed that deranged animal."
+"And yes, I was a witness{n}for the prosecution."
+char Rhea
+"But I also believe in  justice.{n}Chambers is innocent."
+"I know because he helped{n}me a lot back then, when{n}all hope seemed gone..."
+char Rhea e=mad
+"He was a saint in a trial of corrupt,{n}self-righteous fascist...{n}{sfx/Owned.ogg}nincompoops!"
+"That's why I have to get to{n}the bottom of this... no matter{n}what it takes."
+mus
+char Rhea
+"Sorry. I was just thinking aloud."
+char Apollo hide
+"Averyloud."
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Rhea
+"{sfx/Smack.ogg}Look who's talking!"
+char Apollo hide
+"Haha.{p30} Except it's not funny at all."
+char Rhea
+"Okay. I've got a good one{n}for you then:"
+"why does everyone cry{n}when they eat Mexican pizza?"
+mus
+pause 60 script
+"Because they're in the{n}{sfx/Ding.ogg}Cafe Teary Eye!"
+pause 60 script
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Apollo hide
+"..."
+"You know, Phoenix Wright{n}once knew this clown{p5}{next}"
+char Rhea
+"{sfx/Smack.ogg}Hu-hum."
+char Apollo hide
+"Okay, my turn.{n}Have you met my procto{p5}{next}"
+char Rhea
+"...{sfx/Key.ogg}Apollo."
+"As much as I'd like not to laugh{n}at your lawyer jokes, we'd better{n}get going with the investigation."
+char Apollo hide
+"{s 5 5}{sfx/Smack.ogg}You're right! {sfx/Smack.ogg}Of course!"
+pause 30 script
+"Well, I guess it's time to{n}check out the crime scene."
+script scene5menu

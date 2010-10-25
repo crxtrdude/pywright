@@ -1,0 +1,400 @@
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+label start
+startcourt
+cross erlenmeyertestimony2
+
+statement erlenmeyer2A
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}I was playing billiards...{p30}{n}but I can't tell you where."
+
+statement erlenmeyer2B
+witness
+char Erlenmeyer 
+"{witness}{enormal-witness}I was probably asleep when it{n}happened...{p90} After all,{n}my dream was strange."
+
+statement erlenmeyer2F
+witness
+char Erlenmeyer 
+"{witness}{enormal-witness}I... thought I was{n}asleep... but the noises{n}seemed real..."
+
+statement erlenmeyer2C
+witness
+char Erlenmeyer 
+"{witness}{esad-witness}I then woke up...{p90} in the graveyard...{n}with Judge dead."
+
+statement erlenmeyer2D
+witness
+char Erlenmeyer
+"{witness}{esad-witness}I have no idea... how I got{n}there... or what happened..."
+
+statement erlenmeyer2E
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}All in all, the fruit salad{n}was very tasty."
+endcross
+
+label comments
+helper
+char Rhea e=aide
+"{helper}Don't forget that Erlenmeyer is your{n}client, Polly. "
+"If you find a contradiction, think it{n}through and first make sure it{n}doesn't hurt your case!"
+char Apollo hide
+"Maybe...{p20} but if there's{n}nothing, he'll get a guilty{n}verdict for sure!"
+"Considering it can't get much{n}worse, I think I just need to"
+"point out any and all{n}contradictions I might find..."
+goto start
+
+label press erlenmeyer2A
+fg HoldItAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{enormal-nobrac}And you were... uh...{p40}{n}{esweats-nobrac}playing billiards two nights ago?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}...Yes..."
+defense
+char Apollo
+"{defense}{enormal-nobrac}{s 5 5}Please tell us where you were{n}playing!"  
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}{delay2}..."
+defense
+char Apollo
+"{ehandsondesk-nobrac}Please, Mr. Erlenmeyer!"
+"This isn't helping your case...{p40}{n}Yesterday you said that you're{n}innocent, and always have been."
+"{sfx /Ding.ogg}{f}Why won't you say it now?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}I don't remember... saying that."
+"{esad-witness}I hope I'm...{p30} innocent...{p30}{n}but I'm not sure. "
+"{enormal-witness}{sfx /Ding.ogg}{f}I guess if it's that important...{p40}{n}I can tell you."
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}{sfx /Shock.ogg}{s}R-Really?! Where?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}I was playing billiards...{p50}{n}{sfx /Key.ogg}{f}{c900}at a pool table{c}."
+helper
+char Rhea e=aideserious
+"{helper}{f}{sfx /Smack.ogg}{f}BLASPHEMY!"
+char Rhea e=aide
+"...{p30}{sfx/Ding.ogg}Sorry, it's one of my pet{n}peeves."
+defense
+char Apollo
+"{defense}{enormal-nobrac}So, where was this pool table?"
+witness
+char Erlenmeyer
+"{sfx /Key.ogg}{f}...I can't tell you."
+defense
+char Apollo
+"{ehandsondesk-nobrac}{sfx /Smack.ogg}{s}Please!"
+witness
+char Erlenmeyer
+"{witness}{esad-witness}{delay2}..."
+prosecutor
+char Poole
+"{prosecutor}This is why you never ask{n}defendants to testify, rookie."
+"It never plays in their favor. "
+"The jurists are lucky this serial killer{n}doesn't have a good attorney, since{n}it has made their job a lot easier."
+judge
+char G.Strings
+"{judge}{enormal}And mine, too.{n}Please continue with your testimony,{n}witness."
+defense
+char Apollo
+"{defense}{esweats-nobrac(blink)}{sfx /Shock.ogg}{c099}{s 5 5}(Argh!{p90}{n}This is making me look like a fool!)"
+resume
+
+label press erlenmeyer2B
+fg HoldItAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}{c099}(There's plenty to ask about here...)"
+set _list_back_button false
+list whattoask
+li Why "probably"? 
+li What was your dream?
+li Where were you?
+showlist
+scene89erlenmeyertestimony2
+label Why "probably"?
+set _list_back_button true
+defense
+char Apollo
+"{defense}{ethinking-nobrac}Why did you say you were{n}"probably" asleep?"
+prosecutor
+char Poole
+"{prosecutor}Because he {sfx/Ding.ogg}{f}can't prove he was."
+"We know he wasn't, since he{n}was awake, murdering--{p40}{next}"
+fg ObjectionAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}I was asking the {s 5 5}witness,{n}Mrs. Poole!"
+witness
+char Erlenmeyer 
+"{witness}{enormal-witness}I... thought I was{n}asleep... but the {sfx /Key.ogg}{f}{c900}noises{c}{n}seemed real..."
+judge
+char G.Strings
+"{judge}{enormal}That seems like important{n}information. Please add it{n}to your testimony."
+goto start
+label What was your dream?
+set _list_back_button true
+defense
+char Apollo
+"{defense}{ethinking-nobrac}What did you dream about?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}It was dark...{p40} I was{n}trapped...{p30} And the ostriches{n}were fighting."
+judge
+char G.Strings
+"{judge}{enormal}That seems like important{n}information. Please add{n}it to your testimony."
+script scene89erlenmeyertestimony5
+label  Where were you?
+set _list_back_button true
+defense
+char Apollo
+"{defense}{ethinking-nobrac}Where were you while{n}you were falling asleep?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}I was just...{p40} doing things{n}I had to do... "
+"Like playing with the{n}mice...{p30}the usual...
+judge
+char G.Strings
+"{judge}{enormal}That seems like important{n}information. Please add{n}it to your testimony."
+script scene89erlenmeyertestimony6
+
+label press erlenmeyer2F
+fg HoldItAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{ethinking-nobrac}{sfx /Ding.ogg}{f}There were noises...?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}From the...{sfx /Ding.ogg}{f} fruit salad.{n}The corn has ears and the{n}potato has eyes."
+defense
+char Apollo
+"{defense}{esweats-nobrac}What noises did the...{p40}{n}fruit salad make?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}Heavy breathing... Something{n}like a siren... Someone saying{n}{f}"Please!""
+defense
+char Apollo
+"{defense}{ethinking-nobrac}{sfx /Key.ogg}"Please"...?{p40}{sfx /Ding.ogg}{f}{enormal-nobrac} Ah!{n}You probably heard "Police!""
+judge
+char G.Strings
+"{judge}{enormal}This would imply he heard the car{n}alarm, and subsequent phone call."
+defense
+char Apollo
+"{defense}{enormal-nobrac}So he would only have been{n}{sfx /Key.ogg}{f}{c900}half-alseep{c}!"
+prosecutor
+char Poole
+"{prosecutor}{sfx /Ding.ogg}{f}Why does that matter?" 
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}If there was a third person{n}at the scene, he {s 8 8}might have{n}heard his voice!"
+"Mr. Erlenmeyer, did you hear{n}anyone else speak in{n}your dream?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}{p90}{sfx /Key.ogg}{f}No."
+defense
+char Apollo
+"{defense}{esweats-nobrac}{p90}{sfx /Key.ogg}...{p30}{f}Really?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}{sfx /Ding.ogg}{f}Yes."
+prosecutor
+char Poole
+"{prosecutor}Congratulations, Antennas!"
+"You just had the defendant{n}admit there was {f}no third{n}person at the scene."
+"{sfx /Smack.ogg}{s}Truly brilliant!{n}I couldn't have done it better{n}myself."
+defense
+char Apollo
+"{defense}{esweats-nobrac}{sfx /Shock.ogg}{f}W-Wait!{p40} {enormal-nobrac}Just because he{n}didn't hear anyone else speak,{n}doesn't mean no one else was there!"
+prosecutor
+char Poole
+"{prosecutor}That's not the point."
+"You are the one disputing the police's{n}theory, so {s 8 8}you are the one who{n}needs to present evidence!"
+"Whether you fail to prove something,{n}or prove it isn't true, the result{n}is the same:{p80} a {sfx/Owned.ogg}{f}guilty verdict!"
+judge
+char G.Strings
+"{judge}{eserious}Don't get carried away, Mrs. Poole. "
+"We still need to finish{n}examining this testimony... "
+"Not that I think it will be{n}of much use."
+"Please continue, witness."
+helper
+char Rhea e=aide
+"{helper}{p90}...I'm surprised no one pointed out{n}that corn is a grain and potatoes{n}are vegetables."
+resume
+
+label press erlenmeyer2C
+fg HoldItAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{enormal-nobrac}Were you immediately{n}arrested, or interrogated first?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}I opened my eyes...{p40}{n}A policewoman said,"
+"{esad-witness}"{f}You're under {s 5 5}{f}arrest for{n}the murder of Judge Chambers.""
+"I was handcuffed before I woke up...{p40}{n}I didn't know what was going on..."
+defense
+char Apollo
+"{defense}{enormal-nobrac}Was that cruel treatment{n}really necessary?"
+prosecutor
+char Poole
+"{prosecutor}Was killing twe--{sfx /Ding.ogg}{f}thirteen{n}people really necessary?" 
+"{sfx /Smack.ogg}{s}When you find a serial killer{n}sleeping in someone's blood, you{n}don't {s 8 8}greet him with a cup of coffee!"
+defense
+char Apollo
+"{defense}{epointing-nobrac}{f}{s 8 8}But they could've both been{n}the victim of an accident!"
+prosecutor
+char Poole
+"{prosecutor}{sfx /Ding.ogg}That's as likely as you{n}making a valid point in court."
+"The investigation showed{n}it wasn't an accident."
+"Besides, we're not here to discuss{n}the conditions of the{n}defendant's arrest."
+"If you don't have a more relevant{n}point, I propose we move on."
+judge
+char G.Strings
+"Agreed."
+resume
+
+label press erlenmeyer2D
+fg HoldItAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{enormal-nobrac}Well... uh...{p40} can't{n}help you there..."
+"{c099}(It seems he's as confused{n}about it as I am.)"
+prosecutor
+char Poole
+"{prosecutor}An innocent serial killer wakes{n}up at a crime scene with no idea{n}how he got there or what happened..."
+"{sfx /Ding.ogg}{f}...you should write books."
+"That would have been much{n}more preferable to killing people."
+"Of course, the reality is{n}much simpler."
+"Erlenmeyer walked to the cemetery{n}and {sfx/Shing.ogg}{f}{s 10 10}murdered Judge Chambers in cold{n}blood, fully aware of everything!"
+"He is being {s 8 8}deliberately vague{n}because he cannot come up with{n}any explanation for himself!" 
+judge
+char G.Strings
+"{judge}{enormal}I must agree. This sounds like a{n}badly-thought out lie...{p90}"
+"{sfx /Ding.ogg}{f}Like when I told my father all{n}the chocolate simply{n}{sfx/Key.ogg}disappeared..." 
+defense
+char Apollo
+"{defense}{enormal-nobrac(blink)}{c099}(N-{p15}No, that's not it...)
+"{c099}(The real killer must have taken{n}advantage of Erlenmeyer's mental{n}state to frame him for the crime...)"
+"{c099}(But I have no idea who{n}did it, or how...)"
+resume
+
+
+label press erlenmeyer2E
+fg HoldItAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{enormal-nobrac} So... uh...{p40}{esad-nobrac} what made{n}the salad so good?"
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}{sfx /Key.ogg}{f}It was chewy."
+helper e=aideserious
+char Rhea
+"{helper}{p40}...Ew."
+char Apollo hide
+"Erlenmeyer's testimony makes{n}no sense..."
+helper
+char Rhea e=aideserious
+"{helper}{sfx /Smack.ogg}{s}Just bear with it, Polly!"
+"I'm sure you'll find something!"
+char Apollo hide
+"Yeah. Hm... "
+"{sfx /Key.ogg}{f}What's with Rhea's shirt?"
+"Why can't she just have regular{n}sleeves?"
+judge
+char G.Strings
+"{judge}{eserious}...{p30}Please don't get{n}sidetracked, Mr. Justice."
+char Apollo hide
+"{sfx /Ding.ogg}{f}And I bet Strings would be able{n}to command more {s 5 5}authority if{n}he looked more like Marshall..."
+helper
+char Rhea e=aide
+"{helper}{sfx/Ding.ogg}{f}Hey, Polly."
+char Apollo hide
+"{sfx Ding.ogg}{f}H-{p15}Huh? What?"
+helper
+char Rhea e=aideserious
+"{helper}We can hear you."
+char Apollo hide
+"{sfx /Shock.ogg}{s 15 15}ACK!"
+judge
+char G.Strings
+"{judge}{eserious}To {s 8 8}think, I gave you{n}a second chance..."
+defense
+char Apollo
+"{defense}{esweats-nobrac}N-{p15}{s 8 8}No, Your Honor!{n}I think you look {f}great!"
+judge
+char G.Strings
+"{judge}{eserious}Forget it, Mr. Justice."
+"Just continue your{n}cross-examination."
+defense
+char Apollo
+"{defense}{esweats-nobrac(blink)}{sfx/oops.wav}{c099}(Oops.)"
+resume
+
+label none
+is wrongevidence1 wrongevidence1
+fg ObjectionAnimApollo
+pause 5 script
+defense
+char Apollo
+"{defense}{epointing-nobrac}{sfx /Smack.ogg}{s}Your Honor, there is an...{p80}{n}um...."
+judge
+char G.Strings
+"{judge}{eserious}You don't sound very{n}sure, Mr. Justice."
+"I'm afraid I'm going to{n}pentalize you."
+sfx /Bwaaah.ogg
+penalty -20
+is penatly 0 gameover
+defense
+char Apollo
+"{defense}{esweats-nobrac(blink)}{c099}(Damn it!)"
+goto start
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

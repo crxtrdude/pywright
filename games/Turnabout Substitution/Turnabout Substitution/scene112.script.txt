@@ -1,0 +1,404 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+
+flag chosenodecisiveevidence tothedeusexmachina
+
+label faildecisiveevidence
+emo objects-nobrac name=dc
+defense
+"{sfx/Ding.ogg}{f}{s 10 10}Your Honor!{p30} I have {c900}decisive evidence{c}{n}against Rhea Wits!"
+
+emo sweating name=wc
+scrollwitness
+"WH-{p20}{sfx/Shock.ogg}{f}{s 15 15}WHAT?!{p30} S-{p20}{f}{s 10 10}Stop it, Apollo...{p25}{n}We all know you're {f}{s 10 10}bluffing..."
+
+emo confident-nobrac name=dc
+scrolldefense
+sfx /Key.ogg
+"{f}Am I?"
+
+emo serious name=jc
+judge
+"I don't know. {p30}Present your{n}evidence, and we'll find out."
+
+emo handsondesk-nobrac name=dc
+defense
+"All right...{p30} {c099}(Here goes {s 10 10}everything!){c}"
+
+"{c090}My {f}decisive evidence is...!"
+present fail=falsepresent
+
+label falsepresent
+emo smiling2 name=wc
+witness
+"...{p30}{sfx/Ding.ogg}{f}See?{p20} I knew you were bluffing.{ewink}{p60}{esmiling2}"
+
+emo serious name=jc
+judge
+"Yes, that evidence proves nothing."
+"I believe it is time we {s 10 10}turn{n}this case over to the jury!"
+script gameover
+
+label tothedeusexmachina
+mus
+emo handsondesk-nobrac name=dc
+defense
+"{s 10 10}{c099}(N-No...{p20} She's right...{p20}{n}I don't have decisive evidence...)"
+
+emo smiling2 name=wc
+witness
+"You {sfx/Ding.ogg}{f}lose, Apollo.{p20} I suppose it's{n}a good thing true justice prevails{n}in the--{p30}{next}"
+
+char Poole hide nametag=???
+"{sfx/Shing.ogg}{f}{s 15 15}Not so fast, Rhea!!"
+
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo surprised name=wc
+witness
+"{sfx/Ding.ogg}{f}{s 10 10}!!"
+
+mus 145 - Turnabout Substitution - Jessica Poole - To the Bitter End.ogg
+set _music_loop 145 - Turnabout Substitution - Jessica Poole - To the Bitter Endloop.ogg
+emo sarcastic name=pc
+prosecutor
+"...{p40} Hmph. Your {f}{s 10 10}mentor would be{n}disappointed in you,{n}Lady Justice!"
+
+emo thinking-nobrac name=dc
+scrolldefense
+set _speaking dc
+"{sfx/Key.ogg}{f}{c099}(Eh?{p20} Mr. Wright?)"
+
+emo sarcastic name=pc
+scrollprosecutor
+"Have you really forgotten{n}{sfx/Smack.ogg}{s 10 10}everything that he's done?"
+
+emo handsondesk-nobrac name=dc
+scrolldefense
+"...{p60} {sfx/Ding.ogg}{f}Of course!{p30} Rhea, you may{n}have been careful enough to{n}be {f}safe"
+"in Erlenmeyer's first trial,{n}but {f}times have changed."
+
+emo sweating name=wc
+witness
+"{s 10 10}What are you talking about?"
+
+emo handsondesk-nobrac name=dc
+defense
+"{c900}The {sfx/Key.ogg}{f}Jurist System{c}, of course."
+"I don't specifically need{n}circumstantial or decisive{n}evidence...{p60}"
+"{sfx/Dunnn.ogg}{s 12 12}{f}just evidence that sways{n}the jurists!"
+
+emo surprised name=wc
+scrollwitness
+"{sfx/Ding.ogg}{f}{s 10 10}!{p60} ...{p30} N-{p20}{s 8 8}No matter.{p30} I'm sure{n}people as {f}intelligent as them{n}won't be {s 8 8}fooled by your lies!"
+
+emo handsondesk-nobrac name=dc
+defense
+"And I'm sure they won't be {s 10 10}fooled{n}by {f}yours!"
+
+mus
+emo serious name=jc
+judge
+"{sfx/Smack.ogg}{s 10 10}Enough of this pointless bickering!"
+"If both the prosecution and{n}defense have rested their{n}respective cases,"
+"I believe it is time to{n}{f}turn this case over{n}to the jury."
+
+clear
+
+pause 200
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+"...{p50}{sfx/Ding.ogg}{f}The jury has finished deliberating!"
+
+emo handsondesk-nobrac name=dc
+defense
+"...{p30} {c099}({s 10 10}This is it, the moment{n}of truth.)"
+
+judge
+"The number of jurists who voted{n}{c900}"guilty"{c} is...{p80} {sfx/Key.ogg}{f}{c900}three{c}."
+
+emo thinking-nobrac name=dc
+defense
+"...{p25} {s 5 5}Wait...{p25} If {s 8 8}three jurists{n}voted {f}"guilty" then {s 10 10}three jurists{n}voted for {f}"not guilty"!"
+
+prosecutor
+"3-3...{p30} {f}Interesting."
+
+emo handsondesk-nobrac name=dc
+defense
+"A {f}{s 10 10}draw! {ethinking-nobrac}{p60}...What happens{n}in a draw?"
+
+emo serious name=jc
+judge
+"A 3-3 draw results in...{p80}{n} a {sfx/Owned.ogg}{f}{c900}guilty{c} verdict."
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+
+emo ohshit-nobrac name=dc
+defense
+"{sfx/Dunnn.ogg}{s 20 20}Whaaaaaaat?!{p30}{next}"
+
+emo serious name=jc
+judge
+"The jury has made its decision."
+"This court finds the defendant,{n}Robert Erlenmeyer...{p60}{next}"
+
+mus
+fg HoldItAnim
+pause 60 script
+
+emo handsondesk name=dc
+defense
+set _speaking dc
+"{sfx/Awe.ogg}{f}{s 15 15}...!"
+
+emo sweating name=wc
+witness
+set _speaking wc
+"{sfx/Awe.ogg}{f}{s 15 15}...!"
+
+emo normal name=pc
+prosecutor
+set _speaking pc
+"{sfx/Awe.ogg}{f}{s 15 15}...!"
+
+# Clear Court for Ema
+
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Ema
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo mu name=wc
+witness
+"You {sfx/Shing.ogg}{f}{s 20 20}can't render that verdict yet,{n}Your Honor!"
+
+emo sweats-nobrac name=dc
+defense
+"{sfx/Ding.ogg}{f}{s 10 10}Ema!!{p20} {f}{s 10 10}Where have you been?"
+
+emo normal name=wc
+witness
+"Investigating Ms. Wits.{p30} I've had{n}a {f}bad feeling about her this{n}entire time."
+"I searched her office, and{n}found {sfx/Key.ogg}{f}three pieces of evidence."
+
+# Clear Court for Rhea
+
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+emo mad name=wc
+witness
+"{sfx/Smack.ogg}{s 10 10}Not so fast!{p30} The jury has{n}already reached a decision!"
+
+emo thinking name=jc
+judge
+"...{p30}{sfx/Ding.ogg}{f}Technically, if new evidence{n}is presented before the verdict{n}is officially handed down,"
+"they are allowed to change{n}their vote."
+
+emo mad name=wc
+witness
+"{sfx/Bwaaah.ogg}{s 10 10}There's still a problem!{p30} That{n}evidence is {s 10 10}illegal, and thus{n}should"
+"{s 10 10}not give the jurists a chance{n}to re-vote!"
+
+# Clear Court for Ema
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Ema
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo mu name=wc
+witness
+"{sfx/Ding.ogg}{f}Actually, Ms. Wits, I have a{n}search warrant right here,{n}signed by one {sfx/Key.ogg}{f}{c900}Paul Strings{c}."
+
+emo shocked name=jc
+judge
+"{sfx/Dunnn.ogg}{s}What?!"
+
+emo normal name=wc
+witness
+"He is technically still the{n}Chief Justice."
+
+mus
+emo thinking name=jc
+judge
+"...{p20} ...{p20} ... {p20}...{p100}{eserious}{n}Very well.{p20} Let us see this{n}evidence."
+
+# Clear Court for Rhea
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo surprised name=wc
+witness
+"{sfx/Ding.ogg}{f}{s 10 10}!"
+
+# Clear Court for Ema
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Ema
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+mus 138 - Apollo Justice - Investigation Core.ogg
+set _music_loop 138 - Apollo Justice - Investigation Coreloop.ogg
+emo normal name=wc
+witness
+"All right!{p20} The first piece{n}of evidence is...{p30} this {sfx/Key.ogg}{f}{c900}bracelet{c}."
+
+sfx /evidenceshoop.wav
+ev bracelet name=bracelet x=185
+pause 60 script
+set _speaking wc
+nt
+addev bracelet
+"{sfx/evidence.wav}{c099}Bracelet added{n}to the Court Record."
+pause 30 script
+sfx /evidenceshoop.wav
+delete name=bracelet
+
+emo sweats-nobrac name=dc
+defense
+"{sfx/Ding.ogg}{f}!{p30} {c099}(So {f}she's the one who{n}stole it!)"
+
+emo normal name=wc
+witness
+"The second piece of evidence{n}is a {sfx/Key.ogg}{f}{c900}strong sleeping drug{c}."
+
+sfx /evidenceshoop.wav
+ev drug name=drug x=185
+pause 60 script
+set _speaking wc
+nt
+addev drug
+"{sfx/evidence.wav}{c099}Sleeping Drug{n}added to the Court Record."
+pause 30 script
+sfx /evidenceshoop.wav
+delete name=drug
+
+emo normal name=wc
+witness
+"And finally, I have a computer{n}file with information on{n}{sfx/Key.ogg}{f}{c900} Arthur Chambers{c}."
+
+sfx /evidenceshoop.wav
+ev computerfile name=computerfile x=185
+pause 60 script
+set _speaking wc
+nt
+addev computerfile
+"{sfx/evidence.wav}{c099}Computer File{n}added to the Court Record."
+pause 30 script
+sfx /evidenceshoop.wav
+delete name=computerfile
+
+mus
+emo serious name=pc
+prosecutor
+"I must say, this evidence sure{n}makes you {f}suspicious, little lady."
+
+# Clear Court for Rhea
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo sweating name=wc
+witness
+"{f}..."
+
+emo serious name=jc
+judge
+"True, but none of it is decisive{n}evidence, or directly ties Ms. Wits{n}to the crime."
+pause 60 script
+"...{p40}{sfx/Ding.ogg}{f}None of the jurists have{n}opted to change his or her{n}vote."
+"I will now proceed to--{p20}{next}"
+
+fg ObjectionAnimApollo
+pause 10 script
+
+emo objects-nobrac name=dc
+defense
+"While {s 10 10}none of this may seem{n}like decisive evidence...{p30}"
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+"I believe I can {sfx/Shing.ogg}{f}{s 12 12}use it to{n}show that Ms. Wits is the criminal!"
+
+emo smiling2 name=wc
+scrollwitness
+"{s 10 10}Hmph.{p20} Just {f}try."
+
+emo serious name=jc
+judge
+"...{p30}Very well.{p20} And this will be{n}your {sfx/Ding.ogg}{f}last chance."
+
+emo handsondesk-nobrac name=dc
+defense
+set _speaking dc
+"{c099}({s 8 8}All right, I need to think{n}{s 8 8}carefully about which evidence{n}to present,"
+"{c099}and {s 8 8}how it ties with the{n}crime!)"
+"{c099}(I only need to convince{n}{f}one juror in order to{n}win the trial!)"
+
+script scene113

@@ -1,0 +1,118 @@
+clearcross
+mus
+fg ObjectionAnimApollo
+pause 5 script
+clear
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+defense
+char Apollo
+"{defense}{enormal-nobrac}Mr. Erlenmeyer, when you{n}mention mice, do you, by{n}any chance..."
+sfx /evidenceshoop.wav
+ev mice name=mice x=185
+"{p40}...{sfx /Key.ogg}{f}mean these?"
+sfx /evidenceshoop.wav
+delete name=mice
+witness 
+char Erlenmeyer
+"{witness}{enormal-witness}{sfx /Ding.ogg}{f}! How did you...."
+defense
+char Apollo
+"{defense}{econfident-nobrac}I've done my homework."
+"{ehandsondesk}As the court can plainly{n}see, this is a mouse."
+"However, there are two...{p40}{sfx /Key.ogg}{f}{enormal-nobrac} interesting{n}characteristics of this mouse."
+"First, it is infected{n}with a {sfx /Key.ogg}{f}{c900}rare virus{c}."
+"And second, it was found in a{n}very specific location..."
+"{econfident-nobrac}{sfx /Dunnn.ogg}{c900}Erlenmeyer's old biology classroom{n}{c}at Larry Butz High School!"
+"We can determine from Erlenmeyer's{n}reaction just now that this is the{n}same mouse in his testimony."
+"{ethinking-nobrac}So if he had been spending{n}"quality time" with this{n}mouse..."
+"{sfx /Shing.ogg}{f}{s 10 10}{epointing-nobrac}he had to have been{n}in that classroom!" 
+prosecutor
+char Poole
+"{p30}...{sfx /Key.ogg}{f}And?{n}That doesn't change anything."
+mus 113 - Apollo Justice - Objection.ogg
+set _music_loop 113 - Apollo Justice - Objectionloop.ogg
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}It changes {sfx /Key.ogg}{f}{c900}everything{c}."
+"I have a piece of evidence{n}that, when coupled with{n}this discovery,"
+"{epointing-nobrac}will lead to a {sfx /Shing.ogg}{f}{s 10 10}radical change{n}in the court's interpretation{n}of the events of that night!"
+prosecutor
+char Poole
+"{prosecutor}{sfx /Ding.ogg}Ambitious today, aren't we?"   
+"This panacean evidence had better{n}not be...{p40} {sfx/Ding.ogg}{f}disappointing." 
+"If you're going to work up all{n}this hype, you need to be{n}prepared for"
+"the {f}consequences for when you{n}don't deliver." 
+"{sfx /Ding.ogg}{f}Right, Your Honor?"
+judge
+char G.Strings
+"{judge}{eserious}Yes. If you're just{n}bluffing, a simple penalty{n}won't satisfy me."
+defense
+char Apollo
+"{defense}{enormal-nobrac(blink)}{c099}(Not a problem.{n}I have just what I need!)"
+"{c099}(If Erlenmeyer was really{n}in the classroom, they are{n}going to need to deal with this...!)"
+label wasintheclass
+set _cr_back button false
+present
+
+label erlenmeyerphotos
+set _cr_back_button true
+fg TakeThatAnimApollo
+pause 5 script
+script scene91
+
+label none
+set _cr_back_button true
+fg TakeThatAnimApollo
+pause 5 script
+prosecutor
+char Poole
+"{prosecutor}{p30}...Hmph. Seems like your elixir{n}of life is rather a poison{n}of death...{p40} for your client."
+sfx /Bwaaah.ogg
+penalty -40
+judge
+char G.Strings
+"{judge}{eserious}I really thought you{n}had something."
+is penalty 0 gameover
+defense
+char Apollo 
+"{defense}{ehandsondesk}I-{p15}I do!{p40}{n}Let me try again..."
+goto wasintheclass
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit
