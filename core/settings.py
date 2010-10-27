@@ -106,6 +106,7 @@ class settings_menu(gui.pane):
             b.textcolor = [255,255,255]
             print "changed settings for",text
         self.children.append(b)
+        return b
     def base(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
@@ -114,11 +115,11 @@ class settings_menu(gui.pane):
         self.make_button("close",[0,sh-17])
         self.make_button("quit game",[100,sh-17])
         self.make_button("quit pywright",[sw-74,sh-17])
-        self.make_button("saves",[50,0])
-        self.make_button("resolution",[100,0])
-        self.make_button("sound",[170,0])
+        self.make_button("saves",[0,0])
+        self.make_button("resolution",[35,0])
+        self.make_button("sound",[94,0])
         if assets.vtrue("_debug"):
-            self.make_button("debug",[220,0])
+            self.make_button("debug",[132,0])
     def debug(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
