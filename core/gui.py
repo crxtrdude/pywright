@@ -352,6 +352,8 @@ class checkbox(widget):
         self.editbox.draw_back = False
         self.height = self.editbox.height
         self.checked = False
+    def set_checked(self,val):
+        self.checked = val
     def draw(self,dest):
         if not self.visible: return
         bgcol = [210,210,210]
@@ -376,22 +378,22 @@ class checkbox(widget):
                 go = 0
                 for x in self.parent.children:
                     if x==checkbox.lastclicked:
-                        x.checked = checkbox.lastoperation
+                        x.set_checked(checkbox.lastoperation)
                         if not go:
                             go = 1
                         else:
                             checkbox.lastoperation = not checkbox.lastoperation
                             return
                     elif x==self:
-                        x.checked = checkbox.lastoperation
+                        x.set_checked(checkbox.lastoperation)
                         if not go:
                             go = 1
                         else:
                             checkbox.lastoperation = not checkbox.lastoperation
                             return
                     elif go:
-                        x.checked = checkbox.lastoperation
-        self.checked = not self.checked
+                        x.set_checked(checkbox.lastoperation)
+        self.set_checked(not self.checked)
         checkbox.lastclicked = self
         checkbox.lastoperation = self.checked
     def click_up_over(self,mp):

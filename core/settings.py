@@ -94,6 +94,9 @@ class settings_menu(gui.pane):
         self.align = False
         if self.firstpane == "debug" and not assets.vtrue("_debug"):
             settings_menu.firstpane = "resolution"
+            
+        self.sheight = assets.sheight
+        self.swidth = assets.swidth
         getattr(self,self.firstpane)()
     def make_button(self,text,pos):
         b = gui.button(self,text,pos)
@@ -106,6 +109,7 @@ class settings_menu(gui.pane):
     def base(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
+        sh = assets.sh*assets.num_screens
         self.children[:] = []
         self.make_button("close",[0,sh-17])
         self.make_button("quit game",[100,sh-17])
@@ -295,12 +299,28 @@ class settings_menu(gui.pane):
         res_box.children.append(gui.checkbox("fullscreen"))
         self.fs = res_box.children[-1]
         res_box.children.append(gui.checkbox("dualscreen"))
-        self.ds = res_box.children[-1]
+        ds = self.ds = res_box.children[-1]
+        
         res_box.children.append(gui.checkbox("virtual_dualscreen"))
         self.vds = res_box.children[-1]
-        res_box.children.append(gui.radiobutton("Change resolution (%sx%s)"%(assets.swidth,assets.sheight),"resopt"))
+        
+        res_box.children.append(gui.radiobutton("Change resolution (%sx%s)"%(self.swidth,self.sheight),"resopt"))
+        res = res_box.children[-1]
+
         res_box.children[-1].checked = True
         res_box.children[-1].click_down_over = self.popup_resolution
+        
+        s_c = ds.set_checked
+        def set_checked(val):
+            s_c(val)
+            if val:
+                self.sheight*=2
+            else:
+                self.sheight/=2
+            res.editbox.set("Change resolution (%sx%s)"%(self.swidth,self.sheight))
+            
+        ds.set_checked = set_checked        
+
         self.reses = gui.radiobutton.groups["resopt"]
         if assets.fullscreen:
             self.fs.checked = True
