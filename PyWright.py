@@ -24,6 +24,10 @@ class Logger(object):
         self.terminal.write(message)
         self.log.write(message)
         self.now.write(message)
+#~ import gc
+#~ gc.enable()
+#~ gc.set_debug(gc.DEBUG_LEAK)
+
 sys.stderr = sys.stdout = Logger()
 sys.path.insert(0,"")
 try:

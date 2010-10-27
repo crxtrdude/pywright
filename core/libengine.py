@@ -127,6 +127,7 @@ def getz(ob,arg):
         v = assets.variables.get(v,0)
     return v
 
+class mylist(list): pass
 class World:
     """A collection of objects"""
     def __init__(self,obs=None):
@@ -137,7 +138,6 @@ class World:
     def render_order(self):
         """Return a list of objects in the order they should
         be rendered"""
-        class mylist(list): pass
         n = mylist(self.all[:])
         if assets.variables.get("_layering_method","zorder") == "zorder":
             argsort(n,"z")
