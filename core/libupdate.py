@@ -167,7 +167,9 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
         if an[n].get("author",""):
             sline += "                    "+"by "+an[n]["author"]
         stats.add_child(Label(sline))
+        stats.date = 0
         if an[n].get("version_date",""):
+            stats.date = an[n]["version"]
             stats.add_child(Label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"])))
         if an[n].get("website",""):
             url = an[n]["website"]
@@ -181,9 +183,10 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
             stats.add_child(urlb)
         p.add_child(stats)
         p.bgcolor = {"NEW":[255,200,200],"UPDATED":[200,255,200],"INSTALLED":[255,255,255]}[status]
+        p.date = stats.date
         cases[status].append(p)
     for s in ["UPDATED","NEW","INSTALLED"]:
-        for n in cases[s]:
+        for n in reversed(sorted(cases[s],key=lambda el:el.date)):
             list.add_child(n)
     if dir == ".":
         dir = "updates"
