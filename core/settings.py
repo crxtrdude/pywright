@@ -90,7 +90,7 @@ class settings_menu(gui.pane):
         self.width = 1000
         self.height = 1000
         self.pri = -1001
-        self.z = 1001
+        self.z = 11001
         self.align = False
         if self.firstpane == "debug" and not assets.vtrue("_debug"):
             settings_menu.firstpane = "resolution"
@@ -112,8 +112,8 @@ class settings_menu(gui.pane):
         sw,sh = self.sw,self.sh
         sh = assets.sh*assets.num_screens
         self.children[:] = []
-        self.make_button("close",[0,sh-17])
-        self.make_button("quit game",[100,sh-17])
+        self.make_button("close",[225,0])
+        self.make_button("quit game",[0,sh-17])
         self.make_button("quit pywright",[sw-74,sh-17])
         self.make_button("saves",[0,0])
         self.make_button("resolution",[35,0])
@@ -314,11 +314,11 @@ class settings_menu(gui.pane):
         s_c = ds.set_checked
         def set_checked(val):
             s_c(val)
-            if val:
-                self.sheight*=2
-            else:
-                self.sheight/=2
-            res.editbox.set("Change resolution (%sx%s)"%(self.swidth,self.sheight))
+            #~ if val:
+                #~ self.sheight*=2
+            #~ else:
+                #~ self.sheight/=2
+            #res.editbox.set("Change resolution (%sx%s)"%(self.swidth,self.sheight))
             
         ds.set_checked = set_checked        
 

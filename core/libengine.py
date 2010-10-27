@@ -2419,9 +2419,10 @@ class choose_game(gui.widget):
         self.add_child(self.list)
     def update(self,*args):
         self.list.rpos[1] = other_screen(0)
-        #~ if getattr(self,"has_close",False):
-            #~ #self.rpos[1]+=50
-            #~ #self.list.rpos[1]+=10
+        if getattr(self,"has_close",False):
+            self.cb.rpos[1] = self.list.rpos[1]
+            #self.rpos[1]+=50
+            #self.list.rpos[1]+=10
         [x.update() for x in self.children]
         self.list.updatescroll()
         return False
@@ -2429,12 +2430,12 @@ class choose_game(gui.widget):
         self.kill = 1
     def close_button(self):
         self.has_close = True
-        item = gui.button(self,"close")
-        item.bordercolor = [255,255,255]
-        item.rpos[0]=223
-        item.z = 1005
-        item.pri = -1005
-        self.children.append(item)
+        self.cb = gui.button(self,"close")
+        self.cb.bordercolor = [255,255,255]
+        self.cb.rpos[0]=223
+        self.cb.z = 1005
+        self.cb.pri = -1005
+        self.children.append(self.cb)
     def list_games(self,path):
         self.path = path
         for f in os.listdir(path):
