@@ -857,6 +857,18 @@ set _font_new_resume_size 14""".split("\n"):
     def vtrue(self,var,default="_NOT_GIVEN_"):
         v = self.v(var,default)
         return vtrue(v)
+    def start_game(self,game,script="intro",mode="casemenu"):
+        print "starting game",game,script,mode
+        assets.stack.append(assets.Script())
+        if mode == "casemenu" and not os.path.exists(game+"/"+script+".txt"):
+            assets.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
+            assets.cur_script.obs[1].pos = [0,192]
+            return
+        assets.show_load()
+        assets.clear()
+        assets.game = game
+        assets.cur_script.init(script)
+        assets.cur_script.execute_macro("init_defaults")
 
         
 def vtrue(variable):
@@ -2585,15 +2597,6 @@ class case_menu(fadesprite,gui.widget):
             if os.path.exists(test[0]):
                 return test[1]
     def __init__(self,path="games",**kwargs):
-        if getattr(self,"reload",None):
-            intro = os.path.join(self.path,"intro")
-            if os.path.exists(intro+".txt"):
-                assets.game = self.path
-                scr = assets.Script()
-                scr.init("intro")
-                assets.stack = [scr]
-                assets.cur_script.execute_macro("init_defaults")
-                return
         self.pri = kwargs.get("pri",ulayers.index(self.__class__.__name__))
         self.reload=False
         self.path = path
@@ -2723,21 +2726,13 @@ class case_menu(fadesprite,gui.widget):
             scr = assets.Script()
             scr.parent = assets.cur_script
             assets.stack.append(scr)
-            assets.cur_script.init()
-            assets.cur_script._game("",os.path.join(self.path,self.options[self.choice]),script="case_screen")
+            assets.cur_script.init(self.options[self.choice]+"/case_screen")
             assets.cur_script.world = scr.parent.world
     def enter_down(self):
         f = open(os.path.join(self.path,"last"),"w")
         f.write(str(self.choice))
         f.close()
-        assets.show_load()
-        assets.clear()
-        assets.stack.append(assets.Script())
-        assets.cur_script.init()
-        path = os.path.join(self.path,self.options[self.choice])
-        assets.cur_script._game("",path,script=self.get_script(path))
-        self.reload = True
-        assets.cur_script.execute_macro("init_defaults")
+        assets.start_game(self.path+"/"+self.options[self.choice],"intro","nomenu")
     def draw(self,dest):
         if self.reload:
             return

@@ -766,14 +766,7 @@ char test
                     VALUE("script","Script to look for in the game folder to run first","intro")],type="gameflow")
     def _game(self,command,game,script="intro"):
         """Can be used to start a new game or case."""
-        for o in self.obs[:]:
-            o.kill = 1
-        assets.clear()
-        assets.game = game
-        self.held = []
-        scene = script
-        #assets.addscene(scene)
-        self.init(scene)
+        assets.start_game(game,script,"nomenu")
     @category([COMBINED("destination","The destination label to move to"),
                     KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
     def _goto(self,command,place,*args):
@@ -2864,16 +2857,7 @@ def make_start_script(logo=True):
         list.add_child(item)
         def _play_game(func=f):
             gamedir = os.path.join("games",func)
-            assets.game = gamedir
-            scr = Script()
-            scr.init()
-            scr.obs = []
-            assets.stack = [scr]
-            scr.obs.append(bg("main"))
-            scr.obs.append(bg("main",screen=2))
-            case_select = case_menu(gamedir)
-            case_select.reload = True
-            scr.obs.append(case_select)
+            assets.start_game(gamedir,"intro")
         if __version__ >= req:
             setattr(make_start_script,f.replace(" ","_"),_play_game)
         else:
