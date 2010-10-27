@@ -1423,6 +1423,14 @@ as having a non looping animation play several times, or only playing a portion 
                     o.x = jumpto
         if name and not any and vtrue(assets.variables.get("_debug","false")):
             raise missing_object("controlanim: No valid objects found by key name "+name)
+    def _surf3d(self,command,x,y,sw,sh,rw,rh):
+        s = surf3d([int(x),int(y)],int(sw),int(sh),int(rw),int(rh))
+        print "made surf",s
+        self.obs.append(s)
+    def _mesh(self,command,mname):
+        m = mesh(mname)
+        print "made mesh",m
+        self.obs.append(m)
     @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),

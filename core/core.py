@@ -1197,6 +1197,56 @@ class sprite(gui.button):
         if self.base:
             if self.x<len(self.base):
                 self.img = self.base[self.x]
+
+from soft3d import context
+
+class surf3d(sprite):
+    def __init__(self,pos,sw,sh,rw,rh):
+        self.id_name = "surf3d"
+        self.pos = pos
+        self.z = 0
+        self.pri = -1000
+        self.context = context.SoftContext(sw,sh,rw,rh)
+        self.surf = self.context.draw()
+        self.next = 3
+    def draw(self,dest):
+        dest.blit(self.surf,self.pos)
+    def update(self):
+        self.next -= 1
+        if self.next:
+            return
+        if [x for x in self.context.objects if x.changed]:
+            self.surf = self.context.draw().convert()
+        [setattr(x,"changed",0) for x in self.context.objects]
+        self.next = 3
+
+class mesh(sprite):
+    def __init__(self,meshfile,pos=[0,0],rot=[0,0,0],name="surf3d"):
+        con = None
+        for o in assets.cur_script.obs:
+            if o.id_name==name:
+                con = o
+                break
+        if not con:
+            return
+        path = assets.game+"/art/models/"
+        self.ob = ob = con.context.load_object(meshfile,path)
+        ob.trans(z=-100)
+        ob.rot(90,0,0)
+        ob.changed = 1
+        self.pos = pos
+        self.z = 0
+        self.pri = 0
+        self.id_name = "mesh"
+    def rotate(self,axis,amount):
+        r = [0,0,0]
+        r[axis] = amount
+        self.ob.rot(*r)
+        self.ob.changed = 1
+    def draw(self,dest):
+        pass
+    def update(self):
+        pass
         
 class fadesprite(sprite):
     real_path=None
@@ -3640,6 +3690,8 @@ class rotateanim(effect):
             if getattr(o,"kill",0): continue
             if hasattr(o,"rot"):
                 o.rot[self.axis] += amt
+            if hasattr(o,"rotate"):
+                o.rotate(self.axis,amt)
         if self.wait:
             return True
 
