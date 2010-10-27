@@ -2610,7 +2610,6 @@ def make_screen():
     pygame.screen = pygame.Surface([sw,sh*2]).convert()
     pygame.blank = pygame.screen.convert()
     pygame.blank.fill([0,0,0])
-    pygame.display.set_caption("PyWright "+VERSION)
     pygame.display.set_icon(pygame.image.load("art/general/bb.png"))
     if pygame.joystick.get_init():
         pygame.joystick.quit()
@@ -2815,6 +2814,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ lt = time.time()
         #~ dt = ticks*1000.0
         dt = clock.tick(60)
+        pygame.display.set_caption("PyWright "+VERSION+" %s"%clock.get_fps())
         assets.cur_script.update()
         if not assets.cur_script: break
         [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
