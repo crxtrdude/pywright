@@ -43,6 +43,21 @@ game_id = 14571 #JM shot dunk
 #~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
+class WorkThread:
+    def __init__(self,rootpath):
+        self.rootpath = rootpath
+        self.conversions = []
+    def run(self):
+        while self.conversions:
+            conv = self.conversions.pop()
+            if "charname" in conv:
+                if not os.path.exists(self.rootpath+"/art/port/"+conv["charname"]):
+                    os.mkdir(self.rootpath+"/art/port/"+conv["charname"])
+            wget(conv["url"],self.rootpath+"/"+conv["dest"])
+    def start(self):
+        self.t = threading.Thread(target=self.run)
+        self.t.start()
+
 class Resources:
     def __init__(self,rootpath,temppath):
         self.rootpath = rootpath
@@ -72,18 +87,15 @@ class Resources:
         f.close()
     def saveall(self):
         threads = []
-        for norm in [self.bg,self.fg,self.ev,self.mus,self.sfx]:
-            print norm
+        for i in range(3):
+            threads.append(WorkThread(self.rootpath))
+        for norm in [self.bg,self.fg,self.ev,self.mus,self.sfx,self.port]:
             for name in norm:
-                wget(norm[name]["url"],self.rootpath+"/"+norm[name]["dest"])
-                #~ t = threading.Thread(target=wget,args=(norm[name]["url"],norm[name]["dest"]))
-                #~ t.start()
-                #~ threads.append(t)
-        for name in self.port:
-            if not os.path.exists(self.rootpath+"/art/port/"+self.port[name]["charname"]):
-                os.mkdir(self.rootpath+"/art/port/"+self.port[name]["charname"])
-            wget(self.port[name]["url"],self.rootpath+"/"+self.port[name]["dest"])
-        while [x for x in threads if x.isAlive()]:
+                t = threads.pop(0)
+                t.conversions.append(norm[name])
+                threads.append(t)
+        [t.start() for t in threads]
+        while [x.conversions for x in threads]:
             pass
         
 
@@ -651,7 +663,7 @@ for id in sorted(namespace["donnees_messages"].keys()):
     if vals["pretextcode"]:
         w(u"\n"+vals["pretextcode"]+u"\n")
     if vals["text"].strip():
-        vals["text"] = vals["color"]+vals["text"]
+        vals["text"] = vals["color"]+vals["text"]+{"1":"{next}","0":""}[vals.get('lie_au_suivant','0')]
         w(u'\n"%s"'%vals["text"])
     if vals["postcode"]:
         w(u"\n"+vals["postcode"]+u"\n")
