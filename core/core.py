@@ -859,14 +859,15 @@ set _font_new_resume_size 14""".split("\n"):
         return vtrue(v)
     def start_game(self,game,script="intro",mode="casemenu"):
         print "starting game",game,script,mode
+        assets.clear()
+        assets.game = game
         assets.stack.append(assets.Script())
         if mode == "casemenu" and not os.path.exists(game+"/"+script+".txt"):
             assets.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
             assets.cur_script.obs[1].pos = [0,192]
             return
-        assets.show_load()
-        assets.clear()
-        assets.game = game
+        #assets.show_load()
+        print "set game to",assets.game
         assets.cur_script.init(script)
         assets.cur_script.execute_macro("init_defaults")
 
@@ -2722,11 +2723,17 @@ class case_menu(fadesprite,gui.widget):
             self.choice -= 1
         self.case_screen()
     def case_screen(self):
+        if not self.options:
+            return
+        if not hasattr(self,"curgame"):
+            self.curgame = assets.game
         if os.path.exists(os.path.join(self.path,self.options[self.choice],"case_screen.txt")):
             scr = assets.Script()
             scr.parent = assets.cur_script
             assets.stack.append(scr)
-            assets.cur_script.init(self.options[self.choice]+"/case_screen")
+            assets.game=self.curgame+"/"+self.options[self.choice]
+            print "init: g:%s choice:%s"%(assets.game,self.options[self.choice])
+            assets.cur_script.init("case_screen")
             assets.cur_script.world = scr.parent.world
     def enter_down(self):
         f = open(os.path.join(self.path,"last"),"w")

@@ -1,7 +1,7 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.977: September 21, 2010*
-    autosave: time between saves, saves to keep
+    autosave: time between saves, saves to keep, dev defined
     test emo/bemo and error conditions
     - Main PyWright startup script executes simultaneously with the menu
     - _textbox_show_button works correctly, _cr_button no longer hides the bottom
@@ -69,6 +69,11 @@
         "guilty_words" for just the words
         "guilty_doors" for just the doors (which clear the scene when they finish)
     -fixed scroll animations that went further than you told it due to the speed
+    -new command "gamemenu" to list games in a folder. Use it if your game has a large number
+        of cases (10 or more) where the normal case selection screen is a bit hard to navigate. Good
+        for demos.
+        Syntax:  "gamemenu folder" - allows player to choose from games located in the folder. The folder
+        is relative to the current game directory.
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"

@@ -769,6 +769,16 @@ char test
         assets.start_game(game,script,"nomenu")
     @category([COMBINED("destination","The destination label to move to"),
                     KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
+    @category([VALUE("folder","List all games in this folder, relative to current game directory")],type="gameflow")
+    def _gamemenu(self,command,folder):
+        """Can be used to list games in a folder"""
+        cm = choose_game()
+        cm.pause = True
+        cm.list_games(assets.game+"/"+folder)
+        self.obs.append(cm)
+        self._gui("gui","Wait")
+    @category([COMBINED("destination","The destination label to move to"),
+                    KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
     def _goto(self,command,place,*args):
         """Makes the script go to a different section, based on the label name."""
         fail = None
@@ -2726,8 +2736,55 @@ class screen_settings(gui.pane):
         self.kill = 1
         
 class choose_game(gui.widget):
+    def __init__(self,*args,**kwargs):
+        gui.widget.__init__(self,*args,**kwargs)
+        self.width,self.height = [1000,1000]
+        self.z = 1000
+        self.pri = -1000
+        
+        self.list = gui.scrollpane([0,other_screen(0)])
+        self.list.width,self.list.height = [sw,sh]
+        self.add_child(self.list)
     def update(self,*args):
         return False
+    def list_games(self,path):
+        self.path = path
+        for f in os.listdir(path):
+            if f.startswith("."): continue
+            item = gui.button(self,f)
+            d = get_data_from_folder("games/"+f)
+            if d.get("icon",""):
+                graphic = pygame.image.load("games/"+f+"/"+d["icon"])
+            else:
+                graphic = pygame.Surface([1,1])
+            title = d.get("title",f)
+            if d.get("author",""):
+                title += " by "+d["author"]
+            txt = item.font.render(title,1,[0,0,0])
+            req = d.get("min_pywright_version","0")
+            reqs = cver_s(req)
+            height = graphic.get_height()+txt.get_height()
+            width = max(graphic.get_width(),txt.get_width())
+            txt2 = None
+            if __version__ < req:
+                txt2 = item.font.render("Requires PyWright "+reqs,1,[200,20,30])
+                height += txt2.get_height()
+                width = max(graphic.get_width(),txt.get_width(),txt2.get_width())
+            image = pygame.Surface([width,height])
+            image.fill([200,200,255])
+            image.blit(graphic,[0,0])
+            image.blit(txt,[0,graphic.get_height()])
+            if txt2:
+                image.blit(txt2,[0,graphic.get_height()+txt.get_height()])
+            item.graphic = image
+            self.list.add_child(item)
+            def _play_game(func=f):
+                gamedir = self.path+"/"+func
+                assets.start_game(gamedir,"intro")
+            if __version__ >= req:
+                setattr(self,f.replace(" ","_"),_play_game)
+            else:
+                setattr(self,f.replace(" ","_"),lambda: 1)
         
 def load_game_menu():
     if [1 for o in assets.cur_script.obs if isinstance(o,choose_game)]:
@@ -2784,9 +2841,8 @@ def load_game_menu():
 assets.load_game_menu = load_game_menu
         
 def make_start_script(logo=True):
+    assets.game = "games"
     root = choose_game()
-    root.pri = -1000
-    root.z = 0
     bottomscript = Script()
     introlines = []
     try:
@@ -2802,16 +2858,10 @@ def make_start_script(logo=True):
     def add_root(command,*args):
         bottomscript.obs.append(root)
     bottomscript._add_root = add_root
-    root.width,root.height = [1000,1000]
-    root.z = 1000
-    
-    list = gui.scrollpane([0,other_screen(0)])
-    list.width,list.height = [sw,sh]
-    root.add_child(list)
     
     title = gui.editbox(None,"Choose a game to run:")
     title.draw_back = False
-    list.add_child(title)
+    root.list.add_child(title)
 
     def run_updater(*args):
         import libupdate
@@ -2824,44 +2874,9 @@ def make_start_script(logo=True):
     item.bgcolor = [0, 0, 0]
     item.textcolor = [255,255,255]
     item.highlightcolor = [50,75,50]
-    list.add_child(item)
+    root.list.add_child(item)
     
-    for f in os.listdir("games"):
-        if f in [".svn"]: continue
-        item = gui.button(make_start_script,f)
-        d = get_data_from_folder("games/"+f)
-        if d.get("icon",""):
-            graphic = pygame.image.load("games/"+f+"/"+d["icon"])
-        else:
-            graphic = pygame.Surface([1,1])
-        title = d.get("title",f)
-        if d.get("author",""):
-            title += " by "+d["author"]
-        txt = item.font.render(title,1,[0,0,0])
-        req = d.get("min_pywright_version","0")
-        reqs = cver_s(req)
-        height = graphic.get_height()+txt.get_height()
-        width = max(graphic.get_width(),txt.get_width())
-        txt2 = None
-        if __version__ < req:
-            txt2 = item.font.render("Requires PyWright "+reqs,1,[200,20,30])
-            height += txt2.get_height()
-            width = max(graphic.get_width(),txt.get_width(),txt2.get_width())
-        image = pygame.Surface([width,height])
-        image.fill([200,200,255])
-        image.blit(graphic,[0,0])
-        image.blit(txt,[0,graphic.get_height()])
-        if txt2:
-            image.blit(txt2,[0,graphic.get_height()+txt.get_height()])
-        item.graphic = image
-        list.add_child(item)
-        def _play_game(func=f):
-            gamedir = os.path.join("games",func)
-            assets.start_game(gamedir,"intro")
-        if __version__ >= req:
-            setattr(make_start_script,f.replace(" ","_"),_play_game)
-        else:
-            setattr(make_start_script,f.replace(" ","_"),lambda: 1)
+    root.list_games("games")
             
 
 def make_screen():
