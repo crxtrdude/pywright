@@ -146,7 +146,6 @@ class widget(object):
                 if evt.key in self.repeat:
                     self.start_repeat(evt.key)
                 elif evt.key not in [pygame.K_LSHIFT,pygame.K_RSHIFT,pygame.K_ESCAPE] and window.focused:
-                    print evt.unicode
                     if hasattr(window.focused,"insert") and hasattr(evt,"unicode"):
                         def t(m):
                             if hasattr(window.focused,"insert"):
@@ -536,11 +535,11 @@ class scrollbutton(widget):
         if window.focused==self:
             self.scroll(rel)
     def scroll(self,rel):
-            self.rpos[1]+=rel[1]
-            if self.rpos[1]+self.height>self.parent.height-2:
-                self.rpos[1] = self.parent.height-self.height-2
-            if self.rpos[1]<2:
-                self.rpos[1] = 2
+        self.rpos[1]+=rel[1]
+        if self.rpos[1]+self.height>self.parent.height-2:
+            self.rpos[1] = self.parent.height-self.height-2
+        if self.rpos[1]<2:
+            self.rpos[1] = 2
 class scrollbar(widget):
     def __init__(self,rpos=[0,0]):
         super(scrollbar,self).__init__(rpos)
@@ -586,6 +585,8 @@ class scrollpane(pane):
         except ZeroDivisionError:
             pix = 0
         self.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2))
+        if self.scbar not in self.children:
+            self.add_child(self.scbar)
         return surf
     def draw(self,dest):
         if not self.visible: return

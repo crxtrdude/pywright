@@ -2839,7 +2839,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                                 assets.cur_script.world.all.remove(ob)
                 if e.type==pygame.VIDEORESIZE:
                     w,h = e.w,e.h
-                    #w = (256/192.0)*h
                     assets.swidth = w
                     assets.sheight = h
                     make_screen()
@@ -2848,7 +2847,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key==pygame.K_ESCAPE:
                     ss = [x for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
                     if ss:
-                        ss[0].kill = 1
+                        ss[0].close()
                     else:
                         assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
                 if e.type == pygame.QUIT:
