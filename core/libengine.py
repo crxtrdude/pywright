@@ -14,6 +14,7 @@ import gui
 import save
 import load
 from pwvlib import *
+import settings
 
 d = get_data_from_folder(".")
 __version__ = d["version"]
@@ -624,6 +625,8 @@ char test
                 tbox._text = nt+"\n{c283}"+t
                 #tbox.color = (20,200,40)
     def execute_line(self,line):
+        if not line:
+            return
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
             self.call_func("textbox",["textbox",line[1:-1]])
             return True
@@ -2408,332 +2411,6 @@ class DebugScript(Script):
         if scope == "current":
             for err in reversed(aerrors):
                 assets.cur_script.obs.append(err)
-
-def wini():
-    f = open("display.ini","w")
-    f.write(""";standard width is 256
-;standard height is 192
-width=%s
-height=%s
-scale2x=%s
-fullscreen=%s
-opengl=%s
-displaylists=%s
-screens=%s
-sound_format=%s
-sound_bits=%s
-sound_buffer=%s
-sound_volume=%s
-music_volume=%s
-screen_compress=%s
-autosave=%s
-autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
-int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
-assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
-int(assets.screen_compress),int(assets.autosave),int(assets.autosave_keep)))
-    f.close()
-
-class screen_settings(gui.pane):
-    firstpane = "resolution"
-    def __init__(self,*args,**kwargs):
-        gui.widget.__init__(self,*args,**kwargs)
-        self.width = 1000
-        self.height = 1000
-        self.pri = -1001
-        self.z = 1001
-        self.align = False
-        getattr(self,self.firstpane)()
-    def make_button(self,text,pos):
-        b = gui.button(self,text,pos)
-        if screen_settings.firstpane == text:
-            b.bgcolor = [50,50,50]
-            b.highlightcolor = [50,50,50]
-            b.textcolor = [255,255,255]
-            print "changed settings for",text
-        self.children.append(b)
-    def base(self):
-        self.children[:] = []
-        self.make_button("close",[0,sh-17])
-        self.make_button("quit game",[100,sh-17])
-        self.make_button("quit pywright",[sw-74,sh-17])
-        self.make_button("saves",[50,0])
-        self.make_button("resolution",[100,0])
-        self.make_button("sound",[170,0])
-        if assets.vtrue("_debug"):
-            self.make_button("debug",[220,0])
-    def debug(self):
-        screen_settings.firstpane = "debug"
-        self.base()
-        line = gui.pane([0,30],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        self.go_script = ""
-        line.children.append(gui.editbox(self,"go_script"))
-        class myb(gui.button):
-            def click_down_over(s,*args):
-                assets.cur_script.execute_line(self.go_script)
-        line.children.append(myb(None,"execute"))
-        cb = line.children[-1]
-    def saves(self):
-        screen_settings.firstpane = "saves"
-        self.base()
-        line = gui.pane([0,30],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        line.children.append(gui.label("Autosave on scene changes"))
-        class myb(gui.checkbox):
-            def click_down_over(self,*args):
-                super(myb,self).click_down_over(*args)
-                if self.checked:
-                    assets.autosave = 1
-                else:
-                    assets.autosave = 0
-                wini()
-        line.children.append(myb("autosave"))
-        cb = line.children[-1]
-        if assets.autosave: cb.checked = True
-            
-        line = gui.pane([0,50],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        line.children.append(gui.label("Autosave backups"))
-        class mye(gui.editbox):
-            def insert(self,val):
-                if val not in u"0123456789":
-                    return
-                super(mye,self).insert(val)
-            def set(self,val):
-                super(mye,self).set(val)
-                if not val:
-                    val = 0
-                assets.autosave_keep = int(val)
-                wini()
-        self.autosave_keep = str(assets.autosave_keep)
-        line.children.append(mye(self,"autosave_keep"))
-    def sound(self):
-        screen_settings.firstpane = "sound"
-        self.base()
-        ermsg = gui.label("")
-        ermsg.rpos = [0,140]
-        ermsg.textcol = [255,0,0]
-        
-        line = gui.pane([0,30],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        class newr(gui.radiobutton):
-            def click_down_over(s,*args):
-                ermsg.text = ""
-                gui.radiobutton.click_down_over(s,*args)
-                assets.sound_format = int(s.text)
-                if not assets.init_sound(True): 
-                    ermsg.text = "Sound not initialized"
-                else:
-                    assets.play_sound("phoenix/objection.ogg")
-                    wini()
-        line.children.append(gui.label("Format:"))
-        line.children.append(newr("11025","formchoice"))
-        line.children.append(newr("22050","formchoice"))
-        line.children.append(newr("44100","formchoice"))
-        for t in line.children:
-            if t.text==str(assets.sound_format):
-                t.checked = True
-                
-        line = gui.pane([0,50],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        class newr(gui.radiobutton):
-            def click_down_over(s,*args):
-                ermsg.text = ""
-                gui.radiobutton.click_down_over(s,*args)
-                assets.sound_bits = int(s.text)
-                if not assets.init_sound(True): 
-                    ermsg.text = "Sound not initialized"
-                else:
-                    assets.play_sound("phoenix/objection.ogg")
-                    wini()
-        line.children.append(gui.label("Bits:"))
-        line.children.append(newr("8","bitschoice"))
-        line.children.append(newr("16","bitschoice"))
-        for t in line.children:
-            if t.text==str(assets.sound_bits):
-                t.checked = True
-                
-        line = gui.pane([0,70],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        class newr(gui.radiobutton):
-            def click_down_over(s,*args):
-                ermsg.text = ""
-                gui.radiobutton.click_down_over(s,*args)
-                assets.sound_buffer = int(s.text)
-                if not assets.init_sound(True): 
-                    ermsg.text = "Sound not initialized"
-                else:
-                    assets.play_sound("phoenix/objection.ogg")
-                    wini()
-        line.children.append(gui.label("Buffer:"))
-        line.children.append(newr("512","bufchoice"))
-        line.children.append(newr("1024","bufchoice"))
-        line.children.append(newr("2048","bufchoice"))
-        line.children.append(newr("4096","bufchoice"))
-        for t in line.children:
-            if t.text==str(assets.sound_buffer):
-                t.checked = True
-                
-        line = gui.pane([0,90],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-
-        self.snd_line = gui.label("SoundVolume: %d"%assets.sound_volume)
-        def mod(amt,min,max,var,play):
-            def modit():
-                ermsg.text = ""
-                if not assets.init_sound(): 
-                    ermsg.text = "Sound not initialized"
-                else:
-                    n = getattr(assets,var) + amt
-                    if n>max:
-                        n = max
-                    if n<min:
-                        n=min
-                    setattr(assets,var,n)
-                    self.snd_line.text = "SoundVolume: %d"%assets.sound_volume
-                    self.mv_line.text = "MusicVolume: %d"%assets.music_volume
-                    play()
-                    wini()
-            return modit
-        line.children.append(self.snd_line)
-        line.children.append(gui.button(None,"less"))
-        line.children[-1].less = mod(-10,0,100,"sound_volume",lambda:assets.play_sound("phoenix/objection.ogg"))
-        line.children.append(gui.button(None,"more"))
-        line.children[-1].more = mod(10,0,100,"sound_volume",lambda:assets.play_sound("phoenix/objection.ogg"))
-                
-        line = gui.pane([0,110],[sw,20])
-        line.align = "horiz"
-        self.children.append(line)
-        
-        self.mv_line = gui.label("MusicVolume: %d"%assets.music_volume)
-        line.children.append(self.mv_line)
-        line.children.append(gui.button(None,"less"))
-        line.children[-1].less = mod(-10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
-        line.children.append(gui.button(None,"more"))
-        line.children[-1].more = mod(10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
-
-        self.children.append(ermsg)
-    def resolution(self):
-        screen_settings.firstpane = "resolution"
-        self.base()
-        res_box = gui.scrollpane([10,20])
-        res_box.width = 200
-        res_box.height = 120
-        self.res_box = res_box
-        self.children.append(res_box)
-        
-        res_box.children.append(gui.checkbox("fullscreen"))
-        self.fs = res_box.children[-1]
-        res_box.children.append(gui.checkbox("dualscreen"))
-        self.ds = res_box.children[-1]
-        res_box.children.append(gui.checkbox("virtual_dualscreen"))
-        self.vds = res_box.children[-1]
-        res_box.children.append(gui.radiobutton("Change resolution (%sx%s)"%(assets.swidth,assets.sheight),"resopt"))
-        res_box.children[-1].checked = True
-        res_box.children[-1].click_down_over = self.popup_resolution
-        self.reses = gui.radiobutton.groups["resopt"]
-        if assets.fullscreen:
-            self.fs.checked = True
-        if assets.num_screens==2:
-            self.ds.checked = True
-        if not assets.screen_compress:
-            self.vds.checked = True
-                
-        self.children.append(gui.button(self,"apply",[10,140]))
-    def popup_resolution(self,mp):
-        self.res_box.children[:] = []
-        h = 192
-        if get_screen_mode()=="two_screens":
-            h*=2
-        h2 = h*2
-        self.res_box.children.append(gui.radiobutton("DS Res (256x%s)"%h,"resopt"))
-        self.res_box.children.append(gui.radiobutton("Double scale (512x%s)"%h2,"resopt"))
-        for mode in sorted(pygame.display.list_modes()):
-            self.res_box.children.append(gui.radiobutton("(%sx%s)"%mode,"resopt"))
-        for r in self.reses:
-            if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
-                r.checked = True
-        self.res_box.updatescroll()
-    def setdl(self,v):
-        self.dislis.checked = 1-self.dislis.checked
-        pygame.DISPLAY_LIST = self.dislis.checked
-        wini()
-    def apply(self):
-        for r in self.reses: 
-            if r.checked:
-                self.oldwidth,self.oldheight = assets.swidth,assets.sheight
-                self.timer = 5.0
-                self.really_applyb = gui.pane()
-                self.really_applyb.is_applyb = True
-                self.really_applyb.width = 1000
-                self.really_applyb.height = 1000
-                self.really_applyb.pri = -1002
-                self.really_applyb.z = 1002
-                #self.really_applyb.align = False
-                e = gui.editbox(None,"")
-                e.draw_back = False
-                self.really_applyb.children.append(e)
-                self.really_applyb.timer = e
-                b = gui.button(self,"save_resolution",[0,0])
-                self.really_applyb.children.append(b)
-                assets.cur_script.obs.append(self.really_applyb)
-                assets.swidth,assets.sheight = [int(x) for x in (r.text[r.text.find("(")+1:r.text.find(")")]).split("x")]
-        self.old_fullscreen = assets.fullscreen
-        assets.fullscreen = 0
-        if self.fs.checked:
-            assets.fullscreen = 1
-        self.old_num_screens = assets.num_screens
-        assets.num_screens = 1
-        if self.ds.checked:
-            assets.num_screens = 2
-        assets.screen_compress = 1
-        if self.vds.checked:
-            assets.screen_compress = 0
-        make_screen()
-        self.resolution()
-    def save_resolution(self):
-        for o in assets.cur_script.obs:
-            if hasattr(o,"is_applyb"):
-                assets.cur_script.world.remove(o)
-        self.really_applyb = None
-        self.timer = 0
-        wini()
-        self.resolution()
-    def reset_res(self):
-        assets.swidth,assets.sheight = self.oldwidth,self.oldheight
-        assets.fullscreen = self.old_fullscreen
-        assets.num_screens = self.old_num_screens
-        make_screen()
-    def update(self,*args):
-        self.rpos = [0,other_screen(0)]
-        self.pos = self.rpos
-        if getattr(self,"timer",0)>0:
-            self.timer -= .02
-            self.really_applyb.timer.text = "Resetting view in: %.02f seconds"%self.timer
-        else:
-            if getattr(self,"really_applyb",None):
-                assets.cur_script.world.remove(self.really_applyb)
-                self.really_applyb = None
-                self.reset_res()
-        for x in self.children:
-            x.update()
-        return True
-    def quit_game(self):
-        assets.variables.clear()
-        assets.stop_music()
-        assets.stack[:] = []
-        make_start_script(False)
-    def quit_pywright(self):
-        sys.exit()
-    def close(self):
-        self.kill = 1
         
 class choose_game(gui.widget):
     def __init__(self,*args,**kwargs):
@@ -2877,6 +2554,7 @@ def make_start_script(logo=True):
     root.list.add_child(item)
     
     root.list_games("games")
+assets.make_start_script = make_start_script
             
 
 def make_screen():
@@ -2914,62 +2592,8 @@ def make_screen():
     pygame.jsup = gu
     pygame.jsdown = gd
 
-def fit(surf,size):
-    if surf.get_width()<size[0]:
-        surf = pygame.transform.scale2x(surf)
-    surf = pygame.transform.scale(surf,size)
-    return surf
-def get_screen_mode():
-    mode="two_screens"
-    if assets.num_screens == 1:
-        mode = "squished"
-        if assets.screen_compress:
-            mode = "show_one"
-    return mode
-def get_screen_dim(mode,aspect=True):
-    raspect = assets.swidth/float(assets.sheight)
-    if mode == "two_screens":
-        aspect = 256.0/(192.0*2)
-        top_pos = [0,0]
-        top_size = [1,0.5]
-        bottom_pos = [0,0.5]
-        bottom_size = [1,0.5]
-        if aspect:
-            top_size[0]*=aspect/raspect
-            bottom_size[0]*=aspect/raspect
-            top_pos[0]=(1-top_size[0])/2.0
-            bottom_pos[0]=(1-bottom_size[0])/2.0
-    if mode == "horizontal":
-        top_pos = [0,0]
-        top_size = [0.5,0.75]
-        bottom_pos = [0.5,0.25]
-        bottom_size = [0.5,0.75]
-    if mode == "squished":
-        top_pos = [0,0]
-        top_size = [1,1]
-        bottom_pos = None
-    if mode == "show_one":
-        if assets.cur_screen == 0:
-            top_pos = [0,0]
-            top_size = [1,1]
-            bottom_pos = None
-        else:
-            top_pos = None
-            bottom_pos = [0,0]
-            bottom_size = [1,1]
-    d = {"top":None,"bottom":None}
-    if top_pos:
-        top_pos_t = [top_pos[0]*assets.swidth,top_pos[1]*assets.sheight]
-        top_size_t = [top_size[0]*assets.swidth,top_size[1]*assets.sheight]
-        d["top"] = [top_pos,top_size,top_pos_t,top_size_t]
-    if bottom_pos:
-        bottom_pos_t = [bottom_pos[0]*assets.swidth,bottom_pos[1]*assets.sheight]
-        bottom_size_t = [bottom_size[0]*assets.swidth,bottom_size[1]*assets.sheight]
-        d["bottom"] = [bottom_pos,bottom_size,bottom_pos_t,bottom_size_t]
-    return d
 def translate_click(pos):
-    mode = get_screen_mode()
-    dim = get_screen_dim(mode)
+    mode,dim = settings.screen_format(assets)
     def col(pp,ss):
         if pos[0]>=pp[0] and pos[0]<=pp[0]+ss[0]\
             and pos[1]>=pp[1] and pos[1]<=pp[1]+ss[1]:
@@ -2988,14 +2612,18 @@ def translate_click(pos):
             r[1]+=sh
             return r
     return [-100000,-100000]
+def fit(surf,size):
+    if surf.get_width()<size[0]:
+        surf = pygame.transform.scale2x(surf)
+    surf = pygame.transform.scale(surf,size)
+    return surf
 def draw_screen():
     scale = 0
     if assets.sheight!=sh or assets.swidth!=sw: scale = 1
     scaled = pygame.screen
     top = scaled.subsurface([[0,0],[sw,sh]])
     bottom = top
-    mode = get_screen_mode()
-    dim = get_screen_dim(mode)
+    mode,dim = settings.screen_format(assets)
     if mode == "two_screens" or mode == "horizontal" or mode == "show_one":
         bottom = scaled.subsurface([[0,sh],[sw,sh]])
     if assets.swidth>256 and scale:
@@ -3107,7 +2735,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if spl[0]=="screen_compress": assets.screen_compress = int(spl[1])
             if spl[0]=="autosave": assets.autosave = int(spl[1])
             if spl[0]=="autosave_keep": assets.autosave_keep = int(spl[1])
-    wini()
     
     pygame.USE_GL=0
     make_screen()
@@ -3216,15 +2843,14 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     assets.swidth = w
                     assets.sheight = h
                     make_screen()
-                    wini()
+                    settings.wini(assets)
                 if e.type==pygame.KEYDOWN and \
                 e.key==pygame.K_ESCAPE:
-                    ss = [x for x in assets.cur_script.obs if isinstance(x,screen_settings)]
+                    ss = [x for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
                     if ss:
                         ss[0].kill = 1
                     else:
-                        assets.cur_script.obs.append(screen_settings())
-                        #print [o.z for o in assets.cur_script.obs]
+                        assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
                 if e.type == pygame.QUIT:
                     running = False
                 if e.type == pygame.KEYDOWN and e.key == pygame.K_c:
@@ -3244,7 +2870,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key==pygame.K_RETURN and pygame.key.get_mods() & pygame.KMOD_ALT:
                     assets.fullscreen = 1-assets.fullscreen
                     make_screen()
-                    wini()
+                    settings.wini(assets)
                 elif (e.type==pygame.KEYDOWN and\
                 e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONDOWN and\
                 e.button==0):

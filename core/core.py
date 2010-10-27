@@ -261,6 +261,8 @@ class Assets(object):
     sound_init = 0
     sound_volume = 100
     _music_vol = 100
+    sw = sw
+    sh = sh
     def smus(self,v):
         self._music_vol = v
         try:
