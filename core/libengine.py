@@ -2423,6 +2423,9 @@ class choose_game(gui.widget):
         self.list.width,self.list.height = [sw,sh]
         self.add_child(self.list)
     def update(self,*args):
+        self.list.rpos[1] = other_screen(0)
+        [x.update() for x in self.children]
+        self.list.updatescroll()
         return False
     def list_games(self,path):
         self.path = path
