@@ -149,11 +149,6 @@ class World:
             oldapp(ob)
         n.append = _app
         return n
-    def click_order(self):
-        """Return a list of objects in the order they should
-        be checked for clicks"""
-        n = reversed(self.render_order())
-        return n
     def update_order(self):
         """Return a list of objects in the order they
         should be updated"""
@@ -357,7 +352,7 @@ class Script(gui.widget):
         self.held = []
     obs = property(lambda self: self.world.render_order(),lambda self,val: setattr(self,"world",World(val)))
     upobs = property(lambda self: self.world.update_order())
-    def _gchildren(self): return self.world.click_order()
+    def _gchildren(self): return self.world.render_order()
     children = property(_gchildren)
     width = property(lambda x: sw)
     height = property(lambda x: sh*2)
