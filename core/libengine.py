@@ -2419,9 +2419,22 @@ class choose_game(gui.widget):
         self.add_child(self.list)
     def update(self,*args):
         self.list.rpos[1] = other_screen(0)
+        #~ if getattr(self,"has_close",False):
+            #~ #self.rpos[1]+=50
+            #~ #self.list.rpos[1]+=10
         [x.update() for x in self.children]
         self.list.updatescroll()
         return False
+    def close(self):
+        self.kill = 1
+    def close_button(self):
+        self.has_close = True
+        item = gui.button(self,"close")
+        item.bordercolor = [255,255,255]
+        item.rpos[0]=223
+        item.z = 1005
+        item.pri = -1005
+        self.children.append(item)
     def list_games(self,path):
         self.path = path
         for f in os.listdir(path):
@@ -2517,7 +2530,6 @@ assets.load_game_menu = load_game_menu
         
 def make_start_script(logo=True):
     assets.game = "games"
-    root = choose_game()
     bottomscript = Script()
     introlines = []
     try:
@@ -2527,16 +2539,9 @@ def make_start_script(logo=True):
         online_script.close()
     except:
         pass
-    bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 name=logo",
-                                            "zoom mag=-0.25 frames=30 nowait","add_root"] + introlines + ["gui Wait"])
+    bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 x=-35 name=logo",
+                                            "zoom mag=-0.25 frames=30 nowait"] + introlines + ["gui Wait"])
     assets.stack = [bottomscript]  #So that the root object gets tagged as in bottomscript
-    def add_root(command,*args):
-        bottomscript.obs.append(root)
-    bottomscript._add_root = add_root
-    
-    title = gui.editbox(None,"Choose a game to run:")
-    title.draw_back = False
-    root.list.add_child(title)
 
     def run_updater(*args):
         import libupdate
@@ -2544,14 +2549,39 @@ def make_start_script(logo=True):
         libupdate.run()
         make_screen()
         make_start_script()
-    setattr(make_start_script,"DOWNLOAD_GAMES_AND_CONTENT",run_updater)
-    item = gui.button(make_start_script,"DOWNLOAD GAMES AND CONTENT")
-    item.bgcolor = [0, 0, 0]
-    item.textcolor = [255,255,255]
-    item.highlightcolor = [50,75,50]
-    root.list.add_child(item)
+    setattr(make_start_script,"UPDATES",run_updater)
+    item = gui.button(make_start_script,"UPDATES")
+    item.bordercolor = [255,255,255]
+    item.rpos = [190,10]
+    item.z = 999
+    item.pri = -1001
+    bottomscript.obs.append(item)
     
-    root.list_games("games")
+    def pl(*args):
+        [setattr(x,"kill",1) for x in bottomscript.obs if isinstance(x,choose_game)]
+        cg = choose_game()
+        cg.list_games("games")
+        cg.close_button()
+        bottomscript.obs.append(cg)
+    setattr(make_start_script,"GAMES",pl)
+    item = gui.button(make_start_script,"GAMES")
+    item.bordercolor = [255,255,255]
+    item.rpos = [190,30]
+    item.z = 999
+    item.pri = -1001
+    bottomscript.obs.append(item)
+    
+    def pl(*args):
+        [x.close() for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
+        assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
+    setattr(make_start_script,"SETTINGS",pl)
+    item = gui.button(make_start_script,"SETTINGS")
+    item.bordercolor = [255,255,255]
+    item.rpos = [190,50]
+    item.z = 999
+    item.pri = -1001
+    bottomscript.obs.append(item)
+
 assets.make_start_script = make_start_script
             
 
