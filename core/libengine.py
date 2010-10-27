@@ -2431,7 +2431,6 @@ class choose_game(gui.widget):
     def close_button(self):
         self.has_close = True
         self.cb = gui.button(self,"close")
-        self.cb.bordercolor = [255,255,255]
         self.cb.rpos[0]=223
         self.cb.z = 1005
         self.cb.pri = -1005
@@ -2587,6 +2586,10 @@ assets.make_start_script = make_start_script
             
 
 def make_screen():
+    if assets.swidth<256:
+        assets.swidth=256
+    if assets.sheight/assets.num_screens<192:
+        assets.sheight = 192*assets.num_screens
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
     try:

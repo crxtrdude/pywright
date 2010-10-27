@@ -363,7 +363,7 @@ class settings_menu(gui.pane):
                 self.really_applyb.width = 1000
                 self.really_applyb.height = 1000
                 self.really_applyb.pri = -1002
-                self.really_applyb.z = 1002
+                self.really_applyb.z = 11002
                 #self.really_applyb.align = False
                 e = gui.editbox(None,"")
                 e.draw_back = False
