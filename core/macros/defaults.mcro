@@ -11,7 +11,7 @@ print customizing defaults
 set _debug off
 
 #Music and sound volume modifiers - set to a value between 0 and 100
-set _music_fade 0
+set _music_fade 100
 
 #When on, players can fastforward through all text
 set _textbox_allow_skip false

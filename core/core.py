@@ -266,7 +266,7 @@ class Assets(object):
     def smus(self,v):
         self._music_vol = v
         try:
-            pygame.mixer.music.set_volume(v/100.0*(int(assets.variables.get("_music_fade","1"))/100.0))
+            pygame.mixer.music.set_volume(v/100.0*(int(assets.variables.get("_music_fade","100"))/100.0))
         except:
             pass
     def gmus(self):
