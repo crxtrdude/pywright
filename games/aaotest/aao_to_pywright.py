@@ -283,6 +283,7 @@ def song(t,path):
     res.mus[nice_t] = {"url":url,"dest":saveto}
     return nice_t
 
+char_id_name = {}
 all_evidence = {}  #True for each evidence id that should be revealed at the start
 def get_ev_id(element):
     return "ev%s"%element["id"].split("_")[1]
@@ -301,7 +302,10 @@ for ev in soup.findAll(id=re.compile("(preuve|profil)_\d")):
         imname = makeev(src)
         f.write("set %s_pic %s\n"%(evid,imname))
     for name in ev.findAll(id=re.compile("(preuve|profil)_\d_nom")):
-        f.write("set %s_name %s\n"%(evid,textify(name.contents,replace_line_end="")))
+        name = textify(name.contents,replace_line_end="")
+        if evid.endswith("$"):
+            char_id_name[evid] = name
+        f.write("set %s_name %s\n"%(evid,name))
     for desc in ev.findAll(id=re.compile("(preuve|profil)_\d_description")):
         print desc.contents,textify(desc.contents)
         f.write("set %s_desc %s\n"%(evid,textify(desc.contents,replace_line_end="{n}")))
@@ -332,8 +336,8 @@ def AfficherElement(vals,elements):
 def MasquerElements(vals,elements):
     types,ids = elements
     for i in range(len(types)):
-        evid = "ev%s"%textify(ids[i])
-        if textify(types[i])=="profil":
+        evid = "ev%s"%ids[i]
+        if types[i]=="profil":
             evid+="$"
         vals["pretextcode"] += "\ndelev %s"%evid
     
