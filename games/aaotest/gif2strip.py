@@ -1,14 +1,17 @@
 import os,sys,subprocess,pygame,math,urllib2
 import re
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 pygame.display.set_mode([1,1])
 
 MAX_SURFACE_WIDTH=1024
 
 def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     if path_to_gif.startswith("http://"):
+        print "...downloading"
         f = urllib2.urlopen(path_to_gif)
         path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
         out = open(path_to_gif,"wb")
+        print "...save"
         out.write(f.read())
         f.close()
         out.close()
@@ -19,6 +22,7 @@ def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     strip_name = root+".png"
     txt_name = root+".txt"
 
+    print "...start the gifsicle"
     proc = subprocess.Popen('gifsicle -I "%s"'%(path_to_gif),stdout=subprocess.PIPE)
     stdout,stderr = proc.communicate()
     print stdout,stderr
