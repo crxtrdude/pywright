@@ -592,6 +592,7 @@ def w(t):
     res.intro.write(t.encode("utf8"))
     res.intro.flush()
 w(u"include evidence")
+had_fg = False
 for id in sorted(namespace["donnees_messages"].keys()):
     print id
     id_num = str(id)
@@ -621,7 +622,8 @@ for id in sorted(namespace["donnees_messages"].keys()):
             vals["nametag"]=t.replace(" ","_")
         if attr_key == 'fond' and t:
             vals['bg'] = bg(t)
-            vals['fg'] = fg(t.rsplit(".",1)[0]+".gif")
+            if not t.endswith(".gif"):
+                vals['fg'] = fg(t.rsplit(".",1)[0]+".gif")
         if attr_key == 'id_auteur':
             vals['char_id'] = t
         if attr_key == 'image_perso':
@@ -679,8 +681,12 @@ for id in sorted(namespace["donnees_messages"].keys()):
     else:
         charname,ename = setupchar(vals["char_id"], vals["nametag"], vals["char"], vals["charblink"])
         w(u"\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
+    if had_fg and not vals["bg"]:
+        w(u"\ndelete name=fg")
+    had_fg = False
     if vals["fg"]:
-        w(u"\nfg "+vals["fg"]+u" nowait")
+        had_fg = True
+        w(u"\nfg "+vals["fg"]+u" nowait name=fg")
     if vals["pretextcode"]:
         w(u"\n"+vals["pretextcode"]+u"\n")
     if vals["text"].strip():
