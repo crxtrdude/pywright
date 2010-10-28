@@ -461,7 +461,7 @@ def LancerCI(vals,elements):
     for i in range(len(from_statement)):
         jumpto_when_present[to_statement[i]] = "ev"+ev_id[i]+" st_"+from_statement[i]
     if failure_msg:
-        label_none[failure_msg] = True
+        label_none[failure_msg] = "none"
         
 def InputVar(vals,elements):
     """Ask user to define variable
@@ -514,11 +514,13 @@ def pauseCI(vals,elements):
     """Pause cross exam"""
     if crossexam[0]:
         crossexam[0] = None
-        vals["postcode"] = "endcross"
+        vals["postcode"] = u"endcross\n"
     
 def RetourCI(vals,elements):
     """Return to cross exam"""
-    vals["postcode"] = "goto "+"line_"+elements[0][0]
+    print "!!!!",elements[0]
+    vals["postcode"] = "resume"
+    #vals["postcode"] = "goto "+"line_"+elements[0]
     
 def AjouterCI(vals,elements):
     """Reveal hidden statement"""
@@ -539,6 +541,21 @@ def apply_event(vals,code):
         print "calling",func.strip(),l
         func = eval(func.strip())
         func(vals,l)
+def end_cross_exam(vals):
+    t = ""
+    for id_num in jumpto_when_press.keys():
+        t+=u"\nlabel press st_"+jumpto_when_press[id_num]
+        t+=u"\ngoto line_%s\n"%id_num
+        del jumpto_when_press[id_num]
+    for id_num in jumpto_when_present.keys():
+        t+=u"\nlabel "+jumpto_when_present[id_num]
+        t+=u"\ngoto line_%s\n"%id_num
+        del jumpto_when_present[id_num]
+    for id_num in label_none.keys():
+        t+=u"\nlabel "+label_none[id_num]
+        t+=u"\ngoto line_%s\n"
+        del label_none[id_num]
+    return t
             
 def make_textbox(t):
     print "make textbox of",repr(t)
@@ -628,18 +645,11 @@ for id in sorted(namespace["donnees_messages"].keys()):
     if vals["operation"]:
         apply_event(vals,vals["operation"])
     do_statement(vals)
-    if id_num in label_none:
-        w("label none\n")
-    if id_num in jumpto_when_press:
-        w("label press st_"+jumpto_when_press[id_num]+"\n")
-    if id_num in jumpto_when_present:
-        w("label "+jumpto_when_present[id_num]+"\n")
     if vals["skip"]:
         print "skipping",id_num
         continue
     if intromode and vals["text"]:
         vals["text"]+="{next}"
-
     #A delay from the beginning of text before continuing
     if "text_delay" in vals and vals["text_delay"]:
         wait_time = cent_to_frame(vals["text_delay"])
@@ -648,7 +658,8 @@ for id in sorted(namespace["donnees_messages"].keys()):
         if wait_time>0:
             vals["text"]+="{p%s}"%wait_time
         vals["text"]+="{next}"
-
+    if id_num in label_none or id_num in jumpto_when_press or id_num in jumpto_when_present:
+        w(end_cross_exam(vals))
     w(u"\nlabel line_%s\n"%id_num)
     if "mus" in vals and vals['mus']:
         path = {"0":"sfx","1":"music"}[vals['mus_type']]
