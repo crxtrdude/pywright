@@ -53,7 +53,10 @@ class WorkThread:
             if "charname" in conv:
                 if not os.path.exists(self.rootpath+"/art/port/"+conv["charname"]):
                     os.mkdir(self.rootpath+"/art/port/"+conv["charname"])
+            print "..."
+            print "churn on",conv["url"]
             wget(conv["url"],self.rootpath+"/"+conv["dest"])
+            print self.conversions
     def start(self):
         self.t = threading.Thread(target=self.run)
         self.t.start()
@@ -208,6 +211,7 @@ def wget(url,saveto):
     print "get",url,"to",saveto
     import urllib
     if url.endswith(".gif"):
+        print "convert gif"
         prefix=saveto.rsplit(".",1)[0]
         saveto = prefix+".png"
         txt_name = prefix+".txt"
@@ -231,6 +235,7 @@ def wget(url,saveto):
     elif not os.path.exists(saveto):
         print "retrieving"
         urllib.urlretrieve(url.replace(" ","%20"),saveto)
+    print "returning"
     return saveto
 def nice_name(t):
     return t.replace("/","_").replace(":","").replace(" ","_")
