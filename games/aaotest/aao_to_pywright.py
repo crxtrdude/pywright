@@ -259,7 +259,8 @@ def fg(t):
 def makeev(t):
     return add_art(t,"ev")
 def setupchar(id, name, talk, blink):
-    charname = "aao_"+id
+    print char_id_name,"ev"+id+"$"
+    charname = char_id_name["ev"+id+"$"].replace(" ","_")
     talkname = nice_name(talk).rsplit(".",1)[0]+"(talk).png"
     blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).png"
     for name,url in [[talkname,talk],[blinkname,blink]]:
