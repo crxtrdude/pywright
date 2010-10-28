@@ -87,16 +87,16 @@ class Resources:
         f.close()
     def saveall(self):
         threads = []
-        for i in range(3):
+        for i in range(1):
             threads.append(WorkThread(self.rootpath))
         for norm in [self.bg,self.fg,self.ev,self.mus,self.sfx,self.port]:
             for name in norm:
                 t = threads.pop(0)
                 t.conversions.append(norm[name])
                 threads.append(t)
-        [t.start() for t in threads]
-        while [x.conversions for x in threads]:
-            pass
+        [t.run() for t in threads]
+        while [1 for x in threads if x.conversions]:
+            print x.conversions
         
 
 res = Resources("converted/%s"%game_id,temppath="tmp")
