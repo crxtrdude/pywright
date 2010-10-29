@@ -74,6 +74,7 @@
         for demos.
         Syntax:  "gamemenu folder" - allows player to choose from games located in the folder. The folder
         is relative to the current game directory.
+    hold for buttons to have a repeat action while held down
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"
