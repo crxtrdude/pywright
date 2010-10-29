@@ -73,12 +73,13 @@ class widget(object):
     def event(self,name,pos,*args):
         if pos[0]>=self.rpos[0] and pos[0]<=self.rpos[0]+self.width and pos[1]>=self.rpos[1] and pos[1]<=self.rpos[1]+self.height:
             p2 = [pos[0]-self.rpos[0],pos[1]-self.rpos[1]]
-            window.over = self
             for w in reversed(self.children):
                 if not hasattr(w,"event"): continue
                 done = w.event(name,p2,*args)
                 if done:
                     return True
+            if not window.over:
+                window.over = self
             func = getattr(self,name,None)
             if func: 
                 args = [pos]+list(args)
