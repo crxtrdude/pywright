@@ -90,11 +90,9 @@ class widget(object):
     def click_up(self,pos):
         if window.focused == self:
             window.focused = None
-    def hold_down_over(self,pos,*args):
-        pass
     def handle_events(self,evts):
         if pygame.mouse.get_pressed()[0]:
-            self.event("hold_down_over",self.mouse_pos)
+            self.event("hold_down_over",widget.mouse_pos)
         quit = False
         for evt in evts:
             if evt.type == pygame.KEYUP and evt.key == pygame.K_ESCAPE:
