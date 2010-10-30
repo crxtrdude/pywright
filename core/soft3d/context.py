@@ -41,7 +41,7 @@ class SoftContext:
     def make_screen(self):
         self.surf = pygame.Surface([self.s_w,self.s_h]).convert()
         self.arr = pygame.surfarray.pixels2d(self.surf)
-        self.odepth = [1000 for i in range(self.s_w*self.s_h)]
+        self.odepth = [(1000,None) for i in range(self.s_w*self.s_h)]
     def trans(self,p):
         s_w,s_h,r_w,r_h = [self.s_w,self.s_h,self.r_w,self.r_h]
         x,y,z,u,v = p
@@ -101,13 +101,15 @@ def draw_point(x,y,z,u,v,texture):
         return
     if z<=0.001 or z*30>=50:
         return
-    if pygame.depth[y*pygame.s_w+x]<z:
+    if pygame.depth[y*pygame.s_w+x][0]<z:
         pygame.hidden += 1
         return
     pygame.points += 1
-    pygame.depth[y*pygame.s_w+x] = z
     texarr,tw,th = texture
-    pygame.arr[x,y] = texarr[0][int(u%1*tw),int(v%1*th)]
+    u,v=int(u%1*tw),int(v%1*th)
+    pygame.arr[x,y] = texarr[0][u,v]
+    pygame.depth[y*pygame.s_w+x] = (z,[u,th-v])
+    
         
 def draw_tri(a,b,c,texture):
     """draws triangle with horizontal lines"""
@@ -312,6 +314,18 @@ def main():
                     o.rot(ry=-x*2.0)
                     o.rot(rx=y*2.20)
                     o.rot(rz=0)
+            if e.type==pygame.MOUSEBUTTONDOWN:
+                if e.button==1:
+                    x,y = e.pos
+                    x=int(x*(softcontext.s_w/float(softcontext.r_w)))
+                    y=int(y*(softcontext.s_h/float(softcontext.r_h)))
+                    point = pygame.depth[y*softcontext.s_w+x][1]
+                    if point:
+                        u,v = point
+                        for rect in [[122,256,55,199],[178,239,88,215],[277,357,25,77]]:
+                            if u>=rect[0] and u<=rect[0]+rect[2] and v>=rect[1] and v<=rect[1]+rect[3]:
+                                print "handle of gun clicked"
+                                break
         keys = pygame.key.get_pressed()
         spd = 5
         if keys[pygame.K_a]:
