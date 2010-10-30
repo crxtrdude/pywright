@@ -105,6 +105,8 @@ def load(script,olist):
         def func(*args):
             script.goto_result(props["s_macroname"])
         setattr(o,props["s_text"].replace(" ","_"),func)
+        if props["hold_func"]:
+            setattr(o,"hold_down_over",func)
     if cls == "waitenter":
         o = waitenter()
     if cls == "delay":

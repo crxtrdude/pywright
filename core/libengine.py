@@ -1709,9 +1709,11 @@ The four types of gui you can create are:
             def func(*args):
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
+            btn.hold_func = None
             if hold:
                 btn.z=10000
                 btn.hold_down_over = func
+                btn.hold_func = macroname
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
