@@ -2169,6 +2169,21 @@ exit}}}
                 k,v = a.split("=",1)
                 if k == "fail":
                     em.fail = v
+    @category([VALUE("x","x value of rectangular region on the texture"),VALUE("y","y value of rectangular region on the texture"),
+    VALUE("width","width of rectangular region on texture"),VALUE("height","height of rectangular region on texture"),
+    VALUE("label","label to jump to when region is clicked")],type="interface")
+    def _region3d(self,command,x,y,width,height,label):
+        """Creates a clickable region on a 3d object by binding a rectangular region of the object's texture to a wrightscript
+        label event. Applies to current 3d object if there is one."""
+        for o in self.obs:
+            if isinstance(o,mesh):
+                o.regions.append([int(x),int(y),int(width),int(height),label])
+    @category([],type="interface")
+    def _examine3d(self,command):
+        """Turn 3d examinations on"""
+        for o in self.obs:
+            if isinstance(o,mesh):
+                o.examine = True
     @category([VALUE("label","label the cross exam so that you can 'goto label' later to start from the top"),
     KEYWORD("fail","label to jump to if no label is defined for an action, when pressing or presenting",'"none"')],type="crossexam")
     def _cross(self,command,*args):

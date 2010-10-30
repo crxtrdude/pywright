@@ -1,13 +1,15 @@
 import os
 import pygame
 import pygame.gfxdraw
-import psyco
 import numpy
 import math
 import random
 
-
-psyco.full()
+try:
+    import psyco
+    psyco.full()
+except:
+    pass
 
 
 LOW = 320,240

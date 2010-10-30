@@ -1229,6 +1229,7 @@ class mesh(sprite):
                 break
         if not con:
             return
+        self.con = con
         path = assets.game+"/art/models/"
         self.ob = ob = con.context.load_object(meshfile,path)
         ob.trans(z=-100)
@@ -1238,6 +1239,34 @@ class mesh(sprite):
         self.z = 0
         self.pri = 0
         self.id_name = "mesh"
+        self.regions = []
+        self.fail = "none"
+        self.examine = False
+    def click_down_over(self,pos):
+        if not self.examine:
+            return
+        x,y = pos
+        x=int((x-self.con.pos[0])*(self.con.context.s_w/float(self.con.context.r_w)))
+        y=int((y-self.con.pos[1])*(self.con.context.s_h/float(self.con.context.r_h)))
+        print x,y
+        i = y*self.con.context.s_w+x
+        if i>=len(pygame.depth) or i<0:
+            return
+        point = pygame.depth[i][1]
+        if point:
+            u,v = point
+            for rect in self.regions:
+                if u>=rect[0] and u<=rect[0]+rect[2] and v>=rect[1] and v<=rect[1]+rect[3]:
+                    label = rect[4]
+                    self.goto(u,v,label)
+                    return
+            return self.goto(u,v,self.fail)
+    def goto(self,u,v,label):
+        self.examine = False
+        assets.variables["_examine_clickx3d"] = str(u)
+        assets.variables["_examine_clicky3d"] = str(v)
+        self.regions[:] = []
+        assets.cur_script.goto_result(label,backup=self.fail)
     def rotate(self,axis,amount):
         r = [0,0,0]
         r[axis] = amount
