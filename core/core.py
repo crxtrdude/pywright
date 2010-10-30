@@ -614,6 +614,7 @@ set _font_new_resume_size 14""".split("\n"):
         channel = snd.play()
         return channel
     def play_music(self,track=None,loop=0,pre="music",reset_track=True):
+        print self.music_volume,self.variables.get("_music_fade",None)
         if reset_track:
             assets.variables["_music_loop"] = track
         self.init_sound()
@@ -1204,11 +1205,18 @@ class surf3d(sprite):
     def __init__(self,pos,sw,sh,rw,rh):
         self.id_name = "surf3d"
         self.pos = pos
-        self.z = 0
+        self.z = 2
         self.pri = -1000
+        self.width,self.height = rw,rh
         self.context = context.SoftContext(sw,sh,rw,rh)
         self.surf = self.context.draw()
-        self.next = 3
+        self.next = 5
+    def click_down_over(self,pos):
+        print "click",pos
+        if pos[0]>=self.pos[0] and pos[0]<=self.pos[0]+self.width and pos[1]>=self.pos[1] and pos[1]<=self.pos[1]+self.height:
+            for o in assets.cur_script.obs:
+                if isinstance(o,mesh):
+                    o.click(pos)
     def draw(self,dest):
         dest.blit(self.surf,self.pos)
     def update(self):
@@ -1218,7 +1226,7 @@ class surf3d(sprite):
         if [x for x in self.context.objects if x.changed]:
             self.surf = self.context.draw().convert()
         [setattr(x,"changed",0) for x in self.context.objects]
-        self.next = 3
+        self.next = 2
 
 class mesh(sprite):
     def __init__(self,meshfile,pos=[0,0],rot=[0,0,0],name="surf3d"):
@@ -1242,7 +1250,18 @@ class mesh(sprite):
         self.regions = []
         self.fail = "none"
         self.examine = False
-    def click_down_over(self,pos):
+        self.dz = 0
+        self.maxz=0
+        self.minz=-150
+    def trans(self,x=0,y=0,z=0):
+        if self.dz+z>self.maxz:
+            z = self.maxz-self.dz
+        elif self.dz+z<self.minz:
+            z = self.minz-self.dz
+        self.dz+=z
+        self.ob.trans(x,y,z)
+        self.ob.changed = 1
+    def click(self,pos):
         if not self.examine:
             return
         x,y = pos
@@ -2883,7 +2902,7 @@ class examine_menu(sprite,gui.widget):
         self.xscrolling = 0
         scroll_amt = assets.variables.get("_xscroll_"+self.name,0)
         if scroll_amt==-1:
-            assets.cur_script.obs.append(scroll(-256,0,256))
+            assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
         #self.recordb = record_button(assets.cur_script)
     #~ def k_tab(self):
@@ -2962,7 +2981,7 @@ class examine_menu(sprite,gui.widget):
         #self.recordb.draw(dest)
     def update(self,*args):
         if self.xscrolling:
-            assets.cur_script.obs.append(scroll(-self.xscrolling,0,16))
+            assets.cur_script.obs.append(scroll(-self.xscrolling,0,speed=16))
             self.xscrolling = 0
             if hasattr(self,"scrollbut"):
                 self.scrollbut.kill = 1
@@ -3580,11 +3599,12 @@ class effect(object):
         self.z = zlayers.index(self.__class__.__name__)
                 
 class scroll(effect):
-    def __init__(self,amtx=1,amty=1,speed=1,wait=1,filter="top"):
+    def __init__(self,amtx=1,amty=1,amtz=1,speed=1,wait=1,filter="top"):
         super(scroll,self).__init__()
         self.amtx = abs(amtx)
         self.amty = abs(amty)
-        self.dx=self.dy=0
+        self.amtz = abs(amtz)
+        self.dx=self.dy=self.dz=0
         if amtx==0 and amty: 
             self.dy=amty/abs(amty)
         elif amty==0 and amtx:
@@ -3602,6 +3622,8 @@ class scroll(effect):
             else:
                 self.dx=amtx/abs(amtx)
                 self.dy=amty/abs(amty)
+        if amtz:
+            self.dz = (amtz)/abs(amtz)*speed
         self.dx*=speed
         self.dy*=speed
         self.pri = ulayers.index(self.__class__.__name__)
@@ -3611,10 +3633,10 @@ class scroll(effect):
         self.wait = wait
     def draw(self,dest): pass
     def update(self):
-        if self.amtx<=0 and self.amty<=0:
+        if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
             self.kill = 1
             return False
-        ndx,ndy = self.dx,self.dy
+        ndx,ndy,ndz = self.dx,self.dy,self.dz
         self.amtx-=abs(self.dx)
         if self.amtx<0: 
             ndx+=self.amtx*(self.dx/abs(self.dx))
@@ -3623,11 +3645,17 @@ class scroll(effect):
         if self.amty<0:
             ndy+=self.amty*(self.dy/abs(self.dy))
             self.amty=0
+        self.amtz-=abs(self.dz)
+        if self.amtz<0:
+            ndz+=self.amtz*(self.dz/abs(self.dz))
+            self.amtz=0
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"pos") and (not self.filter or self.filter=="top" and o.pos[1]<192 or self.filter=="bottom" and o.pos[1]>=192):
                 o.pos[0]+=ndx
                 o.pos[1]+=ndy
+            if isinstance(o,mesh):
+                o.trans(z=ndz)
         if self.wait:
             return True
     def control_last(self):

@@ -49,7 +49,7 @@ def save(ob):
         oprops["items"] = [x.id for x in ob.items]
         return ["ev_menu",[],oprops]
     elif isinstance(ob,scroll):
-        cp(["dx","dy","amtx","amty","speed","wait","filter","kill"],ob,oprops)
+        cp(["dx","dy","dz","amtx","amty","speed","wait","filter","kill"],ob,oprops)
         oprops["ob_ids"] = [o.id_name for o in ob.obs if hasattr(o,"id_name")]
         return ["scroll",[],oprops]
     elif isinstance(ob,zoomanim):

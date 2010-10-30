@@ -1947,6 +1947,7 @@ zoom mag=-0.5 frames=10
     KEYWORD("filter","select only objects on the 'top' screen or 'bottom' screen, leave blank for either","'top'"),
     KEYWORD("x","amount to scroll horizontally","0"),
     KEYWORD("y","amount to scroll vertically","0"),
+    KEYWORD("z","amount to scroll into the screen, only really valid for mesh objects","0"),
     KEYWORD("speed","pixels per frame to scroll","1"),
     TOKEN("last","select last added object as scroll target"),
     TOKEN("nowait","continue script while scrolling")],type="effect")
@@ -1957,6 +1958,7 @@ scroll amount does not divide evenly by the speed, it will still stop at the rig
 the speed would divide evenly over the distance)."""
         x=0
         y=0
+        z=0
         speed = 1
         last = 0
         wait = 1
@@ -1967,6 +1969,8 @@ the speed would divide evenly over the distance)."""
                 x=int(a[2:])
             if a.startswith("y="):
                 y=int(a[2:])
+            if a.startswith("z="):
+                z=int(a[2:])
             if a.startswith("speed="):
                 speed=int(a[6:])
             if a.startswith("last"):
@@ -1977,7 +1981,7 @@ the speed would divide evenly over the distance)."""
                 name = a[5:]
             if a.startswith("filter="):
                 filter=a[7:]
-        scr = scroll(x,y,speed,wait,filter)
+        scr = scroll(x,y,z,speed,wait,filter)
         self.obs.append(scr)
         if last:
             scr.control_last()
