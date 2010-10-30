@@ -1711,7 +1711,6 @@ The four types of gui you can create are:
             setattr(btn,text.replace(" ","_"),func)
             btn.hold_func = None
             if hold:
-                btn.z=10000
                 btn.hold_down_over = func
                 btn.hold_func = macroname
             self.obs.append(btn)
