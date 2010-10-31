@@ -2,18 +2,7 @@
 #f:str_begins_with() - in parenthesis can only be an inline string not a variable
 #                       may or may not have quotes around it
 
-
-
-
-
-
-
-
-
-
-#TODO: art conversions in temp folder to keep things clean
 #TODO: show evidence at start that is never revealed
-#TODO: linked text
 #TODO: make sure to read as utf8
 """Limitations:
 cannot hide a statement that wasn't hidden from the start
@@ -36,8 +25,8 @@ import re
 import subprocess
 import threading
 
-game_id = 14571 #JM shot dunk
-#~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=10711" #My dialogue test case
+#game_id = 14571 #JM shot dunk
+game_id = "10711" #My dialogue test case
 #~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
 #~ game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
 #~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
@@ -593,6 +582,7 @@ def w(t):
     res.intro.flush()
 w(u"include evidence")
 had_fg = False
+linked = False
 for id in sorted(namespace["donnees_messages"].keys()):
     print id
     id_num = str(id)
@@ -604,10 +594,13 @@ for id in sorted(namespace["donnees_messages"].keys()):
                 "postcode":"",
                 "skip":False,
                 "operation":None,
-                "hidden":False}
+                "hidden":False,
+                "linked":False}
     line_attr = namespace["donnees_messages"][id]
     for attr_key in sorted(line_attr.keys()):
         t = line_attr[attr_key]
+        if attr_key == "lie_au_suivant":
+            vals["linked"] = int(t)
         if attr_key == "defil_auto":
             vals['text_delay'] = int(t)
         if attr_key == 'son':
@@ -690,7 +683,13 @@ for id in sorted(namespace["donnees_messages"].keys()):
     if vals["pretextcode"]:
         w(u"\n"+vals["pretextcode"]+u"\n")
     if vals["text"].strip():
-        vals["text"] = vals["color"]+vals["text"]+{"1":"{next}","0":""}[vals.get('lie_au_suivant','0')]
+        if linked:
+            vals["text"] = "{spd0}{$_last_written_text}{spd1}"+vals["text"]
+            linked = False
+        vals["text"] = vals["color"]+vals["text"]
+        if vals["linked"]:
+            vals["text"] += "{next}"
+            linked = True
         w(u'\n"%s"'%vals["text"])
     if vals["postcode"]:
         w(u"\n"+vals["postcode"]+u"\n")
