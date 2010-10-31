@@ -2479,10 +2479,14 @@ class choose_game(gui.widget):
         self.path = path
         for f in os.listdir(path):
             if f.startswith("."): continue
+            if f in ["art","music","sfx","fonts"]:
+                continue
+            if not os.path.isdir(path+"/"+f):
+                continue
             item = gui.button(self,f)
-            d = get_data_from_folder("games/"+f)
+            d = get_data_from_folder(self.path+"/"+f)
             if d.get("icon",""):
-                graphic = pygame.image.load("games/"+f+"/"+d["icon"])
+                graphic = pygame.image.load(self.path+"/"+f+"/"+d["icon"])
             else:
                 graphic = pygame.Surface([1,1])
             title = d.get("title",f)
@@ -2508,7 +2512,10 @@ class choose_game(gui.widget):
             self.list.add_child(item)
             def _play_game(func=f):
                 gamedir = self.path+"/"+func
-                assets.start_game(gamedir,"intro")
+                if os.path.exists(gamedir+"/"+func+".txt"):
+                    assets.start_game(gamedir,func)
+                else:
+                    assets.start_game(gamedir,"intro")
             if __version__ >= req:
                 setattr(self,f.replace(" ","_"),_play_game)
             else:
