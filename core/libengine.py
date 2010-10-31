@@ -2603,12 +2603,26 @@ def make_start_script(logo=True):
     bottomscript.obs.append(item)
     
     def pl(*args):
+        [setattr(x,"kill",1) for x in bottomscript.obs if isinstance(x,choose_game)]
+        cg = choose_game()
+        cg.list_games("examples")
+        cg.close_button()
+        bottomscript.obs.append(cg)
+    setattr(make_start_script,"EXAMPLES",pl)
+    item = gui.button(make_start_script,"EXAMPLES")
+    item.bordercolor = [255,255,255]
+    item.rpos = [190,50]
+    item.z = 999
+    item.pri = -1001
+    bottomscript.obs.append(item)
+    
+    def pl(*args):
         [x.close() for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
         assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
     setattr(make_start_script,"SETTINGS",pl)
     item = gui.button(make_start_script,"SETTINGS")
     item.bordercolor = [255,255,255]
-    item.rpos = [190,50]
+    item.rpos = [190,70]
     item.z = 999
     item.pri = -1001
     bottomscript.obs.append(item)

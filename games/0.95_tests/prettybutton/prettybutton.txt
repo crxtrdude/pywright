@@ -1,5 +1,0 @@
-gui Button next x=0 y=0 graphic=general/check_gba
-gui Wait
-
-label next
-"good job"
