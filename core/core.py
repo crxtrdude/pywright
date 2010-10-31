@@ -1962,6 +1962,7 @@ class textbox(gui.widget):
     def k_tab(self):
         self.recordb.showmenu()
     def forward(self,sound=True):
+        assets.variables["_last_written_text"] = self.written.split("\n",1)[1]
         assets.cur_script.tboff()
         lines = self.text.split("\n")
         lines = lines[4:]
@@ -2089,7 +2090,9 @@ class textbox(gui.widget):
             num_chars = self.speed
         if self.skipping:
             num_chars = self.skipping
-        for cnum in range(num_chars):
+        cnum = num_chars
+        while (not self.speed) or cnum>0:
+            cnum -= 1
             if (len(self.written)<len(self.text) and 
                     len(self.written.replace("\r\n","\n").split("\n"))<\
                     self.num_lines+1):
@@ -2120,6 +2123,7 @@ class textbox(gui.widget):
                             def back():
                                 old()
                                 s = len(self.written)
+                                #self.written+=assets.variables.get("_return","")
                                 self._text = self.text[:s]+assets.variables.get("_return","")+self.text[s:]
                             ns._endscript = back
                         elif command.startswith("sfx"):
@@ -2142,6 +2146,7 @@ class textbox(gui.widget):
                         elif command == "next":
                             if assets.portrait:
                                 assets.portrait.set_blinking()
+                            self.written = self.written.split("{next}",1)[0]
                             self.forward(False)
                         elif command[0]=="e":
                             try:
@@ -2207,8 +2212,7 @@ class textbox(gui.widget):
                         else:
                             self.next_char = 2
                     self._lc = char
-        else:
-            self.next_char -= 1
+        self.next_char -= 1
         if assets.portrait:
             if self.next_char>10 or self.nextline:
                 assets.portrait.set_blinking()
