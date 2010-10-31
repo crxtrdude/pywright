@@ -1,36 +1,70 @@
 (Note: file not intended for word wrapping)
 
-PyWright 0.978 (for christmas?)
-    unification of text macros and wrightscript
-    remap keys
-    bind hotkeys to buttons
-    more debug options
-    more tools
-    wait/nowait for all objects works properly
+*PyWright 0.980: September 21, 2010*
 
-*PyWright 0.977: September 21, 2010*
-    test scrolls more
-    test save/load with after_load change
-    speed control added back to textboxes
-    _last_written_text
-    {$} in text is replaced with formatting intact
-    {spd0} in text will print every single character in one frame, unless speed is changed back
-    textboxes can be "linked" a la aao like so:
+    -large collection of random examples included with update, demonstrating (badly) features from the
+            last few versions
+            
+    -{spd5} in a textbox determines how many letters are added per update, {delay5} is how many frames
+            between updates. ({spd} was disabled in previous versions due to bugs)
+            {spd0} is a special case that will print every available character up to either a speed change
+            or the end of the text. 
+            "{spd0}This is all printed in one go{spd1}Back to letter by letter"
+    -For every textbox, the text that is displayed is set to the variable $_last_written_text
+    -textboxes can be "linked" a la aao like so:
         "Some text to start with, {next}"
         #change background or character or what have you
         "{spd0}{$_last_written_text}{spd1}and some more text"
-    real3d support
-        surf3d to create a rendering surface where mesh will be rendered
-        scrolling of mesh to "zoom in"
-        rotate to rotate mesh
-        clicking on mesh with examine3d and region3d
-        save/load of mesh/surf3d
-    region made an actual command
-    autosave: time between saves, saves to keep, dev defined
-    test emo/bemo and error conditions
-    - Main PyWright startup script executes simultaneously with the menu
-    - _textbox_show_button works correctly, _cr_button no longer hides the bottom
-        screen
+    -Fixed a bug with vairable substitution in textboxes that didn't keep formatting intact:
+        set james_name {c009}James{c}
+        "Oh look, it's {$james_name}!"
+        Will now print James in blue text
+        
+    -changes to options screen
+        -users can limit how many autosaves are kept
+        -resolution sets the actual resolution, double or single screen is stretched to fit. Before, the
+            resolution option was setting the resolution for a single screen, so doubling it might have
+            gone into an invalid resolution
+        -resolution also lists actual resolutions your monitor will support
+
+    -software 3d rendering support
+        example in "examples/3d_real"
+        file format supported is wavefront OBJ files. Free software blender (blender.org) can export
+            into that format.
+        use the "surf3d" command to create a display area for the 3d object
+            syntax: surf3d x y render_width render_height display_width display_height
+            If you set a smaller render_width than display_width, you will get lower quality rendering that is 
+            then scaled up to fit.
+            the surf3d automatically gets the id_name (used with delete name=) of "surf3d"
+        use the "mesh" command to load a .OBJ/.MTL file. The files should contain a single object, a single
+            material, and a single texture.
+            syntax: mesh obj_name
+            the obj name should be something like "some_object.obj" and the files "some_object.obj" and
+                associated .mtl and texture image files should be located in art/models
+            the mesh automatically gets the id_name (used with delete name=) of "mesh"
+            You should only load one object at a time
+        to rotate the object, you can use the normal "rotate" command. "rotate name=mesh axis=y" will
+            rotate left and right, axis=x will rotate up and down, and axis=z will rotate it in a flat 2d way
+        to zoom in and out on an object, use the normal scroll command, to change the z value
+            there is a hardcoded limit of maximum and minimum zoom
+        to set up examine points on an object, first use a set of "region3d" commands to define clickable
+            regions. These regions are actually a rectangular region referencing the image texture mapped
+            onto the mesh. For instance, if you have a blood splatter you want to be able to click in 3d,
+            you would find a rectangular region on the texture which has the splatter, and call 
+            "region3d x y width height blood_splatter" for that hotspot.
+            syntax: region3d x y width height label
+        to activate those 3d regions, call "examine3d"
+        mesh/surf3d are saved in save files, but their rotation and zoom are not saved
+        
+    -some special effects added
+        check examples/tint_effects
+        -can tint graphics: tint name=id_name start=color_to_start_on end=color_to_end_on speed=fade_speed
+        -can invert graphics: invert name=id_name
+        -can greyscale graphics: grey name=id_name
+        
+    -If you add "hold" to the arguments for a gui Button, the action will repeat each frame as long as
+            the button is held down with the mouse
+
     -can fade music in and out
         check core/macros/music.mcro for the code
         basically:
@@ -40,7 +74,6 @@ PyWright 0.978 (for christmas?)
             music_fade_out
         but for more control, you can "set _music_fade" a value from 0 (no volume) to 100 (maximum
             volume according to users volume settings)
-    controlanim overload to support delay and individual frame delays
     -getprop, setprop commands added to explicitly get and set properties of objects
         example:
         #get the x value of the phoenix wright portrait
@@ -53,12 +86,6 @@ PyWright 0.978 (for christmas?)
         Currently the only interesting properties you can manipulate are x, y, and z; but it may be more clear to do it this way
             than using scroll in some cases. Also if you want to do your own scroll effect, this is a better way to do it.
 
-    -left/right tiny arrow for cross examination
-    better unification of object commands - char command missing flipx for instance, no pri for other objects
-    -made sure to include cross examination arrows with rounded edge
-    -Changed display model. On the options screen you will see a list of valid resolutions for your display. Instead of dual screen
-    in effect doubling the resolution shown, the resolution chosen will be accurate and the display will shrink to fit (whether it
-    is dual screen or not)
     -debug mode changes:
         when in debug mode (set _debug true at the start of a script) "debug" is displayed in the corner of the screen
         More errors are shown:
@@ -70,14 +97,24 @@ PyWright 0.978 (for christmas?)
     -production mode: "set _production true" will turn on production mode.
         in production mode, errors will be logged but not displayed to the user (and
         no clicking will be needed by them to bypass the error)
-    -small changes to error display, displays a bit more text
-    can tint graphics
-    can invert graphics
-    can greyscale graphics
+
+    -other bugs fixed
+        _textbox_show_button works correctly, _cr_button no longer hides the bottom screen
+        -left/right tiny arrow for cross examination
+        -made sure to include cross examination arrows with rounded edge
+        -small changes to error display, displays a bit more text
     
-    unicode and multiple font support: set _punctuation, set _font_tb _font_tb_size
-    _textbox_lines
-    maybe hardcoded support for setting talk/blink
+    -unicode and multiple font support: 
+        set _punctuation - Sets which characters are considered punctuation for lipsyncing
+        set _font_tb - the name of the font file (relative to fonts/) to use for textboxes
+        set _font_tb_size - the point size of the font for textboxes
+        check core/macros/defaults.mcro:init_defaults for all of the other fonts that can be set
+    -set _textbox_lines is back:
+        if this is 3 -> The number of displayed lines of a textbox will be 3
+        if this is 2 -> the number displayed will be 2
+        if this is auto -> the number of lines displayed will depend on the length of the text
+        the default is 3
+    
     - penalty bar options: 
         "penalty threaten=10" will show a flashing reminder of how much health they will lose (and it stays
             by default)
@@ -91,13 +128,15 @@ PyWright 0.978 (for christmas?)
         "guilty" for standard guilty text and doors
         "guilty_words" for just the words
         "guilty_doors" for just the doors (which clear the scene when they finish)
-    fixed scroll animations that went further than you told it due to the speed
+    -fixed scroll animations that went further than you told it due to the speed
+
     -new command "gamemenu" to list games in a folder. Use it if your game has a large number
         of cases (10 or more) where the normal case selection screen is a bit hard to navigate. Good
         for demos.
         Syntax:  "gamemenu folder" - allows player to choose from games located in the folder. The folder
         is relative to the current game directory.
-    hold for buttons to have a repeat action while held down
+        Mostly this command will be used by me to organize the examples better
+    
 
 *PyWright 0.976: July 31, 2010*
     - Fixed a memory leak that would slow a game down over time until a "clear"

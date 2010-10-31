@@ -2707,7 +2707,7 @@ def translate_click(pos):
             return r
     return [-100000,-100000]
 def fit(surf,size):
-    if surf.get_width()<size[0]:
+    if surf.get_width()<size[0] and assets.filter:
         surf = pygame.transform.scale2x(surf)
     surf = pygame.transform.scale(surf,size)
     return surf
@@ -2720,7 +2720,7 @@ def draw_screen():
     mode,dim = settings.screen_format(assets)
     if mode == "two_screens" or mode == "horizontal" or mode == "show_one":
         bottom = scaled.subsurface([[0,sh],[sw,sh]])
-    if assets.swidth>256 and scale:
+    if assets.swidth>256 and scale and assets.filter:
         scaled = pygame.transform.scale2x(pygame.screen)
     if scale:
         scaled = pygame.transform.scale(scaled,[assets.swidth,assets.sheight])
