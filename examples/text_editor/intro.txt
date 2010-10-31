@@ -6,9 +6,6 @@ gui Input txt1 x=0 y=0 name=inp1 width=200
 gui Input txt2 x=0 y=20 name=inp2 width=200
 gui Input txt3 x=0 y=40 name=inp3 width=200
 
-mus pa1_s1/01 - Ace Attorney - Prologue.ogg
-music_fade_in
-
 gui Button {Preview} x=0 y=60 Preview
 
 gui Wait

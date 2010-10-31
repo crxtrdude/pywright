@@ -6,12 +6,16 @@ rectangle_init
 {add_rectangle 0 0 100 100 collide}
 {add_rectangle 10 0 100 100 collide}
 {add_rectangle 20 0 50 50 info}
+textblock 0 0 100 10 ---Top of blocked off area---
+textblock 0 90 100 10 ---Bottom of blocked off area---
+textblock 90 0 10 100 v v v v v v v v v v v v v v 
+textblock 105 0 100 100 Upper left of truck cannot pass through blocked area
 
 
 
 #Set up something we can move around, and position it
 ev bus name=c x=113
-#Setting collision point to the top left corner of the bus
+#Setting collision point to the top left corner of the truck
 set cx 113
 set cy 0
 

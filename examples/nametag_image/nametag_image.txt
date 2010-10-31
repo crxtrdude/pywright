@@ -3,7 +3,7 @@ bg black
 
 textblock 0 0 100 100 name=x standard, oldstyle
 char blue_badger hide
-"Hello, my name is the blue badgerww{n}blah{n}blah"
+"Hello, my name is the blue badger{n}blah{n}blah"
 delete name=x
 
 textblock 0 0 100 100 name=x blank standard

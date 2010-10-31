@@ -1,0 +1,5 @@
+mus pa1_s1/01 - Ace Attorney - Prologue.ogg
+music_fade_in
+"The music has faded in"
+music_fade_out
+"The music has faded out"
