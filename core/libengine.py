@@ -416,10 +416,13 @@ class Script(gui.widget):
                 traceback.print_exc()
                 continue
             if o:
+                print "append",o
                 obs.append(o)
             if later:
                 after_after.append(later)
+        print obs
         self.world.all = obs
+        print [getattr(x,"id_name",None) for x in self.world.all]
         for of in after_after:
             of()
     def load(self,s):
@@ -770,11 +773,13 @@ char test
     @category([COMBINED("destination","The destination label to move to"),
                     KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
     @category([VALUE("folder","List all games in this folder, relative to current game directory")],type="gameflow")
-    def _gamemenu(self,command,folder):
+    def _gamemenu(self,command,folder,*args):
         """Can be used to list games in a folder"""
         cm = choose_game()
         cm.pause = True
         cm.list_games(assets.game+"/"+folder)
+        if "close" in args:
+            cm.close_button(True)
         self.obs.append(cm)
         self._gui("gui","Wait")
     @category([COMBINED("destination","The destination label to move to"),
@@ -2448,6 +2453,7 @@ class choose_game(gui.widget):
         self.list = gui.scrollpane([0,other_screen(0)])
         self.list.width,self.list.height = [sw,sh]
         self.add_child(self.list)
+        self.jump_when_close = None
     def update(self,*args):
         self.list.rpos[1] = other_screen(0)
         if getattr(self,"has_close",False):
@@ -2459,13 +2465,16 @@ class choose_game(gui.widget):
         return False
     def close(self):
         self.kill = 1
-    def close_button(self):
+        if self.jump_when_close:
+            assets.cur_script.goto_result("close")
+    def close_button(self,jump=False):
         self.has_close = True
         self.cb = gui.button(self,"close")
         self.cb.rpos[0]=223
         self.cb.z = 1005
         self.cb.pri = -1005
         self.children.append(self.cb)
+        self.jump_when_close = jump
     def list_games(self,path):
         self.path = path
         for f in os.listdir(path):
@@ -2603,11 +2612,13 @@ def make_start_script(logo=True):
     bottomscript.obs.append(item)
     
     def pl(*args):
-        [setattr(x,"kill",1) for x in bottomscript.obs if isinstance(x,choose_game)]
-        cg = choose_game()
-        cg.list_games("examples")
-        cg.close_button()
-        bottomscript.obs.append(cg)
+        gamedir = "examples"
+        assets.start_game(gamedir,"intro")
+        #~ [setattr(x,"kill",1) for x in bottomscript.obs if isinstance(x,choose_game)]
+        #~ cg = choose_game()
+        #~ cg.list_games("examples")
+        #~ cg.close_button()
+        #~ bottomscript.obs.append(cg)
     setattr(make_start_script,"EXAMPLES",pl)
     item = gui.button(make_start_script,"EXAMPLES")
     item.bordercolor = [255,255,255]
