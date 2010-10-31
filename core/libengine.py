@@ -1684,7 +1684,6 @@ The four types of gui you can create are:
             hold = None
             while args:
                 a = args[0]
-                print a
                 if a.startswith("x="): x=int(a[2:])
                 elif a.startswith("y="): y=int(a[2:])
                 elif a.startswith("z="): z=int(a[2:])
@@ -1716,6 +1715,7 @@ The four types of gui you can create are:
             if hold:
                 btn.hold_down_over = func
                 btn.hold_func = macroname
+                setattr(btn,text.replace(" ","_"),lambda *args:0)
             self.obs.append(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
