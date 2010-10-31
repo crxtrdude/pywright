@@ -1,0 +1,22 @@
+bg lobby
+char phoenix fade
+
+tint name=phoenix start=ffffff end=ff0000
+"I am tinted"
+tint name=phoenix start=ffffff end=ffffff
+
+invert name=phoenix
+"I am inverted"
+invert value=0 name=phoenix
+
+grey name=phoenix
+"I am grey"
+grey value=0 name=phoenix
+
+
+set _production true
+"Currently in production mode"
+goto error111
+label error
+"No message was just displayed"
+fg Cross-ExaminationAnim fade

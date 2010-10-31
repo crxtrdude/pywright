@@ -1,0 +1,15 @@
+set _debug true
+char kawadzu e=normal
+"Yo man watch me blink like a madman"
+set _blinkspeed_next 100 200
+char kawadzu
+"Now I blink infrequently"
+char kawadzu
+"Default sporadic blinking restored"
+
+
+set _blinkspeed_global 100 200
+char kawadzu
+"global blinkspeed set to slow"
+char kawadzu
+"still slow blink speed"

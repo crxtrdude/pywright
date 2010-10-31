@@ -1,0 +1,26 @@
+label wrap
+
+"{c999}I'm sure none of our lives will ever seem the same after the events of the last couple of months."
+
+
+addev bus
+label top
+cross
+statement a
+"this{n}is{n}a{n}long{n}statement{n}mwahahaha{n}and stuff."
+statement b
+"another statement"
+endcross
+goto top
+
+label press a
+"You pressed the statmenet"
+resume
+
+label press b
+"Pressing b"
+resume
+
+label none
+"None!"
+resume

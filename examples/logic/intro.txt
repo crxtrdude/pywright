@@ -1,0 +1,102 @@
+set a_state button
+set b_state button
+set c_state button
+set d_state button
+set e_state hidden   #e is from combining c and d
+
+label reset
+set count_chosen 0
+
+set a_chosen false
+set b_chosen false
+set c_chosen false
+set d_chosen false
+set e_chosen false
+
+
+macro drawchoice
+is $1_state = button AND $1_chosen = true?
+textblock $2 $3 100 25 $ctext
+is $1_state = button AND $1_chosen = false?
+gui Button click_$1 x=$2 y=$3 z=1 $ctext
+endmacro
+
+macro drawchoices
+clear
+bg black
+
+set ctext Man was ugly
+{drawchoice a 0 0}
+set ctext Gun found at scene
+{drawchoice b 0 25}
+set ctext Drapes were green
+{drawchoice c 0 50}
+set ctext Green cloth found on body
+{drawchoice d 0 75}
+set ctext Body was wrapped in green drapes
+{drawchoice e 0 100}
+endmacro
+
+
+
+label draw_choices
+{drawchoices}
+
+
+
+gui Wait
+
+
+macro clickchoice
+set $1_chosen true
+addvar count_chosen 1
+goto check_times
+endmacro
+
+label click_a
+{clickchoice a}
+
+label click_b
+{clickchoice b}
+
+label click_c
+{clickchoice c}
+
+label click_d
+{clickchoice d}
+
+label click_e
+{clickchoice e}
+
+
+label check_times
+{drawchoices}
+is count_chosen < 2 draw_choices
+
+set _list_back_button false
+list combine
+li Combine them?
+li Try again
+showlist
+
+label Try_again
+goto reset
+
+label Combine_them?
+#Check for valid combinations
+is c_chosen = true AND d_chosen = true cde
+is a_chosen = true AND b_chosen = true AND c_chosen = true blah
+
+"Hmm, those don't seem to combine."
+goto reset
+
+label cde
+"Wow, you're right!"
+"Maybe the green cloth we found came from the curtain?"
+set c_state hidden
+set d_state hidden
+set e_state button
+goto reset
+
+label blah
+"hahaha"

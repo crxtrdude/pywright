@@ -1,0 +1,45 @@
+label game_start
+#Set up collisions, clear rectangles
+rectangle_init
+
+#Add some collision rectangles
+{add_rectangle 0 0 100 100 collide}
+{add_rectangle 10 0 100 100 collide}
+{add_rectangle 20 0 50 50 info}
+
+
+
+#Set up something we can move around, and position it
+ev bus name=c x=113
+#Setting collision point to the top left corner of the bus
+set cx 113
+set cy 0
+
+
+#Add buttons for movement
+gui Button move_left x=125 y=292 hold left
+gui Button move_right x=225 y=292 hold right
+gui Button move_up x=182 y=225 hold up
+gui Button move_down x=172 y=340 hold down
+
+label wait_input
+print wait for input
+gui Wait
+
+label move_left
+#direction, name= to scroll, times to scroll, speed of scroll
+{walk_left c 4 8}
+goto wait_input
+
+label move_right
+{walk_right c 4 8}
+goto wait_input
+
+label move_up
+{walk_up c 4 8}
+goto wait_input
+
+label move_down
+print moving down
+{walk_down c 4 8}
+goto wait_input

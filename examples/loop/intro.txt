@@ -1,0 +1,3 @@
+mus looping_pwaa/PWAA - 31 - The Blue Badger - I Want to Protect You.ogg
+set _music_loop looping_pwaa/PWAA - 03 - Ace Attorney - Court Begins.ogg
+"test"
