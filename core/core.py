@@ -1834,7 +1834,7 @@ class textbox(gui.widget):
                     raise "markup error"
                 varname = x[:x.find("}")][1:]
                 try:
-                    t = u"}"+assets.variables.get(varname,"").replace("{","(").replace("}",")")
+                    t = u"}"+assets.variables.get(varname,"")#.replace("{","(").replace("}",")")
                     t = t+x[x.find("}")+1:]
                     nt[i+1]=t
                 except TypeError:
