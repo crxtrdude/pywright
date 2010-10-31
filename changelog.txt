@@ -10,6 +10,14 @@ PyWright 0.978 (for christmas?)
 *PyWright 0.977: September 21, 2010*
     test scrolls more
     test save/load with after_load change
+    speed control added back to textboxes
+    _last_written_text
+    {$} in text is replaced with formatting intact
+    {spd0} in text will print every single character in one frame, unless speed is changed back
+    textboxes can be "linked" a la aao like so:
+        "Some text to start with, {next}"
+        #change background or character or what have you
+        "{spd0}{$_last_written_text}{spd1}and some more text"
     real3d support
         surf3d to create a rendering surface where mesh will be rendered
         scrolling of mesh to "zoom in"
