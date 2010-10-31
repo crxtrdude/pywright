@@ -770,8 +770,6 @@ set _font_new_resume_size 14""".split("\n"):
                 else:
                     stack[index].obs.append(ob)
             loaded.append(ob)
-        for ob in loaded:
-            ob.after_load()
         keys = stack.keys()
         keys.sort()
         for s in assets.stack[:]:
@@ -783,8 +781,9 @@ set _font_new_resume_size 14""".split("\n"):
             if d:
                 assets.stack.remove(s)
         for k in keys:
-
             assets.stack.append(stack[k])
+        for ob in loaded:
+            ob.after_load()
         self.cur_script.obs.append(saved(text="Game restored",block=False))
         self.cur_script.execute_macro("load_defaults")
     def backup(self,path,save):
@@ -1205,6 +1204,7 @@ class surf3d(sprite):
     def __init__(self,pos,sw,sh,rw,rh):
         self.id_name = "surf3d"
         self.pos = pos
+        self.sw,self.sh=sw,sh
         self.z = 2
         self.pri = -1000
         self.width,self.height = rw,rh
@@ -1230,19 +1230,6 @@ class surf3d(sprite):
 
 class mesh(sprite):
     def __init__(self,meshfile,pos=[0,0],rot=[0,0,0],name="surf3d"):
-        con = None
-        for o in assets.cur_script.obs:
-            if o.id_name==name:
-                con = o
-                break
-        if not con:
-            return
-        self.con = con
-        path = assets.game+"/art/models/"
-        self.ob = ob = con.context.load_object(meshfile,path)
-        ob.trans(z=-100)
-        ob.rot(90,0,0)
-        ob.changed = 1
         self.pos = pos
         self.z = 0
         self.pri = 0
@@ -1251,8 +1238,36 @@ class mesh(sprite):
         self.fail = "none"
         self.examine = False
         self.dz = 0
+        self.rot = [0,0,0]
         self.maxz=0
         self.minz=-150
+        self.meshfile=meshfile
+        self.surfname = name
+        self.changed = 1
+    def load(self,script=None):
+        if not script:
+            script = assets.cur_script
+        print "load mesh",self.meshfile,self.surfname
+        print ([x for x in assets.cur_script.world.all if getattr(x,"id_name",None)==self.surfname])
+        con = None
+        for o in assets.cur_script.world.all:
+            print o
+            if getattr(o,"id_name",None)==self.surfname:
+                print "found o",o
+                con = o
+                break
+        print con
+        if not con:
+            return
+        self.con = con
+        path = assets.game+"/art/models/"
+        print "load object"
+        self.ob = ob = con.context.load_object(self.meshfile,path)
+        print "loaded"
+        print con.context.objects
+        ob.trans(z=-100)
+        ob.rot(90,0,0)
+        ob.changed = 1
     def trans(self,x=0,y=0,z=0):
         if self.dz+z>self.maxz:
             z = self.maxz-self.dz

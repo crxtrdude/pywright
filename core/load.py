@@ -29,6 +29,15 @@ def load(script,olist):
         if "bsprite" in props:
             for k in props["bsprite"]:
                 setattr(o.blink_sprite,k,props["bsprite"][k])
+    if cls == "mesh":
+        print "load mesh",args
+        o = mesh(*args)
+        print "mesh loaded",o
+        def f(o=o,props=props):
+            o.load(script)
+    if cls == "surf3d":
+        print "load surf3d"
+        o = surf3d(*args)
     if cls == "ev_menu":
         items = [evidence(x) for x in props["items"]]
         del props["items"]

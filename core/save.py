@@ -44,6 +44,11 @@ def save(ob):
         oprops["tsprite"] = tsprops
         oprops["bsprite"] = bsprops
         return ["char",[ob.name,ob.hide],oprops]
+    elif isinstance(ob,mesh):
+        cp(["regions"],ob,oprops)
+        return ["mesh",[ob.meshfile],oprops]
+    elif isinstance(ob,surf3d):
+        return ["surf3d",[ob.pos,ob.sw,ob.sh,ob.width,ob.height],oprops]
     elif isinstance(ob,evidence_menu):
         cp(["page","sx","sy","mode","pri","z","item_set"],ob,oprops)
         oprops["items"] = [x.id for x in ob.items]

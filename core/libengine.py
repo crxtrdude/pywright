@@ -341,7 +341,7 @@ class Script(gui.widget):
     save_me = True
     def __init__(self,parent=None):
         self.world = World()
-        
+        self.scene = ""
         #widget stuff
         self.rpos = [0,0]
         self.parent = parent
@@ -412,6 +412,8 @@ class Script(gui.widget):
             try:
                 o,later = load.load(self,o)
             except:
+                import traceback
+                traceback.print_exc()
                 continue
             if o:
                 obs.append(o)
@@ -1429,6 +1431,7 @@ as having a non looping animation play several times, or only playing a portion 
         self.obs.append(s)
     def _mesh(self,command,mname):
         m = mesh(mname)
+        m.load()
         print "made mesh",m
         self.obs.append(m)
     @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
