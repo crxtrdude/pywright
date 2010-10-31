@@ -10,9 +10,6 @@ set _textbox_lines 2
 set _cr_button false
 "text"
 bg courtroomfull
-guilty
-notguilty
-
 bg black stack name=fader
 penalty threat=50
 fade name=fader start=0 end=40 wait
