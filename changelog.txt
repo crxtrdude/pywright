@@ -1,6 +1,22 @@
 (Note: file not intended for word wrapping)
 
+PyWright 0.978 (for christmas?)
+    unification of text macros and wrightscript
+    remap keys
+    bind hotkeys to buttons
+    more debug options
+    more tools
+
 *PyWright 0.977: September 21, 2010*
+    test scrolls more
+    test save/load with after_load change
+    real3d support
+        surf3d to create a rendering surface where mesh will be rendered
+        scrolling of mesh to "zoom in"
+        rotate to rotate mesh
+        clicking on mesh with examine3d and region3d
+        save/load of mesh/surf3d
+    region made an actual command
     autosave: time between saves, saves to keep, dev defined
     test emo/bemo and error conditions
     - Main PyWright startup script executes simultaneously with the menu
@@ -15,7 +31,6 @@
             music_fade_out
         but for more control, you can "set _music_fade" a value from 0 (no volume) to 100 (maximum
             volume according to users volume settings)
-    repeatable code for buttons
     controlanim overload to support delay and individual frame delays
     -getprop, setprop commands added to explicitly get and set properties of objects
         example:
@@ -68,7 +83,7 @@
         "guilty" for standard guilty text and doors
         "guilty_words" for just the words
         "guilty_doors" for just the doors (which clear the scene when they finish)
-    -fixed scroll animations that went further than you told it due to the speed
+    fixed scroll animations that went further than you told it due to the speed
     -new command "gamemenu" to list games in a folder. Use it if your game has a large number
         of cases (10 or more) where the normal case selection screen is a bit hard to navigate. Good
         for demos.
