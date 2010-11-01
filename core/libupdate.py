@@ -130,7 +130,6 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
             mn[n] = d
     cases = {"NEW":[],"UPDATED":[],"INSTALLED":[]}
     for n in an.okeys:
-        print an[n],mn[n]
         if n not in mn:
             status = "NEW"
         elif compare_versions(an[n]["version"],mn[n]["version"])>0:
