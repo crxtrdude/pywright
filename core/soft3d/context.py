@@ -1,6 +1,5 @@
 import os
 import pygame
-import pygame.gfxdraw
 import numpy
 import math
 import random
@@ -16,7 +15,6 @@ LOW = 320,240
 HIGH = 192,120
 s_w,s_h = LOW
 r_w,r_h = 640,480
-pygame.screen = s = pygame.display.set_mode([r_w,r_h],pygame.DOUBLEBUF)
 clock = pygame.time.Clock()
 
 from models import *
@@ -270,6 +268,7 @@ def draw_quad(q,c):
     draw_tri(ul,br,bl,q.texture)
 
 def main():
+    pygame.screen = s = pygame.display.set_mode([r_w,r_h],pygame.DOUBLEBUF)
     softcontext = SoftContext(s_w,s_h,r_w,r_h)
     for fn in os.listdir("."):
         if fn.endswith(".obj"):
