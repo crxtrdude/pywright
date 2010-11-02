@@ -568,7 +568,7 @@ class Script(gui.widget):
             u = uglyarrow()
             self.obs.append(u)
             u.textbox = tbox
-            if assets.variables.get("_statements",[]):
+            if assets.variables.get("_statements",[]) and self.cross=="proceed":
                 statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
                 if statements and (statements[0]["words"] == self.statement) or not self.statement:
                     u.showleft = False
