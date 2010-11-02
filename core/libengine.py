@@ -2655,10 +2655,7 @@ def make_screen():
         assets.sheight = 192*assets.num_screens
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
-    try:
-        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],pygame.RESIZABLE|pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.FULLSCREEN*assets.fullscreen)
-    except:
-        SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen|pygame.DOUBLEBUF)
+    SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen)
     ns = assets.num_screens
     if assets.cur_screen:
         ns = 2
