@@ -937,7 +937,10 @@ class ImgFont(object):
         start = metrics[0]
         starty = max(metrics[2],0)
         edge = min(metrics[4],surf.get_width())
-        self.width[t] = edge+1-start
+        self.width[t] = edge#edge+1-start
+        #FIXME: hack for shorter spaces with pwinternational font, better is to fix the actual font
+        if t==" ":
+            self.width[t] = 3
         self.start[t] = start
         self.colors[t,tuple(color)] = surf
         return surf
