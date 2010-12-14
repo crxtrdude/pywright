@@ -97,15 +97,15 @@ class Resources:
 
 res = Resources("converted/%s"%game_id,temppath="tmp")
 
-if os.path.exists("last.html"):
-    f = open("last.html")
+if os.path.exists("%s.html"%game_id):
+    f = open("%s.html"%game_id)
     html = f.read()
     f.close()
 else:
     f = urllib.urlopen(game_url)
     html = f.read()
     f.close()
-    f = open("last.html","w")
+    f = open("%s.html"%game_id,"w")
     f.write(html)
     f.close()
 
