@@ -30,6 +30,10 @@ game_id = "10711" #My dialogue test case
 #~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
 #~ game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
 #~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
+game_id = "14571" #TAP trial former
+game_id = "18928" #TAP medium
+#game_id = "19233" #TAP latter
+game_id = "21671" #investigation test
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -519,6 +523,41 @@ def AjouterCI(vals,elements):
 def FinDuJeu(vals,elements):
     """Finish the Game"""
     vals["postcode"] = "endscript"
+
+#Investigation
+def CreerLieu(vals,elements):
+    """Create place, just records the name of somewhere"""
+    vals["postcode"] = "label SCENE_NO_%s\n"%elements[0]
+    vals["postcode"] = "label SCENE_%s\n"%elements[1]
+
+def DiscussionEnqueteV2(vals,elements):
+    """List of discussion topics"""
+    #[{0: '8', 1: '11'}, {0: 'Line1', 1: 'Line2'}, {0: '0', 1: '1'}, '', '0']
+    #list of sections to jump to when item is selected
+    #list of labels for topics
+    #list of whether each topic is hidden or not
+    #dont know
+    #dont know
+    topic_jump, topic_label, topic_hide, dn, dn = elements
+    vals["postcode"] = "list\n"
+    for i in range(max(topic_jump.keys())):
+        jumpto = topic_jump[i]
+        label = topic_label[i]
+        hide = topic_label[i]
+        vals["postcode"] += "isnot convo_hidden_%s?\n"%vals['id_num']
+        vals["postcode"] += "li %s label=line_%s"%(label,jumpto)
+    vals["postcode"] += "showlist\n"
+
+def DevoilerConversation(vals,elements):
+    """Reveal hidden discussion topic"""
+    #location id, conversation id
+    #basically, set a variable
+    #location id and/or conversation id might be expressions
+    
+def SeDeplacer(vals,elements):
+    """Move to another scene"""
+    vals["postcode"] = "goto SCENE_NO_%s"%elements[0].split("_")[0]
+    
 
 def apply_event(vals,code):
     func = code[0]
