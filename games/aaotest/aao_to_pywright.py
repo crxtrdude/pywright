@@ -378,7 +378,7 @@ goto %(succeed)s
 
 #GOTO
 def AllerMessage(vals,elements):
-    vals["postcode"] = "goto line_"+elements[0][0]
+    vals["postcode"] = "goto line_"+elements[0]
     
 intromode = False
 def DevoilerIntroLieu(vals,elements):
