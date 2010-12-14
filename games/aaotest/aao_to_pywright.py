@@ -15,7 +15,13 @@ Should build script first, then download and convert art, and use threads for th
 The delay function is not accurate - in AAO it is timed from the start of the message, in pywright
 it is timed from the end. We adjust for this by guessing how long a text line will be printed,
 but this is not very accurate. When you combine delay and a line of text, check that
-the timing works out."""
+the timing works out.
+
+Currently doing one to one mapping of aao investigations, which are a mix of
+standard features and specialized investigation features (different from pywright
+where other than the main menu there are no special features). Later, converting
+to more natural pywright code might be a good idea, such as using the specialized
+menu."""
 
 import os
 from BeautifulSoup import BeautifulSoup
@@ -67,6 +73,7 @@ class Resources:
         self.create_folders()
         self.evidence = open(self.rootpath+"/evidence.txt","w")
         self.intro = open(self.rootpath+"/intro.txt","w")
+        self.presets = open(self.rootpath+"/presets.txt","w")
     def create_folders(self):
         if not os.path.exists(self.temppath):
             os.mkdir(self.temppath)
@@ -77,6 +84,7 @@ class Resources:
     def close(self):
         self.evidence.close()
         self.intro.close()
+        self.presets.close()
     def write_ev_check(self,txt,file):
         f = open(self.rootpath+"/"+file,"w")
         f.write(txt)
@@ -346,7 +354,7 @@ def DevoilerElements(vals,elements):
 
 #Lists
 def RepondreQuestion(vals,elements,amt=3):
-    txt = "list\n"
+    txt = "list noback\n"
     labels = []
     num = amt
     for item in elements:
@@ -370,7 +378,7 @@ def DemanderPreuve(vals,elements):
     needev = textify(elements[1])
     fail = elements[2]
     succeed = textify(elements[3])
-    txt = """present fail=%(fail)s
+    txt = """present noback fail=%(fail)s
 label %(goodev)s
 goto %(succeed)s
 """%{"goodev":"ev"+needev,"succeed":"line_"+succeed,"fail":"line_"+fail}
@@ -477,12 +485,7 @@ def TesterVar(vals,elements):
     vals["postcode"] += code
 def DefinirVar(vals,elements):
     """Define variable"""
-    #~ if elements[1][0].startswith("xpr="):
-        #~ parsemode = "alpha"
-        #~ parse = [""]
-        #~ for c in elements[1][0][4:]:
-            #~ if c.isalpha()
-    vals["postcode"] += "\nsetvar %s %s"%(elements[0][0],elements[1][0])
+    vals["postcode"] += "\nsetvar %s %s"%(elements[0],elements[1])
 def EvaluerCondition(vals,elements):
     """Evalute condition (condition,jump_if_success,jump_if_fail)"""
     condition,succeed,fail = [x[0] for x in elements]
@@ -491,10 +494,10 @@ def EvaluerCondition(vals,elements):
     
 def do_statement(vals):
     if crossexam[0]:
-        print "statement",vals
         vals["precode"] += "\nstatement st_"+vals["id_num"]
         if vals["hidden"]:
             vals["precode"] += " test=aao_st_show_"+vals["id_num"]
+        return True
 
 def AllerCI(vals,elements):
     """Start cross exam statement"""
@@ -514,7 +517,7 @@ def RetourCI(vals,elements):
     
 def AjouterCI(vals,elements):
     """Reveal hidden statement"""
-    reveal_id = elements[0][0]
+    reveal_id = elements[0]
     vals["postcode"] = "set aao_st_show_"+reveal_id+" true"
     
 def FinDuJeu(vals,elements):
@@ -527,6 +530,7 @@ def CreerLieu(vals,elements):
     vals["postcode"] = "label SCENE_NO_%s\n"%elements[0]
     vals["postcode"] += "label SCENE_%s\n"%elements[1]
     vals["postcode"] += "set CURRENT_PLACE SCENE_%s\n"%elements[1]
+    vals["globals"]["current_place"] = elements[0]
 
 def DiscussionEnqueteV2(vals,elements):
     """List of discussion topics"""
@@ -538,11 +542,13 @@ def DiscussionEnqueteV2(vals,elements):
     #dont know
     topic_jump, topic_label, topic_hide, dn, dn = elements
     vals["postcode"] = "list\n"
-    for i in range(max(topic_jump.keys())):
+    for i in range(max(topic_jump.keys())+1):
         jumpto = topic_jump[i]
         label = topic_label[i]
-        hide = topic_label[i]
-        vals["postcode"] += "isnot convo_hidden_%s?\n"%vals['id_num']
+        hide = topic_hide[i]
+        if hide=='1':
+            vals["presets"] = "set convo_hidden_%s_%s true\n"%(vals["globals"]["current_place"],i+1)
+        vals["postcode"] += "isnot convo_hidden_%s_%s?\n"%(vals["globals"]["current_place"],i+1)
         vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
     vals["postcode"] += "showlist\ngoto $CURRENT_PLACE\n"
 
@@ -551,6 +557,7 @@ def DevoilerConversation(vals,elements):
     #location id, conversation id
     #basically, set a variable
     #location id and/or conversation id might be expressions
+    vals["postcode"] = "set convo_hidden_%s_%s false\n"%(elements[0],elements[1])
     
 def SeDeplacer(vals,elements):
     """Show menu to move to another scene"""
@@ -626,9 +633,13 @@ while 1:
 def w(t):
     res.intro.write(t.encode("utf8"))
     res.intro.flush()
-w(u"include evidence")
+def wp(t):
+    res.presets.write(t.encode("utf8"))
+    res.presets.flush()
+w(u"include evidence\ninclude presets")
 had_fg = False
 linked = False
+globals = {}
 for id in sorted(namespace["donnees_messages"].keys()):
     print id
     id_num = str(id)
@@ -638,10 +649,12 @@ for id in sorted(namespace["donnees_messages"].keys()):
                 "precode":"",
                 "pretextcode":"",
                 "postcode":"",
+                "presets":"",
                 "skip":False,
                 "operation":None,
                 "hidden":False,
-                "linked":False}
+                "linked":False,
+                "globals":globals}
     line_attr = namespace["donnees_messages"][id]
     for attr_key in sorted(line_attr.keys()):
         t = line_attr[attr_key]
@@ -685,10 +698,11 @@ for id in sorted(namespace["donnees_messages"].keys()):
             vals["hidden"] = int(t)
     if vals["operation"]:
         apply_event(vals,vals["operation"])
-    do_statement(vals)
+    is_statement = do_statement(vals)
+    if vals["hidden"] and not is_statement:
+        vals["precode"] = "isnot aao_st_show_%s?\ngoto line_%s\n"%(id_num,int(id_num)+1)+vals["precode"]
     if vals["skip"]:
-        print "skipping",id_num
-        continue
+        vals["postcode"]+="goto line_%s"%(int(id_num)+1)
     if intromode and vals["text"]:
         vals["text"]+="{next}"
     #A delay from the beginning of text before continuing
@@ -739,6 +753,8 @@ for id in sorted(namespace["donnees_messages"].keys()):
         w(u'\n"%s"'%vals["text"])
     if vals["postcode"]:
         w(u"\n"+vals["postcode"]+u"\n")
+    if vals["presets"]:
+        wp(vals["presets"])
 w(u'\nset _speaking NO_ONE\n"THE END"\n')
 
 for evid in all_evidence:
