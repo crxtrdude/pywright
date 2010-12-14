@@ -2604,7 +2604,7 @@ class listmenu(fadesprite,gui.widget):
         fadesprite.update(self)
         if self.hidden:
             return False
-        if not hasattr(self,"bck") and vtrue(assets.variables.get("_list_back_button","true")):
+        if not hasattr(self,"bck") and vtrue(assets.variables.get("_list_back_button","true")) and not getattr(self,"noback",False):
             self.bck = guiBack()
             self.bck.pos[1] = other_screen(self.bck.pos[1])
             self.bck.pri = 1000
@@ -3433,7 +3433,7 @@ class evidence_menu(fadesprite,gui.widget):
         #assets.cur_script.cross = ""
         #assets.cur_script.instatement = False
     def canback(self):
-        show_back = vtrue(assets.variables.get("_cr_back_button", "true"))
+        show_back = vtrue(assets.variables.get("_cr_back_button", "true")) and not getattr(self,"noback",False)
         if self.mode!="overview" or show_back:
             return True
         return False

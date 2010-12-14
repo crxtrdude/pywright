@@ -150,8 +150,8 @@ char test
     <b>rotate</b> degrees=VALUE speed=VALUE axis=VALUE name=VALUE <i>nowait</i> 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>degrees</td><td>How many degrees to rotate</td><tr><td>speed</td><td>How many degrees to rotate per frame</td><tr><td>axis</td><td>which axis to rotate on, z is the only valid value</td><td>z</td></tr><tr><td>name</td><td>Name a specific object to rotate</td><td>Will try to rotate all objects (not what you might expect)</td></tr><tr><td>nowait</td><td>Continue script while rotation happens</td><td>The script will pause until rotation is finished</td></tr></table><p>Begins an object rotation animation. Will wait for rotation to finish unless
         'nowait' is included.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="scroll"><p>
-    <b>scroll</b> name=VALUE filter=VALUE x=VALUE y=VALUE speed=VALUE <i>last</i> <i>nowait</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Name of object to scroll</td><td>scrolls everything</td></tr><tr><td>filter</td><td>select only objects on the 'top' screen or 'bottom' screen, leave blank for either</td><td>'top'</td></tr><tr><td>x</td><td>amount to scroll horizontally</td><td>0</td></tr><tr><td>y</td><td>amount to scroll vertically</td><td>0</td></tr><tr><td>speed</td><td>pixels per frame to scroll</td><td>1</td></tr><tr><td>last</td><td>select last added object as scroll target</td><tr><td>nowait</td><td>continue script while scrolling</td></table><p>Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
+    <b>scroll</b> name=VALUE filter=VALUE x=VALUE y=VALUE z=VALUE speed=VALUE <i>last</i> <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Name of object to scroll</td><td>scrolls everything</td></tr><tr><td>filter</td><td>select only objects on the 'top' screen or 'bottom' screen, leave blank for either</td><td>'top'</td></tr><tr><td>x</td><td>amount to scroll horizontally</td><td>0</td></tr><tr><td>y</td><td>amount to scroll vertically</td><td>0</td></tr><tr><td>z</td><td>amount to scroll into the screen, only really valid for mesh objects</td><td>0</td></tr><tr><td>speed</td><td>pixels per frame to scroll</td><td>1</td></tr><tr><td>last</td><td>select last added object as scroll target</td><tr><td>nowait</td><td>continue script while scrolling</td></table><p>Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
 (consider moving the viewpoint/camera RIGHT) and positive values for y will move objects UP (moving the viewpoint/camera DOWN) If the
 scroll amount does not divide evenly by the speed, it will still stop at the right place. (In older versions you needed to make sure
 the speed would divide evenly over the distance).</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="shake"><p>
@@ -227,7 +227,9 @@ would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;paddin
     <b>divvar</b> variable amount 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to divide the variable by</td></table><p>Divide a variable by a number. If the variable 'x' were set to 10, the script:
 <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>divvar x 2</pre>
-would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getprop"><p>
+would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gamemenu"><p>
+    <b>gamemenu</b> [destination] fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>destination</td><td>The destination label to move to</td><tr><td>fail</td><td>A label to jump to if the destination can't be found</td></table><p>Can be used to list games in a folder</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getprop"><p>
     <b>getprop</b> variable name=VALUE prop=VALUE 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>name</td><td>The object to get the property from</td><tr><td>prop</td><td>The property to get from the object</td></table><p>Copies the value of some property of an object into a variable</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getvar"><p>
     <b>getvar</b> variable [source variable] 
@@ -321,7 +323,9 @@ folder be the same, and not show a case menu at all.</p></div><br><br><div style
     <b>examine</b> fail=VALUE 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
         based on the spot. Immediately following the examine command, you must use region commands to define where the
-        player can click.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gui"><p>
+        player can click.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="examine3d"><p>
+    <b>examine3d</b> 
+    </p><p>Turn 3d examinations on</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gui"><p>
     <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE <i>hold</i> <i>password</i> run=VALUE [text] 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
 don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
@@ -333,12 +337,13 @@ The four types of gui you can create are:<br><br>* Button - This creates a butto
     <b>li</b> [option] result=VALUE 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>option</td><td>text to display, and if 'result' not given, label to jump to if option is selected</td><tr><td>result</td><td>specifically named label to jump to if this option is chosen</td></table><p>Add an item to the current list. When clicked, PyWright will go to a label either matching the option text, or matching the value of 'result'
         if that was given. Must be used between 'list' and 'showlist' commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="list"><p>
-    <b>list</b> tag 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Tag this list with some name so PyWright can keep track of which list options the player has tried already</td><td>Default is to name the list based on what script it's found in and on what line</td></tr></table><p>Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
+    <b>list</b> tag <i>noback</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Tag this list with some name so PyWright can keep track of which list options the player has tried already</td><td>Default is to name the list based on what script it's found in and on what line</td></tr><tr><td>noback</td><td>No back button will be displayed if this token is included</td></table><p>Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
         they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
-        'goto [tag]' to jump straight to the list without any other labels. To actually build the list requires a series of 'li' commands, and then displaying the list 
+        'goto [tag]' to jump straight to the list without any other labels. If noback is included, then no back button will be displayed, 
+        forcing the player to choose an option. You may not use "noback" as the tag. To actually build the list requires a series of 'li' commands, and then displaying the list 
         will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
-        under 'li' and 'showlist'.
+        under 'li' and 'showlist'. 
 <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
 "What is your favorite food?"<br><br>list faveorite_food
 li hamburger
@@ -364,10 +369,38 @@ exit</pre>
         [scene_name].txt which loads the background and shows the menu. Then, any external script can
         instantly load the proper scene with "script [scene_name]". You can control which options
         are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="present"><p>
-    <b>present</b> fail=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the court record and allows the player to present evidence. After the presentation,
+    <b>present</b> fail=VALUE <i>noback</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr><tr><td>noback</td><td>Don't show back button</td></table><p>Displays the court record and allows the player to present evidence. After the presentation,
         will jump to the label named after the selected evidence tag. If a label for the chosen evidence
-        is not found, will either jump to 'label none', or the value of 'fail'.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="showlist"><p>
+        is not found, will either jump to 'label none', or the value of 'fail'. To disable showing the back
+        button, use the 'noback' token
+        <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+        #add some evidence
+        addev sillyputty
+        addev redherring<br><br>        #show present screen
+        present fail=badpresent<br><br>        #back was pressed
+        "So you don't want to present anything at all?"
+        goto next<br><br>        #silly putty was presented
+        label sillyputty
+        "That's just what I needed."
+        goto next<br><br>        #Something else was presented
+        label badpresent
+        "I don't care about that."<br><br>        label next
+        #show present with no back button
+        present fail=badpresent noback
+        "the code will never get here"
+        label sillyputty
+        "good I needed that"
+        "by the way, I saw you couldn't press the back button"
+        goto next
+        label badpresent
+        "I don't care about that."
+        label next
+        </pre>
+        </p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="region3d"><p>
+    <b>region3d</b> x y width height label 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>x</td><td>x value of rectangular region on the texture</td><tr><td>y</td><td>y value of rectangular region on the texture</td><tr><td>width</td><td>width of rectangular region on texture</td><tr><td>height</td><td>height of rectangular region on texture</td><tr><td>label</td><td>label to jump to when region is clicked</td></table><p>Creates a clickable region on a 3d object by binding a rectangular region of the object's texture to a wrightscript
+        label event. Applies to current 3d object if there is one.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="showlist"><p>
     <b>showlist</b> 
     </p><p>Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
         a series of 'li' commands.</p></div><br><br><a name='sounds'><h2>Category: sounds</h2><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>

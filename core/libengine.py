@@ -2046,13 +2046,15 @@ set [tag]_check: name of a script to run if item is checked by player"""
         """Delete an item from the court record."""
         ids = [x.id for x in assets.items]
         if ev in ids: del assets.items[ids.index(ev)]
-    @category([VALUE("tag","Tag this list with some name so PyWright can keep track of which list options the player has tried already","Default is to name the list based on what script it's found in and on what line")],type="interface")
-    def _list(self,command,tag=None):
+    @category([VALUE("tag","Tag this list with some name so PyWright can keep track of which list options the player has tried already","Default is to name the list based on what script it's found in and on what line"),
+                    TOKEN("noback","No back button will be displayed if this token is included")],type="interface")
+    def _list(self,command,tag=None,noback=False):
         """Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
         they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
-        'goto [tag]' to jump straight to the list without any other labels. To actually build the list requires a series of 'li' commands, and then displaying the list 
+        'goto [tag]' to jump straight to the list without any other labels. If noback is included, then no back button will be displayed, 
+        forcing the player to choose an option. You may not use "noback" as the tag. To actually build the list requires a series of 'li' commands, and then displaying the list 
         will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
-        under 'li' and 'showlist'.
+        under 'li' and 'showlist'. 
 {{{
 "What is your favorite food?"
 
@@ -2074,9 +2076,17 @@ label hamburger?
 "Yes, that is correct. Don't be timid."
 exit}}}
 """
+        if tag == "noback":
+            tag = None
+            noback = "noback"
         if tag:
             assets.lists[tag] = assets.lists.get(tag,{})
-        self.obs.append(listmenu(tag))
+        lm = listmenu(tag)
+        if noback=="noback":
+            lm.noback = True
+        if noback and noback != "noback":
+            raise script_error("Unknown token '%s'"%noback)
+        self.obs.append(lm)
     @category([COMBINED("option","text to display, and if 'result' not given, label to jump to if option is selected"),
     KEYWORD('result','specifically named label to jump to if this option is chosen')],type="interface")
     def _li(self,command,*label):
@@ -2142,11 +2152,47 @@ exit}}}
         if name and not any and vtrue(assets.variables.get("_debug","false")):
             print "error"
             raise missing_object("Delete: cannot find "+name)
-    @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
+    @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none"),
+    TOKEN("noback","Don't show back button")],type="interface")
     def _present(self,command,*args):
         """Displays the court record and allows the player to present evidence. After the presentation,
         will jump to the label named after the selected evidence tag. If a label for the chosen evidence
-        is not found, will either jump to 'label none', or the value of 'fail'."""
+        is not found, will either jump to 'label none', or the value of 'fail'. To disable showing the back
+        button, use the 'noback' token
+        {{{
+        #add some evidence
+        addev sillyputty
+        addev redherring
+        
+        #show present screen
+        present fail=badpresent
+        
+        #back was pressed
+        "So you don't want to present anything at all?"
+        goto next
+        
+        #silly putty was presented
+        label sillyputty
+        "That's just what I needed."
+        goto next
+        
+        #Something else was presented
+        label badpresent
+        "I don't care about that."
+        
+        label next
+        #show present with no back button
+        present fail=badpresent noback
+        "the code will never get here"
+        label sillyputty
+        "good I needed that"
+        "by the way, I saw you couldn't press the back button"
+        goto next
+        label badpresent
+        "I don't care about that."
+        label next
+        }}}
+        """
         self.statement = ""
         self.cross = "proceed"
         ob = evidence_menu(assets.items)
@@ -2155,6 +2201,8 @@ exit}}}
                 k,v = a.split("=",1)
                 if k == "fail":
                     ob.fail = v
+            elif a=="noback":
+                ob.noback = True
         addob(ob)
         self.buildmode = False
     @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")

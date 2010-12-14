@@ -1,0 +1,24 @@
+list noback
+li why can't I go back? result=x
+showlist
+
+label x
+"Because you cannot."
+
+list something error
+"Oops, error"
+
+list something noback
+li still can't go back... result=y
+showlist
+
+label y
+"nope"
+
+list normal
+li a result=z
+li b result=z
+li c result=z
+showlist
+label z
+"Good you can go back."
