@@ -391,29 +391,29 @@ def DevoilerLieu(vals,elements):
     
 #Click position in an image
 def PointerImage(vals,elements):
-    def g_v(x):
-        if hasattr(x,"keys"):
-            return g_v(x[0])
-        return x
-    url = g_v(elements[0])
-    x1 = g_v(elements[1])
-    y1 = g_v(elements[2])
-    x2 = g_v(elements[3])
-    y2 = g_v(elements[4])
-    w = int(x2)-int(x1)
-    h = int(y2)-int(y1)
-    fail = g_v(elements[5])
-    success = g_v(elements[6])
+    url = elements[0]
+    xes = elements[1]
+    yes = elements[2]
+    x2s = elements[3]
+    y2s = elements[4]
+    successes = elements[6]
+    fail = elements[5]
     img = bg(url)
+    def make_region(x1,y1,x2,y2,success):
+        w = int(x2)-int(x1)
+        h = int(y2)-int(y1)
+        return "region %d %d %d %d line_%s\n"%(x1,y1,w,h,success)
+    regions = ""
+    if xes:
+        for i in range(max(xes.keys())):
+            regions += make_region(xes[i],yes[i],x2s[i],y2s[i],successes[i])
     vals["postcode"] = """bg %(image)s
 examine hide
-region %(x1)d %(y1)d %(w)d %(h)d good
+%(regions)s
 
-label good
-goto %(success)s
 label none
 goto %(fail)s
-"""%{"image":img,"x1":int(x1),"y1":int(y1),"w":w,"h":h,"fail":"line_"+fail,"success":"line_"+success}
+"""%{"image":img,"fail":"line_"+fail,"regions":regions}
 #Click position in an image
 
 
