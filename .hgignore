@@ -2,3 +2,13 @@ glob:*.pyc
 glob:*.pyo
 glob:.svn/*
 glob:last
+glob:0.95Patch/*
+glob:*.zip
+glob:0.970/*
+glob:0.974/*
+glob:PyWright.src/*
+glob:PyWright/*
+glob:PyWright_t/*
+glob:build/*
+glob:core/cache/*
+glob:scriptdist/*
