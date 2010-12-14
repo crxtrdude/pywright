@@ -544,7 +544,7 @@ def DiscussionEnqueteV2(vals,elements):
         hide = topic_label[i]
         vals["postcode"] += "isnot convo_hidden_%s?\n"%vals['id_num']
         vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
-    vals["postcode"] += "showlist\n"
+    vals["postcode"] += "showlist\ngoto $CURRENT_PLACE\n"
 
 def DevoilerConversation(vals,elements):
     """Reveal hidden discussion topic"""
