@@ -526,6 +526,7 @@ def CreerLieu(vals,elements):
     """Create place, just records the name of somewhere"""
     vals["postcode"] = "label SCENE_NO_%s\n"%elements[0]
     vals["postcode"] += "label SCENE_%s\n"%elements[1]
+    vals["postcode"] += "set CURRENT_PLACE SCENE_%s\n"%elements[1]
 
 def DiscussionEnqueteV2(vals,elements):
     """List of discussion topics"""
@@ -552,8 +553,17 @@ def DevoilerConversation(vals,elements):
     #location id and/or conversation id might be expressions
     
 def SeDeplacer(vals,elements):
-    """Move to another scene"""
-    vals["postcode"] = "goto SCENE_NO_%s"%elements[0].split("_")[0]
+    """Show menu to move to another scene"""
+    items = ""
+    for e in elements:
+        scid,scname = e.split("_",1)
+        items += "li %s result=SCENE_NO_%s\n"%(scname,scid)
+    vals["postcode"] = """
+    list
+    %(items)s
+    showlist
+    goto $CURRENT_PLACE
+    """%{"items":items}
     
 
 def apply_event(vals,code):
