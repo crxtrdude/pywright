@@ -368,7 +368,7 @@ def ChoixEntre4(vals,elements):
 #Present single
 def DemanderPreuve(vals,elements):
     needev = textify(elements[1])
-    fail = textify(elements[2])
+    fail = elements[2]
     succeed = textify(elements[3])
     txt = """present
 label %(goodev)s
