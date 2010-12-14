@@ -370,11 +370,10 @@ def DemanderPreuve(vals,elements):
     needev = textify(elements[1])
     fail = elements[2]
     succeed = textify(elements[3])
-    txt = """present
+    txt = """present fail=%(fail)s
 label %(goodev)s
 goto %(succeed)s
-label none
-goto %(fail)s"""%{"goodev":"ev"+needev,"succeed":"line_"+succeed,"fail":"line_"+fail}
+"""%{"goodev":"ev"+needev,"succeed":"line_"+succeed,"fail":"line_"+fail}
     vals["postcode"] = txt
 
 #GOTO
@@ -402,10 +401,11 @@ def PointerImage(vals,elements):
     def make_region(x1,y1,x2,y2,success):
         w = int(x2)-int(x1)
         h = int(y2)-int(y1)
-        return "region %d %d %d %d line_%s\n"%(x1,y1,w,h,success)
+        print x1,y1,w,h,success
+        return "region %s %s %s %s line_%s\n"%(x1,y1,w,h,success)
     regions = ""
     if xes:
-        for i in range(max(xes.keys())):
+        for i in range(max(xes.keys())+1):
             regions += make_region(xes[i],yes[i],x2s[i],y2s[i],successes[i])
     vals["postcode"] = """bg %(image)s
 examine hide
@@ -545,7 +545,7 @@ def DiscussionEnqueteV2(vals,elements):
         label = topic_label[i]
         hide = topic_label[i]
         vals["postcode"] += "isnot convo_hidden_%s?\n"%vals['id_num']
-        vals["postcode"] += "li %s label=line_%s"%(label,jumpto)
+        vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
     vals["postcode"] += "showlist\n"
 
 def DevoilerConversation(vals,elements):
