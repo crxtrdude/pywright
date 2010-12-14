@@ -2909,7 +2909,7 @@ class examine_menu(sprite,gui.widget):
         self.regions = []
         self.mouse = pygame.Surface([10,10])
         self.mouse.fill([100,100,100])
-        self.selected = ["none"]
+        self.selected = [None]
         self.mx,self.my = sw/2,sh/2
         self.check = assets.open_art("general/check"+assets.appendgba,key=[255,0,255])[0]
         self.hide = hide
@@ -2966,7 +2966,7 @@ class examine_menu(sprite,gui.widget):
         self.regions.append(reg)
         self.highlight()
     def highlight(self):
-        self.selected = ["none"]
+        self.selected = [None]
         for reg in self.regions:
             if self.mx>reg[0]+self.getoffset() and self.my>reg[1] and \
             self.mx<reg[0]+self.getoffset()+reg[2] and self.my<reg[1]+reg[3]:
@@ -2993,7 +2993,7 @@ class examine_menu(sprite,gui.widget):
                 pygame.draw.rect(dest,col,[[self.mx-5,my-5],[10,10]],1)
         if vtrue(assets.variables.get("_examine_showbars", "true")):
             dest.blit(self.fg,[0,other_screen(0)])
-        if self.selected != ["none"] and not self.hide:
+        if self.selected != [None] and not self.hide:
             dest.blit(self.check,[sw-self.check.get_width()+3,other_screen(sh-self.check.get_height())])
         if vtrue(assets.variables.get("_debug","false")):
             x = int(assets.variables.get("_examine_offsetx",0))
@@ -3071,7 +3071,11 @@ class examine_menu(sprite,gui.widget):
         print self.selected,self.regions,self.mx,self.my
         assets.variables["_examine_clickx"] = str(self.mx)
         assets.variables["_examine_clicky"] = str(self.my)
-        assets.cur_script.goto_result(self.selected[-1],backup=self.fail)
+        print "FAIL ",self.fail
+        go = self.selected[-1]
+        if go == None:
+            go = self.fail
+        assets.cur_script.goto_result(go,backup=self.fail)
         self.die()
         self.kill = 1
     def k_space(self):
