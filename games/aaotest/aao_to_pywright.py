@@ -525,7 +525,7 @@ def FinDuJeu(vals,elements):
 def CreerLieu(vals,elements):
     """Create place, just records the name of somewhere"""
     vals["postcode"] = "label SCENE_NO_%s\n"%elements[0]
-    vals["postcode"] = "label SCENE_%s\n"%elements[1]
+    vals["postcode"] += "label SCENE_%s\n"%elements[1]
 
 def DiscussionEnqueteV2(vals,elements):
     """List of discussion topics"""
