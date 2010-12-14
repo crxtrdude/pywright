@@ -408,11 +408,8 @@ def PointerImage(vals,elements):
         for i in range(max(xes.keys())+1):
             regions += make_region(xes[i],yes[i],x2s[i],y2s[i],successes[i])
     vals["postcode"] = """bg %(image)s
-examine hide
+examine hide fail=%(fail)s
 %(regions)s
-
-label none
-goto %(fail)s
 """%{"image":img,"fail":"line_"+fail,"regions":regions}
 #Click position in an image
 
