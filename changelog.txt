@@ -1,6 +1,7 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.980: September 21, 2010*
+*PyWright 0.980/0.981: September 21, 2010*
+    (0.981 fixed some last minute bugs with mac, the updater, and cross examination arrows)
 
     -large collection of random examples included with update, demonstrating (badly) features from the
             last few versions
