@@ -2441,7 +2441,7 @@ class DebugScript(Script):
             assets.variables["_speaking"] = c
             self.char_cache[tuple(args)] = c
         if command == "textbox":
-            txt = " ".join(args).replace("{n}","\n")
+            txt = " ".join(args[1:]).replace("{n}","\n")
             tb = textbox(txt)
             tb.can_skip = True
             #tb.skipping = len(txt)
@@ -2471,7 +2471,17 @@ class DebugScript(Script):
             self.update()
         errors = [o for o in self.obs if isinstance(o,error_msg)]
         return errors
-    def debug_game(self,scope="current"):
+    def run_lines(self,scene,lines,func):
+        output = []
+        for i,line in enumerate(lines):
+            if func(line):
+                output.append((scene,i+1,line))
+        return output
+    def _no_quote(self,line):
+        line = line.strip()
+        if line.startswith('"') and not line.endswith('"'):
+            return True
+    def debug_game(self,scope="current",method="run"):
         scenes = [assets.cur_script.scene]
         if scope == "all":
             scenes = os.listdir(assets.game)
@@ -2480,16 +2490,22 @@ class DebugScript(Script):
             if scope=="all" and not scene.endswith(".txt"):
                 continue
             print scene
-            self.world.all = []
-            self.init(scene)
-            #self.scriptlines = assets.cur_script.scriptlines
-            assets.stack.append(self)
-            errors = self.run_it()
-            print errors
-            aerrors.extend(errors)
+            if method=="run":
+                self.world.all = []
+                self.init(scene)
+                #self.scriptlines = assets.cur_script.scriptlines
+                assets.stack.append(self)
+                errors = self.run_it()
+                print errors
+                aerrors.extend(errors)
+            elif method=="quote":
+                lines = assets.raw_lines(scene,use_unicode=True)
+                aerrors.extend(self.run_lines(scene,lines,self._no_quote))
+        print aerrors
         if scope == "current":
             for err in reversed(aerrors):
                 assets.cur_script.obs.append(err)
+assets.DebugScript = DebugScript
         
 class choose_game(gui.widget):
     def __init__(self,*args,**kwargs):
@@ -3089,12 +3105,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key == pygame.K_F7 and assets.game!="menu":
                     load_game_menu()
                     #assets.load_game(assets.game)
-                if e.type==pygame.KEYDOWN and\
-                e.key == pygame.K_F9:
-                    print "debugging game"
-                    s = DebugScript()
-                    s.debug_game()
-                    print "finished"
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)

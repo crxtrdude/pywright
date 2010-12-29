@@ -135,7 +135,39 @@ class settings_menu(gui.pane):
                 assets.cur_script.execute_line(self.go_script)
                 self.close()
         line.children.append(myb(None,"execute"))
-        cb = line.children[-1]
+        
+        line = gui.pane([0,50],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        class myb(gui.button):
+            def click_down_over(s,*args):
+                print "debugging game"
+                s = assets.DebugScript()
+                s.debug_game("current","run")
+                print "finished"
+        line.children.append(myb(None,"Debug current script"))
+        
+        line = gui.pane([0,70],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        class myb(gui.button):
+            def click_down_over(s,*args):
+                print "debugging game"
+                s = assets.DebugScript()
+                s.debug_game("all","run")
+                print "finished"
+        line.children.append(myb(None,"Debug entire game (slow)"))
+        
+        line = gui.pane([0,90],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        class myb(gui.button):
+            def click_down_over(s,*args):
+                print "debugging game"
+                s = assets.DebugScript()
+                s.debug_game("all","quote")
+                print "finished"
+        line.children.append(myb(None,"Find quote errors"))
     def saves(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
