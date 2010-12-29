@@ -786,6 +786,7 @@ set _font_new_resume_size 14""".split("\n"):
             ob.after_load()
         self.cur_script.obs.append(saved(text="Game restored",block=False))
         self.cur_script.execute_macro("load_defaults")
+        self.cur_script.execute_macro("init_court_record_settings")
     def backup(self,path,save):
         if not os.path.exists(path+"/"+save):
             return
@@ -872,7 +873,9 @@ set _font_new_resume_size 14""".split("\n"):
         print "set game to",assets.game
         assets.cur_script.init(script)
         assets.cur_script.execute_macro("init_defaults")
-
+        self.cur_script.execute_macro("font_defaults")
+        self.cur_script.execute_macro("load_defaults")
+        self.cur_script.execute_macro("init_court_record_settings")
         
 def vtrue(variable):
     if variable.lower() in ["on","1","true"]:
@@ -2087,7 +2090,7 @@ class textbox(gui.widget):
             while bracketmatch<0:
                 self.written = "{"+self.written
                 bracketmatch+=1
-            raise script_error("Text macro brackets don't match")
+            raise script_error("Text macro brackets don't match:%s"%repr(self.text))
         num_chars = 0
         if self.next_char==0:
             num_chars = self.speed
@@ -2108,7 +2111,7 @@ class textbox(gui.widget):
                 try:
                     char = self.text[len(self.written)]
                 except IndexError:
-                    raise script_error("Problem with text formatting")
+                    raise script_error("Problem with text formatting:%s"%repr(self.text))
                 self.written+=char
                 if char == "{":
                     addchar = "getcolor"
