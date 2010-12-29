@@ -39,7 +39,7 @@ game_id = "10711" #My dialogue test case
 game_id = "14571" #TAP trial former
 game_id = "18928" #TAP medium
 #game_id = "19233" #TAP latter
-game_id = "21671" #investigation test
+#game_id = "21671" #investigation test
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -375,13 +375,21 @@ def ChoixEntre4(vals,elements):
 
 #Present single
 def DemanderPreuve(vals,elements):
-    needev = textify(elements[1])
+    evtypes = elements[0]
+    evids = elements[1]
     fail = elements[2]
-    succeed = textify(elements[3])
+    gotos = elements[3]
+    gotocode = ""
+    if evids:
+        for i in range(max(evids.keys())+1):
+            evid = "ev%s"%evids[i]
+            if evtypes[i]=="profil":
+                evid+="$"
+            gotocode += "label %s\n"%evid
+            gotocode += "goto line_%s\n"%gotos[i]
     txt = """present noback fail=%(fail)s
-label %(goodev)s
-goto %(succeed)s
-"""%{"goodev":"ev"+needev,"succeed":"line_"+succeed,"fail":"line_"+fail}
+%(gotocode)s
+"""%{"gotocode":gotocode,"fail":"line_"+fail}
     vals["postcode"] = txt
 
 #GOTO
@@ -542,14 +550,15 @@ def DiscussionEnqueteV2(vals,elements):
     #dont know
     topic_jump, topic_label, topic_hide, dn, dn = elements
     vals["postcode"] = "list\n"
-    for i in range(max(topic_jump.keys())+1):
-        jumpto = topic_jump[i]
-        label = topic_label[i]
-        hide = topic_hide[i]
-        if hide=='1':
-            vals["presets"] = "set convo_hidden_%s_%s true\n"%(vals["globals"]["current_place"],i+1)
-        vals["postcode"] += "isnot convo_hidden_%s_%s?\n"%(vals["globals"]["current_place"],i+1)
-        vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
+    if topic_jump:
+        for i in range(max(topic_jump.keys())+1):
+            jumpto = topic_jump[i]
+            label = topic_label[i]
+            hide = topic_hide[i]
+            if hide=='1':
+                vals["presets"] = "set convo_hidden_%s_%s true\n"%(vals["globals"]["current_place"],i+1)
+            vals["postcode"] += "isnot convo_hidden_%s_%s?\n"%(vals["globals"]["current_place"],i+1)
+            vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
     vals["postcode"] += "showlist\ngoto $CURRENT_PLACE\n"
 
 def DevoilerConversation(vals,elements):
