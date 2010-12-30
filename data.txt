@@ -1,0 +1,8 @@
+version 0.981
+version_date 11/11/2010
+version_notes some interface stuff and effects
+author saluk
+website http://pywright.dawnsoft.org/
+title PyWright Game Engine
+icon art/general/pwicon.png
+category engine

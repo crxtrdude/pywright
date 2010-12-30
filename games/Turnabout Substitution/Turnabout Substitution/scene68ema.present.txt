@@ -1,0 +1,67 @@
+#-version-1
+present
+label top
+bg ts/2cemetery
+menu scene68ema
+
+#PRESENT ALARM
+label caralarm
+char Ema
+char Apollo hide
+"You gotta get a lot of calls from{n}alarms... Why was this{n}one so important?"
+char Ema e=hair
+"Well, not many people have that{n}particular alarm installed,{n}it's pretty expensive..."
+"{enormal}But it's so expensive because{n}it's state-of-the-art."
+"{eglasses}Each alarm system has the ID{n}of its owner registered{n}in police data."
+"So when the alarm went off, we saw{n}that it was from Chambers' car,{n}and rushed to see what happened."
+"{eprofile}It's a good thing we did, or{n}Erlenmeyer might have{n}escaped again..."
+char Apollo hide
+"{c099}(...In other words, if it was{n}someone like me,{n}no one would've cared.)"
+goto top
+
+#PRESENT JUDGE
+label judgeupdated$
+char Ema e=profile
+"...I can't believe he's dead."
+"I mean, just the other day he was in{n}the defendant's chair, sweating{n}bullets, wishing he could go home..."
+"{emu}and now he's gone."
+"{ehair}I remember when I first met him...{n}If you've studied Mr. Wright, you{n}have to know about SL-9."
+"I first met him in that case.{n}Everyone was trying to{n}get me to talk..."
+"...but he was the only one{n}who cared about me, instead{n}of what I knew."
+"{eprofile}He may not be the most competent{n}judge I've met, but he's {n}definintely the nicest."
+"{emu}...I don't have time to reminiscence.{n}I need to focus on the case, to put{n}the one who killed him behind bars!{f}"
+goto top
+
+#PRESENT ERLENMEYER
+label erlenmeyerupdated$
+char Apollo hide
+"From the beginning, no one could tell{n}how severe his mental condition{n}was, or even if he had one at all."
+"I've talked to him, and I{n}could barely understand{n}what he was saying."
+"But yesterday you said he was able{n}to understand Strings' plan."
+"And now that another murder{n}has been committed, what's{n}your opinion?"
+char Ema e=hair
+"He's smarter than I{n}gave him credit for."
+"He had time to plan out his previous{n}crimes, and all he had to do to{n}escape was follow Strings' order."
+"{eprofile}But here, the crime wasn't{n}premeditated..."
+"He had to think on his feet to use{n}Chambers' own car and kill him in{n}the quickest way possible."
+"{euninterested}If he hadn't fainted, he could've{n}dumped the body somewhere{n}and escaped."
+char Apollo hide
+"But couldn't we come across the{n}exact same scene if Erlenmeyer was{n}innocent and just framed?"
+char Ema e=won't-share
+"There's too much evidence against him."
+"There's no way you'll be able to use{n}his insanity to prove his innocence,{n}like what happened in his first trial."
+char Apollo hide
+"{c099}(Then I'm going to have to find{n}{c900}contradictions{c099} in the evidence...)"
+goto top
+
+#PRESENT NOTHING
+label none
+char Ema e=snacks
+"{c090}{sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH"
+char Ema e=won't-share
+"You know, I'm not actually{n}munching. I'm just pretending{n}because I don't want to talk to you."
+"...About this."
+char Apollo hide
+"{c099}(Thanks a lot. You gave a whole{n}new meaning to the word helpful.)"
+"{c099}(This conversation sounds familiar.)" #MC: You said to add nothing, but I couldn't resist.
+goto top

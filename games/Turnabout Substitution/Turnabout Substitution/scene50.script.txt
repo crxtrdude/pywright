@@ -1,0 +1,55 @@
+#-version-1
+pause 60 script
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Fisher
+set _judge G.Strings
+set _helper Rhea
+startcourt
+judge
+"Done."
+helper
+emo aide name=hc
+"Now, about that golden plate..."
+"The complete message is:"
+"{sfx/Dunnn.ogg}{c090}{center}480 is real putsch! Hes a culprits!"
+pause 60 script
+"It is an anagram for Pleistarchus,{n}who was Leonidas's son."
+pause 60 script
+"But that's not all: the bust{n}of Leonidas was fashioned to look{n}exactly like Paul Strings."
+"{sfx/Ding.ogg}{f}Don't you see?"
+pause 60 script
+"The message on that plate..."
+pause 30 script
+"It refers to {sfx/Key.ogg}{f}{c900}you{c}, Your Honor."
+judge
+"Yes, I was already aware of that."
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+helper
+emo aideserious name=hc
+"{sfx/Key.ogg}{f}Precisely."
+"That means you {f}knew the{n}phone number was 480."
+"And that means you were {sfx/Dunnn.ogg}{f}{s 20 20}{c900}covering{n}for your father{c} just now!"
+"You seem like a bright young{n}man with a good imagination."
+"Can you imagine how the media{n}would react to that juicy tidbit?"
+"Can you imagine what that{n}would mean for your career?"
+judge
+emo embarrassed name=jc
+"..."
+helper
+emo aideserious name=hc
+"So here's what you'll do:"
+"You'll drop the charges{n}against Apollo for the search."
+"You'll issue an arrest warrant{n}for Paul Strings and a search{n}team for Robert Erlenmeyer."
+mus
+judge
+emo embarrassed name=jc
+"..."
+"...{p30}{sfx/Ding.ogg}{f}Very well."
+"Let's turn the cameras back on..."
+delete
+script scene51

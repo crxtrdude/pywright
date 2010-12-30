@@ -1,0 +1,64 @@
+set _debug true
+macro clean
+delete name=rb
+delete name=lb
+delete name=pushb
+delete name=pullb
+endmacro
+
+
+bg 3dgrid z=-10
+#high quality
+surf3d 32 16 192 120 192 120
+#low quality
+#surf3d 32 16 96 60 192 120 
+mesh m16.obj
+fg fg3d z=1
+
+label buttons
+gui Button right x=180 y=140 name=rb hold rotate
+gui Button left x=50 y=140 name=lb hold rotate
+gui Button push x=0 y=50 name=pushb hold zoom
+gui Button pull x=0 y=110 name=pullb hold zoom
+
+label regions
+region3d 122 256 55 199 handle
+region3d 178 239 88 215 handle
+region3d 277 357 25 77 handle
+region3d 0 0 512 512 main
+examine3d
+
+label wait
+print "waiting"
+gui Wait
+
+label right
+rotate name=mesh degrees=10 speed=5 axis=y
+goto n
+
+label left
+rotate name=mesh degrees=-10 speed=5 axis=y
+goto n
+
+label push
+scroll name=mesh z=-10 speed=10
+goto n
+
+label pull
+scroll name=mesh z=10 speed=10
+goto n
+
+label handle
+clean
+"The handle has no fingerprints"
+goto buttons
+
+label main
+clean
+"It's an m16"
+goto buttons
+
+
+label n
+clean
+goto buttons

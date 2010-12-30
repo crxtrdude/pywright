@@ -1,0 +1,53 @@
+label lobby
+bg lobby
+localmenu examine=true move=true talk=true present=true
+
+label move
+goto a
+label examine
+goto b
+label talk
+goto c
+label present
+goto d
+
+label a
+list movements
+li externalscene
+li place 1
+li place 2
+showlist
+label externalscene
+menu scene6 examine=false
+label none
+goto lobby
+
+label b
+examine
+region 0 0 50 50 x
+region 260 0 50 50 y
+label x
+"x"
+label y
+"y"
+label none
+goto lobby
+
+label c
+set _list_bg_image general/logobw
+set _menu_fade_level 0
+list talking
+li line 1
+li line 2
+showlist
+label none
+set _list_bg_image general/black
+set _menu_fade_level 50
+goto lobby
+
+label d
+present
+label bus
+"you presented the bus"
+label none
+goto lobby

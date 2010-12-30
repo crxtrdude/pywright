@@ -1,0 +1,87 @@
+#-version-1
+clear
+nt
+pause 120
+"{c090}{center}{type}September 13, 10:00 AM{n}District Court{n}Courtroom No. 6"
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+bg aj/judgeseat
+char Udgey e=normal nametag=Judge
+"Court is now in session for the{n}trial of Robert Erlenmeyer."
+bg aj/prosecutionseat
+fg pbench
+char Poole e=normal
+"The prosecution is still ready,{n}Your Honor."
+bg aj/defenseseat
+fg dbench
+char Snow e=normal
+"The defense is ready, Your{n}Honor."
+bg aj/judgeseat
+char Udgey e=normal nametag=Judge
+"Yesterday, the defense chose to{n}change its plea from not guilty to{n}insanity due to"
+"conclusive evidence presented by{n}the prosecution."
+"{ewarning}Miss Snow, please explain the{n}justification for this sudden change{n}in the defense's plea."
+bg aj/defenseseat
+fg dbench
+char Snow e=normal
+"Yes, Your Honor. My client, Robert{n}Erlenmeyer, has been examined by{n}various well-respected psychiatrists"
+"in their respective fields{n}since his arrest."
+"The majority concluded that he{n}suffers from psychosis, which is to{n}say, a loss of contact from reality,"
+"exhibiting all symptoms:{n}hallucinations, delusional beliefs,{n}and incoherent speech."
+"His testimony yesterday did{n}nothing but corroborate this{n}diagnosis."
+char Snow e=normal
+"Therefore, it is a certain fact that{n}Erlenmeyer is unable to distinguish{n}reality from fiction,"
+"and therefore he cannot be{n}held responsible for his actions.{p25}{next}"
+fg ObjectionAnimPoole
+pause 5 script
+bg aj/prosecutionseat
+fg pbench
+char Poole e=serious
+"Your Honor, the evidence presented{n}by Miss Snow is now outdated."
+"The same psychiatrists were{n}asked to conduct various tests{n}just yesterday."
+"The purpose of these tests was to{n}determine whether Erlenmeyer was{n}able to distinguish between"
+"what he did and did not do."
+"The results of these tests can{n}be found in his updated{n}psychological profile."
+bg aj/judgeseat
+char Udgey e=normal nametag=Judge
+"The court accepts this profile{n}into evidence."
+nt
+"{sfx/evidence.wav}{c099}Psychological Profile added{n}to the Court Record."
+bg aj/prosecutionseat
+fg pbench
+char Poole e=serious
+"While these experts confirmed{n}that Erlenmeyer is indeed psychotic,"
+"the tests repeatedly showed that{n}he is not only capable of making{n}decisions,"
+"but also aware of his own actions.{n}Therefore, it is Robert Erlenmeyer{n}himself, and not his mental state,"
+"that is responsible for the{n}crimes he committed."
+"Erlenmeyer knew what he was doing,{n}and these horrible crimes are{n}entirely his responsibility."
+"For this, he clearly deserves{n}to receive the death penalty."
+bg aj/judgeseat
+char Udgey e=normal nametag=Judge
+"Well, this does seem to rather{n}conclusively prove{n}Erlenmeyer's guilt,"
+"as well as negate the{n}effectiveness of the{n}insanity plea.{p25}{next}"
+mus
+fg ObjectionAnimSnow
+pause 5 script
+bg aj/defenseseat
+fg dbench
+char Snow e=objection-pointing
+"Your Honor, I object to the{n}{f}validity of this evidence."
+"I have reason to believe that the{n}psych profile presented by the{n}prosecution has been {f}falsified!"
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+bg aj/prosecutionseat
+fg pbench
+char Poole e=serious
+"{sfx/sfx general/sfx-shock2.wav}{f}{s}WHAT!?"
+bg aj/judgeseat
+char Udgey e=surprised nametag=Judge
+"{sfx/sfx general/sfx-shock2.wav}{f}{s}WHAT!?{sfx/jury.ogg}"
+bg aj/defenseseat
+fg dbench
+char Snow e=objection
+"The defense demands that the{n}trial be stopped so that an{n}investigation can be made into"
+"how this profile was obtained."
+bg black fade
+
+script scene62

@@ -1,0 +1,16 @@
+#-version-1
+present
+label top
+bg ts/1stringsoffice
+menu scene16strings
+
+label none
+char Strings
+char Apollo hide
+"Mr.Chief Justice! What do you{n}know about this evidence?
+char Strings
+"Well, as for me, all I know{n}is that I know nothing...{n}Socrates once said."
+char Apollo hide
+"{c099}(Yeah, and maybe he wouldn't{n}have been sentenced to death{n}if he hadn't been so clueless.)"
+char nothing
+goto top

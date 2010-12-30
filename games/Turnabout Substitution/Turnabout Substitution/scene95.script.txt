@@ -1,0 +1,195 @@
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+defense
+char Apollo
+"{defense}{enormal-nobrac}{sfx /Key.ogg}{f}It's the motive."
+"This means Erlenmeyer didn't{n}specifically plan to meet and{n}kill Chambers."
+"{f}Why would Erlenmeyer do so{n}once he got to the cemetery?"
+prosecutor
+char Poole
+"{prosecutor}He's a {sfx/Smack.ogg}{s 8 8}serial killer: he{n}doesn't need a motive to{n}kill anyone."
+"Of course, if there is {sfx/Key.ogg}{f}anyone{n}Robert Erlenmeyer has a motive to{n}kill, it's Judge Chambers."
+judge
+char G.Strings
+"{judge}{enormal}Yes, that explanation{n}works quite nicely."
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac(blink)}{c099}(Erlenmeyer killed Judge because{n}he sentenced him to prison...)" 
+"{enormal-nobrac}{c099}(That's the motive we've all assumed{n}this time, but does it really work?)"
+list doesitwork
+li It Works
+li It Doesn't Work
+showlist
+scene95
+label It Works
+defense
+char Apollo
+"{defense}{enormal-nobrac}{sfx /Ding.ogg}{f}Y-Yeah, I guess it{n}works..."
+"... I thought there was something{n}wrong with the prosecution's{n}theory, but I guess there wasn't..."
+helper
+char Rhea e=aideserious
+"{helper}{sfx /Smack.ogg}{s}Polly, you're agreeing{n}with Poole?!"
+"Are you trying to lose{n}this trial?"
+"Object first, think later!"
+"{enormal}Isn't that how your mentor{n}used to do it?"
+char Apollo hide
+"{c099}{sfx /Ding.ogg}{f}(A-{p15}Ah, right!)"
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}{s 8 8}Sorry, Your Honor, but I meant to{n}say that there is {sfx/Shing.ogg}{f}=something{n}wrong with the prosecution's theory!"
+"Something {s 8 8}very wrong!"
+judge
+char G.Strings
+"{judge}{eserious}Please make up your mind{n}before you speak, Mr. Justice."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"So, what's wrong with Mrs.{n}Poole's scenario?"
+goto 16list
+label It Doesn't Work
+defense
+char Apollo
+"{defense}{ethinking-nobrac}{sfx /Ding.ogg}{f}No...{p30} That motive might seem logical{n}at first glance, but upon closer{n}inspection it {f}{s 10 10}doesn't work at all!"
+goto 16list
+
+label 16list
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}The idea that Erlenmeyer wished{n}to kill Judge Chambers in an act{n}of revenge..."
+"{enormal-nobrac}{sfx /Ding.ogg}{f}It contradicts an event that{n}happened at a certain {f}{s 8 8}{c900}time {c}and {f}{s 8 8}{c900}place!"
+judge
+char G.Strings
+"{judge}{enormal}{sfx /Ding.ogg}{f}What event are you{n}talking about?"
+label starttothink
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}This event occurred at..."
+set _double_screen_examine_fade false
+set _examine_showbars false
+bg timeline 
+examine hide
+region 63 8 49 48 cell
+scene95
+
+label cell
+clear
+clearcourt
+fg TakeThatAnimApollo
+pause 5 script
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+judge
+char G.Strings
+"{judge}{enormal}I see...{p40}{n}When did this event occur?"
+set chosetime 1
+bg times
+examine hide
+region 5 41 195 34 mornof26
+
+label mornof26
+script scene96
+
+label none
+is chosetime 1 failtimeplace
+clear
+clearcourt
+fg TakeThatAnimApollo
+pause 5 script
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+judge
+char G.Strings
+"{judge}{enormal}I see...{p40}{n}When did this event occur?"
+bg times
+examine hide
+region 0 0 256 192 failtimeplace
+
+
+label failtimeplace
+set chosetime 0
+clear
+clearcourt
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+judge
+char G.Strings
+"{judge}{enormal}What happened at that place and{n}that time...{p90}{n}{eserious}{sfx /Smack.ogg}{s}is completely fine."
+defense
+char Apollo
+"{defense}{esweats-nobrac}{sfx /Shock.ogg}{f}{s 10 10}E-Eh?!"
+prosecutor
+char Poole
+"{prosecutor}It doesn't contradict{n}that motive at all."
+judge
+char G.Strings
+"Bluffing doesn't help your{n}case, Mr. Justice."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"{eserious}Are you sure this event{n}really occurred?"
+defense
+char Apollo
+"{defense}{enormal-nobrac}{sfx /Ding.ogg}{f}Yes, Your Honor!{n}Just give me one more chance!"
+judge
+char G.Strings
+"{judge}{eserious}{p90}...Very well."
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac(blink)}{c099}(C'mon, {s 5 5}think! What event shows{n}Erlenmeyer didn't want to{n}kill Judge?)"
+goto starttothink
+
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

@@ -1,0 +1,131 @@
+#-version-1
+set _list_back_button false
+
+sfx /swoop.wav
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Fisher
+set _judge G.Strings
+set _helper Rhea
+startcourt
+witness
+emo complaining name=wc
+"He rarely talks, and when he does{n}it's just nonsense in a {sfx/Key.ogg}{f}{c900}boring,{n}slow, monotonous voice{c}."
+"The hardest part is{n}{sfx/Ding.ogg}{f}{s 5 5}not falling asleep!"
+delete
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _witness Meekins
+set _judge G.Strings
+set _helper Rhea
+startcourt
+defense
+emo thinking name=dc
+"If we combine the fact that{n}Erlenmeyer had that kind of voice..."
+pause 30 script
+"...Mr. Chambers's vulnerable{n}and gullible personality..."
+pause 30 script
+emo normal name=dc
+"...The fact that he must have been{n}tired from the stress of breaking{n}into the prison,"
+"and since it was late at night..."
+pause 60 script
+emo objects name=dc
+mus 115 - Apollo Justice - Tell the Truth.ogg
+set _music_loop 115 - Apollo Justice - Tell the Truthloop.ogg
+"I believe {epointing} Erlenmeyer could have{n}{sfx/Shing.ogg}{f}{s 25 25}{c900}hypnotized{c} Chambers!"
+fg ObjectionAnimPoole
+pause 5 script
+scrollprosecutor
+"That's an extremely farfetched{n}theory. There's {sfx/Bwaaah.ogg}{s 20 20}no way{n}that happened!"
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo handsondesk name=dc
+"I admit it's a long shot, but it's{n}a {sfx/Shing.ogg}{f}{s 15 15}possibility!"
+emo objects name=dc
+"But the {epointing}important part is that{n}it {sfx/Dunnn.ogg}{f}{s 20 20}clears up the contradictions{n}in my explanation!"
+prosecutor
+"{sfx/Slash.ogg}{s 25 25}!"
+sfx /Jury.ogg
+pause 60 script
+judge
+"I must agree with the defense.{n}It's an improbability,{n}but also a possibility."
+defense
+"Continuing what happened{n}that night..."
+emo normal name=dc
+"After Chambers was hypnotized and{n}fell asleep, Erlenmeyer cut himself."
+"He and Fisher then planted the blood{n}to make it appear as if{n}a crime had taken place."
+"Erlenmeyer put on Chambers's{n}uniform to stop the bleeding,{n}removed his wig and mustache,"
+"and then met Meekins{n}on his way out."
+scrollprosecutor
+emo serious name=pc
+"Hmph. You've forgotten one{n}important thing in your{n}theory... this "murder weapon"."
+"If there was no murder that night...{n}{sfx/Key.ogg}{f}{c900}who fired the gun{c}?"
+label whofiredthegun
+set _cr_back_button false
+present
+
+label erlenmeyer$
+set _cr_back_button true
+defense
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"It had to be Robert Erlenmeyer, as{n}there were no fingerprints other than{n}Chambers's on the murder weapon,"
+"and his brother didn't have{n}any gloves on when{n}the police found him."
+"Erlenmeyer was trying to frame{n}Chambers and make it{n}look like a murder,"
+"so he purposely shot the wall{n}near the bed at head-level."
+script scene46
+
+label none
+set _cr_back_button true
+judge
+"That person wasn't even at the{n}crime scene. How could that{n}one be the culprit?"
+defense
+emo sweats name=dc
+"Uh..."
+prosecutor
+"Just give him the penalty{n}and let him try again."
+judge
+"Agreed."
+sfx /Bwaaah.ogg
+penalty -25
+is penalty 0 gameover
+goto whofiredthegun
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

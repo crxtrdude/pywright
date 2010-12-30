@@ -1,0 +1,57 @@
+label top
+bg policehq
+
+list scene70ematalk
+li Facts of the Case
+li Evidence?
+showlist
+menu scene70ema
+
+#TALK 1 FACTS OF THE CASE
+label Facts of the Case
+char Ema
+"For starters, the murder occured{n}this morning at 1 AM."
+char Apollo hide
+"{sfx\Ding.ogg}{c099}(That's the {f}same time Erlenmeyer's{n}prison break happened!)"
+char Ema e=mu
+"Chambers was run over by{n}his own car."
+char Apollo hide
+"Really? Why was he killed in{n}such a strange way?"
+char Ema e=won't-share
+"It seems that Chambers and{n}Erlenmeyer struggled..."
+"...since the car's alarm system was{n}set off and contacted{n}the police."
+"Erlenmeyer was pressed for time as{n}a result, and so he killed Chambers{n}with the car."
+char Apollo hide
+"The car alarm contacted you?"
+char Ema e=hiya
+"Yeah. It's a new device that{n}automatically contacts the police{n}and gives us the car's location..."
+"...whenever it's set off."
+char Ema e=profile
+"Once Chambers was unconscious,{n}Erlenmeyer took the keys and ran{n}him over, forwards and backwards."
+"...several times to make{n}sure he was dead."
+char Apollo hide
+"That's... That's horrible!"
+char Ema e=uninterested
+"Anyway, we found Erlenmeyer{n}unconscious in a pool of Chambers'{n}blood. We had to arrest him..."
+"{ehair}For killing Chambers, not{n}just because he was{n}an escaped convict." #MC: Sounds familiar. :P
+goto top
+
+
+#TALK 2 EVIDENCE
+label Evidence?
+char Ema
+char Apollo hide
+"Were there any witnesses?"
+char Ema
+"Not that we know of."
+char Apollo hide
+"...Which means that only{n}Erlenmeyer and Chambers{n}were there."
+char Ema e=smirks
+"Yep. Suicide is impossible{n}considering the cause of death,{n}which means you're out of luck..."
+"...unless you plan on{n}accusing a zombie."
+char Apollo hide
+"{c099}(She's right! He can't{n}be innocent under{n}circumstances like this...)"
+"Do you have any{n}decisive evidence?"
+char Ema e=uninterested
+"...Sorry, I can't reveal{n}everything up our sleeve."
+goto top

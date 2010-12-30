@@ -1,0 +1,131 @@
+#-version-1
+mus
+bg black
+nt
+"{c090}{center}{type}December 28{n}Wright Anything Agency{n}Apollo's Bedroom"
+char Apollo hide
+"..."
+"... Fine, *snort* I'll give{n}"cromulent"... but no triple{n}word score! *snore*"
+"..."
+bg apolloroomday fade
+char Rhea
+"{sfx/Ding.ogg}{f}Hey, Polly. Wake up."
+char Apollo hide
+"Eh... huh? O-Oh... Hi, Rhea."
+char Rhea
+"Sleep well?"
+char Apollo hide
+"Yeah... The couch wasn't so bad..."
+char Rhea e=smiling1
+"Thanks for letting me stay over,{n}and sleep in your bed..."
+"I just didn't feel comfortable going{n}home alone with Erlenmeyer{n}on the loose."
+char Apollo hide
+"He's on the run...{n}I'm sure he's miles away.{n}But no problem."
+char Rhea
+"So, do you want--{next}"
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+ev apollophone name=billy x=185
+char Apollo hide
+"{sfx\Phone.wav}Hello..?"
+char Phoenix hide
+"You awake, Polly? I know it's{n}early for you."
+char Apollo hide
+"No, I'm still sleeping."
+char Phoenix hide
+"Now's not the time for this, Apollo.{n}You need to cancel your{n}flight to Borginia."
+char Apollo hide
+"What..?"
+char Phoenix hide
+"There's been an {f}{c900}emergency{c999}."
+char Rhea e=surprised
+char Apollo hide
+"{sfx\Shock.ogg}{s}WHAT?! Is it Trucy? Or Thalassa?{n}Why shouldn't I come over!?"
+char Phoenix hide
+"...It happened on your end, not mine.{n}It's... {c900}{f}the Judge{c}."
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+char Apollo hide
+"{c900}{sfx\Whaaa.ogg}{s}Judge Chambers{c}?"
+char Rhea e=sad
+"{f}!"
+char Phoenix hide
+"Yeah... I'm just going to say it:{n}he's {f}dead.{n}{sfx\Dunnn.ogg}{c900}Murdered{c}."
+char Apollo hide
+"{s}{sfx/Bwaaah.ogg}Whaaaat?! Dead?!"
+char Rhea e=sad
+"{sfx\Slash.ogg}{f}WHAT!?! Polly, what happened?!"
+char Apollo hide
+"Y-Yeah! Mr. Wright,{n}what happened?"
+char Phoenix hide
+"According to the police, he was{n}run over by his car in a cemetery."
+char Apollo hide
+"What..?"
+"{c099}(For Judge to die... for him to {s 5 5}{f}die{n}this way... It's, {s 5 5}{f}it's...Ugh! Way{n}too early...)"
+"When's the funeral?"
+char Phoenix hide
+"After the case is over. But there's{n}something more important you{n}need to deal with."
+char Apollo hide
+"What's more important than this!?"
+char Phoenix hide
+
+"The man they arrested.{n}One {f}{c900}Robert Erlenmeyer{c}."
+char Apollo hide
+"{sfx\Slash.ogg}{s 20 20}ERLENMEYER?!"
+char Rhea e=sweating
+"Wh-What?!{n}What does he have to do with this?"
+char Apollo hide
+"He was arrested as{n}Judge's murderer."
+char Rhea e=mad
+"What...? N-No... This is{n}going too far, Polly!"
+char Apollo hide
+"...Wait. Mr. Wright, there's only{n}one reason this would{n}concern me..."
+char Phoenix hide
+"Looks like you finally figured it out."
+char Apollo hide
+"I'm sorry, Mr. Wright, but there's {n}{sfx\Smack.ogg}just no way--{next}"
+char Phoenix hide
+"You'll defend him? He initially{n}wanted me to defend him."
+"But of course, I'm retired and on{n}the other side of the Atlantic, so{n}I referred him to you."
+delev judge$
+addev judgeupdated$
+delev erlenmeyer$
+addev erlenmeyerupdated$
+"He was my biology teacher in high{n}school... a bit boring, but he seemed{n}like a nice enough guy."
+char Apollo hide
+"B-But why me?! I can't defend{n}a serial killer..."
+"I mean, you got Mr. Engarde{n}convicted when you found out he{n}was actually guilty, didn't you?"
+char Phoenix hide
+"I'm not asking you to defend a guilty{n}man. {sfx\Ding.ogg}But do you really know that{n}Erlenmeyer is guilty?"
+"Our job is to make sure no one who{n}is innocent gets declared guilty..."
+"Do you really want to turn him down{n}without even hearing him out?"
+char Apollo hide
+"Uh..."
+char Phoenix hide
+"Good. I knew I could count on you.{n}Don't worry, you'll come to Borginia{n}afterwards!"
+"We'd never let you miss the{n}world's largest collection of{n}lawyer-themed video games.{sfx\Phone.wav}"
+delete name=billy
+#MC: ...
+mus
+char Rhea e=mad
+"You can't even consider defending{n}Erlenmeyer, Polly."
+"Are you really going to defend{n}the man who killed{n}my brother?!"
+char Apollo hide
+"{sfx\Key.ogg}Are you sure he did?"
+char rhea e=mad
+"...He wasn't convicted for no{n}reason. {enormal}And he confessed."
+char Apollo hide
+"...If I'm going to turn down his{n}request, I at least need to do{n}it in person."
+char Rhea
+"...Okay."
+"But the only thing I want you to do{n}there is look Erlenmeyer in the eye{n}and tell him you can't defend him."
+char Apollo hide
+"All right, let's go!"
+"{c099}(Judge... Yesterday he said he had{n}an early matter to attend to, and{n}now he's gone....)"
+"{c099}(He may have been a bit{n}absent-minded, but he was one of{n}the nicest people I knew.)"
+"{c099}(Whoever killed him... he's{n}going to pay.)"
+"{c099}(...)"
+"{c099}(...W-{f}Wait!! My... {c900}My bracelet is{n}gone{c099}! Could I have dropped it? No,{n}it's too tight-fitting...)"
+"{c099}(Was it {c900}stolen{c}? Oh, I don't have{n}time for this..! I'll just file a police{n}report when I get a chance...)"
+setflag phone3
+script scene65erlenmeyer

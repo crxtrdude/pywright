@@ -1,0 +1,4 @@
+bg lobby
+"This is {c009}some{c} text.{next}"
+bg black
+"{spd0}{$_last_written_text}{spd1} And some more text."

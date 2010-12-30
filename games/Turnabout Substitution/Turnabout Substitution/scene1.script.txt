@@ -1,0 +1,89 @@
+#-version-1
+set _cr_button false
+mus Prologue.ogg
+bg black name=topblack
+fg chapter5 fade x=50 y=260
+bg 1 fade name=bg1 y=100 stack
+scroll name=bg1 speed=2 y=-390
+pause 90
+
+
+bg 2 stack fade
+delete name=bg1
+pause 60
+
+bg 3 fade name=back3 y=170 stack
+delete name=2
+pause 30
+scroll speed=1 y=-170 name=back3
+pause 80
+bg black stack y=192 name=bottomblack
+bg 4 fade stack
+delete name=back3
+pause 60
+
+nt
+"{sound /null}He's at the end of{n}the corridor...{p70}{next}"
+
+bg black stack
+delete name=4
+sfx /footsteps.wav
+pause 100
+
+bg 5A fade stack
+pause 140
+
+bg 5B fade stack
+delete name=5A
+pause 130
+
+bg black stack name=topblack
+delete name=5B
+pause 20
+nt
+"{sound /null}{c900}Robert Erlenmeyer,{n}I presume...?{p60}{next}"
+
+bg 6 fade stack
+delete name=topblack
+pause 30
+"{sound /null}...Yes?{p60}{next}"
+pause 30
+"{sound /null}{c900}I assume you know why{n}I'm here?{p60}{next}"
+pause 30
+"{sound /null}...I do.{p60}{next}"
+pause 30
+"{sound /null}{c900}Then...{p40}Goodbye.{p60}{next}"
+
+bg black stack name=topblack
+delete name=6
+pause 30
+
+"{sound /null}{delay 2}......{p60}{next}"
+
+"{f}{sfx /gunshot.wav}{next}"
+
+bg 7 name=blood stack
+delete name=bottomblack
+bg black stack y=192 name=bottomblack
+pause 80
+delete name=blood
+
+bg 8 fade stack name=8
+pause 120
+
+bg 9 fade stack name=udgey
+delete name=8
+pause 120
+
+"{sound /null}{c900}I...{p30} feel...{p30} faint...{p70}{next}"
+delete name=udgey
+
+bg black stack
+delete name=udgey
+delete name=bottomblack
+bg black stack y=192 name=bottomblack
+
+"{s 20 10}{sfx /sfx-thud4.wav}{next}"
+pause 1000
+clear
+script scene2
