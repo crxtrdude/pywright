@@ -234,7 +234,11 @@ class Engine:
                     self.download_file(path,filename,url,output,True)
                 else:
                     self.download_file(self.path,check.filename,check.file,output)
+    def make_download_folders(self):
+        if not os.path.exists("downloads"):
+            os.mkdir("downloads")
     def download_file(self,path,filename,url,output=None,seek=False):
+        self.make_download_folders()
         if not hasattr(self,"progress"):
             self.progress = progress()
             root.add_child(self.progress)
