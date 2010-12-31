@@ -891,11 +891,13 @@ class SoundEvent(object):
         self.name = name
         self.wait = after
         self.z = zlayers.index(self.__class__.__name__)
+    def delete(self):
+        self.kill = 1
     def update(self):
         self.wait-=1
         if self.wait<=0:
             assets.play_sound(self.name)
-            self.kill = 1
+            self.delete()
         return False
     def draw(self,*args):
         pass
@@ -1574,6 +1576,8 @@ class portrait(object):
             self.cur_sprite.pos = pos
             self.cur_sprite.rot = self.rot[:]
             self.cur_sprite.draw(dest)
+    def delete(self):
+        self.kill = 1
     def update(self):
         if getattr(self,"single",None):
             self.cur_sprite.loopmode = "loop"
@@ -1920,8 +1924,8 @@ class textbox(gui.widget):
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
     def delete(self):
-        self.pressb.kill = 1
-        self.presentb.kill = 1
+        self.pressb.delete()
+        self.presentb.delete()
         self.kill = 1
         assets.cur_script.refresh_arrows(self)
     def gsound(self):
@@ -2040,12 +2044,12 @@ class textbox(gui.widget):
             for o in assets.cur_script.obs:
                 if isinstance(o,press_button):
                     if o != self.pressb:
-                        o.kill = 1
+                        o.delete()
                     else:
                         h1 = o
                 if isinstance(o,present_button):
                     if o != self.presentb:
-                        o.kill = 1
+                        o.delete()
                     else:
                         h2 = o
             if not h1:
@@ -3009,7 +3013,7 @@ class examine_menu(sprite,gui.widget):
             assets.cur_script.obs.append(scroll(-self.xscrolling,0,speed=16))
             self.xscrolling = 0
             if hasattr(self,"scrollbut"):
-                self.scrollbut.kill = 1
+                self.scrollbut.delete()
                 del self.scrollbut
             return
         keys = pygame.key.get_pressed()
@@ -3050,9 +3054,9 @@ class examine_menu(sprite,gui.widget):
             self.bck.pos = [0,other_screen(sh-self.bck.img.get_height())]
             self.bck.pri = 1000
             def k_space(b=self.bck):
-                b.kill = 1
-                self.kill = 1
-                if hasattr(self,"scrollbut"): self.scrollbut.kill = 1
+                b.delete()
+                self.delete()
+                if hasattr(self,"scrollbut"): self.scrollbut.delete()
             self.bck.k_space = k_space
             assets.cur_script.obs.append(self.bck)
         scrn = (-self.getoffset()//sw)+1
@@ -3062,7 +3066,7 @@ class examine_menu(sprite,gui.widget):
         elif scrn>1:
             self.xscroll = -1
         if not self.xscroll and hasattr(self,"scrollbut"): 
-            self.scrollbut.kill = 1
+            self.scrollbut.delete()
             del self.scrollbut
         if self.xscroll and not hasattr(self,"scrollbut"):
             self.scrollbut = guiScroll(self.xscroll)
@@ -3079,17 +3083,16 @@ class examine_menu(sprite,gui.widget):
         if go == None:
             go = self.fail
         assets.cur_script.goto_result(go,backup=self.fail)
-        self.die()
-        self.kill = 1
+        self.delete()
     def k_space(self):
         if not self.hide:
-            self.die()
-    def die(self):
+            self.delete()
+    def delete(self):
         self.kill = 1
         if hasattr(self,"bck"):
-            self.bck.kill = 1
+            self.bck.delete()
         if hasattr(self,"scrollbut"):
-            self.scrollbut.kill = 1
+            self.scrollbut.delete()
 
 class evidence_menu(fadesprite,gui.widget):
     fail = "none"
@@ -3167,8 +3170,8 @@ class evidence_menu(fadesprite,gui.widget):
         self.back_button.pos[1] = other_screen(self.back_button.pos[1])
         self.back_button.pri = 1000
         def k_space(b=self.back_button):
-            b.kill = 1
-            self.kill = 1
+            b.delete()
+            self.delete()
             assets.variables["_selected"] = "Back"
         self.back_button.k_space = k_space
         
@@ -3190,7 +3193,7 @@ class evidence_menu(fadesprite,gui.widget):
             if not vtrue(assets.variables.get("_%s_enabled"%p,"true")):
                 self.pages_set.remove(p)
         if not self.pages_set:
-            self.kill = 1
+            self.delete()
         self.item_set = self.pages_set[0]
         self.layout()
     def update(self):
@@ -3359,9 +3362,9 @@ class evidence_menu(fadesprite,gui.widget):
             self.k_z()
         elif self.back and self.canback():
             if self.mode == "overview":
-                self.kill = 1
+                self.delete()
             elif self.mode == "zoomed":
-                if assets.gbamode: self.kill = 1
+                if assets.gbamode: self.delete()
                 else: self.mode = "overview"
             elif self.mode == "check":
                 self.mode = "overview"
@@ -3403,12 +3406,12 @@ class evidence_menu(fadesprite,gui.widget):
         if not self.can_present(): return
         assets.variables["_selected"] = self.chosen
         assets.cur_script.cross = "presenting"
-        self.kill = 1
+        self.delete()
         for o in assets.cur_script.obs:
             if isinstance(o,textbox):
                 o.delete()
             if isinstance(o,uglyarrow):
-                o.kill = 1
+                o.delete()
         assets.cur_script.goto_result((self.chosen+" "+assets.cur_script.statement).strip(),backup=self.fail)
     def next_screen(self):
         if len(self.pages_set)==1:
@@ -3429,10 +3432,10 @@ class evidence_menu(fadesprite,gui.widget):
         self.switch = False
     def k_space(self):
         if self.mode=="zoomed":
-            if assets.gbamode: self.kill = 1
+            if assets.gbamode: self.delete()
             else: self.mode = "overview"
         elif self.mode=="overview" and vtrue(assets.variables.get("_cr_back_button", "true")):
-            self.kill = 1
+            self.delete()
         #assets.cur_script.cross = ""
         #assets.cur_script.instatement = False
     def canback(self):
@@ -3593,7 +3596,7 @@ class waitenter(sprite):
     def update(self):
         return True
     def enter_down(self):
-        self.kill = 1
+        self.delete()
                 
 class delay(sprite):
     def __init__(self,ticks=1):
@@ -3603,7 +3606,7 @@ class delay(sprite):
     def draw(self,dest): pass
     def update(self):
         if self.ticks<=0:
-            self.kill = 1
+            self.delete()
             return False
         self.ticks-=1
         return True
@@ -3617,7 +3620,7 @@ class timer(sprite):
         self.script = assets.cur_script
     def update(self):
         if self.ticks<=0:
-            self.kill = 1
+            self.delete()
             if self.run:
                 ns = self.script.execute_macro(self.run)
         self.ticks-=1
@@ -3626,6 +3629,8 @@ class timer(sprite):
 class effect(object):
     def __init__(self):
         self.z = zlayers.index(self.__class__.__name__)
+    def delete(self):
+        self.kill = 1
                 
 class scroll(effect):
     def __init__(self,amtx=1,amty=1,amtz=1,speed=1,wait=1,filter="top"):
@@ -3663,7 +3668,7 @@ class scroll(effect):
     def draw(self,dest): pass
     def update(self):
         if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
-            self.kill = 1
+            self.delete()
             return False
         ndx,ndy,ndz = self.dx,self.dy,self.dz
         self.amtx-=abs(self.dx)
@@ -3718,7 +3723,7 @@ class zoomanim(effect):
         if self.kill: return False
         self.frames -= 1
         if self.frames <= 0:
-            self.kill = 1
+            self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"dim"):
@@ -3762,16 +3767,16 @@ class rotateanim(effect):
         if self.degrees>0:
             self.degrees-=amt
             if self.degrees<=0:
-                self.kill = 1
+                self.delete()
                 amt+=self.degrees
             amt = -amt
         elif self.degrees<0:
             self.degrees+=amt
             if self.degrees>=0:
-                self.kill = 1
+                self.delete()
                 amt-=self.degrees
         else:
-            self.kill = 1
+            self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"rot"):
@@ -3804,14 +3809,14 @@ class fadeanim(effect):
             self.start+=amt
             if self.start>self.end:
                 amt -= (self.start-self.end)
-                self.kill = 1
+                self.delete()
         elif self.start>self.end:
             self.start-=amt
             if self.start<self.end:
                 amt-=(self.end-self.start)
-                self.kill=1
+                self.delete()
         else:
-            self.kill=1
+            self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
@@ -3860,7 +3865,7 @@ class tintanim(effect):
             else:
                 done+=1
         if done==3:
-            self.kill = 1
+            self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
@@ -3891,14 +3896,14 @@ class invertanim(effect):
             self.start+=amt
             if self.start>self.end:
                 amt -= (self.start-self.end)
-                self.kill = 1
+                self.delete()
         elif self.start>self.end:
             self.start-=amt
             if self.start<self.end:
                 amt-=(self.end-self.start)
-                self.kill=1
+                self.delete()
         else:
-            self.kill=1
+            self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
@@ -3929,14 +3934,14 @@ class greyscaleanim(effect):
             self.start+=amt
             if self.start>self.end:
                 amt -= (self.start-self.end)
-                self.kill = 1
+                self.delete()
         elif self.start>self.end:
             self.start-=amt
             if self.start<self.end:
                 amt-=(self.end-self.start)
-                self.kill=1
+                self.delete()
         else:
-            self.kill=1
+            self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
@@ -3958,7 +3963,7 @@ class flash(effect):
         dest.blit(self.surf,[0,0])
     def update(self):
         self.ttl -= 1
-        if self.ttl<=0: self.kill = 1
+        if self.ttl<=0: self.delete()
         return True
     
 class shake(effect):
@@ -3976,7 +3981,7 @@ class shake(effect):
         self.offset -= abs(self.offset / self.ttl)
         if self.offset < 1: self.offset = 1
         self.ttl -= 1
-        if self.ttl<=0: self.kill = 1
+        if self.ttl<=0: self.delete()
         return self.wait
         
 class guiBack(sprite,gui.widget):
@@ -4005,7 +4010,7 @@ class guiBack(sprite,gui.widget):
     def unhighlight(self):
         self.load(self.image+assets.appendgba)
     def k_space(self):
-        self.kill = 1
+        self.delete()
         print "only kill back button"
     def update(self):
         return True
@@ -4022,14 +4027,14 @@ class guiScroll(sprite,gui.widget):
         gui.widget.__init__(self,self.pos,self.img.get_size())
         self.direction = direction
     def k_z(self):
-        self.kill = 1
+        self.delete()
         self.parent.xscrolling = self.direction*sw
         #del self.parent.scrollbut
     def update(self):
         return True
         
 class guiWait(sprite):
-    def __init__(self,run=None):
+    def __init__(self,run=None, mute=False):
         sprite.__init__(self)
         gui.widget.__init__(self)
         self.width = 0
@@ -4038,6 +4043,15 @@ class guiWait(sprite):
         self.pos = [0,0]
         self.run = run
         self.script = assets.cur_script
+        self.mute = mute  #Mute sound while waiting
+        if self.mute:
+            pygame.mixer.pause()
+            pygame.mixer.music.pause()
+    def delete(self):
+        self.kill = 1
+        if self.mute:
+            pygame.mixer.unpause()
+            pygame.mixer.music.unpause()
     def update(self):
         if self.run:
             ns = self.script.execute_macro(self.run)
@@ -4061,7 +4075,7 @@ class saved(fadesprite):
         dest.blit(txt2,[self.pos[0]+2,self.pos[1]+2])
     def update(self):
         if self.ticks<=0:
-            self.kill = 1
+            self.delete()
             return False
         self.ticks-=1
         return self.block
@@ -4069,8 +4083,10 @@ class saved(fadesprite):
 class error_msg(gui.pane):
     def __repr__(self):
         return self.msg
-    def click_down_over(self,mp):
+    def delete(self):
         self.kill = 1
+    def click_down_over(self,mp):
+        self.delete()
     def __init__(self,msg,line,lineno,script):
         self.pri = ulayers.index(self.__class__.__name__)
         self.z = zlayers.index(self.__class__.__name__)
@@ -4100,7 +4116,7 @@ class error_msg(gui.pane):
         self.width=256
         self.height=len(msg_lines)*20
         if vtrue(assets.variables.get("_production","false")):
-            self.kill = 1
+            self.delete()
     def update(self):
         return True
         
@@ -4118,6 +4134,8 @@ class movie:
         self.z = zlayers.index(self.__class__.__name__)
         self.paused = 0
         self.id_name = name
+    def delete(self):
+        self.kill = 1
     def update(self):
         self.paused = 0
         self.movie.play()
@@ -4125,7 +4143,7 @@ class movie:
             self.sound.unpause()
         if self.movie.get_busy(): return True
         del self.movie
-        self.kill = 1
+        self.delete()
         if self.sound:
             self.sound.stop()
     def draw(self,dest):
