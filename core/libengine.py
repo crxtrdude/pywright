@@ -2980,6 +2980,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     if e.gain==0 and (e.state==6 or e.state==2 or e.state==4):
                         print "minimize"
                         gw = guiWait(mute=True)
+                        gw.pri = -1000
                         gw.minimized = True
                         assets.cur_script.obs.append(gw)
                     if e.gain==1 and (e.state==6 or e.state==2 or e.state==4):
