@@ -69,7 +69,12 @@ class widget(object):
         #~ return mp[0]>=pos[0] and mp[0]<=pos[0]+self.width and mp[1]>=pos[1] and mp[1]<=pos[1]+self.height
     def draw(self,dest):
         if self.visible: 
-            [x.draw(dest) for x in self.children]
+            for c in self.children:
+                rp = c.rpos[:]
+                c.rpos[0]+=self.rpos[0]
+                c.rpos[1]+=self.rpos[1]
+                c.draw(dest)
+                c.rpos = rp
     def event(self,name,pos,*args):
         if pos[0]>=self.rpos[0] and pos[0]<=self.rpos[0]+self.width and pos[1]>=self.rpos[1] and pos[1]<=self.rpos[1]+self.height:
             p2 = [pos[0]-self.rpos[0],pos[1]-self.rpos[1]]

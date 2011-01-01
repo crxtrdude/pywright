@@ -2512,20 +2512,17 @@ assets.DebugScript = DebugScript
 class choose_game(gui.widget):
     def __init__(self,*args,**kwargs):
         gui.widget.__init__(self,*args,**kwargs)
+        self.rpos[1] = other_screen(0)
         self.width,self.height = [1000,1000]
         self.z = 1000
         self.pri = -1000
         
-        self.list = gui.scrollpane([0,other_screen(0)])
+        self.list = gui.scrollpane([0,0])
         self.list.width,self.list.height = [sw,sh]
         self.add_child(self.list)
         self.jump_when_close = None
     def update(self,*args):
-        self.list.rpos[1] = other_screen(0)
-        if getattr(self,"has_close",False):
-            self.cb.rpos[1] = self.list.rpos[1]
-            #self.rpos[1]+=50
-            #self.list.rpos[1]+=10
+        self.rpos[1] = other_screen(0)
         [x.update() for x in self.children]
         self.list.updatescroll()
         return False
