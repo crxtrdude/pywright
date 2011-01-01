@@ -2802,8 +2802,11 @@ assets.draw_screen = draw_screen
 
 def run(checkupdate=False):
     import sys,os
-    
 
+    if "--help" in sys.argv or "-h" in sys.argv or "-?" in sys.argv or "/?" in sys.argv:
+        print "%s -run 'path/to/game'  :  run a game directly"%(sys.argv[0],)
+        sys.exit()
+    
     #Check for updates!
     newengine = None
     if checkupdate:
@@ -2912,6 +2915,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     clock = pygame.time.Clock()
 
     make_start_script()
+    if "-run" in sys.argv:
+        assets.start_game(sys.argv[sys.argv.index("-run")+1],"intro")
+
     import time
     lt = time.time()
     ticks = 0
