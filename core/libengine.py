@@ -76,7 +76,7 @@ def addob(ob):
     if [1 for x in only_one if isinstance(ob,x)]:
         for o2 in assets.cur_script.obs[:]:
             if isinstance(o2,ob.__class__):
-                o2.kill = 1
+                o2.delete()
     assets.cur_script.obs.append(ob)
 def addevmenu():
     try:
@@ -563,7 +563,7 @@ class Script(gui.widget):
     def refresh_arrows(self,tbox):
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
         for a in arrows:
-            a.kill = 1
+            a.delete()
         if vtrue(assets.variables.get("_textbox_show_button","true")):
             u = uglyarrow()
             self.obs.append(u)
@@ -1252,7 +1252,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
-                o.kill = 1
+                o.delete()
         m = menu()
         m.scene = ascene
         for scr in assets.list_casedir():
@@ -1280,7 +1280,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
-                o.kill = 1
+                o.delete()
         m = menu()
         for a in args:
             if "=" in a:
@@ -1318,7 +1318,7 @@ resume when the new script exits, otherwise, the current script will vanish."""
                 label = a.split("=",1)[1]
         if "noclear" not in args:
             for o in self.obs:
-                o.kill = 1
+                o.delete()
         name = scriptname+".script"
         try:
             assets.open_script(name,False,".txt")
@@ -1488,7 +1488,7 @@ have a ball.txt describing it's animation qualities, if it has any."""
         if clear and func==bg:
             for o in self.obs[:]:
                 if getattr(o,"autoclear",False):
-                    o.kill = 1
+                    o.delete()
                     self.world.remove(o)
         o = func(args[0],x=x,y=y,flipx=flipx,**more)
         if z is not None:
@@ -2133,7 +2133,7 @@ exit}}}
     def _clear(self,command):
         """Clears all objects from the scene."""
         for o in self.obs:
-            o.kill = 1
+            o.delete()
         pygame.screen.fill([0,0,0])
     @category([KEYWORD("name","Unique name of object to delete.")],type="objects")
     def _delete(self,command,*args):
@@ -2147,7 +2147,7 @@ exit}}}
         for o in reversed(self.obs):
             if getattr(o,"id_name",None)==name:
                 any = True
-                o.kill = 1
+                o.delete()
                 break
         if name and not any and vtrue(assets.variables.get("_debug","false")):
             print "error"
@@ -2431,7 +2431,7 @@ class DebugScript(Script):
             if "stack" not in args:
                 for o in self.obs:
                     if isinstance(o,portrait):
-                        o.kill = 1
+                        o.delete()
             if tuple(args) in self.char_cache:
                 c = self.char_cache[tuple(args)]
                 self.obs.append(c)
@@ -2454,9 +2454,11 @@ class DebugScript(Script):
         self.kill = 0
         self.o = assets.variables.copy()
         assets.variables["_debug"] = "true"
+    def delete(self):
+        self.kill = 1
     def interpret(self):
         if self.si2>=len(self.scriptlines):
-            self.kill = 1
+            self.delete()
             assets.variables.clear()
             assets.variables.update(self.o)
             assets.stack[:] = self.old_stack
@@ -2527,8 +2529,10 @@ class choose_game(gui.widget):
         [x.update() for x in self.children]
         self.list.updatescroll()
         return False
-    def close(self):
+    def delete(self):
         self.kill = 1
+    def close(self):
+        self.delete()
         if self.jump_when_close:
             assets.cur_script.goto_result("close")
     def close_button(self,jump=False):
@@ -2602,7 +2606,7 @@ def load_game_menu():
     cb = list.children[-1]
     def cancel(*args):
         print "canceling"
-        root.kill = 1
+        root.delete()
     setattr(root,"cancel",cancel)
     cb.bgcolor = [0, 0, 0]
     cb.textcolor = [255,255,255]
@@ -2632,7 +2636,7 @@ def load_game_menu():
         filename=s[0].replace(assets.game,"")[1:]
         fullpath=s[0]
         def do_load(filename=filename,fullpath=fullpath):
-            root.kill = 1
+            root.delete()
             print "loading",filename,fullpath
             assets.clear()
             assets.load_game_from_string(open(fullpath).read())
@@ -2669,7 +2673,7 @@ def make_start_script(logo=True):
     bottomscript.obs.append(item)
     
     def pl(*args):
-        [setattr(x,"kill",1) for x in bottomscript.obs if isinstance(x,choose_game)]
+        [x.delete() for x in bottomscript.obs if isinstance(x,choose_game)]
         cg = choose_game()
         cg.list_games("games")
         cg.close_button()
@@ -2685,7 +2689,7 @@ def make_start_script(logo=True):
     def pl(*args):
         gamedir = "examples"
         assets.start_game(gamedir,"intro")
-        #~ [setattr(x,"kill",1) for x in bottomscript.obs if isinstance(x,choose_game)]
+        #~ [x.delete() for x in bottomscript.obs if isinstance(x,choose_game)]
         #~ cg = choose_game()
         #~ cg.list_games("examples")
         #~ cg.close_button()
