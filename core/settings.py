@@ -458,4 +458,6 @@ class settings_menu(gui.pane):
     def quit_pywright(self):
         sys.exit()
     def close(self):
+        self.delete()
+    def delete(self):
         self.kill = 1
