@@ -1448,14 +1448,15 @@ class portrait(object):
     female = bliplines[4].strip().split(" ")
     def __init__(self,name=None,hide=False):
         self.init(name,hide)
-    def init(self,name=None,hide=False,blinkname=None):
+    def init(self,name=None,hide=False,blinkname=None,init_basic=True):
         if not name: return
-        self.z = zlayers.index(self.__class__.__name__)
-        self.clicksound = "blipmale.ogg"
-        self.pri = ulayers.index(self.__class__.__name__)
-        self.pos = [0,0]
-        self.rot = [0,0,0]
-        self.name = name
+        if init_basic:
+            self.z = zlayers.index(self.__class__.__name__)
+            self.clicksound = "blipmale.ogg"
+            self.pri = ulayers.index(self.__class__.__name__)
+            self.pos = [0,0]
+            self.rot = [0,0,0]
+            self.name = name
         super(portrait,self).__init__()
         charname,rest = name.split("/",1)
         emo = rest
@@ -1479,7 +1480,8 @@ class portrait(object):
         self.emoname = emo
         self.blinkemo = blinkemo
         self.modename = mode
-        self.nametag = charname+"\n"
+        if init_basic:
+            self.nametag = charname+"\n"
         
         if not self.emoname: hide = "wait"
         self.hide = hide
@@ -1559,6 +1561,11 @@ class portrait(object):
         else:
             raise art_error("Can't load character "+charname+"/"+emo+"("+mode+")")
         self.blinkspeed = self.blink_sprite.blinkspeed
+    def setprop(self,p,v):
+        if p in "xy":
+            self.pos["xy".index(p)] = float(v)
+        if p in "z":
+            self.z = int(v)
     def set_dim(self,amt):
         self.blink_sprite.dim = amt
         self.talk_sprite.dim = amt
@@ -1587,16 +1594,12 @@ class portrait(object):
         if self.hide and self.hide != "wait": return
         if not emo: return
         self.hide = False
-        p = self.pos[:]
-        self.init(self.charname+"/"+emo+"("+self.modename+")")
-        self.pos = p
+        self.init(self.charname+"/"+emo+"("+self.modename+")",init_basic=False)
     def set_blink_emotion(self,emo):
         if self.hide and self.hide != "wait": return
         if not emo: return
         self.hide = False
-        p = self.pos[:]
-        self.init(self.charname+"/"+self.emoname+"("+self.modename+")",blinkname=emo)
-        self.pos = p
+        self.init(self.charname+"/"+self.emoname+"("+self.modename+")",blinkname=emo,init_basic=False)
     def set_talking(self):
         if self.hide: return
         self.cur_sprite = self.talk_sprite

@@ -1629,13 +1629,10 @@ printing."""
             if not char and vtrue(assets.variables.get("_debug","false")):
                 raise missing_object(command+": No character found by key name "+name)
         if char:
-            nametag = char.nametag
             if mode == 'talk':
                 char.set_emotion(emotion)
             elif mode == 'blink':
                 char.set_blink_emotion(emotion)
-            char.nametag = nametag
-            assets.variables["_speaking_name"] = nametag
         elif vtrue(assets.variables.get("_debug","false")):
             raise missing_object(command+": No character found to set emotion!")
     @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
