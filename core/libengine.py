@@ -750,7 +750,7 @@ char test
             assets.variables.clear()
             assets.stop_music()
             assets.stack[:] = []
-            make_start_script(False)
+            assets.make_start_script(False)
         return
     @category([CHOICE([TOKEN("true","turns on debug mode"),TOKEN("false","turns off debug mode")])],type="debug")
     def _debug(self,command,value):
@@ -2660,7 +2660,7 @@ def make_start_script(logo=True):
         reload(libupdate)
         libupdate.run()
         make_screen()
-        make_start_script()
+        assets.make_start_script()
     setattr(make_start_script,"UPDATES",run_updater)
     item = gui.button(make_start_script,"UPDATES")
     item.bordercolor = [255,255,255]
@@ -2914,8 +2914,12 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     showfps = False
     clock = pygame.time.Clock()
 
-    make_start_script()
+    assets.make_start_script()
     if "-run" in sys.argv:
+        def ms(*args):
+            sys.exit()
+        assets.make_start_script = ms
+        assets.stack = []
         assets.start_game(sys.argv[sys.argv.index("-run")+1],"intro")
 
     import time
