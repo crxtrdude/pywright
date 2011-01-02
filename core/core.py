@@ -1461,17 +1461,26 @@ class portrait(object):
     female = bliplines[4].strip().split(" ")
     def __init__(self,name=None,hide=False):
         self.init(name,hide)
+    def init_sounds(self):
+        self.clicksound = assets.variables.get("char_defsound","blipmale.ogg")
+        if self.charname in self.female:
+            self.clicksound = "blipfemale.ogg"
+        if self.charname in self.male:
+            self.clicksound = "blipmale.ogg"
+        if "char_defsound_"+self.charname in assets.variables:
+            self.clicksound = assets.variables["char_defsound_"+self.charname]
     def init(self,name=None,hide=False,blinkname=None,init_basic=True):
-        if not name: return
+        if not name: return self.init_sounds()
+        charname,rest = name.split("/",1)
         if init_basic:
             self.z = zlayers.index(self.__class__.__name__)
-            self.clicksound = "blipmale.ogg"
             self.pri = ulayers.index(self.__class__.__name__)
             self.pos = [0,0]
             self.rot = [0,0,0]
             self.name = name
+            self.nametag = charname+"\n"
         super(portrait,self).__init__()
-        charname,rest = name.split("/",1)
+        
         emo = rest
         mode = ""
         if emo.endswith("(combined)"):
@@ -1487,19 +1496,14 @@ class portrait(object):
             blinkmode = "blink"
         
         mode = mode[:-1]
-        if charname in self.female:
-            self.clicksound = "blipfemale.ogg"
         self.charname = charname
         self.emoname = emo
         self.blinkemo = blinkemo
         self.modename = mode
-        if init_basic:
-            self.nametag = charname+"\n"
         
         if not self.emoname: hide = "wait"
         self.hide = hide
-        if self.hide: return
-        
+        if self.hide: return self.init_sounds()
         self.talk_sprite = fadesprite()
         self.blink_sprite = fadesprite()
         self.cur_sprite = self.talk_sprite
@@ -1574,6 +1578,8 @@ class portrait(object):
         else:
             raise art_error("Can't load character "+charname+"/"+emo+"("+mode+")")
         self.blinkspeed = self.blink_sprite.blinkspeed
+        if init_basic:
+            self.init_sounds()
     def setprop(self,p,v):
         if p in "xy":
             self.pos["xy".index(p)] = float(v)
