@@ -329,28 +329,23 @@ class settings_menu(gui.pane):
         self.res_box = res_box
         self.children.append(res_box)
         
-        res_box.children.append(gui.checkbox("fullscreen"))
-        self.fs = res_box.children[-1]
-        res_box.children.append(gui.checkbox("dualscreen"))
-        ds = self.ds = res_box.children[-1]
+        res_box.add_child(gui.checkbox("fullscreen"))
+        self.fs = res_box.pane.children[-1]
+        res_box.add_child(gui.checkbox("dualscreen"))
+        ds = self.ds = res_box.pane.children[-1]
         
-        res_box.children.append(gui.checkbox("virtual_dualscreen"))
-        self.vds = res_box.children[-1]
+        res_box.add_child(gui.checkbox("virtual_dualscreen"))
+        self.vds = res_box.pane.children[-1]
         
-        res_box.children.append(gui.radiobutton("Change resolution (%sx%s)"%(self.swidth,self.sheight),"resopt"))
-        res = res_box.children[-1]
+        res_box.add_child(gui.radiobutton("Change resolution (%sx%s)"%(self.swidth,self.sheight),"resopt"))
+        res = res_box.pane.children[-1]
 
-        res_box.children[-1].checked = True
-        res_box.children[-1].click_down_over = self.popup_resolution
+        res.checked = True
+        res.click_down_over = self.popup_resolution
         
         s_c = ds.set_checked
         def set_checked(val):
             s_c(val)
-            #~ if val:
-                #~ self.sheight*=2
-            #~ else:
-                #~ self.sheight/=2
-            #res.editbox.set("Change resolution (%sx%s)"%(self.swidth,self.sheight))
             
         ds.set_checked = set_checked        
 
@@ -366,15 +361,15 @@ class settings_menu(gui.pane):
     def popup_resolution(self,mp):
         assets = self.assets
         sw,sh = self.sw,self.sh
-        self.res_box.children[:] = []
+        self.res_box.pane.children[:] = []
         h = 192
         if get_screen_mode(assets)=="two_screens":
             h*=2
         h2 = h*2
-        self.res_box.children.append(gui.radiobutton("DS Res (256x%s)"%h,"resopt"))
-        self.res_box.children.append(gui.radiobutton("Double scale (512x%s)"%h2,"resopt"))
+        self.res_box.add_child(gui.radiobutton("DS Res (256x%s)"%h,"resopt"))
+        self.res_box.add_child(gui.radiobutton("Double scale (512x%s)"%h2,"resopt"))
         for mode in sorted(pygame.display.list_modes()):
-            self.res_box.children.append(gui.radiobutton("(%sx%s)"%mode,"resopt"))
+            self.res_box.add_child(gui.radiobutton("(%sx%s)"%mode,"resopt"))
         for r in self.reses:
             if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
                 r.checked = True
