@@ -337,7 +337,7 @@ class settings_menu(gui.pane):
         res_box.add_child(gui.checkbox("virtual_dualscreen"))
         self.vds = res_box.pane.children[-1]
         
-        res_box.add_child(gui.radiobutton("Change resolution (%sx%s)"%(self.swidth,self.sheight),"resopt"))
+        res_box.add_child(gui.button(self,"Change resolution (%sx%s)"%(assets.swidth,assets.sheight)))
         res = res_box.pane.children[-1]
 
         res.checked = True
@@ -349,7 +349,7 @@ class settings_menu(gui.pane):
             
         ds.set_checked = set_checked        
 
-        self.reses = gui.radiobutton.groups["resopt"]
+        #self.reses = gui.radiobutton.groups["resopt"]
         if assets.fullscreen:
             self.fs.checked = True
         if assets.num_screens==2:
@@ -366,10 +366,13 @@ class settings_menu(gui.pane):
         if get_screen_mode(assets)=="two_screens":
             h*=2
         h2 = h*2
+        self.res_box.add_child(gui.radiobutton("(%sx%s)"%(assets.swidth,assets.sheight),"resopt"))
+        self.res_box.pane.children[-1].checked = True
         self.res_box.add_child(gui.radiobutton("DS Res (256x%s)"%h,"resopt"))
         self.res_box.add_child(gui.radiobutton("Double scale (512x%s)"%h2,"resopt"))
         for mode in sorted(pygame.display.list_modes()):
             self.res_box.add_child(gui.radiobutton("(%sx%s)"%mode,"resopt"))
+        self.reses = gui.radiobutton.groups["resopt"]
         for r in self.reses:
             if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
                 r.checked = True
