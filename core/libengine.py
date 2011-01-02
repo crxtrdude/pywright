@@ -2551,12 +2551,11 @@ class choose_game(gui.widget):
             games.append(f)
         try:
             f = open("lastgame")
-            played = eval(f.read())
+            assets.played = eval(f.read())
             f.close()
         except:
-            played = []
-        for i in reversed(played):
-            i = played.pop(-1)
+            assets.played = []
+        for i in reversed(assets.played):
             if i in games:
                 games.remove(i)
                 games.insert(0,i)
@@ -2589,9 +2588,9 @@ class choose_game(gui.widget):
             item.graphic = image
             self.list.add_child(item)
             def _play_game(func=f):
-                played.insert(0,func)
+                assets.played.insert(0,func)
                 sf = open("lastgame","w")
-                sf.write(repr(played))
+                sf.write(repr(assets.played))
                 sf.close()
                 gamedir = self.path+"/"+func
                 if os.path.exists(gamedir+"/"+func+".txt"):
