@@ -565,19 +565,33 @@ class scrollpane(pane):
         super(scrollpane,self).__init__(*args,**kwargs)
         self.scbar = scrollbar([0,0])
         self.scbar.nolayout = True
-        self.add_child(self.scbar)
+        self.scbar_y = 0
+        self.scbar_height = None
+        self.add_child(self.scbar,"root")
+        self.pane = pane([0,0])
+        self.pane.border = False
+        self.pane.background = False
+        self.add_child(self.pane,"root")
+        self.pix = 0
+    def add_child(self,ob,which="pane"):
+        if which == "pane":
+            return self.pane.add_child(ob)
+        return super(scrollpane,self).add_child(ob)
     def scroll_up_over(self,mp):
-        self.scbar.scbut.scroll([0,-3])
+        self.scbar.scbut.scroll([0,-6])
         self.updatescroll()
     def scroll_down_over(self,mp):
-        self.scbar.scbut.scroll([0,3])
+        self.scbar.scbut.scroll([0,6])
         self.updatescroll()
     def updatescroll(self):
+        self.pane.width = self.width-15
+        self.pane.height = self.height
+        self.pane.rpos = [0,0]
         surf = super(self.__class__,self).render()
-        self.scbar.rpos = [self.width-15,0]
+        self.scbar.rpos = [self.width-15,self.scbar_y]
         self.scbar.width = 15
-        self.scbar.height = self.height
-        pages = self.in_height/float(self.height)
+        self.scbar.height = self.scbar_height or self.height
+        pages = self.pane.in_height/float(self.pane.height)
         try:
             self.scbar.scbut.height = int(self.scbar.height-4)/(pages)
         except ZeroDivisionError:
@@ -585,10 +599,10 @@ class scrollpane(pane):
         if self.scbar.scbut.height > int(self.scbar.height-4):
             self.scbar.scbut.height = int(self.scbar.height-4)
         try:
-            pix = float(self.in_height)/float(self.scbar.height-4)
+            pix = float(self.pane.in_height)/float(self.scbar.height-4)
         except ZeroDivisionError:
             pix = 0
-        self.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2))
+        self.pane.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2))
         if self.scbar not in self.children:
             self.add_child(self.scbar)
         return surf

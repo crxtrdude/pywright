@@ -117,7 +117,7 @@ list.status_box.draw(screen)
 root.add_child(list)
 
 def build_list(dir="art/port",url="zip_port_info",check_folder=None):
-    list.children = [list.status_box,list.scbar]
+    list.pane.children = [list.status_box]
     fnd = 0
     list.status_box.text="Scanning local files..."
     mn = mynames(dir)
