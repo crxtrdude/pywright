@@ -1338,10 +1338,19 @@ class fadesprite(sprite):
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
                 self.mockimg = self.img.convert_alpha()
+                self.mockimg_base = [x.convert_alpha() for x in self.base]
                 self.origa = pygame.surfarray.array_alpha(self.mockimg)
+                self.origa_base = [pygame.surfarray.array_alpha(x) for x in self.mockimg_base]
                 self.origc = pygame.surfarray.array3d(self.mockimg)
-                self.gs = self.origc[:]
-                self.gs = [y*numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]]) for y in self.gs]
+                self.origc_base = [pygame.surfarray.array3d(x) for x in self.mockimg_base]
+                self.gs_base = [x[:] for x in self.origc_base]
+                mat = numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]])
+                self.gs_base = [[y*mat for y in x] for x in self.gs_base]
+                self.gsimg_base = [x.convert_alpha() for x in self.base]
+                for i,x in enumerate(self.gsimg_base):
+                    x = pygame.surfarray.pixels3d(x)
+                    x[:] = self.gs_base[i]
+                    del x
                 self.draw_func = self.numpydraw
             else:
                 self.draw_func = self.mockdraw
@@ -1378,15 +1387,17 @@ class fadesprite(sprite):
                 traceback.print_exc()
                 raise art_error("Problem with fading code, switching to older fade technology")
     def numpydraw(self,dest):
-        px = pygame.surfarray.pixels_alpha(self.mockimg)
-        px[:] = self.origa[:]*(self.fade/255.0)
+        if not self.mockimg_base:
+            return
+        px = pygame.surfarray.pixels_alpha(self.mockimg_base[self.x])
+        px[:] = self.origa_base[self.x][:]*(self.fade/255.0)
         del px
-        px = pygame.surfarray.pixels3d(self.mockimg)
+        px = pygame.surfarray.pixels3d(self.mockimg_base[self.x])
         change = getattr(self,"lgs",None)!=self.greyscale or getattr(self,"li",None)!=self.invert or getattr(self,"lt",None)!=self.tint
         if change:
-            px[:] = self.origc
+            px[:] = self.origc_base[self.x]
             if self.greyscale:
-                px[:] = self.gs[:]
+                px[:] = self.gs_base[self.x][:]
             self.lgs = self.greyscale
             if self.invert:
                 px[:] = 255-px[:]
@@ -1396,7 +1407,9 @@ class fadesprite(sprite):
             self.lt = self.tint
         del px
         img = self.img
-        self.img = self.mockimg
+        self.img = self.mockimg_base[self.x]
+        if self.greyscale:
+            self.img = self.gsimg_base[self.x]
         sprite.draw(self,dest)
         self.img = img
     def mockdraw(self, dest):
