@@ -359,10 +359,12 @@ class Script(gui.widget):
     def handle_events(self,evts):
         n = []
         dp = translate_click
+        dps = scale_relative_click
         for e in evts:
             if e.type==pygame.MOUSEMOTION:
-                d = {"rel":e.rel,"buttons":e.buttons}
+                d = {"buttons":e.buttons}
                 d["pos"] = dp(e.pos)
+                d["rel"] = dps(e.pos,e.rel)
                 e = pygame.event.Event(pygame.MOUSEMOTION,d)
             if e.type==pygame.MOUSEBUTTONUP:
                 d = {"button":e.button}
@@ -2539,12 +2541,26 @@ class choose_game(gui.widget):
         self.jump_when_close = jump
     def list_games(self,path):
         self.path = path
+        games = []
         for f in os.listdir(path):
             if f.startswith("."): continue
             if f in ["art","music","sfx","fonts"]:
                 continue
             if not os.path.isdir(path+"/"+f):
                 continue
+            games.append(f)
+        try:
+            f = open("lastgame")
+            played = eval(f.read())
+            f.close()
+        except:
+            played = []
+        for i in reversed(played):
+            i = played.pop(-1)
+            if i in games:
+                games.remove(i)
+                games.insert(0,i)
+        for f in games:
             item = gui.button(self,f)
             d = get_data_from_folder(self.path+"/"+f)
             if d.get("icon",""):
@@ -2573,6 +2589,10 @@ class choose_game(gui.widget):
             item.graphic = image
             self.list.add_child(item)
             def _play_game(func=f):
+                played.insert(0,func)
+                sf = open("lastgame","w")
+                sf.write(repr(played))
+                sf.close()
                 gamedir = self.path+"/"+func
                 if os.path.exists(gamedir+"/"+func+".txt"):
                     assets.start_game(gamedir,func)
@@ -3013,8 +3033,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     running = False
                 if e.type == pygame.KEYDOWN and e.key == pygame.K_c:
                     print "scripts",assets.stack
-                    print "objects",[len(x.obs) for x in assets.stack]
-                    print assets.cur_script.obs
+                    print [s.scene for s in assets.stack]
+                    print "objects",[x.obs for x in assets.stack]
                     print [getattr(o,"kill",0) for o in assets.cur_script.obs]
                 if (e.type==pygame.KEYUP and\
                 e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONUP and\
