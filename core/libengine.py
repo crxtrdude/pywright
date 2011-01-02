@@ -2765,6 +2765,24 @@ def make_screen():
     pygame.jsup = gu
     pygame.jsdown = gd
 
+def scale_relative_click(pos,rel):
+    mode,dim = settings.screen_format(assets)
+    def col(pp,ss):
+        if pos[0]>=pp[0] and pos[0]<=pp[0]+ss[0]\
+            and pos[1]>=pp[1] and pos[1]<=pp[1]+ss[1]:
+            x = rel[0]/float(ss[0])*sw
+            y = rel[1]/float(ss[1])*sh
+            return [x,y]
+    if dim["top"]:
+        r = col(*dim["top"][2:])
+        if r:
+            return r
+    if dim["bottom"]:
+        r = col(*dim["bottom"][2:])
+        if r:
+            return r
+    return rel
+    
 def translate_click(pos):
     mode,dim = settings.screen_format(assets)
     def col(pp,ss):
