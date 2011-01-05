@@ -8,6 +8,8 @@ from zipfile import ZipFile,ZIP_DEFLATED
 from pwvlib import *
 
 ERROR_STR= """Error removing %(path)s, %(error)s """
+ROOT_URL = "http://74.207.230.140/"
+ROOT_URL = "http://pywright.dawnsoft.org/"
 
 def rmgeneric(path, __func__):
     try:
@@ -74,17 +76,14 @@ def load_image(path):
     
 class my_o_dict(dict):
     pass
-        
 def names(url):
     url = url.replace("(","%28").replace(")","%29").replace(" ","%20")
-    print "accessing","http://pywright.dawnsoft.org/"+url
     if 1:#try:
-        f = urllib2.urlopen("http://pywright.dawnsoft.org/"+url)
+        f = urllib2.urlopen(ROOT_URL+url)
     else:#except:
         print "fail"
         return {}
     txt = f.read()
-    print txt
     lines = eval(txt)
     f.close()
     files = my_o_dict()
@@ -201,11 +200,13 @@ class Engine:
     mode = "port"
     quit_threads = 0
     root = root
+    num_threads = 0
     def Download_X(self,mode,path,url,check_folder=None):
         def t():
             self.mode = mode
             self.path = path
             self.url = url
+            print "try download",self.url
             build_list(path,url,check_folder)
             rpos = root.children[root.start_index].rpos
             root.children[root.start_index] = button(self,"download")
@@ -224,20 +225,27 @@ class Engine:
     def Update_PyWright(self,thread=True):
         self.path = "."
         self.Download_X("engine",".",get_url%("engine",),check_folder=".")
+    def get_download_in_progress(self,check):
+        path,filename,url,seek = self.path,check.filename,check.file,False
+        if os.path.exists("downloads/"+check.filename+"_url") and os.path.exists("downloads/"+check.filename):
+            try:
+                path,filename,url = open("downloads/"+check.filename+"_url","r").read().split("\t")
+                seek = True
+            except:
+                pass
+        return path,filename,url,seek
     def do_downloads(self,checkfolder=True,output=None):
-        print list.children
-        for x in list.children[2:]:
+        print "doing downloads"
+        for x in list.pane.children[1:]:
             check = x.children[1].children[0]
             if check.checked:
-                if os.path.exists("downloads/"+check.filename+"_url") and os.path.exists("downloads/"+check.filename):
-                    path,filename,url = open("downloads/"+check.filename+"_url","r").read().split(" ")
-                    self.download_file(path,filename,url,output,True)
-                else:
-                    self.download_file(self.path,check.filename,check.file,output)
+                path,filename,url,seek = self.get_download_in_progress(check)
+                self.download_file(path,filename,url,output,seek)
     def make_download_folders(self):
         if not os.path.exists("downloads"):
             os.mkdir("downloads")
     def download_file(self,path,filename,url,output=None,seek=False):
+        self.num_threads += 1
         self.make_download_folders()
         if not hasattr(self,"progress"):
             self.progress = progress()
@@ -248,29 +256,35 @@ class Engine:
         self.progress.progress = 0
         headers = {"User-Agent":"pywright downloader"}
         size = None
-        print "download with seek",seek
+        print "download with seek",seek,url
         if seek:
-            f = open("downloads/"+filename,"rb")
-            old = f.read()
-            f.close()
-            cli = open("downloads/"+filename,"w")
-            cli.write(old)
-            seek = len(old)
-            print "seeked",seek,"bytes"
-            serv = urllib2.urlopen(url)
-            size = int(serv.info()["Content-Length"])
-            if seek>size:
-                print "resetting download"
-                seek = 0
-                os.remove("downloads/"+filename+"_url")
+            try:
+                f = open("downloads/"+filename,"rb")
+                old = f.read()
+                f.close()
                 cli = open("downloads/"+filename,"w")
-            headers["Range"] = "bytes=%d-%d"%(seek,size)
-            serv.close()
-            print "headers:",headers
-        else:
+                cli.write(old)
+                seek = len(old)
+                print "seeked",seek,"bytes"
+                serv = urllib2.urlopen(url.replace(" ","%20"))
+                size = int(serv.info()["Content-Length"])
+                if seek>size:
+                    print "resetting download"
+                    seek = 0
+                    os.remove("downloads/"+filename+"_url")
+                    cli = open("downloads/"+filename,"w")
+                headers["Range"] = "bytes=%d-%d"%(seek,size)
+                serv.close()
+                print "headers:",headers
+            except:
+                import traceback
+                traceback.print_exc()
+                seek = 0
+        if not seek:
             seek = 0
             cli = open("downloads/"+filename,"wb")
             print "opened new file"
+        
         req = urllib2.Request(url.replace(" ","%20"),None,headers)
         try:
             serv = urllib2.urlopen(req)
@@ -285,7 +299,7 @@ class Engine:
         read = seek
         bytes = seek
         prog = open("downloads/"+filename+"_url","w")
-        prog.write(path+" "+filename+" "+url)
+        prog.write(path+"\t"+filename+"\t"+url)
         prog.close()
         f = open("downloads/last","w")
         f.write(path+" "+filename)
@@ -314,10 +328,12 @@ class Engine:
                     if evt.type == pygame.QUIT: raise SystemExit
         serv.close()
         cli.close()
-        self.progress.text = self.extract_zip(path,filename)
+        if read==size:
+            self.progress.text = self.extract_zip(path,filename)
         del self.progress
         if self.mode == "games":
             self.Download_Games()
+        self.num_threads -= 1
     def extract_zip(self,todir,filename):
         try:
             z = ZipFile("downloads/"+filename,"r")
@@ -372,6 +388,7 @@ class Engine:
         t = threading.Thread(target=self.do_downloads)
         t.start()
     def End_updater(self,*args):
+        Engine.quit_threads = True
         self.running = False
                 
 def run():
@@ -424,8 +441,11 @@ def run():
     root.add_child(pwup_b)
     
     if os.path.exists("downloads/last"):
-        last_path,last_dl = open("downloads/last","r").read().split(" ")
-        e.extract_zip(last_path,last_dl)
+        try:
+            last_path,last_dl = open("downloads/last","r").read().split(" ")
+            e.extract_zip(last_path,last_dl)
+        except:
+            os.remove("downloads/last")
 
     clock = pygame.time.Clock()
     while e.running:
@@ -441,5 +461,7 @@ def run():
             e.running = False
             if getattr(e,"need_restart",False):
                 sys.exit()
+    while e.num_threads:
+        pass
 if __name__=="__main__":
     run()
