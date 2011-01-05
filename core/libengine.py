@@ -19,6 +19,7 @@ import settings
 d = get_data_from_folder(".")
 __version__ = d["version"]
 VERSION = "Version "+cver_s(d["version"])
+clock = pygame.time.Clock()
 
 def pauseandquit():
     import time
@@ -2807,7 +2808,7 @@ def fit(surf,size):
         surf = pygame.transform.scale2x(surf)
     surf = pygame.transform.scale(surf,size)
     return surf
-def draw_screen():
+def draw_screen(showfps):
     scale = 0
     if assets.sheight!=sh or assets.swidth!=sw: scale = 1
     scaled = pygame.screen
@@ -2830,6 +2831,8 @@ def draw_screen():
         draw_segment(pygame.real_screen,top,dim["top"][0],dim["top"][1])
     if dim["bottom"]:
         draw_segment(pygame.real_screen,bottom,dim["bottom"][0],dim["bottom"][1])
+    if showfps:
+        pygame.real_screen.blit(assets.get_font("nt").render(str(clock.get_fps()),1,[100,180,200]),[0,pygame.real_screen.get_height()-12])
     pygame.display.flip()
 assets.make_screen = make_screen
 assets.draw_screen = draw_screen
@@ -2945,8 +2948,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
 
     running = True
 
-    showfps = False
-    clock = pygame.time.Clock()
+    showfps = True
 
     assets.make_start_script()
     if "-run" in sys.argv:
@@ -2975,7 +2977,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ lt = time.time()
         #~ dt = ticks*1000.0
         dt = clock.tick(60)
-        pygame.display.set_caption("PyWright "+VERSION+" %s"%clock.get_fps())
+        pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
         if not assets.cur_script: break
         [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
@@ -2998,16 +3000,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         if assets.shakeargs:
             assets.cur_script._shake(*assets.shakeargs)
             assets.shakeargs = 0
-        if showfps:
-            pygame.screen.blit(font.render(str(1/(dt/1000.0)),[100,180,200]),[0,0])
-            #~ y = 12
-            #~ for s in assets.stack:
-                #~ for i in range(len(s.obs)):
-                    #~ pygame.screen.blit(arial10.render(str(s.obs[i]),1,[100,180,200]),[0,y])
-                    #~ y+=10
-                #~ y+=2
         if assets.variables.get("render",1):
-            draw_screen()
+            draw_screen(showfps)
         #pygame.image.save(pygame.real_screen,"capture/img%.04d.jpg"%fr)
         #fr+=1
         pygame.event.pump()
