@@ -5,7 +5,6 @@
 #TODO: show evidence at start that is never revealed
 #TODO: make sure to read as utf8
 
-#TODO: Need to add reveal/hide location introductions, once I actually understand them
 #TODO: psyche locks
 """
 Should create objects for each aao line, so that they can be manipulated better
@@ -40,7 +39,8 @@ game_id = "10711" #My dialogue test case
 game_id = "14571" #TAP trial former
 game_id = "18928" #TAP medium
 #game_id = "19233" #TAP latter
-#game_id = "21671" #investigation test
+#game_id = "21671" #investigation test 1, moving, talking, presenting, examining, and hide/reveal dialog and frames
+game_id = "22330"  #investigation test 2: hide/reveal scene, hide/reveal scene intro
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -397,14 +397,6 @@ def DemanderPreuve(vals,elements):
 def AllerMessage(vals,elements):
     vals["postcode"] = "goto line_"+elements[0]
     
-intromode = False
-def DevoilerIntroLieu(vals,elements):
-    """Intro mode off"""
-    intromode = True
-def DevoilerLieu(vals,elements):
-    """Intro mode off"""
-    intromode = False
-    
 #Click position in an image
 def PointerImage(vals,elements):
     url = elements[0]
@@ -543,7 +535,10 @@ def CreerLieu(vals,elements):
     vals["postcode"] = "label SCENE_NO_%s\n"%elements[0]
     vals["postcode"] += "label SCENE_%s\n"%elements[1]
     vals["postcode"] += "set CURRENT_PLACE SCENE_%s\n"%elements[1]
+    vals["postcode"] += "{intro_logic %s %s}"%(elements[0],int(vals["id_num"])+1)
     vals["globals"]["current_place"] = elements[0]
+    if elements[2]=="1":
+        wp("set scene_hidden_%s true\n"%elements[0])
 
 def DiscussionEnqueteV2(vals,elements):
     """List of discussion topics"""
@@ -582,16 +577,22 @@ def MasquerConversation(vals,elements):
 def MasquerIntroLieu(vals,elements):
     """Hide location intro text"""
     vals["postcode"] = "set intro_hidden_%s true\n"%(elements[0])
-def DevoilerConversation(vals,elements):
+def DevoilerIntroLieu(vals,elements):
     """Reveal location intro text"""
     vals["postcode"] = "set intro_hidden_%s false\n"%(elements[0])
+def MasquerLieu(vals,elements):
+    """Hide location"""
+    vals["postcode"] = "set scene_hidden_%s true\n"%(elements[0])
+def DevoilerLieu(vals,elements):
+    """Reveal location"""
+    vals["postcode"] = "set scene_hidden_%s false\n"%(elements[0])
     
 def SeDeplacer(vals,elements):
     """Show menu to move to another scene"""
     items = ""
     for e in elements:
         scid,scname = e.split("_",1)
-        items += "li %s result=SCENE_NO_%s\n"%(scname,scid)
+        items += "isnot scene_hidden_%s?\nli %s result=SCENE_NO_%s\n"%(scid,scname,scid)
     vals["postcode"] = """
     list
     %(items)s
@@ -664,6 +665,15 @@ def wp(t):
     res.presets.write(t.encode("utf8"))
     res.presets.flush()
 w(u"include evidence\ninclude presets")
+wp(u"""
+macro intro_logic
+is intro_hidden_$1 = true?
+set aao_line_hide_$2 false
+is intro_hidden_$1 = false?
+set aao_line_hide_$2 true
+set intro_hidden_$1 = x
+endmacro
+""")
 had_fg = False
 linked = False
 globals = {}
@@ -732,8 +742,6 @@ for id in sorted(namespace["donnees_messages"].keys()):
         vals["precode"] = "is aao_line_hide_%s?\ngoto line_%s\n"%(id_num,int(id_num)+1)+vals["precode"]
     if vals["skip"]:
         vals["postcode"]+="goto line_%s"%(int(id_num)+1)
-    if intromode and vals["text"]:
-        vals["text"]+="{next}"
     #A delay from the beginning of text before continuing
     if "text_delay" in vals and vals["text_delay"]:
         wait_time = cent_to_frame(vals["text_delay"])
