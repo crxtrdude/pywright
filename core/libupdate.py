@@ -314,6 +314,7 @@ class Engine:
             read += len(r)
             bytes += len(r)
             self.progress.progress = read/float(size)
+            print self.progress.progress
             if time.time()-s>1:
                 bps = bytes/(time.time()-s)
                 s = time.time()
@@ -326,11 +327,16 @@ class Engine:
                 output[1]()
                 for evt in pygame.event.get():
                     if evt.type == pygame.QUIT: raise SystemExit
+        print "closing server"
         serv.close()
+        print "closing download file"
         cli.close()
+        print "extract zip?"
         if read==size:
             self.progress.text = self.extract_zip(path,filename)
+        print "delete progress bar"
         del self.progress
+        print "switch modes"
         if self.mode == "games":
             self.Download_Games()
         self.num_threads -= 1
@@ -461,7 +467,8 @@ def run():
             e.running = False
             if getattr(e,"need_restart",False):
                 sys.exit()
-    while e.num_threads:
+    while Engine.num_threads:
+        print Engine.num_threads
         pass
 if __name__=="__main__":
     run()
