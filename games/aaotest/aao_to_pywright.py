@@ -626,7 +626,7 @@ def end_cross_exam(vals):
         del jumpto_when_present[id_num]
     for id_num in label_none.keys():
         t+=u"\nlabel "+label_none[id_num]
-        t+=u"\ngoto line_%s\n"
+        t+=u"\ngoto line_%s\n"%id_num
         del label_none[id_num]
     return t
             
