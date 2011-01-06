@@ -90,7 +90,7 @@ def addevmenu():
         return
     return em
 def add_s(scene):
-    s = Script()
+    s = assets.Script()
     s.init(scene)
     assets.stack.append(s)
 assets.addob = addob
@@ -663,7 +663,7 @@ char test
         mlines = self.macros.get(macroname,None)
         if not mlines: return
         if args: args = " "+args
-        nscript = Script(self)
+        nscript = assets.Script(self)
         nscript.world = self.world
         scriptlines = ["{"+macroname+args+"}"]
         assets.replace_macros(scriptlines,self.macros)
@@ -2408,6 +2408,28 @@ useful to use 'resume' in the 'fail' case, because you won't know where the play
         
 assets.Script = Script
 
+class TextScript(Script):
+    def __init__(self,*args):
+        super(TextScript,self).__init__(*args)
+        print "initialized TextScript"
+    def execute_line(self,line):
+        #print "execute:",repr(line)
+        super(TextScript,self).execute_line(line)
+    def call_func(self,command,args):
+        if command == "textbox":
+            txt = " ".join(args[1:]).replace("{n}","\n")
+            tb = textbox(txt)
+            tb.can_skip = True
+            #tb.skipping = len(txt)
+            tb.enter_down()
+            tb.update()
+            print tb.written.encode("utf8")
+            x = raw_input()
+        else:
+            super(TextScript,self).call_func(command,args)
+    def draw(self,*args):
+        pass
+
 class DebugScript(Script):
     def __init__(self):
         super(DebugScript,self).__init__()
@@ -2659,7 +2681,7 @@ assets.load_game_menu = load_game_menu
         
 def make_start_script(logo=True):
     assets.game = "games"
-    bottomscript = Script()
+    bottomscript = assets.Script()
     introlines = []
     try:
         import urllib2
@@ -2764,6 +2786,10 @@ def make_screen():
     pygame.jsright = gr
     pygame.jsup = gu
     pygame.jsdown = gd
+    if os.environ.get("SDL_VIDEODRIVER",0)=="dummy":
+        pygame.screen = pygame.Surface([sw,sh*2],0,32)
+        pygame.blank = pygame.Surface([sw,sh*2],0,32)
+        pygame.blank.fill([0,0,0])
 
 def scale_relative_click(pos,rel):
     mode,dim = settings.screen_format(assets)
@@ -2842,6 +2868,7 @@ def run(checkupdate=False):
 
     if "--help" in sys.argv or "-h" in sys.argv or "-?" in sys.argv or "/?" in sys.argv:
         print "%s -run 'path/to/game'  :  run a game directly"%(sys.argv[0],)
+        print "%s -text : text mode, no graphics created, must use -run"%(sys.argv[0],)
         sys.exit()
     
     #Check for updates!
@@ -2933,7 +2960,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if spl[0]=="autosave_keep": assets.autosave_keep = int(spl[1])
     
     pygame.USE_GL=0
-    make_screen()
 
     #assets.master_volume = 0.0
         
@@ -2950,9 +2976,18 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
 
     showfps = True
 
+    text_only = False
+    if "-text" in sys.argv:
+        text_only = True
+        assets.Script = TextScript
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+    make_screen()
     assets.make_start_script()
+
     if "-run" in sys.argv:
         def ms(*args):
+            print "make_start_script to exit"
             sys.exit()
         assets.make_start_script = ms
         assets.stack = []
