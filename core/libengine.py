@@ -649,7 +649,7 @@ char test
         except KeyError:
             self.obs.append(error_msg("Variable not defined:",line,self.si,self))
             return True
-        if self.execute_macro(args[0]):
+        if self.execute_macro(args[0]," ".join(args[1:])):
             return True
         self.call_func(args[0],args)
     def call_func(self,command,args):
