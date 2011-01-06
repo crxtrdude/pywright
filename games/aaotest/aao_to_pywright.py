@@ -4,12 +4,12 @@
 
 #TODO: show evidence at start that is never revealed
 #TODO: make sure to read as utf8
-"""Limitations:
-cannot hide a statement that wasn't hidden from the start
-cannot hide regular lines, only statements:
-idea:
-    isnot aao_st_show_[line_num] line_[line_num+1]
-    
+
+#TODO: psyche locks
+"""
+Should create objects for each aao line, so that they can be manipulated better
+and produce better code
+
 Should build script first, then download and convert art, and use threads for the downloading
 
 The delay function is not accurate - in AAO it is timed from the start of the message, in pywright
@@ -39,7 +39,8 @@ game_id = "10711" #My dialogue test case
 game_id = "14571" #TAP trial former
 game_id = "18928" #TAP medium
 #game_id = "19233" #TAP latter
-#game_id = "21671" #investigation test
+#game_id = "21671" #investigation test 1, moving, talking, presenting, examining, and hide/reveal dialog and frames
+game_id = "22330"  #investigation test 2: hide/reveal scene, hide/reveal scene intro
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -396,14 +397,6 @@ def DemanderPreuve(vals,elements):
 def AllerMessage(vals,elements):
     vals["postcode"] = "goto line_"+elements[0]
     
-intromode = False
-def DevoilerIntroLieu(vals,elements):
-    """Intro mode off"""
-    intromode = True
-def DevoilerLieu(vals,elements):
-    """Intro mode off"""
-    intromode = False
-    
 #Click position in an image
 def PointerImage(vals,elements):
     url = elements[0]
@@ -522,11 +515,15 @@ def RetourCI(vals,elements):
     print "!!!!",elements[0]
     vals["postcode"] = "resume"
     #vals["postcode"] = "goto "+"line_"+elements[0]
-    
+
+def MasquerMessage(vals,elements):
+    """Hide message OR STATEMENT"""
+    vals["postcode"] = "set aao_st_show_"+elements[0]+" false"
+    vals["postcode"] += "\nset aao_line_hide_%s true"%elements[0]
 def AjouterCI(vals,elements):
-    """Reveal hidden statement"""
-    reveal_id = elements[0]
-    vals["postcode"] = "set aao_st_show_"+reveal_id+" true"
+    """Reveal hidden statement OR LINE"""
+    vals["postcode"] = "set aao_st_show_"+elements[0]+" true"
+    vals["postcode"] += "\nset aao_line_hide_%s false"%elements[0]
     
 def FinDuJeu(vals,elements):
     """Finish the Game"""
@@ -538,7 +535,10 @@ def CreerLieu(vals,elements):
     vals["postcode"] = "label SCENE_NO_%s\n"%elements[0]
     vals["postcode"] += "label SCENE_%s\n"%elements[1]
     vals["postcode"] += "set CURRENT_PLACE SCENE_%s\n"%elements[1]
+    vals["postcode"] += "{intro_logic %s %s}"%(elements[0],int(vals["id_num"])+1)
     vals["globals"]["current_place"] = elements[0]
+    if elements[2]=="1":
+        wp("set scene_hidden_%s true\n"%elements[0])
 
 def DiscussionEnqueteV2(vals,elements):
     """List of discussion topics"""
@@ -556,7 +556,7 @@ def DiscussionEnqueteV2(vals,elements):
             label = topic_label[i]
             hide = topic_hide[i]
             if hide=='1':
-                vals["presets"] = "set convo_hidden_%s_%s true\n"%(vals["globals"]["current_place"],i+1)
+                vals["presets"] += "set convo_hidden_%s_%s true\n"%(vals["globals"]["current_place"],i+1)
             vals["postcode"] += "isnot convo_hidden_%s_%s?\n"%(vals["globals"]["current_place"],i+1)
             vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
     vals["postcode"] += "showlist\ngoto $CURRENT_PLACE\n"
@@ -567,13 +567,32 @@ def DevoilerConversation(vals,elements):
     #basically, set a variable
     #location id and/or conversation id might be expressions
     vals["postcode"] = "set convo_hidden_%s_%s false\n"%(elements[0],elements[1])
+def MasquerConversation(vals,elements):
+    """Hide discussion topic"""
+    #location id, conversation id
+    #basically, set a variable
+    #location id and/or conversation id might be expressions
+    vals["postcode"] = "set convo_hidden_%s_%s true\n"%(elements[0],elements[1])
+    
+def MasquerIntroLieu(vals,elements):
+    """Hide location intro text"""
+    vals["postcode"] = "set intro_hidden_%s true\n"%(elements[0])
+def DevoilerIntroLieu(vals,elements):
+    """Reveal location intro text"""
+    vals["postcode"] = "set intro_hidden_%s false\n"%(elements[0])
+def MasquerLieu(vals,elements):
+    """Hide location"""
+    vals["postcode"] = "set scene_hidden_%s true\n"%(elements[0])
+def DevoilerLieu(vals,elements):
+    """Reveal location"""
+    vals["postcode"] = "set scene_hidden_%s false\n"%(elements[0])
     
 def SeDeplacer(vals,elements):
     """Show menu to move to another scene"""
     items = ""
     for e in elements:
         scid,scname = e.split("_",1)
-        items += "li %s result=SCENE_NO_%s\n"%(scname,scid)
+        items += "isnot scene_hidden_%s?\nli %s result=SCENE_NO_%s\n"%(scid,scname,scid)
     vals["postcode"] = """
     list
     %(items)s
@@ -646,6 +665,15 @@ def wp(t):
     res.presets.write(t.encode("utf8"))
     res.presets.flush()
 w(u"include evidence\ninclude presets")
+wp(u"""
+macro intro_logic
+is intro_hidden_$1 = true?
+set aao_line_hide_$2 false
+is intro_hidden_$1 = false?
+set aao_line_hide_$2 true
+set intro_hidden_$1 = x
+endmacro
+""")
 had_fg = False
 linked = False
 globals = {}
@@ -708,12 +736,12 @@ for id in sorted(namespace["donnees_messages"].keys()):
     if vals["operation"]:
         apply_event(vals,vals["operation"])
     is_statement = do_statement(vals)
-    if vals["hidden"] and not is_statement:
-        vals["precode"] = "isnot aao_st_show_%s?\ngoto line_%s\n"%(id_num,int(id_num)+1)+vals["precode"]
+    if vals["hidden"]:
+        wp("set aao_line_hide_%s true\n"%id_num)
+    if not is_statement:
+        vals["precode"] = "is aao_line_hide_%s?\ngoto line_%s\n"%(id_num,int(id_num)+1)+vals["precode"]
     if vals["skip"]:
         vals["postcode"]+="goto line_%s"%(int(id_num)+1)
-    if intromode and vals["text"]:
-        vals["text"]+="{next}"
     #A delay from the beginning of text before continuing
     if "text_delay" in vals and vals["text_delay"]:
         wait_time = cent_to_frame(vals["text_delay"])
@@ -764,7 +792,7 @@ for id in sorted(namespace["donnees_messages"].keys()):
         w(u"\n"+vals["postcode"]+u"\n")
     if vals["presets"]:
         wp(vals["presets"])
-w(u'\nset _speaking NO_ONE\n"THE END"\n')
+w(u'\nlabel line_%s\nset _speaking NO_ONE\n"THE END"\n'%(int(id_num)+1))
 
 for evid in all_evidence:
     if all_evidence[evid]:
