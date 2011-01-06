@@ -40,7 +40,7 @@ game_id = "14571" #TAP trial former
 game_id = "18928" #TAP medium
 #game_id = "19233" #TAP latter
 #game_id = "21671" #investigation test 1, moving, talking, presenting, examining, and hide/reveal dialog and frames
-game_id = "22330"  #investigation test 2: hide/reveal scene, hide/reveal scene intro
+#game_id = "22330"  #investigation test 2: hide/reveal scene, hide/reveal scene intro
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -53,10 +53,10 @@ class WorkThread:
             if "charname" in conv:
                 if not os.path.exists(self.rootpath+"/art/port/"+conv["charname"]):
                     os.mkdir(self.rootpath+"/art/port/"+conv["charname"])
-            print "..."
-            print "churn on",conv["url"]
+            #print "..."
+            #print "churn on",conv["url"]
             wget(conv["url"],self.rootpath+"/"+conv["dest"])
-            print self.conversions
+            #print self.conversions
     def start(self):
         self.t = threading.Thread(target=self.run)
         self.t.start()
@@ -673,6 +673,9 @@ is intro_hidden_$1 = false?
 set aao_line_hide_$2 true
 set intro_hidden_$1 = x
 endmacro
+
+set _textbox_wrap true
+set _debug true
 """)
 had_fg = False
 linked = False
@@ -710,9 +713,12 @@ for id in sorted(namespace["donnees_messages"].keys()):
         if attr_key == 'auteur':
             vals["nametag"]=t.replace(" ","_")
         if attr_key == 'fond' and t:
-            vals['bg'] = bg(t)
-            if not t.endswith(".gif"):
-                vals['fg'] = fg(t.rsplit(".",1)[0]+".gif")
+            if t=="no":
+                vals['bg'] = 'black'
+            else:
+                vals['bg'] = bg(t)
+                if not t.endswith(".gif"):
+                    vals['fg'] = fg(t.rsplit(".",1)[0]+".gif")
         if attr_key == 'id_auteur':
             vals['char_id'] = t
         if attr_key == 'image_perso':
