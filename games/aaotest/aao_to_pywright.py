@@ -7,6 +7,10 @@
 
 #TODO: psyche locks
 """
+Need to figure out when retourci should actually use 'resume' and when it should
+restart the cross exam. AAO has no 'resume' command, so uses RetourCI for both
+kinds of things
+
 Should create objects for each aao line, so that they can be manipulated better
 and produce better code
 
@@ -512,9 +516,8 @@ def pauseCI(vals,elements):
     
 def RetourCI(vals,elements):
     """Return to cross exam"""
-    print "!!!!",elements[0]
-    vals["postcode"] = "resume"
-    #vals["postcode"] = "goto "+"line_"+elements[0]
+    #vals["postcode"] = "resume"
+    vals["postcode"] = "goto "+"line_"+elements[0]
 
 def MasquerMessage(vals,elements):
     """Hide message OR STATEMENT"""
