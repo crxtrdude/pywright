@@ -1,0 +1,36 @@
+#-version-1
+bg nothing
+nt
+"{c090}{center}{type}December 26, 9:02 AM{n}Detention Center{n}Visitor's Room"
+bg aj/detentioncenter fade
+pause 60
+char Udgey fade y=22
+sfx /Key.ogg
+char Apollo hide
+"{c099}(This... can't be...!!)"
+sfx /swoop.wav
+bg aj/judgeseat fade
+char Udgey e=warning nametag=Judge
+"And so, on the charges of murder,{n}{c900}I{c} am hereby declared...{p30}{next}"
+guilty
+sfx /Key.ogg
+char Udgey e=surprised nametag=Judge
+"Mr. Justice..."
+"Is there something wrong?"
+char nothing
+sfx /swoop.wav
+bg aj/detentioncenter fade
+char Udgey e=surprised y=22
+pause 60 script
+char Udgey y=22
+char Apollo hide
+"N...no... nothing. I'm fine.{n}I mean, I'm sorry."
+"So, what did you call me here for,{n}Your Honor?"
+char Udgey y=22 nametag=Judge
+"{f}{sfx/Awe.ogg}I didn't do nuddin!{sfx/Smack.ogg} I swear!"
+pause 30 script
+addev judge$
+"...By the way, my name is{n}Judge Chambers. But you{n}can call me Judge."
+char Apollo hide
+"Ok... Judge... Let's start{n}with a few questions then."
+script scene3menu

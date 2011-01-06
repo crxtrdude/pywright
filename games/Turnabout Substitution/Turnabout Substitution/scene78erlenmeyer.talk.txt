@@ -1,0 +1,45 @@
+#-version-1
+label top
+bg aj/detentioncenter
+
+list scene78erlenmeyertalk
+li What happened?
+li Erlenmeyer
+showlist
+menu scene78erlenmeyer
+
+
+label What happened?
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+
+char Apollo hide
+"Do you remember anything about{n}what happened?"
+
+char Erlenmeyer
+"...The eggplant was killed."
+
+char Apollo hide
+"{sfx/Smack.ogg}{s}K-Killed?! By whom?!"
+
+char Erlenmeyer
+"The strawberry, of course.{n}{esad}I'm sorry, Charles...."
+
+char Apollo hide
+"...*sigh*"
+goto top
+
+
+label Erlenmeyer
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+
+char Apollo hide
+"So, uh... is there anything you'd{n}like me to know about you?"
+
+char Erlenmeyer e=squinting
+"I don't have a lemon for a head."
+
+char Apollo hide
+"...Great."
+goto top

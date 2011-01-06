@@ -1,0 +1,21 @@
+#-version-1
+present
+label top
+menu scene10meekins
+bg ts/1clooneyprisonasylumentrance
+
+label none
+char Meekins
+"It...{n}It's an {sfx/Bwaaah.ogg}honor, sir!"
+"I've shown things to people{n}many, many times!"
+"Sometimes the wrong things{n}to the wrong people!"
+char Meekins e=megaphone
+"{sfx/megaphone.wav}But this is the first time{n}anyone's ever shown something to{n}meeeeeeeeeeeeee!"
+char Apollo hide
+"So, what's your{n}opinion about it?"
+char Meekins e=thoughtful
+"...I know {sfx/Key.ogg}nothing about this, sir!"
+char Apollo hide
+"{c099}(Apparently, he's not the only{n}one who likes to show the wrong{n}things to the wrong people.)"
+char nothing
+goto top

@@ -1,0 +1,38 @@
+#-version-1
+sfx /swoop.wav
+mus 115 - Apollo Justice - Tell the Truth.ogg
+set _music_loop 115 - Apollo Justice - Tell the Truthloop.ogg
+bg aj/detentioncenter fade
+char Udgey y=22
+"It was Christmas Eve...{n}I received a letter from Erlenmeyer."
+"He promised he would explain{n}everything to me if{n}I came to visit him."
+delete
+sfx /swoop.wav
+bg aj/detentioncenter fade
+char Udgey y=22
+"The gun... the uniform...{n}they were not my idea."
+"I received them in a package{n}along with the letter. They were part{n}of Erlenmeyer's conditions."
+delete
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Ema
+set _judge G.Strings
+set _helper Rhea
+startcourt
+defense
+emo confident name=dc
+"The whole set-up was a trap!"
+"The real killer lured Chambers to{n}Erlenmeyer's cell with a gun, drugged{n}him, and then framed Chambers!"
+scrollprosecutor
+emo sarcastic name=pc
+"My, what an interesting tale!"
+"Of course, that's all I'll{n}ever think it is, unless{n}you have some hard proof."
+emo normal name=pc
+"What happened to this letter?"
+defense
+emo normal name=dc
+"Well..."
+delete
+script scene29

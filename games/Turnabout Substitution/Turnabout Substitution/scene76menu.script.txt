@@ -1,0 +1,14 @@
+#-version-1
+label top
+bg ts/judgesbedroom fade
+
+flag openScene77 skipEma
+flag postitAdded AND soporificAdded EmaCalls
+menu scene76
+
+label skipEma
+mus 123 - Apollo Justice - Search Opening.ogg
+menu scene76
+
+label EmaCalls
+script scene76end

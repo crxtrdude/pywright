@@ -1,0 +1,43 @@
+#-version-1
+label top
+mus
+bg ts/1clooneyprisonasylumentrancewithoutwig fade
+
+flag scene79repeat skipClooney
+
+char Apollo hide
+nt
+"{c090}{center}{type}December 28{n}Clooney Prison's Asylum"
+
+char Apollo hide
+"{c099}(I wondered if this place would{n}be as creepy the second time....{n}.{p25}.{p25}.{p25}Yep, still creepy.)"
+
+char Rhea
+"What are you waiting for, Polly?{n}Let's go get that profile!"
+
+char hotti nametag=???
+"{f}Hmm, visitors, {f}yes!"
+
+char Apollo hide
+"{s}{sfx/Shock.ogg}Aaaaaaggggh!{n}{c099}(Where did he come from?!)"
+
+char hotti nametag=???
+"I'm {sfx/Key.ogg}Director Clooney, yes..."
+
+char hotti nametag=Clooney
+"Just like the sign says...{n}Clooney Prison."
+addev hotti$
+
+char Rhea e=smiling1
+"Oh, he looks official!{n}He can probably help us, right?"
+
+char Apollo hide
+"R-right...."
+
+setflag scene79repeat
+mus 126 - Apollo Justice - Eccentric.ogg
+menu scene79clooney
+
+label scene79repeat
+mus 126 - Apollo Justice - Eccentric.ogg
+menu scene79clooney

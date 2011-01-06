@@ -1,0 +1,98 @@
+#-version-1
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness nothing
+set _judge G.Strings
+set _helper Rhea
+startcourt
+prosecutor
+"{sfx/Ding.ogg}{f}And are you sure{n}this is the right time?"
+judge
+"...{sfx/Smack.ogg}{s 10 10}Of course!{n}I have a watch, y'know."
+prosecutor
+"{sfx/Ding.ogg}{f}Is your watch working?"
+judge
+"...{sfx/Shock.ogg}{s 10 10}Gah! I've gotta go--{p10}{next}"
+fg HoldItAnimApollo
+pause 5 script
+defense
+"I think this is the right{n}courtroom, Your Honor. She's{n}just messing with you."
+judge
+emo shocked name=jc
+"{sfx/Shock.ogg}{s 10 10}WHAT? Is this true?!"
+prosecutor
+"You were here when it{n}happened. Is it?"
+judge
+emo serious name=jc
+"Gr... {sfx/Bwaaah.ogg}{s 20 20}penalties for the both of you!"
+defense
+emo objects name=dc
+"{sfx/Shing.ogg}{f}I haven't done anything!"
+judge
+"...{sfx/Ding.ogg}{f}Fine. No penalties."
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(But what about her?{n}Ugh... I have got to{n}win this trial...)"
+"{c099}(I wouldn't be able to stand{n}this guy presiding over{n}all my future cases!)"
+judge
+"Now then, will the prosecution{n}give its opening statement?"
+prosecutor
+"How do you know I'm ready?"
+judge
+emo serious name=jc
+"You already said you were!"
+prosecutor
+"{sfx/Key.ogg}{f}Oh really?"
+judge
+emo embarrassed name=jc
+"{sfx/Smack.ogg}{s 10 10}Yes! Then you and the defense{n}started to argue why you{n}were invisible, but I..."
+"err... {sfx/oops.wav}never mind. A-are you ready?"
+prosecutor
+"Yes, and I will now give{n}my opening statement."
+scrolldefense
+emo objects name=dc
+"{sfx/Shing.ogg}{f}Wait! What about me?"
+scrollprosecutor
+"What about you, Lady Justice?"
+scrolldefense
+emo sweats name=dc
+"...{sfx/Key.ogg}{f}Why is she speaking to Rhea?"
+helper
+emo aideserious name=hc
+"She's speaking to {sfx/Ding.ogg}{f}{c900}you{c}, Apollo!"
+set _speaking dc
+"{sfx/Shock.ogg}{s 10 10}What?!"
+prosecutor
+emo serious name=pc
+"The defense is obviously not ready."
+"Of course, whether he's ready{n}or not has no correlation to{n}the outcome of this trial."
+judge
+"I concur."
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(Huh?!)"
+judge
+"Your opening statement, please."
+mus 112 - Apollo Justice - Trance Logic.ogg
+set _music_loop 112 - Apollo Justice - Trance Logicloop.ogg
+prosecutor
+"Four months ago, Robert Erlenmeyer{n}was convicted as the serial killer{n}behind the Mysterious Bust Killings."
+emo serious name=pc
+"Although some might view{n}this as a righteous deed,{n}I certainly do not."
+"The killer of a murderer is a murderer{n}himself, no better - perhaps{n}even worse - than his victim."
+emo normal name=pc
+"And I shall prove, by providing{n}motive, opportunity,{n}and decisive evidence,"
+"{sfx/Shing.ogg}{f}that Judge Chambers is{n}this murderer!"
+helper
+emo aide name=hc
+"Wow, she really is formidable...{n}That was an extremely{n}strong opening statement!"
+prosecutor
+"Now, you are probably{n}wondering what ever could{n}make the police arrest an"
+"upstanding member of{n}society like the defendant..."
+"...and I have a {sfx/Dunnn.ogg}{f}witness to{n}perfectly answer that question!"
+"The prosecution calls{n}Ema Skye to the stand!"
+script scene22

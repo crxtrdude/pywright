@@ -1,0 +1,141 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+
+flag chosemicequestion3 micequestion3intro
+flag chosevirusquestion3 virusquestion3intro
+
+label micequestion3intro
+set _cr_back_button true
+fg TakeThatAnimApollo
+pause 5 script
+defense
+sfx /evidenceshoop.wav
+ev mice name=mice x=185
+"{ehandsondesk-nobrac}I brought up these mice{n}earlier in the trial."
+"I believe I already mentioned{n}that they were infected{n}with a {f}rare virus..."
+sfx /evidenceshoop.wav
+delete name=mice
+"{sfx /Key.ogg}{f}Specifically, the {f}{c900}MLJ5 virus{c}."
+"I learned this when Detective{n}Skye and I investigated{n}the classroom,"
+"and found these{n}{sfx/Ding.ogg}{f}strangely-colored mice."
+goto question4
+
+label virusquestion3intro
+set _cr_back_button true
+fg TakeThatAnimApollo
+pause 5 script
+defense
+sfx /evidenceshoop.wav
+ev mice name=mice x=185
+"{ehandsondesk-nobrac}Detective Skye and I found{n}{sfx/Ding.ogg}{f}strangely colored mice in{n}the biology classroom."
+sfx /evidenceshoop.wav
+delete name=mice
+"{sfx /Shing.ogg}{f}We soon discovered they{n}were infected with{n}the {c900}MLJ5 virus{c}!"
+goto question4
+
+label question4
+defense
+"{enormal-nobrac}Obviously, the mice {f}couldn't have{n}been infected long before{n}the night of the murder,"
+"or a {f}teacher would{n}have noticed."
+"Erlenmeyer must have{n}{f}{s 10 10}injected the mice with{n}the virus himself,"
+"then {sfx/Shing.ogg}{f}{s 10 10}played with them{n}so that he would be{n}infected!"
+"After all, the MLJ5 virus is{n}able to be {sfx/Key.ogg}{f}transferred{n}to human beings."
+"Obviously if I could{n}figure this out,{n}{sfx/Dunnn.ogg}{f}{s 10 10}you could too, Rhea!"
+witness
+"{p50}...{sfx/Ding.ogg}{f}Hmph."
+defense
+"{ehandsondesk-nobrac}Wearing gloves, you {f}drove{n}to Larry Butz High{n}School."
+"You went to the classroom,{n}{sfx/sfx-thud4.wav}{s 8 8}knocked Erlenmeyer"
+"out, and then set up{n}the Mysterious Bust{n}crime scene."
+"You then put {f}{s 8 8}Erlenmeyer in the{n}trunk of your car and drove{n}to Forest Bones Cemetery!"
+witness
+"{emad}And just {f}why{n}would I go there?"
+defense
+"{c900}To {sfx/Key.ogg}{f}dispose of the{n}body{c}, of course!"
+witness
+"{sfx /Ding.ogg}{f}How exactly would going to{n}Forest Bones Cemetery help{n}me get rid of the body?"
+"If I really wanted to get rid{n}of it, I would have dumped{n}it in a river or something."
+defense
+"There was {f}{s 5 5}something at{n}the cemetery that let{n}you get rid of the body."
+"{f}{s 8 8}Something like {f}this...!"
+"{ehandsondesk-nobrac(blink)}{c099}(I need to pick out the {f}spot at{n}the scene of the crime that{n}shows them what I mean!)"
+
+clear
+label question4p1
+timer 7200 outoftime
+show_timer
+set _double_screen_examine_fade true
+set _examine_showbars true
+bg ts/2cemeterycrimescenefortrial
+examine hide
+region 18 53 63 93 gravesA
+region 82 53 57 69 gravesB
+region 147 98 23 28 graveC
+region 187 103 15 23 graveD
+region 211 96 23 18 graveE
+region 174 73 21 21 graveF
+scene106
+
+label gravesA
+script scene107
+
+label gravesB
+script scene107
+
+label graveC
+script scene107
+
+label graveD
+script scene107
+
+label graveE
+script scene107
+
+label graveF
+script scene107
+
+label none
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+judge
+"The only thing that destroys....{p40}{n}is your {f}credibility."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"{sfx /Smack.ogg}{s}Now get serious and{n}point out the spot!"
+goto question4p1
+
+label gameover
+script gameover
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

@@ -1,0 +1,10 @@
+#-version-1
+label top
+
+list scene4move
+li Detention Center
+showlist
+menu scene4
+
+label Detention Center
+script scene3menu

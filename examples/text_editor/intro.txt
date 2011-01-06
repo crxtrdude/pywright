@@ -1,0 +1,20 @@
+set _debug true
+
+label cool
+
+gui Input txt1 x=0 y=0 name=inp1 width=200
+gui Input txt2 x=0 y=20 name=inp2 width=200
+gui Input txt3 x=0 y=40 name=inp3 width=200
+
+gui Button {Preview} x=0 y=60 Preview
+
+gui Wait
+
+
+
+
+macro Preview
+joinvar txt $txt1 {n} $txt2 {n} $txt3
+textbox $txt
+gui Wait
+endmacro

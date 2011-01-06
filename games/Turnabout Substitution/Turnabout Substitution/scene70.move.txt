@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg policehq
+
+list scene70
+li Wright Anything Agency
+showlist
+menu scene70
+
+label Wright Anything Agency
+script scene66menu

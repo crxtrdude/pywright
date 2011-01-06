@@ -1,0 +1,67 @@
+#-version-1
+bg aj/courtlobby fade
+char Judge fade
+char nothing hide
+nt
+"{c090}{center}{type}December 27, 1:21 PM{n}District Court{n}Defendant Lobby No. 4"
+mus 106 - Apollo Justice - Courtroom Lobby.ogg
+set _music_loop 106 - Apollo Justice - Courtroom Lobbyloop.ogg
+char Apollo hide
+"...Phew. Are you nervous?"
+char Judge
+"N-{sfx/Smack.ogg}{s 5 5}no! I'm fine!"
+char Apollo hide
+"{c099}(You look like you're{n}about to faint.)"
+char Rhea fade
+"{sfx/Ding.ogg}{f}It's okay, Judge!{n}We're doing fine!"
+"Besides, if Poole had any decisive{n}evidence I'm sure she would've{n}presented it by now!"
+"She's building up her case, brick by{n}brick, and we just need to{n}knock it down, brick by brick!"
+char Apollo hide
+"{c099}(Of course, we haven't done{n}much of that knocking{n}down part yet...)"
+char Judge fade
+"But Jessica has {f}{sfx/Key.ogg}proven that{n}I had the opportunity and{n}provided the evidence."
+"And Fisher's testimony will{n}probably be decisive enough{n}for a guilty verdict."
+char Rhea fade e=mad
+"{sfx/Ding.ogg}{f}But we've met Fisher, and know{n}his personality!"
+char Apollo hide
+"Yeah, {sfx/Smack.ogg}{s 5 5}that's right!"
+"He's short-tempered,{n}so maybe if we anger him{n}enough he'll slip it up!"
+char Judge fade
+"That seems like as good{n}a plan as any."
+char Apollo hide
+"{c099}(More like the only plan...)"
+char Rhea fade
+"Anyway, the recess is almost over.{n}We'd better get back inside!"
+char Apollo hide
+"{c099}(Poole is two thirds of the way to a{n}guilty verdict. The only thing standing{n}between them is one testimony...)"
+"{c099}(I've got to find a way to break{n}the testimony, evidence and motive{n}all at once, or I'm finished!)"
+mus
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness nothing
+set _judge G.Strings
+set _helper Rhea
+startcourt
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+judge
+emo thinking name=jc
+"Court is back in session for{n}the trial of Judge Chambers."
+"Is the prosecution ready{n}to call its witness?"
+prosecutor
+"The prosecution was ready{n}before the recess. After all, the{n}break was your idea."
+judge
+emo shocked name=jc
+"{sfx/Ding.ogg}{f}{s 5 5}Ah! Right, I'm very sorry,{n}Mrs. Poole!"
+prosecutor
+"It's okay, Your Honor."
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(She's a crafty one, she is...)"
+prosecutor
+"Anyway, the prosecution calls{n}Shawn O. Fisher to the stand!"
+script scene33

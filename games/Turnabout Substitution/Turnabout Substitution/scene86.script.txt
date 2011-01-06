@@ -1,0 +1,125 @@
+mus
+clearcross
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Jake
+startcourt
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+judge
+char G.Strings
+"{judge}{enormal}Very well."
+"Thank you very much for{n}the testimony, Detective."
+"It seems we do not need{n}you to testify on any{n}other matters."
+witness
+char Jake 
+"{witness}{emad}A true sheriff never leaves the{n}stand...{p40}{enormal}except to get{n}a good ol' Lunchland steak."
+char Jake 
+"{witness}{emad}{sfx/gunshot.wav}{f}Adios!"
+defense
+char Apollo
+set _speaking dc
+"{defense}{esweats-nobrac}{c099}(See you, spaced cowboy...)"
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness nothing
+startcourt
+judge
+"Now then, I believe the{n}prosecution has a second{n}witness."
+prosecutor
+"Yes, Your Honor."
+mus
+"{sfx /Ding.ogg}{f}{s 5 5}Er, I mean, no, actually."
+judge
+"{eshocked}{sfx /Shock.ogg}{f}{s 10 10}What?!{p30}{eserious} But you told the court{n}Erlenmeyer's psychiatrist would{n}testify about his motive!"
+prosecutor
+"Well yes, but it seems she had{n}a {f}death in the family at the{n}last minute, and couldn't come."
+"I sincerely apologize for this,{n}Your Honor."
+"However, although this is not{n}as good as her professional{n}testimony,"
+"I believe the common knowledge that{n}the victim sentenced the defendant{n}to jail is enough of a motive."
+judge
+"{ethinking}I see...{p30}{enormal}{sfx /Key.ogg}{f}{n}So, there is {f}no second witness?"
+prosecutor
+"No, Your Honor."
+"Therefore, the prosecution is{n}forced to {c900}{sfx /Key.ogg}{f}rest its case{c}." 
+"However, I believe I have provided {n}{s 5 5}sufficient proof of the defendant's{n}guilt,"
+"which the defense failed to refute."
+defense
+"{ehandsondesk-nobrac(blink)}{sfx /Ding.ogg}{f}!{p40}{n}{c099}(So it was a trap...{p40} that I{n}{f}{s 5 5}completely fell for.)"
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+prosecutor
+"{f}Motive:{p40} Sentencing him to jail."
+"{f}Opportunity:{p40} Their meeting in{n}the cemetery."
+"{f}Decisive evidence:{p40} The fingerprints,{n}and the condition in which{n}Erlenmeyer was found."
+mus
+"{sfx /Dunnn.ogg}{f}{s 10 10}Erlenmeyer's guilt is obvious!" 
+judge
+"{p30}...Then I believe we've reached{n}a {f}conclusion."  
+"Members of the jury, you have seen{n}and heard all the evidence{n}and arguments of the attorneys."
+"Now I will instruct you on{n}the law." 
+defense
+"{ehandsondesk-nobrac(blink)}{c099}(I'm sorry, Robert...{p30})"
+clear
+clearcourt
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness nothing
+startcourt
+pause 180 script
+fg HoldItAnim
+pause 5 script
+defense
+"{sfx/Dunnn.ogg}{f}!"
+prosecutor
+"{sfx/Dunnn.ogg}{f}!"
+judge
+pause 20 script
+"Um...{p50} It...{p50} {c900}It was {sfx/Key.ogg}{f}me{c}."
+defense
+"{ehandsondesk-nobrac(blink)}{sfx /Shock.ogg}{f}{s 15 15}{c099}(What?!)"
+helper
+emo aideserious name=hc
+"{sfx /Smack.ogg}{f}Don't look a gift horse in the{n}mouth, Polly."
+judge
+"I'm sorry Mrs. Poole, but you won't{n}get me this time."
+"If Mr. Justice had known there{n}would be no more testimonies after{n}Detective Marshall's,"
+"I'm certain he would not{n}have given up so easily."
+"We are dealing with men's lives,{n}the ends do not justify the means."
+"{eserious}{sfx/ Smack.ogg}{s 8 8}Honestly, Mr. Justice, I'm{n}disappointed you didn't object!"  
+"If we are going to have a fair trial,{n}we must have more professionalism...{p40}{n}and I mean from {sfx/Key.ogg}{f}both of you."
+prosecutor
+"{p20}{sfx /Ding.ogg}{f}..!"
+judge
+"{enormal}I will give you {sfx /Ding.ogg}{f}{c900}one last chance{c},{n}Mr. Justice."
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+"{eserious}{f}Call a witness or {f}present evidence,{n}something that will let me{n}believe in your client's innocence."
+"Or else the jury will make{n}their {s 8 8}verdict for real,"
+"and I believe we all know what{n}they will decide at this point."
+defense
+"{enormal-nobrac}I understand, Your Honor."
+"{enormal-nobrac(blink)}{c099}({s 8 8}Phew, that was close! But I can't{n}relax yet...{p40} If I mess this{n}up, the case is over for real!)"
+"{c099}(I need something--{s 5 5}anything{n}--that can show Erlenmeyer is{n}innocent!)"
+"{c099}(So, am I going to use evidence or{n}a witness?)"
+
+list evidenceorwitness
+li Present Evidence
+li Call a Witness
+showlist
+scene86
+
+label Present Evidence
+script scene86-presentevidence
+
+label Call a Witness
+script scene86-witnesscall  

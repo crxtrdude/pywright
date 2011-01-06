@@ -1,0 +1,98 @@
+#-version-1
+present
+label top
+bg aj/detentioncenter
+menu scene65erlenmeyer
+
+
+#PRESENT WIG
+label wigupdated
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+"My magic hat... and my magic{n}mask. With both I am Robert{n}Erlenmeyer... with neither"
+"I am Shawn Fisher.{n}With one, I am nobody."
+char Apollo hide
+"{c099}{sfx\Ding.ogg}(Ah...! Why didn't I{n}realize that sooner?)"
+char Erlenmeyer
+"They are how I escaped from{n}the philosophical yak."
+char Apollo hide
+"So, uh... why did you want{n}to get away from{n}the, um, yak?"
+char Erlenmeyer e=sad
+"He was scolding me, like for{n}the tack... But I didn't do{n}it... this time." #MC: Note to self - Use more MC's.
+char Apollo hide
+"{c099}(This time? Oh boy...)"
+goto top
+
+
+#PRESENT BLOOD
+label bloodupdated
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+"A familiar sight..."
+char Rhea hide
+"{sfx\Shock.ogg}{s}B-Blood? From your victims?"
+char Erlenmeyer e=sad
+"My blood... Not unlike when a{n}lead pipe is damaged, and{n}a thin stream of water spurts out..."
+"...breaking the air with strokes."
+char Rhea hide
+"He's freaking me out, Polly.... Why'd{n}you have to show him that?!"
+goto top
+
+
+#PRESENT FISHER
+label fisher$
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+"...That's... my brother... He let me{n}escape Pinky, but... I don't think he{n}did it for me."
+"{erage}He... never liked me."
+char Apollo hide
+"{c099}(Motivated by money or not, he{n}still risked his life to{n}break you out of prison...)"
+"{c099}(I don't think he would do that for{n}someone he didn't care about.)"
+goto top
+
+
+#PRESENT ERLENMEYER
+label erlenmeyerupdated$
+fg detentionfg loops=0 nowait
+char Erlenmeyer e=squinting
+"They say... I'm a killer."
+char Rhea hide
+"Well, you confessed!"
+char Erlenmeyer
+"...I thought I was.{n}I think I don't know now."
+char Apollo hide
+"This is very reassuring..."
+char Erlenmeyer e=rage
+"{sfx\Shock.ogg}I'm not evil!"
+"{enormal}Just... a harbinger of calamity..."
+char Apollo hide
+"H-{c900}Harbinger{c}?"
+char Erlenmeyer e=sad
+"Everywhere I go, bad things{n}happen... people disappear...{n}{f}forever..."
+char Rhea hide
+"{sfx\Smack.ogg}Well, I don't see how those{n}could be accidents!"
+char Erlenmeyer e=squinting
+"{delay2}..."
+char Apollo hide
+"{c099}(I-Is he telling the truth? He doesn't{n}seem like a killer...{n}his mind seems too weak.)"
+char Rhea hide
+"That's only right now, Polly. Who{n}knows how he'd act if he gets angry,{n}or a sudden urge to kill."
+goto top
+
+
+#PRESENT NOTHING
+label none
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+"I wish..."
+char Apollo hide
+"Yes...?"
+char Erlenmeyer e=squinting
+"I wish I wish I was a fish."
+char Apollo hide
+"...Anything else?"
+char Erlenmeyer
+"Buttered toast would be nice."
+char Apollo hide
+"{c099}(...This isn't going anywhere.)"
+goto top

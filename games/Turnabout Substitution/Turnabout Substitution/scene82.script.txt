@@ -1,0 +1,75 @@
+bg black
+nt
+"{c090}{center}{type}December 29, 10:00 AM{n}District Court{n}Courtroom No. 4"
+fg ani-judge-gavel
+pause 50 script
+clear
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness nothing
+startcourt
+judge
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+"Court is in session for the trial of{n}Robert Erlenmeyer!"
+"Are the defense and{n}prosecution ready?"
+defense
+"{enormal-nobrac}The defense is ready, Your Honor."
+prosecutor
+"If by ready, you mean to{n}{sfx/Key.ogg}{f}lose, I'd have to agree."
+judge
+"Mrs. Poole, you can insult the{n}defense once we have finished our{n}opening proceedings."
+prosecutor
+"{p30}...This is the {s 5 5}moment I've been{n}waiting for ever since Arthur{n}was murdered..."
+"This is the reason I returned to{n}this country and restarted my{n}career."
+"The opportunity to put that monster{n}Erlenmeyer behind bars was taken{n}from me before...{p40}"
+"This is the {sfx/Dunnn.ogg}{f}{s 10 10}Final Judgment,{n}and you insult me by asking{n}{sfx /Smack.ogg}{f}if I'm prepared?!"
+judge
+"I-I'll take that as a yes.{p30}"
+"Now if you'd like to gi-{p20}{next}"  
+prosecutor
+mus
+"{sfx /Smack.ogg}{f}{s 8 8}Members of the jury!{n}A madman murders a dozen{n}innocent victims, maybe more,"
+"and gets treated like a priority{n}patient in a cozy mental hospital."
+defense
+"{esweats-nobrac}{c099}(That's not exactly how I would{n}describe Clooney Prison, but...)"
+prosecutor
+"However, he escapes from prison,{n}makes a fool of the police, and, on{n}just the following day,"
+"murders another man."
+"A caring {f}grandfather, a dear personal{n}{f}friend, and the {sfx/Shing.ogg}{f}{s 10 10}judge that{n}sentenced the defendant to prison!"
+"As he just showed us, people like{n}this man, Robert Erlenmeyer,{n}cannot repent."
+"Not even a week after being freed,{n}he's committed another crime!"
+"He's a {f}killing machine, and he will just{n}{s 8 8}kill again and again until he's{n}put away! {p90}...For good."
+defense
+"{epointing-nobrac}{sfx /Shock.ogg}{s 8 8}Hey! You're talking like you're certain{n}my client is guilty, but you{n}don't have any evidence!"
+"{esweats-nobrac(blink)}{c099}(She's going not just for a{n}guilty verdict, but for a death{n}sentence!)"
+helper
+emo aide name=hc
+"Considering how much this case{n}means to her, I'm sure she has{n}something."
+prosecutor
+"I'm sure my first witness will sway{n}even you, Lady Justice." 
+"The prosecution calls Detective{n}Ema Skye to the stand!"
+clear
+pause 90 script
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness nothing
+startcourt
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+judge
+"Now then, witness please{delay3}....{p60}{witness} Er..."
+prosecutor
+"{sfx /Awe.ogg}{f}Wh-{p15}{s 8 8}What is the{n}meaning of this?!"
+helper
+emo aide name=hc
+"Hey, Polly, if a late witness is{n}making Poole this annoyed..."
+"Imagine how much she'll {f}lose it if{n}we can poke some holes in her{n}theory."
+endcourt
+script scene83

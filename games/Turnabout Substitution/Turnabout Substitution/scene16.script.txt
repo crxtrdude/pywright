@@ -1,0 +1,31 @@
+#-version-1
+noflag firststringsinoffice introductionscene16
+flag firststringsinoffice scene16
+label introductionscene16
+mus
+bg ts/1stringsoffice fade
+char ??? hide
+"Ah, Mr.Justice. I am terribly{n}sorry to have kept you waiting."
+"Please accept my{n}most humble apologies."
+mus 140 - Turnabout Substitution - Paul Strings - Ex officio.ogg
+set _music_loop 140 - Turnabout Substitution - Paul Strings - Ex officioloop.ogg
+char strings fade
+char Apollo hide
+"{sfx/Smack.ogg}Mr. Chief Justice!{n}It is an honor to be here, sir."
+char Strings
+"Thank you. And who, might I ask,{n}is the pulchritudinous princess{n}partaking in your probe?"
+char rhea
+"{sfx/Ding.ogg}{f}Ah! I'm Rhea Wits.{n}Very pleased to meet you, sir."
+char Strings
+"...I summoned you here today{n}to urge you not to defend{n}Mr. Chambers in court tomorrow."
+"This is one case you're{n}not going to win, Mr.Justice."
+"I have been in politics{n}long enough to know that{n}reputation means everything."
+char Apollo hide
+"{sfx/Smack.ogg}I don't care about my reputation !{n}{sfx/Smack.ogg}I know that Chambers is innocent!"
+char Strings e=thinking
+"...I thought you might say{n}something like that."
+char Strings
+"...{p30}Very well, then. For better or{n}for worse, I have some information{n}for you regarding the case."
+setflag firststringsinoffice
+label scene16
+script scene16menu
