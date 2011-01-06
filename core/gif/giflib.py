@@ -120,36 +120,44 @@ def decompress(f,d):
             return charstream
             break
         chunk = f.read(amt)
+        #~ unpacker = pythonlzw.BitUnpacker(code_size-1)
+        #~ charstream.extend(unpacker.unpack(chunk))
+        #~ continue
         p = ""
-        print len(chunk)
+        #print "charstream:",len(charstream)
+        #print len(chunk)
         for byte in chunk:
             p+=pbin(ord(byte))
-        for i in range(len(p)//code_size):
-            print p[i*code_size:i*code_size+code_size]
+        #for i in range(len(p)//code_size):
+        #    print p[i*code_size:i*code_size+code_size]
         for byte in chunk:
-            print "byte",pbin(ord(byte)),code_size#,charstream
+            #print "byte",pbin(ord(byte)),code_size#,charstream
             bits = pbin(ord(byte))+lastbits
             if len(bits)<code_size:
                 lastbits = bits
                 continue
-            print "bits",bits
+            #print "bits",bits
             bits,lastbits = bits[-code_size:],bits[:-code_size]
             code = int(bits,2)
-            print bits,code,lastcode
+            #print bits,code,lastcode
             if code==char_size+1:
                 print "end"
                 return charstream
             elif code==char_size:
-                print "clear"
+                #print "clear"
                 code_size=(npages+1)
                 string_table = init_table(code_size,char_size)
                 continue
             if code<len(string_table):
                 charstream.extend(string_table[code])
                 if lastcode:
-                    prefix = string_table[lastcode]
+                    #print len(string_table),lastcode
+                    try:
+                        prefix = string_table[lastcode]
+                    except:
+                        return charstream
                     cstr = string_table[code][0]
-                    print "cstr",cstr
+                    #print "cstr",cstr
                     string_table.append(prefix+[cstr])
                     if code_size<12 and len(string_table)==(2**code_size):
                         code_size+=1
@@ -182,7 +190,10 @@ def get_image(f,d,frame):
     x=image.left
     y=image.top
     for c in raster:
-        col = d.colors[c]
+        if c>=len(d.colors):
+            col = [255,0,255]
+        else:
+            col = d.colors[c]
         surf.set_at([x,y],col)
         x+=1
         if x>=image.left+image.width:
