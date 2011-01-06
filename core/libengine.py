@@ -72,17 +72,10 @@ class CHOICE():
 
     
 delete_on_menu = [evidence,portrait,fg]
-only_one = [textbox,testimony_blink,evidence_menu]
-def addob(ob):
-    if [1 for x in only_one if isinstance(ob,x)]:
-        for o2 in assets.cur_script.obs[:]:
-            if isinstance(o2,ob.__class__):
-                o2.delete()
-    assets.cur_script.obs.append(ob)
 def addevmenu():
     try:
         em = evidence_menu(assets.items)
-        addob(em)
+        assets.cur_script.add_object(em,True)
     except art_error,e:
         assets.cur_script.obs.append(error_msg(e.value,"",0,assets.cur_script))
         import traceback
@@ -93,7 +86,6 @@ def add_s(scene):
     s = assets.Script()
     s.init(scene)
     assets.stack.append(s)
-assets.addob = addob
 assets.addevmenu = addevmenu
 assets.addscene = add_s
 
@@ -546,6 +538,12 @@ class Script(gui.widget):
             import traceback
             traceback.print_exc()
             return
+    def add_object(self,ob,single=False):
+        if single:
+            for o2 in self.obs[:]:
+                if isinstance(o2,ob.__class__):
+                    o2.delete()
+        self.obs.append(ob)
     def draw(self,screen):
         for o in self.obs:
             if not getattr(o,"hidden",False) and not getattr(o,"kill",False):
@@ -558,7 +556,7 @@ class Script(gui.widget):
                 self.world.remove(o)
                 break
     def tbon(self):
-        addob(testimony_blink("testimony"))
+        self.add_object(testimony_blink("testimony"),True)
     def state_test_true(self,test):
         if test is None:
             return True
@@ -569,7 +567,7 @@ class Script(gui.widget):
             a.delete()
         if vtrue(assets.variables.get("_textbox_show_button","true")):
             u = uglyarrow()
-            self.obs.append(u)
+            self.add_object(u,True)
             u.textbox = tbox
             if assets.variables.get("_statements",[]) and self.cross=="proceed":
                 statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
@@ -617,7 +615,7 @@ char test
         if vtrue(assets.variables.get("_textbox_allow_skip","false")):
             tbox.can_skip = True
         self.viewed[assets.game+self.scene+str(self.si-1)] = True
-        addob(tbox)
+        self.add_object(tbox,True)
         self.refresh_arrows(tbox)
         self.tboff()
         if self.cross is not None and self.instatement:
@@ -783,7 +781,7 @@ char test
         cm.list_games(assets.game+"/"+folder)
         if "close" in args:
             cm.close_button(True)
-        self.obs.append(cm)
+        self.add_object(cm,True)
         self._gui("gui","Wait")
     @category([COMBINED("destination","The destination label to move to"),
                     KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
@@ -1219,7 +1217,7 @@ KEYWORD('priority','Fine tune what gets paused and what doesnt.','10000 (such a 
         if not ticks: ticks = 60
         do = delay(ticks)
         do.pri=pri
-        self.obs.append(do)
+        self.add_object(do)
     @category([
 VALUE('ticks','How many ticks (1/60 of a second) before the command will be run'),
 VALUE('command','The name of a macro to be run after the timer runs out')],type="gameflow")
@@ -1227,13 +1225,13 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         """Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
         fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
         completed."""
-        self.obs.append(timer(int(ticks),run))
+        self.add_object(timer(int(ticks),run))
     @category([],type="gameflow")
     def _waitenter(self,command):
         """The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
         it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred."""
         self.buildmode = False
-        self.obs.append(waitenter())
+        self.add_object(waitenter())
     @category([],type="gameflow")
     def _exit(self,command):
         """Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
@@ -1268,7 +1266,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                     m.delm(arg)
         self.scriptlines = []
         self.si = 0
-        self.obs.append(m)
+        self.add_object(m,True)
         self.execute_macro("defaults")
         self.autosave()
     @category([KEYWORD('examine','whether to show the examine button','false'),
@@ -1293,7 +1291,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                 elif vtrue(val):
                     m.addm(arg)
         m.open_script = False
-        self.obs.append(m)
+        self.add_object(m,True)
     @category([KEYWORD('pri','What priority to update the case menu','Default casemenu priority listed in core/sorting.txt')],type="interface")
     def _casemenu(self,command,*args):
         """Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
@@ -1305,7 +1303,7 @@ folder be the same, and not show a case menu at all."""
         kwargs = {}
         pri = ([x[4:] for x in args if x.startswith("pri=")] or [None])[0]
         if pri is not None: kwargs["pri"] = pri
-        self.obs.append(case_menu(assets.game,**kwargs))
+        self.add_object(case_menu(assets.game,**kwargs),True)
     @category(
     [VALUE('script_name',"name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder."),
 KEYWORD('label','A label in the loading script to jump to after it loads.','Execution starts at the top of the script instead of a label'),
@@ -1436,12 +1434,12 @@ as having a non looping animation play several times, or only playing a portion 
     def _surf3d(self,command,x,y,sw,sh,rw,rh):
         s = surf3d([int(x),int(y)],int(sw),int(sh),int(rw),int(rh))
         print "made surf",s
-        self.obs.append(s)
+        self.add_object(s)
     def _mesh(self,command,mname):
         m = mesh(mname)
         m.load()
         print "made mesh",m
-        self.obs.append(m)
+        self.add_object(m)
     @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -1502,7 +1500,7 @@ have a ball.txt describing it's animation qualities, if it has any."""
             o.id_name = name
         else:
             o.id_name = args[0]
-        self.obs.append(o)
+        self.add_object(o)
         if "fade" in args: self._fade("fade","wait","name="+o.id_name,"speed=5")
         if loops is not None:
             o.loops = int(loops)
@@ -1511,7 +1509,7 @@ have a ball.txt describing it's animation qualities, if it has any."""
     def _movie(self,command,file,sound=None):
         self.buildmode = False
         m = movie(file,sound)
-        self.obs.append(m)
+        self.add_object(m,True)
         return m
     @category([VALUE("bg_path","Path to the graphics file relative to case/art/bg and without extension; such as scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
@@ -1681,7 +1679,7 @@ The four types of gui you can create are:
                 elif a.startswith("name="): name=a[5:]
             if y>=192 and assets.num_screens == 1 and assets.screen_compress:
                 y -= 192
-            self.obs.append(guiBack(x=x,y=y,z=z,name=name))
+            self.add_object(guiBack(x=x,y=y,z=z,name=name))
             self.buildmode = False
         if guitype=="Button":
             macroname=args[0]; del args[0]
@@ -1721,7 +1719,7 @@ The four types of gui you can create are:
                 btn.hold_down_over = func
                 btn.hold_func = macroname
                 setattr(btn,text.replace(" ","_"),lambda *args:0)
-            self.obs.append(btn)
+            self.add_object(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
         if guitype=="Input":
@@ -1755,11 +1753,11 @@ The four types of gui you can create are:
             eb.pri = 0
             if name: eb.id_name = name
             else: eb.id_name = "$$"+str(id(eb))+"$$"
-            self.obs.append(eb)
+            self.add_object(eb)
         if guitype=="Wait":
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
-            self.obs.append(guiWait(run=run))
+            self.add_object(guiWait(run=run))
             self.buildmode = False
     @category([VALUE('x','x value to place text'),VALUE('y','y value to place text'),VALUE('width','width of text block'),
     VALUE('height','height of text block (determines rows but the value is in pixels)'),
@@ -1781,7 +1779,7 @@ The four types of gui you can create are:
         if y>=192 and assets.num_screens == 1 and assets.screen_compress:
             y -= 192
         tb = textblock(" ".join(text),[int(x),int(y)],[int(width),int(height)],surf=pygame.screen)
-        self.obs.append(tb)
+        self.add_object(tb)
         if id_name: tb.id_name = id_name
         else: tb.id_name = "$$"+str(id(tb))+"$$"
         if color:
@@ -1836,7 +1834,7 @@ The four types of gui you can create are:
             end = int(amt)
         pen = penalty(end,var,flash_amount=flash_amount)
         pen.delay = delay
-        self.obs.append(pen)
+        self.add_object(pen,True)
         self.buildmode = False
     @category([KEYWORD("degrees","How many degrees to rotate"),KEYWORD("speed","How many degrees to rotate per frame"),
     KEYWORD("axis","which axis to rotate on, z is the only valid value","z"),
@@ -1848,7 +1846,7 @@ The four types of gui you can create are:
         kwargs,args = parseargs(args,intvals=["degrees","speed","wait"],
                                                 defaults={"axis":"z",'wait':1},
                                                 setzero={"nowait":"wait"})
-        self.obs.append(rotateanim(obs=self.obs,**kwargs))
+        self.add_object(rotateanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
     @category([KEYWORD("start","What fade level to start at",0),
     KEYWORD("end","What fade level to end at",100),
@@ -1860,7 +1858,7 @@ The four types of gui you can create are:
         kwargs,args = parseargs(args,intvals=["start","end","speed","wait"],
                                                 defaults={"start":0,"end":100,"speed":1,"wait":1},
                                                 setzero={"nowait":"wait"})
-        self.obs.append(fadeanim(obs=self.obs,**kwargs))
+        self.add_object(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
     @category([KEYWORD("start","Color tint to start at","'ffffff' or no tint (full color)"),
     KEYWORD("end","Color tint to end at","'000000' or full black tint"),
@@ -1874,7 +1872,7 @@ The four types of gui you can create are:
         kwargs,args = parseargs(args,intvals=["speed","wait"],
                                                 defaults={"start":"ffffff","end":"000000","speed":1,"wait":1},
                                                 setzero={"nowait":"wait"})
-        self.obs.append(tintanim(obs=self.obs,**kwargs))
+        self.add_object(tintanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
     @category([KEYWORD("value","Whether an object should be inverted or not: 1=inverted 0=not","1"),
     KEYWORD("name","Name a specific object to tint","Will try to tint all objects")],type="effect")
@@ -1884,7 +1882,7 @@ The four types of gui you can create are:
                                                 defaults={"value":1,"name":None})
         kwargs["start"] = 1-kwargs["value"]
         kwargs["end"] = kwargs["value"]
-        self.obs.append(invertanim(obs=self.obs,**kwargs))
+        self.add_object(invertanim(obs=self.obs,**kwargs))
     @category([KEYWORD("value","Whether an object should be greyscale or not: 1=greyscale 0=not","1"),
     KEYWORD("name","Name a specific object to set to greyscale","Will try to greyscale all objects")],type="effect")
     def _grey(self,command,*args):
@@ -1893,7 +1891,7 @@ The four types of gui you can create are:
                                                 defaults={"value":1,"name":None})
         kwargs["start"] = 1-kwargs["value"]
         kwargs["end"] = kwargs["value"]
-        self.obs.append(greyscaleanim(obs=self.obs,**kwargs))
+        self.add_object(greyscaleanim(obs=self.obs,**kwargs))
     @category([VALUE("ttl","Time for shake to last in frames","30"),
     VALUE("offset","How many pixels away to move the screen (how violent)","15"),
     TOKEN("nowait","Continue executing script during shake")],type="effect")
@@ -1914,7 +1912,7 @@ The four types of gui you can create are:
         sh.ttl = ttl
         sh.offset = offset
         sh.wait = wait
-        self.obs.append(sh)
+        self.add_object(sh)
     @category([KEYWORD("mag","How many times to magnify","1 (will magnify 1 time, which is 2x magnification)"),
     KEYWORD("frames","how many frames for the zoom to take","1"),
     KEYWORD("name","Which object to magnify","tries to magnify everything"),
@@ -1950,7 +1948,7 @@ zoom mag=-0.5 frames=10
             zzzooom.control_last()
         if name:
             zzzooom.control(name)
-        self.obs.append(zzzooom)
+        self.add_object(zzzooom)
         if wait: self.buildmode = False
     @category([KEYWORD("name","Name of object to scroll","scrolls everything"),
     KEYWORD("filter","select only objects on the 'top' screen or 'bottom' screen, leave blank for either","'top'"),
@@ -1991,7 +1989,7 @@ the speed would divide evenly over the distance)."""
             if a.startswith("filter="):
                 filter=a[7:]
         scr = scroll(x,y,z,speed,wait,filter)
-        self.obs.append(scr)
+        self.add_object(scr)
         if last:
             scr.control_last()
         if name:
@@ -2020,7 +2018,7 @@ the speed would divide evenly over the distance)."""
             after = float(sound[0].replace("after=","",1))
             sound = sound[1:]
         sound = " ".join(sound)
-        self.obs.append(SoundEvent(sound,after))
+        self.add_object(SoundEvent(sound,after))
     @category([COMBINED("nametag","Text to set for the next nametag","If no text is given, the next nametag will be invisible")],type="text")
     def _nt(self,command,*name):
         """Sets or clears the next nametag. Must be called immediately before the textbox it alters. Other commands like "char" or "set _speaking" which alter the
@@ -2086,7 +2084,7 @@ exit}}}
             lm.noback = True
         if noback and noback != "noback":
             raise script_error("Unknown token '%s'"%noback)
-        self.obs.append(lm)
+        self.add_object(lm,True)
     @category([COMBINED("option","text to display, and if 'result' not given, label to jump to if option is selected"),
     KEYWORD('result','specifically named label to jump to if this option is chosen')],type="interface")
     def _li(self,command,*label):
@@ -2203,7 +2201,7 @@ exit}}}
                     ob.fail = v
             elif a=="noback":
                 ob.noback = True
-        addob(ob)
+        self.add_object(ob,True)
         self.buildmode = False
     @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _examine(self,command,*args):
@@ -2211,7 +2209,7 @@ exit}}}
         based on the spot. Immediately following the examine command, you must use region commands to define where the
         player can click."""
         em = examine_menu(hide=("hide" in args),name=self.scene+":%s"%self.si)
-        self.obs.append(em)
+        self.add_object(em,True)
         while self.si<len(self.scriptlines):
             line = self.getline()
             if line is None: return
