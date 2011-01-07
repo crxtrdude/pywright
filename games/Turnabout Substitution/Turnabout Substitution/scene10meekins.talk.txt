@@ -1,0 +1,121 @@
+#-version-1
+label top
+bg ts/1clooneyprisonasylumentrance
+
+list scene10meekinstalk1
+li Your role in the incident
+flag somethingsignificant somethingsignificant
+label scene10meekinstalk2
+showlist
+menu scene10meekins
+label somethingsignificant
+li Something significant
+goto scene10meekinstalk2
+
+label Your role in the incident
+char Meekins
+"I'm a lost little prison guard,{n}like a lost little lamb, sir!"
+char Apollo hide
+"{c099}(He already lost me.)"
+char Meekins e=punch
+"I was only doing what I{n}was trained to do, sir!"
+char Apollo hide
+"Which is?"
+char Meekins e=thoughtful
+"My mission is simple yet formidable."
+char Meekins
+"Anyone who wants to visit a{n}cell has to go through me! {sfx/Bwaaah.ogg}Through!"
+"Most people don't do it because it's{n}forbidden, sir, and so it means{n}they're not allowed to do it."
+char Apollo hide
+"{c099}(So basically you get paid{n}for daydreaming.)"
+char Meekins e=punch
+"But yesterday, sir,{n}something incredible happened!"
+"I saw a suspicious person, sir!{n}{sfx/Bwaaah.ogg}A suspicious person!"
+"An awe-inspiring creature,{n}with august, candy-floss like beard{n}and stately, lolipop-like head!"
+char Apollo hide
+"{c099}(That would be Chambers.)"
+char rhea e=surprised
+"Then {sfx/Ding.ogg}why did you let him through?"
+char Meekins
+"Believe it or not, sir,{n}all prison guards are{n}required to wear a uniform,"
+"so that we don't confuse{n}them with surgeons, or... squirrels!"
+"A uniform... like this!"
+sfx /evidenceshoop.wav
+ev uniform name=uniform x=185
+char Meekins
+"We all wear it, without{n}exception, sir!"
+delete name=uniform
+char Apollo hide
+"..."
+fg ObjectionAnimApollo
+"{sfx/Dunnn.ogg}{s}Then why aren't you wearing one?"
+char Meekins e=yank
+"{sfx/Shock.ogg}AAAAARGH!!!{p10}{next}"
+char Meekins e=sad
+"...{sfx/Key.ogg}It's a long story."
+char rhea e=mad
+"{sfx/Ding.ogg}Let's not go there, Apollo."
+"So, what about this{n}distinguished outfit?"
+char Meekins e=punch
+"Believe it or not, sir, I don't believe{n}it, Mr. Defendant... the chambers...{n}yes, he was wearing one! {sfx/Dunnn.ogg}Wearing!"
+char Apollo hide
+"{sfx/Shock.ogg}WHAAAAAAT?!!!!{p10}{next}"
+char game hide
+nt
+addev uniform
+"{sfx/evidence.wav}{c099}Uniform added to the Court Record."
+char Meekins
+"And that is why, sir, I had no{n}choice but to obey his orders!"
+"Imperturbable, I glided through the{n}corridors with fearless poise,{n}and a map!"
+"A mere ten minutes later,{n}my mission was completed, sir!"
+"Though I didn't witness the{n}exact moment of the crime..."
+"I can certify that Mr. Chambers{n}was in Erlenmeyer's cell{n}when it happened."
+char Apollo hide 
+"{c099}(Truth 1, Justice 0.{n}Damn you, Truth!)"
+char rhea
+"Is there anything else{n}you'd like to add?"
+char Meekins e=thoughtful
+"{sfx/Key.ogg}Well, actually, sir..."
+"If you had to label me as{n}having something significant to say{n}or not having anything to say"
+"in particular...{p60}then I'd say{n}I lean heavily on the having{n}something significant to say side!"
+char Apollo hide
+"WHATWHAT{sfx/Shock.ogg}WHAAAAAAT?!!!!{p10}{next}"
+"{c099}(I have a bad feeling about this...)"
+setflag somethingsignificant
+char nothing
+goto top
+
+label Something significant
+char Meekins e=punch
+"{sfx/Smack.ogg}Sir! Now I remember, sir!"
+"There's another reason{n}why I thought Mr.Chambers{n}was a senior officer, sir!"
+char Apollo hide
+"{c099}(A senior officer-cer?)"
+char Meekins e=thoughtful
+"After all, there's no mistaking{n}a {sfx/Dunnn.ogg}{c900}gun{c} when you see one, sir!"
+char Apollo hide
+"WHATWHATWHATWHATWHAT{n}{sfx/Shock.ogg}WHAAAAAAT?!!!!{p10}{next}"
+"{c099}(I-I don't believe it... Chambers,{n}he... he brought the murder weapon{n}with him... this can only mean... no...)"
+"...{sfx/Key.ogg}Wait a minute."
+"You mean you let him through{n}{sfx/Ding.ogg}{c900}because{c} he was carrying a gun?"
+char Meekins e=punch
+"{sfx/Bwaaah.ogg}Exactly, sir! That's exactly it!"
+char Meekins e=megaphone
+"{sfx/megaphone.wav}Nothing could be more exact, sir!{n}Nothing!"
+char Apollo hide
+"{c099}(This guy should really donate{n}his brain to science.)"
+"Thank you, Mr.Meekins.{n}You've been more than helpful."
+char Meekins
+"{sfx/Smack.ogg}No, sir, you should be{n}the one thanking me!"
+char Apollo hide
+"But that's what I just did...{n}oh, nevermind."
+char rhea e=sad
+"In any case, this makes our{n}client look very bad, Apollo."
+"{sfx/Ding.ogg}If Mike Meekins takes the{n}witness stand tomorrow..."
+"...then the prosecution will{n}be able to prove the{n}murder was {sfx/Key.ogg}{c900}premeditated{c}."
+"...Let's hope Judge doesn't{n}turn out to be a dictatorial,{n}duck billed... {sfx/Owned.ogg}diplodocus."
+char Apollo hide
+"{c099}(Better go talk to him...)"
+setflag meekinsconversation
+char nothing
+goto top

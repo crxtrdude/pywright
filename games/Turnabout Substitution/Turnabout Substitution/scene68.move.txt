@@ -1,0 +1,24 @@
+#-version-1
+label top
+bg ts/2cemetery
+
+list scene68
+li Wright Anything Agency
+li Crime Scene
+showlist
+menu scene68
+
+label Wright Anything Agency
+script scene66menu
+
+label Crime Scene
+flag openScene76 scene75nopoole
+flag openScene75 scene75poole
+script scene69
+
+label scene75nopoole
+bg ts/2cemeterycrimescene fade
+menu scene75
+
+label scene75poole
+script scene75poole

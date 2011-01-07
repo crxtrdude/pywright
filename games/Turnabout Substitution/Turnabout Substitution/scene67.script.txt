@@ -1,0 +1,12 @@
+mus
+bg ts/1deekayandcooffice
+flag secondTime skipApollo
+nt
+"{c090}{center}{type}December 28{n}Dee Kay & Co. Funeral Directors{n}Rhea Wits's Office"
+char Apollo hide
+"Darn... I guess Rhea didn't{n}come back here. I should{n}probably just leave..."
+setflag secondTime
+menu scene67
+
+label skipApollo
+menu scene67

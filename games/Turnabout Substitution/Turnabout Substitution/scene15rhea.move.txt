@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg ts/1deekayandcooffice
+
+list scene15rheamove
+li Wright Anything Agency
+showlist
+menu scene15rhea
+
+label Wright Anything Agency
+script scene11menu

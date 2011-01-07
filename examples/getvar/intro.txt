@@ -1,0 +1,37 @@
+"First, you have not been to the theater"
+                set place0 pier
+                set place1 carnival
+                set placemax 1
+
+label check
+                #Only do some code if you've been to the theater
+                char someone
+                "Have you been to the theater?"
+                
+                set index 0
+                label check_place
+                is index > $placemax notbeen  #Checked all of the places, so continue somewhere
+                #getvar p place $index
+		joinvar p place $index
+                is $p = theater been_theater
+                addvar index 1
+                goto check_place
+                
+                label been_theater
+                char me
+                "Yes, I've been there!"
+                got next2
+                
+                label notbeen
+                char me
+                "I have not."
+                goto next
+
+label next
+"Now you have been to the theater, lets add it to the end:"
+addvar placemax 1
+joinvar vname place $placemax
+set $vname theater
+goto check
+
+label next2

@@ -1,0 +1,186 @@
+#Clear court related variables
+macro clearcourt
+set helper_nt  
+set defense_nt  
+set witness_nt  
+set prosecutor_nt  
+set judge_nt  
+set _defense  
+set _witness  
+set _helper  
+set _prosecutor  
+set _judge  
+endmacro
+
+#Load all of the characters and backgrounds for courtroom
+macro startcourt
+
+set dx 0
+addvar dx 256
+set wx 520
+addvar wx 256
+set px 1040
+addvar px 256
+set jx 1296
+addvar jx 256
+set hx 1551
+addvar hx 256
+
+isempty court_dbench?
+set court_dbench dbench
+isempty court_wbench?
+set court_wbench wbench
+isempty court_pbench?
+set court_pbench pbench
+isempty court_background?
+set court_background courtroomfull
+isempty court_helper?
+set court_helper helper
+
+isempty helper_nt?
+set helper_nt $_helper
+isempty defense_nt?
+set defense_nt $_defense
+isempty witness_nt?
+set witness_nt $_witness
+isempty prosecutor_nt?
+set prosecutor_nt $_prosecutor
+isempty judge_nt?
+set judge_nt $_judge
+
+bg $court_background x=$dx stack
+char $_defense x=$dx name=dc nametag=$defense_nt
+fg $court_dbench x=$dx
+char $_witness x=$wx stack name=wc nametag=$witness_nt
+fg $court_wbench x=$wx
+char $_prosecutor x=$px stack name=pc nametag=$prosecutor_nt
+fg $court_pbench x=$px
+bg judgestand x=$jx stack
+char $_judge x=$jx stack name=jc nametag=$judge_nt
+bg $court_helper x=$hx stack
+char $_helper x=$hx stack name=hc nametag=$helper_nt
+
+set court_x 0
+endmacro
+
+macro scroll_to
+set __from__ $court_x
+set court_scr 0
+addvar court_scr $court_x
+subvar court_scr $1
+set court_scr_spd $court_scr
+
+isnot _sc scroll $0_cont
+set court_scr_spd 20
+
+label $0_cont
+absvar court_scr_spd
+scroll x=$court_scr speed=$court_scr_spd
+set court_x $1
+
+isnot _debug_court on $0_end
+delete name=scrolltext
+textblock 0 100 200 200 name=scrolltext scroll to $court_x from $__from__ via $court_scr at $court_scr_spd
+label $0_end
+endmacro
+
+#Show the judge and make him talk
+macro judge
+set _sc 0
+{scroll_to $jx}
+set _speaking jc
+endmacro
+
+macro scrolljudge
+{judge}
+endmacro
+
+macro helper
+set _sc 0
+{scroll_to $hx}
+set _speaking hc
+endmacro
+
+macro scrollhelper
+{helper}
+endmacro
+
+macro defense
+set _sc 0
+{scroll_to $dx $_sc}
+set _speaking dc
+endmacro
+
+macro scrolldefense
+set _sc scroll
+isnot court_x = $jx OR court_x = $hx $0_strt
+set _sc 0
+label $0_strt
+{scroll_to $dx}
+set _speaking dc
+endmacro
+
+macro prosecutor
+set _sc 0
+{scroll_to $px $_sc}
+set _speaking pc
+endmacro
+
+macro scrollprosecutor
+set _sc scroll
+isnot court_x = $jx OR court_x = $hx $0_strt
+set _sc 0
+label $0_strt
+{scroll_to $px}
+set _speaking pc
+endmacro
+
+macro witness
+set _sc 0
+{scroll_to $wx $1 _sc}
+set _speaking wc
+endmacro
+
+macro scrollwitness
+set _sc scroll
+isnot court_x = $jx OR court_x = $hx $0_strt
+set _sc 0
+label $0_strt
+{scroll_to $wx}
+set _speaking wc
+endmacro
+
+macro newwitness
+delete name=wc
+set newx $wx
+subvar newx $court_x
+char $_witness x=$newx stack name=wc nametag=$witness_nt
+endmacro
+
+macro newhelper
+delete name=hc
+set newx $hx
+subvar newx $court_x
+char $_helper x=$newx stack name=hc nametag=$helper_nt
+endmacro
+
+macro newjudge
+delete name=jc
+set newx $jx
+subvar newx $court_x
+char $_judge x=$newx stack name=jc nametag=$judge_nt
+endmacro
+
+macro newdefense
+delete name=dc
+set newx $dx
+subvar newx $court_x
+char $_defense x=$newx stack name=dc nametag=$defense_nt
+endmacro
+
+macro newprosecutor
+delete name=pc
+set newx $px
+subvar newx $court_x
+char $_prosecutor x=$newx stack name=pc nametag=$prosecutor_nt
+endmacro

@@ -1,0 +1,145 @@
+#-version-1
+label top
+bg ts/1clooneyprisonasylumentrancewithoutwig
+
+list scene79clooneytalk
+li Psychological Profile
+showlist
+menu scene79clooney
+
+
+label Psychological Profile
+char hotti
+
+char Rhea
+"Director Clooney, could you please{n}tell us where the psychological{n}profiles of your patients are"
+"kept? We are conducting a murder{n}investigation, and believe it is{n}essential. We need the profile of"
+"Robert Erlenmeyer...{n}I'm sure you've heard of him."
+
+char hotti nametag=Clooney
+"Yes, yes... What a cutie we have{n}here. Delicious... Hm, yes..."
+
+char Apollo hide
+"Please, just answer the question."
+
+char hotti nametag=Clooney
+"Hm... yes, you two are lucky...{n}I have that report right here.{n}Lucky, you two... Usually I only"
+"keep the profiles of... female{n}patients. Helps me... understand{n}their problems, and they..."
+"confide in me. Hmm, yes, I love{n}it when they talk in their honey{n}voices..."
+"{epervert}Sometimes they let me... touch--"
+
+{s}
+fg HoldItAnimApollo
+delete
+
+char hotti
+
+char Apollo hide
+"{c099}(D...Disgusting.)"
+"We'd love to hear about... this{n}later, but right now could we{n}have that profile of Erlenmeyer?"
+
+char hotti nametag=Clooney
+"Hm, him... huh, huh. Not... a{n}'hottie,' but I knew right away{n}when I... 'found' his profile,"
+"it would be... invaluable. Hm,{n}yes... Eh he he... I'll give it{n}to you, in exchange for... a kiss."
+
+mus
+char Rhea e=surprised
+"{s}{sfx/Smack.ogg}WHAT?!"
+
+char Apollo hide
+"Y-You can't be serious!"
+
+char hotti nametag=Clooney
+"Hm, yes... Of course I am.{n}{epervert}Come on, sweetie..."
+
+char Rhea e=mad
+"Listen good, you {s}perverted pile{n}of platypus puke! I know you're{n}not a 'Director'! Not even the"
+"crazies here would believe that!"
+
+char hotti nametag=Clooney
+"Yes... Hm, I suppose I am less{n}of a 'director' and more of a...{n}'patient.'"
+
+char Rhea e=mad
+"Well, duh. Anyway, you just{n}admitted to us that you steal{n}female patients' profiles."
+"You aren't exactly in a position{n}to ask for anything. Give us the{n}profile, or you'll rot in here"
+"for the rest of your life."
+
+char Apollo hide
+"{c099}(Rhea is getting kind of harsh...{n}Not that this guy doesn't{n}deserve it.)"
+
+char hotti nametag=Clooney
+"Oooh... When you're angry...{n}you're sexy."
+
+char Rhea e=mad
+"I mean it. Do you want to share a{n}cell with Earl the Gut-Eater, or{n}Tom Crude?"
+
+mus 126 - Apollo Justice - Eccentric.ogg
+char hotti nametag=Clooney
+"Hm, no, no... huh. Here's his{n}profile. Not my type... but to{n}each their own, uh, uh..."
+"Have fun... I'll just go back to{n}my cell. Our talk has got me...{n}excited... eh he he..."
+
+addev psychprofile
+ev psychprofile name=psychprofile x=185
+char game hide
+nt
+"{sfx/evidence.wav}{c099}Psychological Profile added{n}to the Court Record."
+delete name=psychprofile
+
+mus
+char nothing fade
+
+char Rhea e=mad
+"...+50 trauma points."
+
+char Apollo hide
+"I'm tired of all these psychos.{n}From now on I'm only taking sane{n}people as clients."
+"Anyway, we finally have his real{n}psychological profile... Let's{n}see what it says. ...Hm... Oh!"
+"Here's something..."
+mus 142 - Turnabout Substitution - Recollection - Charles Darwin and Music.ogg
+set _music_loop 142 - Turnabout Substitution - Recollection - Charles Darwin and Musicloop.ogg
+bg bpsart1 fade
+"{sound}{c090}'According to his mother, his{n}parents had bought him a cat,{n}named Charles, of which he was"
+"{sound}{c090}particularly fond. On a Saturday{n}evening, in winter, the patient{n}was crossing the street with his"
+bg bpsart2 fade
+"{sound}{c090}cat when they suddenly encountered{n}a black car driving the wrong way.{n}Strangely, the patient was fast"
+bg bpsart3 fade
+"{sound}{c090}enough to avoid the vehicle, while{n}the animal was hit, and did not{n}survive. His mother remembers"
+bg bpsart4 fade
+"{sound}{c090}scolding him for taking the cat{n}out for a walk alone. She also{n}says that when she and his father"
+bg bpsart5 fade
+"{sound}{c090}were burying Charles in their{n}garden, her son accidentally{n}observed the scene from his"
+bg bpsart6 fade
+"{sound}{c090}bedroom. For days after this{n}incident, the patient did not{n}leave his bed, and barely spoke"
+"{sound}{c090}to his family.'"
+char Apollo hide
+"W-Wait, so when he mentioned{n}'Charles,' he meant... his cat?"
+
+bg ts/1clooneyprisonasylumentrancewithoutwig
+
+addev charles$
+ev charles$ name=charles x=185
+char game hide
+nt
+"{sfx/evidence.wav}{c099}Charles added{n}to the Court Record."
+delete name=charles
+
+char Apollo hide
+"Anyway, this could be just{n}what we need!"
+
+char Rhea
+"...I'm not so sure. Look at the{n}end:"
+"'{c090}However, mentioning this incident{n}to the patient has not elicited{n}the expected response so far.{c}'"
+"We're not the first to try this..."
+
+char Apollo hide
+"Maybe... But they were trying to{n}figure out why he killed people.{n}We're probably the first using"
+"this to prove that he didn't...{n}It can't hurt to try, can it?"
+
+char Rhea
+"...No, I guess not."
+
+char Apollo hide
+"It's finally time to enter{n}Erlenmeyer's crazy world..."
+
+setflag openScene80
+menu scene79

@@ -1,0 +1,97 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+
+defense
+"{ehandsondesk-nobrac}{s 8 8}Mrs. Poole told me all about{n}Erlenmeyer's first trial, where{n}you {f}{s 8 8}testified, Rhea!"
+"And I specifically remember{n}this comment that{n}Erlenmeyer made.."
+clear
+sfx /Hush.ogg
+bg black
+char Erlenmeyer e=sad
+"I'm sorry...{p50} I've been a bad{n}boy...{p80} but there's no{n}need to send me away..."
+"I'll punish myself...{p20} I promise,{n}I'll pay for everything...{p30}{n}as soon as I'm out of here..."
+"{sfx /Ding.ogg}{f}Mice... they can be your{n}friends...{p60}{n}or your enemies just the same..."
+"You shouldn't worry about{n}me... {p50} you should worry"
+"about them...{p60} they get{n}lonely in their cages... {p20}{n}you know?" 
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+sfx /Hush.ogg
+defense
+"{p60}{sfx /Key.ogg}{f}"{c900}I'll punish myself as{n}soon as I get out of here{c}.""
+"{ehandsondesk-nobrac}{s 5 5}Meaning, as {f}{s 8 8}soon as{n}he got out of prison,{n}he'd {sfx/Shing.ogg}{f}{s 10 10}visit"
+"his mice in his{n}biology classroom!"
+"Everyone thought it was just{n}Erlenmeyer's usual nonsense,"
+"{sfx /Key.ogg}{f}{enormal-nobrac}but you understood{n}what it meant, Rhea."
+"So when Erlenmeyer was{n}busted out of Clooney's Asylum,"
+"while the authorities were{n}dumbfounded, you knew{n}{f}exactly where he was."
+prosecutor
+"That reference to his mice{n}might make sense, but what{n}about {sfx/Slash.ogg}{f}punishing himself?"
+"No blood, no instruments{n}of torture..."
+"This contradicts your theory{n}that his remark reflected{n}what he would do after his escape!"
+defense
+"{enormal-nobrac}{sfx /Ding.ogg}{f}Actually, I {f}do have evidence{n}that he {s 8 8}{f}"punished" himself!"
+
+label question3
+timer 5400 outoftime
+show_timer
+set set _cr_back_button false
+present
+
+label miceupdated
+flag chosemicequestion3
+script scene106
+
+label virus
+flag chosevirusquestion3
+script scene106
+
+label none
+set _cr_back_button true
+fg TakeThatAnimApollo
+pause 5 script
+witness
+"{sfx /Key.ogg}{f}I gotta say, Apollo, watching{n}you flounder around like{n}this is torture."
+"{esmiling2}Of course, that's the only{n}way that piece of evidence{n}can be used as a torture device."
+judge
+"{sfx /Ding.ogg}{f}An eye for an eye, Mr. Justice." 
+"You torture us...{p20}{n} and we torture you."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Now, do you really{n}have proof he punished{n}himself?
+defense
+"{sfx /Ding.ogg}{f}Y-Yes!"
+goto question3
+
+label gameover
+script gameover
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

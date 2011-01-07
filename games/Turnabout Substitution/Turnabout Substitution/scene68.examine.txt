@@ -1,0 +1,29 @@
+#-version-1
+label top
+bg ts/2cemetery
+
+examine
+region 38 0 159 52 sky
+region 35 57 174 117 gate
+menu scene68
+
+#EXAMINE SKY
+label sky
+char Apollo hide
+"Why is it never{n}sunny at cemeteries?"
+"I mean, I know there's a bunch of{n}dead people and it's solemn and all,{n}but still..."
+"I bet if I take 10 steps back, out{n}of this place, the sky will{n}be blue and sunny."
+"...Nope."
+goto top
+
+#EXAMINE GATE
+label gate
+"The gate... The entrance to{n}this field of souls, like the{n}gate to Hell itself..."
+"...Is it just me, or did{n}it just get warmer?"
+goto top
+
+#EXAMINE NOTHING
+label none
+char Apollo hide
+"No clues here."
+goto top

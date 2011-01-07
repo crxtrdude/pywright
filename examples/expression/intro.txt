@@ -1,0 +1,35 @@
+setvar x 5
+setvar y 6
+
+label t1
+is_ex y == 6 AND x == 5 t2
+"bad t1!"
+exit
+
+
+label t2
+is_ex x == 4 OR x == 6 OR y == 6 t3
+"bad t2!'
+exit
+
+
+label t3
+is_ex (x + 1) * y == 36 t4 fail=failure
+
+label t4
+setvar_ex x (x + 1) * y
+is x = 36?
+goto t5
+"bad t4!"
+exit
+
+
+label t5
+"good"
+exit
+
+
+
+label failure
+"bad t3! {$x} {$y}"
+exit

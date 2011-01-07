@@ -1,0 +1,147 @@
+#-version-1
+label top
+bg ts/2cemeterycrimescenewithoutcar
+
+#menu
+list scene75pooletalk
+li Erlenmeyer's Trial
+li A Suggestion
+showlist
+menu scene75poole
+#end menu
+
+label Erlenmeyer's Trial
+char Poole e=normal-outofcourt
+
+char Apollo hide
+"I don't get it... Yesterday you{n}said that you were going to{n}resign because of your actions"
+"during Erlenmeyer's trial, and{n}now you're prosecuting him again?!"
+
+char Poole e=normal-outofcourt
+"...Things have changed.{n}Including my mind."
+
+char Apollo hide
+"You mean Judge's murder?"
+
+char Poole e=normal-outofcourt
+"...This case is personal. First{n}Arthur, and now Judge."
+"I can't just let him get away{n}with it. ...Not again.{n}I wouldn't be able to live with"
+"myself if I let this case go by{n}when I had the opportunity{n}to take it."
+"I will be the one to destroy him{n}in court!{n}This will truly be my last case..."
+"Me and my best friend's killer,{n}face to face. I'll end my career{n}by fixing my own mess."
+
+char Apollo hide
+"Even after what you did to him{n}in his first trial?"
+
+char Poole e=normal-outofcourt
+"...This time it will be a fair{n}trial. No deals. I'll give it my{n}all, with the truth on my side..."
+"and {eserious-outofcourt}{s}send that monster back to{n}where he came from. Then I'll be{n}willing go to jail for my actions."
+
+char Rhea
+"...So you're still convinced that{n}Erlenmeyer is the Mysterious Bust{n}killer?"
+
+char Poole e=normal-outofcourt
+"You're having doubts, Ms. Wits?{n}I must give you credit, Antennas:{n}I never thought you'd convince"
+"anyone that Erlenmeyer wasn't{n}guilty, least of all..."
+
+char Rhea e=mad
+
+char Poole hide
+"{sfx/Ding.ogg}her.{p30}"
+
+char Poole e=normal-outofcourt
+"You'd need to be crazy like poor{n}Strings... It doesn't surprise me{n}you're defending a psychopath"
+"like Erlenmeyer."
+"You like lost causes, even when{n}the truth is right there{n}in front of you!"
+
+char Apollo hide
+"...It's not that simple."
+
+char Poole e=normal-outofcourt
+"For you, it is. All you need is a{n}vague feeling or a hunch, and you{n}take a case."
+"You have no evidence and no plan,{n}just faith. And that's why you{n}will lose tomorrow."
+"It's also why you don't have{n}more clients: you're not worth{n}the gamble."
+
+char Rhea e=mad
+"H-Hey! Polly's never lost a case!"
+
+char Poole e=normal-outofcourt
+"...Hmph. It's not like he's been{n}in very many. Your mentor was{n}lucky too, and only lost once..."
+"but he only practiced for three{n}years. Do you really think he{n}could have kept that streak up"
+"until today if he hadn't been{n}disbarred?"
+"Plus, even a joke like Winston{n}Payne got a lucky streak at the{n}beginning of his career."
+
+flag ErlenmeyersTrialDone top
+setflag ErlenmeyersTrialDone
+flag ErlenmeyersTrialDone AND ASuggestionDone PooleLeaves
+goto top
+
+label A Suggestion
+char Poole e=normal-outofcourt
+"I'm a little worried, actually."
+
+char Apollo hide
+"?"
+
+char Poole e=sarcastic-outofcourt
+"For my last case, I want an actual{n}challenge... I'm just going to{n}crush you too easily."
+
+char Rhea e=mad
+"{sfx/Smack.ogg}What?! {s}How dare you!"
+
+char Poole e=normal-outofcourt
+"I bet you haven't even{n}investigated the right places."
+
+char Apollo hide
+"{sfx/Smack.ogg}{s}Yes I have!"
+"This isn't my first visit to the{n}graveyard, and I've checked out{n}that biology classroom."
+
+char Poole e=normal-outofcourt
+"...Hmph. Just as I thought."
+
+char Rhea
+"Where else are we supposed{n}to check?"
+
+char Poole e=normal-outofcourt
+"You two are actually so pathetic{n}and I feel so sorry for you,{n}I will actually help you out."
+
+mus
+"{eserious-outofcourt}If you want to stand a chance{n}against me...{n}check out {sfx/Key.ogg}{c900}Judge's bedroom{c}."
+
+char Apollo hide
+"Really?"
+
+char Poole e=normal-outofcourt
+"Yes. It will change everything{n}you think you know about{n}the case thus far."
+
+char Apollo hide
+"Wh-What?! How?"
+
+char Poole e=normal-outofcourt
+"...I've helped you enough.{n}Figure that out on your own."
+
+flag ASuggestionDone top
+setflag ASuggestionDone
+flag ErlenmeyersTrialDone AND ASuggestionDone PooleLeaves
+goto top
+
+label PooleLeaves
+char Poole e=normal-outofcourt
+"...Hmph. I think I've wasted{n}enough time talking with you.{n}Besides, I have a meeting now."
+"I will see you in court{n}tomorrow... if you are brave{n}enough to come."
+char nothing fade
+pause 120
+char Apollo hide
+"...Not only will I come,{n}{sfx/Smack.ogg}{s 10 10}I'll also win!"
+
+char Rhea fade e=mad
+"...Why did you wait until she was{n}out of earshot to say that?"
+
+char Apollo hide
+"...{p30}{n}Uh..."
+
+char Rhea e=mad
+"Whatever. {enormal}Let's just go check out{n}Judge's bedroom... Maybe she was{n}actually telling the truth."
+
+setflag openScene76
+menu scene75

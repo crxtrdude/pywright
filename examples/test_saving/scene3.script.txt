@@ -1,0 +1,4 @@
+"test penalty"
+"you are losing some penalty sir"
+penalty 50
+"mwa ha ha"

@@ -1,0 +1,7 @@
+horizontal 3
+vertical 1
+length 3
+loops 0
+framedelay 0 9
+framedelay 1 12
+framedelay 2 19

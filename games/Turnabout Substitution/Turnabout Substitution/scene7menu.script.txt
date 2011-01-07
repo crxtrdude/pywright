@@ -1,0 +1,5 @@
+#-version-1
+bg ts/1clooneyprisonasylumcell
+char Ema 
+mus 122 - Apollo Justice - Ema.ogg
+menu scene7ema

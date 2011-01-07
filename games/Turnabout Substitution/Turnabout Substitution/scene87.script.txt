@@ -1,0 +1,43 @@
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness nothing
+startcourt
+defense
+"{enormal-nobrac}The defense calls {f}{s 10 10}Robert Erlenmeyer{n}to the stand!"
+"There may not be an eyewitness to{n}the crime, but there's still{n}someone"
+"who can give us an account{n}of what happened."
+judge
+"{eserious}{sfx /Ding.ogg}{f}The defendant?"
+defense
+"{ehandsondesk-nobrac}The defense believes his{n}testimony will lead us to{n}a very different truth."
+fg ObjectionAnimPoole
+pause 5 script
+prosecutor
+"{sfx /Smack.ogg}{s 10 10}{f}Of course it will!{n}The defendant will just lie,{n}and say {s 8 8}anything to defend himself!"
+fg ObjectionAnimApollo
+pause 5 script
+defense
+"I've already talked to him, and I{n}think he's just as clueless as{n}we are on what happened that night."
+fg ObjectionAnimPoole
+pause 5 script
+prosecutor
+"{sfx /Smack.ogg}{s}We know exactly what happened{n}that night: Erlenmeyer ran over{n}Chambers with his own car!"
+fg ObjectionAnimApollo
+pause 5 script
+defense
+"{enormal-nobrac}{sfx /Ding.ogg}{f}If Erlenmeyer was going to lie,{n}don't you think he would have" 
+"already given the police an{n}alibi or tried to have explained{n}himself by now?"
+fg ObjectionAnimPoole
+pause 5 script
+prosecutor
+"{p50}... {p30}...{sfx /Key.ogg}{f}Actually, I hate to admit it,{n}but that's a good point."
+"However, as that may be, he{n}is not exactly in a state{n}to testify." 
+judge
+"{enormal}I believe that there is no harm{n}in at least trying, Mrs. Poole."
+"Let's give this a shot!"
+"Please bring the defendant{n}to the stand."
+clear
+script scene88 

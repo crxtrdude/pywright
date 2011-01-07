@@ -1,0 +1,2 @@
+bg filecheck y=192 fade
+gui Back x=96 y=350

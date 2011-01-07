@@ -1,0 +1,221 @@
+#-version-1
+set _list_back_button false
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Meekins
+set _judge G.Strings
+set _helper Rhea
+startcourt
+set _allow_saveload true
+set _allow_click_load true
+mus
+defense
+sfx /evidenceshoop.wav
+ev wig name=wigupdated x=185
+"...This wig was found inside{n}Clooney's Prison."
+delete name=wigupdated
+prosecutor
+"We know."
+defense
+"Your Honor, please close your eyes-{p5}{next}"
+fg ObjectionAnimPoole
+pause 5 script
+prosecutor
+"You're supposed to be proving{n}{sfx/Dunnn.ogg}{s 10 10}who the other Fisher was!"
+defense
+emo handsondesk name=dc
+"{sfx/Ding.ogg}{f}{s 5 5}If you play along, it'll become{n}crystal clear to {f}you, too!"
+judge
+"Objection overruled. Let's see{n}where Mr. Justice is going with this..."
+prosecutor
+emo sarcastic name=pc
+"Ten bucks it's a ploy to run away."
+defense
+emo thinking name=dc
+"...Anyway, close your eyes{n}and picture Mr. Fisher."
+pause 120 script
+sfx /evidenceshoop.wav
+ev wig name=wigupdated x=185
+"Now, imagine him wearing that{n}wig with a gray mustache."
+delete name=wigupdated
+judge
+emo thinking name=jc
+"O-okay..."
+defense
+"You have that picture in mind?"
+judge
+"Yes."
+defense
+emo normal name=dc
+"Now open your eyes. Did your mental{n}image look anything like..."
+sfx /evidenceshoop.wav
+ev erlenmeyer name=erlenmeyer$ x=185
+"...{sfx/Key.ogg}{f}This?"
+judge
+emo shocked name=jc
+"{sfx/Ding.ogg}{f}{s 10 10}! It did!"
+delete name=erlenmeyer$
+"But... {sfx/Key.ogg}{f}{s 5 5}why did you prepare{n}an edited photograph of{n}Mr. Fisher like that?"
+defense
+emo headshakes name=dc
+pause 120 script
+emo normal name=dc
+"This isn't an edited photograph."
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+mus 118 - Apollo Justice - Pursuit Overtaken.ogg
+set _music_loop 118 - Apollo Justice - Pursuit Overtakenloop.ogg
+"It's a {sfx/Dunnn.ogg}{f}{s 20 20}picture of the {sfx/Shing.ogg}{f}{s 20 20}{c900}victim,{n}{s 10 10}Robert Erlenmeyer!"
+sfx /Jury.ogg
+pause 30 script
+judge
+emo shocked name=jc
+"{sfx/Slash.ogg}{s 20 20}!!!"
+defense
+"Erlenmeyer's wig and mustache{n}were {s 10 10}fake, and he {s 10 10}removed{n}them to {f}fool Meekins!"
+fg ObjectionAnimPoole
+pause 5 script
+scrollprosecutor
+"Erlenmeyer is the only one it{n}{sfx/Bwaaah.ogg}{s 15 15}couldn't have been!"
+"Do I need to remind you he was{n}{sfx/Shock.ogg}{s 15 15}{f}{c900}dead{c} at the time?"
+defense
+emo confident name=dc
+"{sfx/Ding.ogg}{f}Was he?"
+prosecutor
+emo serious name=pc
+"Of {sfx/Smack.ogg}{s 15 15}course!"
+defense
+emo objects name=dc
+"If you're so {epointing}convinced that{n}he's dead, why don't you{n}show me some evidence?"
+"Like, say, the {sfx/Shing.ogg}{f}{s 20 20}corpse!"
+judge
+emo thinking name=jc
+"Mr. Justice, what are you saying?"
+defense
+emo normal name=dc
+"This whole incident wasn't{n}a murder at all..."
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"It was a {sfx/Dunnn.ogg}{f}{s 20 20}{c900}prison break{c} by Fisher{n}to get his {f}{c900}twin brother{c} out of jail!"
+sfx /Jury.ogg
+pause 60 script
+sfx /Gavel.ogg
+pause 30 script
+judge
+emo serious name=jc
+"{sfx/Bwaaah.ogg}{s 15 15}ORDER! I will have order!"
+"Hmmm... Mr. Justice, please explain{n}what you believe happened{n}in this context."
+defense
+emo normal name=dc
+"Well, I already explained how{n}they actually got Erlenmeyer{n}out of the prison."
+"Fisher sent Chambers a letter with{n}a plan, the gun, and the uniform,{n}pretending to be Erlenmeyer."
+emo thinking name=dc
+"He promised to tell Chambers about{n}the Mysterious Bust Crimes,{n}knowing he would come."
+emo objects name=dc
+"It was just a {epointing}{sfx/Shing.ogg}{f}{s 15 15}set-up to{n}break Erlenmeyer out!"
+scrollprosecutor
+"But there's a big hole{n}in your theory..."
+"You've explained how Chambers was{n}lured to Clooney Prison's Asylum,{n}and how Erlenmeyer waltzed out,"
+"but you've told us {sfx/Dunnn.ogg}{s 20 20}{f}nothing{n}about what happened at{n}Erlenmeyer's cell!"
+"For Fisher and Erlenmeyer to do{n}this, Chambers would have needed{n}to be unconscious, right?"
+judge
+"Yes..."
+prosecutor
+"But we found {sfx/Smack.ogg}{s 15 15}no drugs{n}in the defendant's body!"
+helper
+emo aideserious name=hc
+"{sfx/Ding.ogg}{f}{s 5 5}Come on, Apollo! This has been{n}the biggest hole in our case{n}the entire trial..."
+"If you can do it, then{n}it'll be a breeze after this!"
+prosecutor
+emo serious name=pc
+"So can you do it, or not?"
+"Because the {s 5 5}moment you {f}run out{n}of explanations is the {s 10 10}moment{n}you {f}lose the case!"
+scrolldefense
+emo normal name=dc
+"...{sfx/Key.ogg}{f}I'll do it."
+label howunconscious
+judge
+"All right then. How was the{n}defendant rendered unconscious?"
+set _cr_back_button false
+present
+
+label erlenmeyer$
+set _cr_back_button true
+mus
+fg TakeThatAnimApollo
+pause 5 script
+defense
+emo normal name=dc
+"Think back to Mr. Fisher's{n}testimony about Erlenmeyer..."
+delete
+script scene45
+
+label none
+set _cr_back_button true
+prosecutor
+emo sarcastic name=pc
+"Mr. Justice, you're going to put{n}me to sleep trying to explain how{n}that put Mr. Chambers to sleep."
+defense
+emo sheepish name=dc
+"Uh..."
+prosecutor
+"And then you'll use that time to{n}figure out how to fill this{n}hole in your theory, right?"
+defense
+emo handsondesk name=dc
+"N-{sfx/Ding.ogg}{f}{s 5 5}No! I was... {esheepish}trying{n}to {sfx/Ding.ogg}{f}{s 5 5}surprise you!"
+"You know, keep you on your{n}toes, prevent you from falling{n}asleep... Heh..."
+judge
+emo sarcastic name=jc
+"Don't worry... I'm sure this{n}penalty will keep everyone{n}wide awake for a while!"
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo ohshit name=dc
+"{sfx/Slash.ogg}{s 15 15}Gah!"
+is penalty 0 gameover
+prosecutor
+"Now then, why don't you{n}actually answer the question!"
+helper
+emo aideserious name=hc
+"{sfx/Ding.ogg}{f}{s 5 5}Do it, Apollo! You need to think about{n}everything you've heard today{n}to finally prove your case!"
+goto howunconscious
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

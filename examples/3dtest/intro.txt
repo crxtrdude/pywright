@@ -1,0 +1,62 @@
+set rx 0
+set ry 0
+set zoom false
+
+macro set_bg_name
+joinvar bg_name $rx _ $ry
+is zoom = true?
+joinvar bg_name $bg_name z
+print $bg_name
+endmacro
+
+label show_bg
+set_bg_name
+delete name=3dbg
+bg $bg_name y=192 stack name=3dbg
+
+#set _examine_skipupdate false
+set _examine_showbars false
+set _examine_showcursor false
+#set _cr_back_button false
+examine hide
+region 0 39 33 36 zoom_in
+region 1 88 30 36 zoom_out
+region 45 143 69 28 yleft
+region 147 143 69 28 yright
+region 225 94 30 38 xdown
+region 225 17 30 38 xup
+
+label zoom_in
+set zoom true
+goto show_bg
+
+label zoom_out
+set zoom false
+goto show_bg
+
+label yleft
+subvar ry 1
+is ry < 0?
+set ry 3
+goto show_bg
+
+label yright
+addvar ry 1
+is ry > 3?
+set ry 0
+goto show_bg
+
+label xdown
+subvar rx 1
+is rx < 0?
+set rx 3
+goto show_bg
+
+label xup
+addvar rx 1
+is rx > 3?
+set rx 0
+goto show_bg
+
+label none
+goto show_bg

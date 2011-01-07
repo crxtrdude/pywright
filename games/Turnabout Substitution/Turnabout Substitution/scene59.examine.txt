@@ -1,0 +1,66 @@
+#-version-1
+label top
+bg records
+
+examine
+region 0 3 71 189 shelves
+region 86 43 30 46 shelvesinback
+region 177 5 77 182 glasscase
+menu scene59
+
+label shelves
+char Apollo hide
+"Let's see here. Well, there{n}aren't any other copies of{n}HT5 over here."
+char Rhea fade e=normal
+"What's this? D...{p20} L...{p25} 6?{n}Check this file out, Apollo."
+char G.Strings fade e=normal-outofcourt
+"..."
+mus
+char Apollo hide
+"Wait a sec...{p40} {sfx/Shing.ogg}{f}Hold it right{n}there! Hands where I can see em!"
+char G.Strings e=shocked-outofcourt
+"{s}{sfx/shock.ogg}Oh, my word! {eembarrassed-outofcourt}{sfx/sfx general/sfx-whoops.wav}Whoops, now I've{n}dropped my papers."
+char Apollo hide
+"Oh, sorry, Mr. Strings. I thought{n}you were going to pull a weapon{n}on me, for some reason."
+char G.Strings e=shocked-outofcourt
+"Why on Earth would you think{n}something like that?"
+"It will take hours for me to{n}resort these important trial{n}documents by case number!"
+char Apollo hide
+"Sorry, my bad. {c099}(He can't get his{n}secretary to do that?)"
+mus 123 - Apollo Justice - Search Opening.ogg
+char nothing
+goto top
+
+label shelvesinback
+char Rhea fade e=normal
+"Look at all of these files. With{n}all of these old cases...{p40} don't{n}you think it's"
+"possible that those who were{n}convicted were innocent, and the real{n}culprit is still on the loose?"
+"Who would ever know? All it{n}takes is one little mistake. Doesn't{n}that frighten you, Apollo?"
+char Apollo hide
+"Uh, yeah...{p40} definitely."
+char nothing
+goto top
+
+label glasscase
+char Apollo hide
+"I wonder why all of these files{n}are behind this glass, while the{n}rest are out on the shelves."
+"Is there something special{n}about them?"
+char Rhea fade e=normal
+"Let's take a look...{p40} Come{n}on, open! Why can't I open it?"
+char G.Strings fade e=shocked-outofcourt
+"Oh, um...{p40} the files that you{n}see are merely an illusion!"
+char Rhea fade e=normal
+"What?"
+char G.Strings fade e=shocked-outofcourt
+"Those files are, er... top secret.{n}Just pretend they aren't there."
+"Carry on people, nothing{n}to see here."
+char Apollo hide
+"{c099}(I wonder what's in those files{n}that he doesn't want us to see.{n}I can only imagine...)"
+char nothing
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+goto top
+

@@ -1,0 +1,187 @@
+#-version-1
+label top
+bg aj/detentioncenter
+
+set _show_back_button true
+set _show_back_button true
+list scene56Stringstalk
+li Why did you do it?
+
+flag whydidyoudoit whydidyoudoit
+label scene56stringstalk2
+
+flag justice justice
+label scene56stringstalk3
+
+showlist
+menu scene56Strings
+
+label whydidyoudoit
+li Justice?
+goto scene56stringstalk2
+
+label justice
+li Erlenmeyer, innocent?
+goto scene56stringstalk3
+#end menu
+
+label Why did you do it?
+fg detentionfg loops=0 nowait
+char Strings fade e=normal
+char Apollo hide
+"Justice Strings, why did you go{n}through the trouble of arranging{n} Erlenmeyer's prison break,"
+"and then framing Chambers{n}for his fake death?"
+char Strings e=normal
+"I had two reasons. The first{n}was my son. Though he may be a{n}bit air-headed on occasion,"
+"he is a true genius when it comes{n}to law. I could tell that he deserved{n}to judge high-profile cases,"
+"but too often he was told that{n}Chambers was the more experienced{n}of the two."
+"There was no one to set up my{n}career for me, but my son is{n}still just a boy."
+"There is a weakness in his heart{n}that prevents him from{n}believing in himself..."
+"He needs assistance to maximize{n}his considerable potential."
+"Perhaps I thought that if I helped{n}him in that regard, it would keep him{n}from making the same mistakes I did..."
+char Apollo hide
+"How can you act like{n}you've been altruistic?"
+"You came close to destroying the{n}life of a good, innocent man.{n}You can't possibly justify that!"
+char Strings e=normal
+"A good man, you say? But{n}how well do you really know this{n}man?
+"What do you know about the judge{n}that has presided over all of{n}your cases until now?"
+char Rhea hide
+"I know plenty about him. He's{n}been like a loving grandfather to me-{n}he wouldn't hurt a fly!"
+char Strings e=normal
+"Well, I'm afraid that there are many{n}things you do not know. Chambers,{n}the man, and Chambers, the judge,"
+"are two very different people. The{n}latter, I'm afraid, has done some{n}inexcusable things in the past."
+char Apollo hide
+"I...{p40} I don't believe{sfx/Shock.ogg}{s} that!"
+char Strings e=normal
+"Of course not. I never said it{n}would be easy, but what I tell{n}you is the truth."
+"Chambers would not make the{n}right decision until it did not pose{n}any risk to himself."
+"And the sacrifices he made of{n}theirs to protect his own security...{p60}{n}Frankly, it's rather disgusting."
+char Apollo hide
+"Are you implying that he allowed{n}innocent men to be convicted?"
+char Strings e=normal
+"All that I'm trying to communicate is{n}that this man does not deserve all of{n}the respect that you have for him."
+"That judges of important causes{n}should hold office for life is a{n}disputable thing, for the mind grows"
+"old as well as the body, Aristotle{n}once said. This city needs a new{n}judge, one with a clean record."
+"I did what was necessary to{n}make that a reality."
+char Rhea hide
+"You're a despicable man."
+char Strings e=normal
+"Now, hold your judgement. I{n}am not yet finished." 
+"Another reason guided my actions,{n}and it was one far beyond the scope{n}of a mere individual."
+"I did all of this...{p40} for {c900}justice."
+setflag whydidyoudoit
+char nothing
+goto top
+
+label Justice?
+fg detentionfg loops=0 nowait
+char Strings fade
+char Apollo hide
+"You did this for justice?"
+char Strings e=thinking
+"No, I did not do this for your{n}sake, Mr. Justice. What I mean is an{n}idea, a notion."
+"Justice is a concept that was held in{n}great regard by ancient civilizations{n}so much more than it is today."
+char Strings e=normal
+"It was evident in those times{n}that the truth mattered more than{n}political differences or other such"
+"irrelevant things."
+"But now the expectation is just the{n}opposite: guilt or innocence is given{n}second consideration"
+"to evidence and testimony, the{n}lot of which is forgery and perjury."
+"An innocent man too often is found{n}guilty because of legal or political{n}circumstances outside of his control."
+"Too many have lost sight of{n}the meaning of justice,"
+"allowing themselves to be{n}corrupted by outside influences."
+"Judges like Chambers care more{n}about themselves than those that{n}they judge."
+"We've kept records of the words{n}of our ancestors, but we've{n}completely forgotten their ideals."
+"It is better to risk sparing{n}a guilty person than to condemn an{n}innocent one, Voltaire once said."
+char Apollo hide
+"You say all of that, but it's{n}obvious what kind of person you are!"
+"You talk about values like justice, but{n}in the end it's all about your own{n}interests."
+"You'd stab anyone you could in the{n}back if it helps get you to the top,{n}just like with Chambers!"
+char Strings e=normal
+"Do you think I don't{n}know that about myself?"
+"That disturbing quality has caused{n}me great illness until now."
+"That is why I have decided to{n}prove the truth of my values, no{n}matter what the cost."
+"That is why I am sitting in this{n}detention center right now, being{n}questioned by you."
+"I stopped talking about doing{n}good, and actually did it. And yet, all{n}I have received in return is contempt."
+"But that is to be expected. At{n}any rate, the two of you will not{n}be the ones to judge my fate."
+char Rhea hide
+"How can you figure that you've{n}been doing good by freeing a{n}murderer?"
+char Strings e=thinking
+"{sfx/sfx general/sfx-realization.wav}Murderer? A murderer is a person{n}who kills people."
+char Strings e=normal
+"That is something that Erlenmeyer{n}has certainly never done,"
+"and I suspect that he is{n}not even capable of it."
+char Apollo hide
+"How can you be so certain that{n}Erlenmeyer is innocent?"
+setflag justice
+char nothing
+goto top
+
+label Erlenmeyer, innocent?
+mus 142 - Turnabout Substitution - Recollection - Charles Darwin and Music.ogg
+set _music_loop 142 - Turnabout Substitution - Recollection - Charles Darwin and Musicloop.ogg
+fg detentionfg loops=0 nowait
+char Strings fade e=normal
+"No person in their right mind{n}would think that man is guility."
+char Apollo hide
+"But Erlenmeyer confessed!"
+char Rhea hide
+"And let's not forget that he was{n}diagnosed as a sociopath by{n}numerous renowned psychologists."
+char Strings e=normal
+"Or rather, you might say that he{n}was diagnosed as a sociopath in light{n}of his confession."
+"It is clear that he is{n}mentally unstable, at least."
+"However, there is no evidence{n}in his testimony of{n}his own wrongdoing."
+"Do you know how the investigation{n}in that case was conducted?"
+"It was the most horrible{n}affront to justice imaginable."
+"The police were desperate for clues,{n}and they were under considerable{n}pressure from the government."
+"No one had an explanation for{n}these Mysterious Bust Killings."
+"They were terrifying because{n}they seemed to be completely{n}meaningless, almost random."
+"Neither the clues nor the choice of{n}victims made any sense, like puzzle{n}pieces that were all"
+"from separate boxes."
+"It all seemed...{p40} terribly arbitrary.{n}And that is why, when a poor,{n}unstable man arrived at"
+"the police station confessing to{n}the crimes, the police were all too{n}eager to arrest him."
+"It was much more convenient to{n}explain the strange details of{n}the case"
+"than to try to understand what{n}the killer was trying to communicate."
+char Rhea hide
+"But it wasn't as random as you're{n}trying to make it look. He was a{n}science teacher, after all,"
+"and those messages read{n}{c900}Charles Darwin."
+"In that light, it's pretty hard{n}to think there isn't some connection."
+char Apollo hide
+"Yeah, this explanation seems a lot{n}more plausible than your conspiracy{n}theories."
+char Strings e=normal
+"But I believe that there is another{n}possibility, which was completely{n}ignored in that investigation."
+"Is it not possible, Mr. Justice,{n}that the serial killer in these crimes is{n}not really insane at all?"
+"What if this person were simply...{p40}{n}{sfx/sfx general/sfx-realization.wav}{f}purely and openly evil?"
+char Apollo hide
+"Just...{p40}{sfx/sfx general/sfx-realization.wav} evil? Come on,{s}{sfx/sfx general/sfx-stab.wav} nothing's{n}ever that simple."
+char Strings e=normal
+"My son had a quote related to this,{n}though I'm not sure which famous{n}philosopher originally said it."
+"It was something along these lines:{n}Some men aren't looking for anything{n}logical like money."
+"They can't be bought, bullied,{n}reasoned, or negotiated with."
+"Some men just want to{n}watch the world burn."
+char Apollo hide
+"Well, who could this{n}murderer be?"
+char Rhea hide
+"What sane person would go around{n}killing so many people, just for{n}the heck of it?"
+char Strings e=thinking
+"To be honest, I do not know.{n}I cannot prove it, but I'm{n}certain of it:"
+"a dark truth hides at the{n}bottom of this case."
+"I can't see it clearly, but{n}I can tell that it's down there."
+char Apollo hide
+"But just a hunch won't be enough.{n}Everything still points to Erlenmeyer."
+"Don't you think it's possible{n}that you're the one who isn't facing{n}the truth here?"
+char Strings e=normal
+"I already knew that you would{n}be hesitant to believe me."
+"But if you should choose to put{n}aside your preconceptions about{n}these case,"
+"and consider what I have said,{n}then I suggest looking into the HT5{n}case files in the police station."
+"I think you will discover that{n}there is much that you do not know{n}about the Mysterious Bust Killings."
+mus
+char Apollo hide
+"Well, perhaps I will. At any rate,{n}thank you for taking the time to{n}speak with us, Justice Strings."
+char Strings e=normal
+"I think that this conversation{n}may prove to benefit both of us,{n}Mr. Justice."
+"It is looking at things for a long time{n}that ripens you and gives{n}you a deeper understanding,"
+"Van Gogh once said."
+mus 124 - Apollo Justice - Police Cell.ogg
+setflag erlenmeyer,innocent
+char nothing
+goto top

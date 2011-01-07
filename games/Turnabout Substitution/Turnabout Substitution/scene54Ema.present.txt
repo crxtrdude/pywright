@@ -1,0 +1,195 @@
+#-version-1
+present
+label top
+bg ts/1stringsoffice
+menu scene54Ema
+
+label erlenmeyer$
+char Ema fade e=mu
+"We completely underestimated{n}Erlenmeyer. He's even more{n}dangerous than we thought."
+char Apollo hide
+"How so?"
+char Ema e=normal
+"Think about it this way, Apollo.{n}Erlenmeyer is completely insane, so{n}we figured he would be acting"
+"irrationally, without reason."
+"And yet, he was able not only to{n}comprehend but also to execute{n}Strings's plan, and he managed to"
+"escape right out from under our{n}noses."
+char Rhea fade e=normal
+"Maybe Erlenmeyer has just been{n}pretending to be insane, like they said{n}in the trial. He could have been"
+"faking it all this time, just so that the{n}police would underestimate{n}him when he made his escape."
+char Apollo hide
+"Whether he's really insane or not,{n}he's a serial killer. Someone is going{n}to die unless we catch him, soon."
+char Ema fade e=normal
+"Speaking of which, I've been{n}wondering what Erlenmeyer did with{n}the bodies of his victims."
+"Don't you find it strange that none{n}of them have ever been found?"
+char Apollo hide 
+"I don't know. Throws them{n}in a river, I guess?"
+char Ema e=mu
+"But then they would eventually wash{n}up on a beach somewhere, right? And{n}yet not one of them has turned up."
+char Apollo hide
+"I've never really given much{n}thought to it."
+char Rhea fade e=normal
+"Whatever he does with them, you've{n}got to admit there's a certain mad{n}genius in his methods."
+"It's enough to send shivers down{n}your spine, eh Apollo? Thinking that{n}if he kills you, your body"
+"will never ever be found."
+char Apollo hide
+"Jeez, Rhea, I'm scared enough{n}without you making matters worse.{n}Why are you always doing that?"
+char Rhea e=sad
+"Oh, sorry. I guess it's just{n}a bit of a bad habit."
+char nothing
+goto top
+
+label pstrings$
+char Ema fade e=mu
+char Apollo hide
+"What I want to know is, why would{n}Strings have risked his career as a{n}Supreme Court Justice to break some"
+"serial killer out of jail?"
+"I mean, I understand that he{n}wanted to frame Chambers{n}for his son's benefit, but why{n}"
+"go to such an extreme?{n}It doesn't make any sense."
+char Ema e=mu
+"Well, he said that he did it for{c900} justice.{c}{n}Maybe he thinks that Erlenmeyer is{n}innocent."
+"Or perhaps he wanted to interrogate{n}Erlenmeyer himself."
+char Rhea e=normal
+"If he really was innocent, then why{n}would he escape? Maybe it's really{n}Strings who is insane."
+char nothing
+goto top
+
+label fisherupdated$
+char Rhea fade e=normal
+"You know, Erlenmeyer really does{n}look like Fisher without the wig{n}and mustache."
+"Now that you mentioned it, we{n}probably should have picked up on it{n}when we first met."
+"I mean, we already knew what{n}Erlenmeyer looked like, and we{n}had found that wig..."
+sfx /swoop.wav
+mus
+bg policehq
+char Fisher fade e=normal
+"Me, I'm the underdog."
+"You know when you was a kid,{n}there was this job you really wanted{n}to do?"
+char Apollo hide
+"{c099}(That would be: lawyer, like{c900}{n}Damion Shard!)"
+bg ts/1stringsoffice
+sfx /swoop.wav
+char Rhea fade e=normal
+"I don't think that's how that went."
+char Apollo hide
+"Oh. Well, remember that detective{n}who worked there, the one that was{n}playing a game?"
+sfx /swoop.wav
+bg policehq
+char Apollo hide
+"These detectives must have a lot{n}of work going on with the case."
+char Rhea fade e=normal
+"This one's playing video games."
+char Apollo hide
+"{c900}Damion Shard: Ace Attorney?{c} What{n}a stupid name!"
+bg ts/1stringsoffice
+sfx /swoop.wav
+char Rhea fade e=mad
+"That isn't how that went either!{n}Something must be wrong with your{n}memory, Apollo!"
+mus 138 - Apollo Justice - Investigation Core.ogg
+set _music_loop 138 - Apollo Justice - Investigation Coreloop.ogg
+char Apollo hide
+sfx /sfx general/sfx-whoops.wav
+"I'm sorry! I don't know what's{n}come over me.{p100}What were we talking{n}about?"
+char Rhea e=normal
+"We were talking about how Fisher{n}and Erlenmeyer look the same{n}without that wig and mustache."
+char Apollo hide
+sfx /ding.ogg
+"Oh yeah! Say, do you think it's{n}possible that they might have...{p40}{n}{c900}switched places?"
+char Ema fade e=smirks
+"We already have Fisher under arrest{n}and in custody."
+"They couldn't possibly{n}have made the swap{n}in the current situation."
+char Apollo hide
+"Oh...{p50} {c099}(How many times am I{n}going to get shot down!?)
+char nothing
+goto top
+
+label wigupdated
+char Rhea fade e=normal
+"You know, Erlenmeyer really does{n}look like Fisher without the wig{n}and mustache."
+"Now that you mentioned it, we{n}probably should have picked up on it{n}when we first met."
+"I mean, we already knew what{n}Erlenmeyer looked like, and we{n}had found that wig..."
+sfx /swoop.wav
+bg policehq
+char Fisher fade e=normal
+"Me, I'm the underdog."
+"You know when you was a kid,{n}there was this job you really wanted{n}to do?"
+char Apollo hide
+"{c099}(That would be: lawyer, like{c900}{n}Damion Shard!)"
+bg ts/1stringsoffice
+sfx /swoop.wav
+char Rhea fade e=normal
+"I don't think that's how that went."
+char Apollo hide
+"Oh. Well, remember that detective{n}who worked there, the one that was{n}playing a game?"
+sfx /swoop.wav
+bg policehq
+char Apollo hide
+"These detectives must have a lot{n}of work going on with the case."
+char Rhea fade e=normal
+"This one's playing video games."
+char Apollo hide
+"{c900}Damion Shard: Ace Attorney?{c} What{n}a stupid name!"
+bg ts/1stringsoffice
+sfx /swoop.wav
+char Rhea fade e=mad
+"That isn't how that went either!{n}Something must be wrong with your{n}memory, Apollo!"
+char Apollo hide
+sfx /sfx general/sfx-whoops.wav
+"I'm sorry! I don't know what's{n}come over me.{p100}What were we talking{n}about?"
+char Rhea e=normal
+"We were talking about how Fisher{n}and Erlenmeyer look the same{n}without that wig and mustache."
+char Apollo hide
+sfx /ding.ogg
+"Oh yeah! Say, do you think it's{n}possible that they might have...{p40} {n}switched places?"
+char Ema fade e=smirks
+"We already have Fisher under arrest{n}and in custody."
+"They couldn't possibly{n}have made the swap{n}in the current situation."
+char Apollo hide
+"Oh...{p50} {c099}(How many times am I{n}going to get shot down!?)
+mus 138 - Apollo Justice - Investigation Core.ogg
+set _music_loop 138 - Apollo Justice - Investigation Coreloop.ogg
+char nothing
+goto top
+
+label bust
+char Ema fade
+char Apollo hide
+"Have you checked the phone? Er...{p40}{n}the bust? It's possible that someone{n}called Erlenmeyer and warned him"
+"that he needed to escape."
+"They might even have left a message{n}on the phone itself!"
+char Ema fade e=profile
+"Yeah, well...{p40} we still haven't been{n}able to figure out how this device{n}works."
+char Apollo hide
+sfx /sfx general/sfx-shock2.wav
+"What? You mean, you can't figure{n}out how this phone... bust... thing...{n}works? I mean, you're a detective..."
+"forensic scientist... person."
+char Ema e=profile
+"Well, we haven't been able to figure{n}out how to check the last number{n}that was called."
+"Perhaps it's not even possible.{n}At any rate, we'll have to interrogate{n}Strings to figure it out."
+char Apollo hide
+"I don't know. Strings seemed pretty{n}uncooperative. You may have to{n}resort to {c900}{sfx/sfx general/sfx-realization.wav}enhanced interrogation."
+char Ema e=mu
+"... That's not even funny, Apollo!"
+char Rhea fade e=mad
+"Heh. Yeah, Apollo! Only an sick,{n}twisted, evil person would think that{n}insensitive joke was funny!"
+"How can you laugh at the expense{n}of innocent torture victims whose{n}plight has been concealed"
+"from the public eye!"
+char Apollo hide
+sfx /sfx general/sfx-shock2.wav
+"{c099}(But, you're the one who laughed!)"
+char nothing
+goto top
+
+
+label none
+char Ema fade e=mu
+"What is that? Is that{n}going to help us{n}find Erlenmeyer?"
+char Apollo hide
+"Um, no. It's just, uh...a thing."
+char Ema e=mu
+sfx /sfx general/sfx-stab.wav
+"Then why don't you just go away,{n}and take your thing with you. I need{n}to focus on locating Erlenmeyer."
+char Rhea e=mad
+"Yeah, Apollo. How can you be{n}so thoughtless?"
+char nothing
+goto top

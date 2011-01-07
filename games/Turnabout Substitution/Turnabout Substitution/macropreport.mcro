@@ -1,0 +1,33 @@
+macro ppage2
+bg preport2 fade y=192
+gui Button {ppage3} x=115 y=200 Next
+endmacro
+
+macro ppage3
+bg preport3 fade y=192
+gui Button {ppage4} x=115 y=200 Next
+endmacro
+
+macro ppage4
+bg preport4 fade y=192
+gui Button {ppage5} x=115 y=200 Next
+endmacro
+
+macro ppage5
+bg preport5 fade y=192
+gui Button {ppage6} x=115 y=200 Next
+endmacro
+
+macro ppage6
+bg preport6 fade y=192
+gui Button {ppage7} x=115 y=200 Next
+endmacro
+
+macro ppage7
+bg preport7 fade y=192
+gui Button {ppage8} x=115 y=200 Next
+endmacro
+
+macro ppage8
+bg preport8 fade y=192
+endmacro

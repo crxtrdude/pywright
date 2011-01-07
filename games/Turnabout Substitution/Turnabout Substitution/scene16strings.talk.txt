@@ -1,0 +1,71 @@
+#-version-1
+label top
+bg ts/1stringsoffice
+
+list scene16stringstalk
+li The judge
+li The prosecutor
+showlist
+menu scene16strings
+
+label The judge
+char strings
+"The Chambers case has been{n}handed to a novice judge."
+"Don't let appearances deceive you,{n}however. He is brilliant - one might{n}be tempted to call him a genius."
+"Driven by his libido sciendi, he{n}shall ascertain that the jurors{n}fully grasp the facts of the case"
+"before sending a man to prison.{n}...{p30}{ethinking}He rather reminds me of your{n}client, as a matter of fact."
+char Strings e=laughing
+pause 60 script
+char Strings
+char Apollo hide
+"{c099}(Judge Chambers, a genius?)"
+char Strings
+"I see doubt in your eyes, Mr.Justice,{n}but what I speak is the truth."
+"Erstwhile sagacious, yet impetuous,{n}nowadays wise, yet forgetful,{n}Mr. Chambers would hardly"
+"recognize his former self in{n}the mirror. All is flux, nothing{n}stays still, Heraclitus once said."
+char Strings e=laughing
+pause 60 script
+char Strings
+"...But you will not save him from{n}decay, Mr.Justice. Nor will you{n}save him from conviction."
+"As I already said, this is one{n}case you are not going to win."
+char Apollo hide
+"{c099}(Thank you so much, Mr. Chief{n}Justice. Your negativity is{n}really helping me right now.)"
+setflag thejudge
+flag thejudge AND theprosecutor enddayone
+char nothing
+goto top
+
+label The prosecutor
+char strings
+"Your opponent in tomorrow's{n}trial will be Jessica Poole.{n}...Prosecuting legend."
+"At 67, she has the universal wisdom{n}of a bicentennial oak, and the{n}passionate heart of an erupting"
+"volcano. Although she lived abroad{n}for many years, she is still{n}considered to be the best attorney"
+"of her generation. One single{n}faux-pas will not only cost you a {n}guilty verdict, but it will also tarnish"
+"your name for years to come.{n}However talented you might be, you{n}don't stand a chance against her."
+"Humility is the foundation{n}of all the other virtues,{n}Saint Augustine once said."
+"...Which is why I strongly{n}advise you not to take this case."
+"You have nothing to win,{n}and everything to lose."
+char rhea
+"He sure warned us, Apollo."
+char Apollo hide
+"{c099}(Whatever. I'm still going for it.{n}I know Judge is innocent, after all.)"
+"{c099}(...Tomorrow's trial is going{n}to be sink or swim!)"
+setflag theprosecutor
+flag thejudge AND theprosecutor enddayone
+char nothing
+goto top
+
+label enddayone
+mus
+char rhea
+"{sfx/Key.ogg}Well, I believe this is about{n}all the information we're{n}going to gather for today."
+char Apollo hide
+"Yeah... there are still a lot of grey{n}areas, but at least we made some{n}progress in our investigation."
+clear
+"{c099}(...To be honest, today has been{n}kind of a crazy day.)"
+"{c099}(Tomorrow is my only chance to{n}show them what I'm really made of!)"
+clear
+pause 60 script
+fg tobecontinued fade x=60 y=85
+pause 300 script
+script scene17
