@@ -1994,7 +1994,9 @@ class textbox(gui.widget):
     def k_tab(self):
         self.recordb.showmenu()
     def forward(self,sound=True):
-        assets.variables["_last_written_text"] = self.written.split("\n",1)[1]
+        spl = self.written.split("\n",1)
+        if spl[1:]:
+            assets.variables["_last_written_text"] = spl[1]
         assets.cur_script.tboff()
         lines = self.text.split("\n")
         lines = lines[4:]
