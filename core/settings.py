@@ -81,7 +81,7 @@ def screen_format(assets):
     return mode,dim
 
 class settings_menu(gui.pane):
-    firstpane = "resolution"
+    firstpane = "display"
     def __init__(self,*args,**kwargs):
         self.sw=kwargs["sw"]
         self.sh=kwargs["sh"]
@@ -93,7 +93,7 @@ class settings_menu(gui.pane):
         self.z = 11001
         self.align = False
         if self.firstpane == "debug" and not assets.vtrue("_debug"):
-            settings_menu.firstpane = "resolution"
+            settings_menu.firstpane = "display"
             
         self.sheight = assets.sheight
         self.swidth = assets.swidth
@@ -116,7 +116,7 @@ class settings_menu(gui.pane):
         self.make_button("quit game",[0,sh-17])
         self.make_button("quit pywright",[sw-74,sh-17])
         self.make_button("saves",[0,0])
-        self.make_button("resolution",[35,0])
+        self.make_button("display",[35,0])
         self.make_button("sound",[94,0])
         if assets.vtrue("_debug"):
             self.make_button("debug",[132,0])
@@ -318,10 +318,10 @@ class settings_menu(gui.pane):
         line.children[-1].more = mod(10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
 
         self.children.append(ermsg)
-    def resolution(self):
+    def display(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
-        settings_menu.firstpane = "resolution"
+        settings_menu.firstpane = "display"
         self.base()
         res_box = gui.scrollpane([10,20])
         res_box.width = 200
@@ -415,7 +415,7 @@ class settings_menu(gui.pane):
         if self.vds.checked:
             assets.screen_compress = 0
         assets.make_screen()
-        self.resolution()
+        self.display()
     def save_resolution(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
@@ -425,7 +425,7 @@ class settings_menu(gui.pane):
         self.really_applyb = None
         self.timer = 0
         wini(assets)
-        self.resolution()
+        self.display()
     def reset_res(self):
         assets = self.assets
         assets.swidth,assets.sheight = self.oldwidth,self.oldheight
