@@ -1578,7 +1578,22 @@ TOKEN("noauto","Just play the animation, don't let textboxes set talk/blink mode
 the object name of the currently speaking character). Character's in pywright refer to a folder containing various animations belonging
 to the character. This "emotion" can be set with the e= keyword on the char command, as well as modified during text. Textboxes
 also will control the animation of the currently speaking character to make the mouth movements match the speed the text is
-printing."""
+printing.
+
+There are several variables which further control properties of characters. All characters will, by default, use the sound
+effect "blipmale.ogg" as the sound the text makes as it prints out, which is the male voice. If the character's name is located
+under the female section in core/blipsounds.txt, the default sound used will instead be "blipfemale.ogg". The sound can be changed
+on a text by text basis, with "{soundnewsound.ogg}The text sound has now been changed", but this can get tedious. 
+
+A new default sound, based on the characters id name (the name used for their art folder, and used by the char command as 
+in 'char name') can be set. The syntax is 'set char_defsound_[name] [sound file]', where [name] is the name you will use, 
+and [sound file] is the filename relative to the sfx/ folder to play for the text blip sound.
+
+The default blip for characters who aren't predefined in this way can be changed from blipmale.ogg to something else by
+setting the variable 'char_defsound': 'set char_defsound [sound file]'
+
+The best place to set these variables is in a separate file included in intro.txt, so that the settings will remain
+throughout the game."""
         assets.character = character
         z = None
         e = "normal(blink)"
