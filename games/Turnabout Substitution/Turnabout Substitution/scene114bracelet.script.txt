@@ -1,0 +1,117 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+
+flag chosebraceletme braceletme
+flag chosebraceletyou braceletyou
+flag chosebraceleterlenmeyer braceleterlenmeyer
+
+
+label braceletme
+defense
+"{epointing-nobrac}It's {sfx/Dunnn.ogg}{f}{s}my bracelet!"
+goto endbracelet
+
+label braceletyou
+"{econfident-nobrac}This bracelet is {sfx/Key.ogg}{f}{c900}yours{c}, Rhea."
+witness
+"You mean you're giving it to me?"
+defense
+"{ethinking-nobrac}E-{p20}{sfx/Ding.ogg}{f}Eh?"
+witness
+"I know it's your bracelet.{p30}{n}You were wearing it the{n}other day in court."
+"And I'm guessing it's the same one,{n}since you weren't wearing it today."
+prosecutor
+"I noticed it in court the other day, too."
+judge
+"Me too."
+defense
+"{esheepish-nobrac}Oh...{p30} {s 10 10}{sfx/oops.wav}yeah.{p30}{n}It is my bracelet!"
+goto endbracelet
+
+label braceleterlenmeyer
+defense
+"{epointing-nobrac}This bracelet is {sfx/Dunnn.ogg}{f}{s}{c900}Erlenmeyer's{c}!"
+witness
+"...{p30}Honestly, after everything{n}you've said, {s 10 10}{sfx/Smack.ogg}THAT is the{n}lie you came up with?"
+"I saw you flaunting that bracelet{n}in court the other day."
+prosecutor
+"Me too."
+judge
+"Me too."
+witness
+"Everyone knows it's your bracelet,{n}so why deny it?"
+defense
+"{esheepish-nobrac}Y-{p20}{s 10 10}{sfx/oops.wav}Yeah.{p30}{n}It is my bracelet!"
+goto endbracelet
+
+label endbracelet
+defense
+"{econfident-nobrac}So then what was it doing{n}in {sfx/Key.ogg}{f}{c900}your{c} office?"
+witness
+"...{sfx/Ding.ogg}{f}!"
+defense
+"{epointing-nobrac}You {s 5 5}stole it from me,{n}afraid I would catch you with it!"
+prosecutor
+"Catch her...{p30} with a {f}bracelet?"
+defense
+"{ethinking-nobrac}...{p20}It's a long story.{n}But anyway, that's pretty{n}incriminating, don't you think?"
+witness
+"No, no, no...{p30}{n}you've got it all wrong...{p30} {sfx/Key.ogg}{f}Polly."
+"{f}{s 5 5}{c900}You{c} took it off, and {f}{s 5 5}{c900}you{c} forgot it{n}in my office on that night{n}we spent together."
+"I thought you had had{n}a bit too much to drink..."
+defense
+"{econfident-nobrac}Yeah, right."
+witness
+emo sad name=wc
+"I was going to {f}return it{n}to you,{p20} honest!"
+"...It just slipped my mind, since{n}you know, I was almost{n}{s 10 10}{sfx/Smack.ogg}MURDERED that night."
+judge
+emo serious name=jc
+"I see.{p20} I fail to see how this{n}bracelet affects the case, Mr. Justice,{n}whether you left it or she stole it."
+defense
+"{ehandsondesk-nobrac}...{sfx/Ding.ogg}{f}! W-{p20}{s 5 5}{f}Wait, Your Honor!"
+judge
+"What is it now?"
+defense
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+"What Rhea said just now...{p40} is a{n}{sfx/Key.ogg}{s 5 5}{f}{c900}giant contradiction{c}!"
+witness
+emo sweating name=wc
+"Wh-{p20}{s}{sfx/Shock.ogg}What?!"
+defense
+"{econfident-nobrac}You've just undone yourself!"
+set _speaking dc
+"{c099}(This is it,{p15} the break{n}I've been waiting for!)"
+defense
+"{epointing-nobrac}What you've just said, coupled{n}with this piece of evidence,{n}{s 5 5}{f}exposes you as the killer!"
+
+label exposedornot1
+timer 5400 outoftime
+show_timer
+set set _cr_back_button false
+present
+script specialendgameover
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

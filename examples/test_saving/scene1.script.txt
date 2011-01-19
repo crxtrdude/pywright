@@ -1,0 +1,11 @@
+bg judgestand
+bg defence x=50 stack fade=50
+char ben nametag=ben1
+char ben nametag=ben2 name=jj x=50 stack
+char ben nametag=BEN hide
+fg wbench y=-10 stack
+set _speaking jj
+ev bus
+"Hello, my name is ben."
+"rotate"
+rotate degrees=140 speed=2

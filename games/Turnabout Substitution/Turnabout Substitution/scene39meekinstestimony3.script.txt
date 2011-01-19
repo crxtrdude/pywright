@@ -1,0 +1,348 @@
+#-version-1
+set _list_back_button false
+set wrongevidence 1
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Meekins
+set _judge G.Strings
+set _helper Rhea
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+label start
+startcourt
+cross meekinstestimony3
+
+statement meekins3A
+witness
+emo normal name=wc
+"When I left the victim's cell,{n}only Erlenmeyer, Chambers and{n}Fisher were there, ma'am!"
+
+statement meekins3B
+witness
+"Between Chambers and Fisher,{n}the culprit must be the former!"
+
+statement meekins3C
+witness
+"Not only do the fingerprints{n}on the murder weapon and the{n}blood on the robe point to him..."
+
+statement meekins3D
+witness
+emo punch name=wc
+"But I also have evidence proving{n}Fisher isn't the killer!"
+
+
+statement meekins3E
+witness
+emo normal name=wc
+"First, the missed shot{n}means the murderer is{n}inexperienced with shooting!"
+
+
+statement meekins3F
+witness
+emo thoughtful name=wc
+"But more importantly, why would{n}Fisher use Chambers's gun{n}instead of his own?"
+
+statement meekins3G
+witness
+emo punch name=wc
+"That's why there is no doubt{n}Chambers was the true perpetrator{n}of this crime, ma'am!"
+
+statement meekins3H
+witness
+"Plus half an hour later I{n}saw Fisher, and he wasn't{n}suspicious at all!"
+endcross
+
+label comments
+helper
+emo aide name=hc
+set _speaking dc
+"This testimony is just stuff{n}that's been brought up before."
+helper
+emo aide name=hc
+"And we still don't have{n}a way to counter it..."
+set _speaking dc
+"This is all old and{n}circumstantial, so it won't{n}advance Poole's case."
+helper
+emo aide name=hc
+"But if we squeeze out some{n}new info, {sfx/Ding.ogg}{f}maybe we can use{n}it to further ours?"
+goto start
+
+label press meekins3A
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+"We don't know the time of{n}death, since we don't have{n}Erlenmeyer's body."
+emo pointing name=dc
+"Therefore, we do not know how{n}long after you left the{n}cell the crime took place!"
+scrollwitness
+"H-{sfx/Ding.ogg}{f}{s 5 5}Huh? B-But... Uh..."
+fg ObjectionAnimPoole
+pause 5 script
+scrollprosecutor
+"We know from Mr. Fisher's testimony{n}that the gun was first shot{n}soon after the witness left."
+"I believe we can infer that the second{n}gunshot -- and murder -- took place{n}immediately after the first."
+"Thus we know that the murder{n}took place shortly after{n}the witness left."
+"Mr. Meekins, please tell{n}Mr. Justice what that means..."
+resume
+
+label press meekins3B
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal name=dc
+"But Fisher lied in his testimony.{n}That's pretty incriminating,{n}don't you think?"
+scrollwitness
+"Well..."
+scrollprosecutor
+"He tried to streamline the trial,{n}not to save his skin."
+"Besides, the evidence still{n}points to the defendant. Please{n}continue the testimony."
+resume
+
+label press meekins3C
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"But the fingerprints got on the murder{n}weapon while he was holding the{n}gun, before the murder occurred!"
+fg ObjectionAnimPoole
+pause 5 script
+scrollprosecutor
+"Yes, his fingerprints definitely{n}got on the murder weapon{n}before the murder occurred."
+"But that doesn't mean he{n}didn't fire the gun!"
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo confident name=dc
+"{sfx/Ding.ogg}{f}{s 5 5}Exactly! The fingerprints don't prove{n}he fired the gun, so he might{n}not have fired the gun!"
+scrollprosecutor
+emo serious name=pc
+"You're repeating yourself. You just{n}can't confront the new information in{n}this testimony. Please continue."
+defense
+emo handsondesk name=dc
+set _speaking dc
+"{c099}(What new information? You're{n}the one repeating yourself...)"
+resume
+
+label press meekins3D
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo thinking name=dc
+"When you say "I", you mean{n}"Mrs. Poole", right?"
+scrollwitness
+"If I would have to say that I have the{n}evidence or that she has the evidence{n}I would have to say the {sfx/Ding.ogg}{f}{s 5 5}latter, sir!"
+scrolldefense
+emo handsondesk name=dc
+"Well, we might as well have{n}her take the stand!"
+scrollprosecutor
+"This is the witness' own deduction!"
+emo sarcastic name=pc
+"...{p30}Even if I did {sfx/Key.ogg}{f}guide{n}him through it, a little."
+"Just carry on with{n}the testimony."
+resume
+
+label press meekins3E
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo thinking name=dc
+"How do you know Fisher is so much{n}more experienced than Chambers?"
+scrollwitness
+"Well, he used to be a cop, so he had{n}experience with guns there."
+emo punch name=wc
+"{sfx/Smack.ogg}{s 5 5}Also, prison guards receive training{n}in the issued firearms, sir!"
+scrollprosecutor
+"And the defendant confessed that{n}he had never handled a{n}gun before the murder."
+scrolldefense
+"Well, how do you know that the{n}first shot was an accident?"
+emo confident name=dc
+"Maybe Fisher missed it {sfx/Key.ogg}{f}{c900}on purpose{c}{n}so it wouldn't look like it was him."
+scrollprosecutor
+emo sarcastic name=pc
+"Oh please. Are you trying to turn{n}a high school dropout who can't{n}even give a coherent testimony"
+"into a criminal mastermind?{n}He {sfx/Dunnn.ogg}{s 7 7}doesn't even have{n}a motive or opportunity!"
+defense
+emo sheepish name=dc
+"Er..."
+prosecutor
+"Witness! Continue the testimony."
+resume
+
+label press meekins3F
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo handsondesk name=dc
+"Simple: to {sfx/Dunnn.ogg}{f}{s 7 7}{c900}frame{c} Chambers!"
+fg ObjectionAnimPoole
+pause 5 script
+scrollprosecutor
+"Let's not go through this again. If{n}Fisher used Chambers's gun, then{n}Chambers had to be unconscious."
+"{sfx/Shing.ogg}{f}{s 10 10}But we found no chemical{n}substance in him!"
+"Besides, it would've taken too{n}long to get Chambers's gun -{n}Erlenmeyer would've had more than"
+"enough time to{n}attack Fisher."
+judge
+"Yes, it seems highly illogical for{n}Fisher to have used the{n}defendant's gun."
+"Objection sustained - please{n}continue, Mr. Meekins."
+resume
+
+label press meekins3G
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo handsondesk name=dc
+"This is just going in{n}circles! There's no new{n}evidence or testimony!"
+scrollwitness
+emo sad name=wc
+"Well, there's the last reason..."
+scrolldefense
+emo sheepish name=dc
+"...{sfx/Key.ogg}{f}Oh yeah."
+resume
+
+label press meekins3H
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal name=dc
+"What do you mean he wasn't{n}suspicious at all?"
+scrollwitness
+emo thoughtful name=wc
+"Well, he wasn't carrying a body{n}with him, and he didn't have{n}any blood on his clothes..."
+"...He looked perfectly {sfx/Ding.ogg}{f}normal!"
+prosecutor
+pause 60 script
+helper
+emo aideserious name=hc
+"If Meekins really did see{n}Fisher, then there's no way{n}he was the criminal!"
+"It would really prove{n}Chambers is guilty..."
+set _speaking dc
+"{c099}(But then why does Poole look{n}so shaken up about this?)"
+resume
+
+label fisherstestimony meekins3H
+script scene40
+
+label none
+is wrongevidence 1 wrongevidence1
+is wrongevidence 2 wrongevidence2
+is wrongevidence 3 wrongevidence3
+
+label wrongevidence1
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo objects name=dc
+"{sfx/Dunnn.ogg}{s}Your Honor!{n}That statement contradicts{n}the evidence!"
+judge
+emo shocked name=jc
+"...{sfx/Key.ogg}{f}Really? Let me see that..."
+"...{sfx/Ding.ogg}{f}! Why, you're right!"
+"This is... unheard of{n}in this courtroom!"
+"You single-handedly turned{n}the case around with{n}this one piece of evidence!"
+defense
+emo confident name=dc
+"Didn't I? Didn't I?"
+judge
+emo sarcastic name=jc
+"...{sfx/oops.wav}Of course you didn't."
+"What IS unheard of in this courtroom{n}is your credulity, Mr.Justice.{n}You deserve this penalty."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(My ego... it hurts...)"
+is penalty 0 gameover
+set wrongevidence 2
+clear
+goto start
+
+label wrongevidence2
+fg ObjectionAnimApollo
+pause 5 script
+judge
+emo serious name=jc
+"{sfx/Dunnn.ogg}{s}Penalty!"
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo objects name=dc
+"{sfx/Shing.ogg}{f}What?!{n}I haven't said anything yet!"
+judge
+"But you were definitely going{n}to say something{n}ridiculous, weren't you?"
+defense
+set _speaking dc
+"{c099}(Actually, he's right...)"
+judge
+emo sarcastic name=jc
+"Which is why I decided{n}to prevent you from{n}further embarrassing yourself."
+"You should be grateful."
+defense
+emo sheepish name=dc
+"Thank you, Your Honor."
+set _speaking dc
+"{c099}(Though I AM embarrassed now.)"
+is penalty 0 gameover
+set wrongevidence 3
+clear
+goto start
+
+label wrongevidence3
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+"..."
+emo sheepish name=dc
+"{sfx/oops.wav}Please give me a penalty, Your{n}Honor. I swear I was going{n}to say something stupid."
+judge
+"...You sure do learn fast, Mr.Justice.{n}Alright, I'd be glad to."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(I a-bso-lu-tely need{n}to remember to{n}forget that moment.)"
+is penalty 0 gameover
+set wrongevidence 1
+clear
+goto start
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

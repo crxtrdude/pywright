@@ -1,0 +1,4 @@
+horizontal 12
+vertical 4
+length 44
+loops 0

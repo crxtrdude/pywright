@@ -1,0 +1,67 @@
+#-version-1
+label top
+bg ts/2cemeterycrimescenewithoutcar
+
+examine
+region 427 144 43 48 carTracks
+region 152 108 17 23 graveA
+region 322 68 74 56 graveB
+region 299 61 21 26 graveC
+region 294 89 33 47 ArthurGrave
+region 477 161 29 31 body
+menu scene75
+
+label carTracks
+char Apollo hide
+"{c099}(These tracks in the snow run all{n}the way to the body... I guess{n}there's no doubt that's how he"
+"{c099}died. But there's so many{n}tracks... Did he run over Chambers{n}a bunch of times? ...He had to be"
+"{c099}a reasonably skilled driver. He{n}had to turn a bit while reversing,{n}since the body wasn't in line with"
+"{c099}the car... Why didn't he just move{n}the body? I guess he was in a{n}hurry from the alarm...)"
+goto top
+
+label graveA
+char Apollo hide
+"'Here lies Dustin Dewinn, since{n}there isn't enough room to sit.'"
+char Rhea 
+"...Well it's true."
+goto top
+
+label graveB
+char Apollo hide
+"Oh, this one has a poem..."
+"'Free your body and soul,{n}Unfold your powerful wings,{n}Climb up the highest mountains,"
+"Kick your feet up in the air.{n}You may now live forever,{n}Or return to this earth,"
+"Unless you feel good{n}where you are!'"
+"...I was expecting something{n}stupid or funny."
+char Rhea
+"Something has always seemed...{n}off to me about this grave, but{n}I could never put my finger on it."
+goto top
+
+label graveC
+char Apollo hide
+"'Sue Flay... She lived with her{n}husband fifty years,{n}and died in the confident hope"
+"of a better life.'"
+"{c099}(...Note to self: Ensure cemetery{n}in which I am buried is not{n}joke-based.)"
+char Rhea e=smiling2
+"You'd be amazed at how much more{n}comedic tombstones cost than{n}regular ones, Polly."
+goto top
+
+label ArthurGrave
+char Apollo hide
+"{c099}(Let's see what pun is on this{n}grave... 'Here lies...{n}{sfx/Key.ogg}{c900}Arthur Chambers{c}.'"
+"{c099}{s}Aaaaah!! This must be why Judge{n}came to the cemetery! ...Could{n}this be the "urgent matter" he"
+"{c099}mentioned after the trial? And if{n}it was, why did he come in the{n}middle of the night?"
+"{c099}Curiouser and curiouser...)"
+goto top
+
+label body
+char Apollo hide
+"{c099}(Judge's outline, in chalk. I know{n}the police need to preserve the{n}crime scene and they can't just"
+"{c099}keep the body here, but still...{n}I don't like it. It's a constant{n}reminder of his death..."
+"{c099}like he's been killed once more.)"
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+goto top

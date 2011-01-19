@@ -1,0 +1,59 @@
+mus
+bg ts/2cemetery
+
+flag scene68repeat skipEma
+nt
+"{c090}{center}{type}December 28{n}Forest Bones Cemetery{n}Entrance"
+char Apollo hide
+"It's so gloomy...{n}Almost like a horror movie."
+"Of course, it is a graveyard{n}AND a crime scene."
+char Ema e=hiya
+"Hi, Apollo."
+mus 122 - Apollo Justice - Ema.ogg
+char Apollo hide
+"Hey, Ema. How are you doing?"
+char Ema e=mu
+"{sfx\Smack.ogg}{s}I was woken up early in the{n}morning to investigate the second{n}gruesome murder in a week!"
+"How do you {f}think I feel?"
+char Apollo hide
+"S-Sorry..."
+char Ema e=uninterested
+"So much for a Christmas break...{n}Say, where's your girlfriend? Did she{n}ditch you after Chambers' trial?"
+char Apollo hide
+"N-No... We had a fight."
+char Ema e=hair
+"Hmph. So, I'm guessing you're{n}Erlenmeyer's attorney?"
+char Apollo hide
+ev awfulrequest x=16 y=16 name=moo
+"{sfx\evidenceshoop.wav}Y-Yeah. {c099}(Why am I even showing{n}her this? It's not like anyone{n}would accept it...)"
+delete name=moo
+char Ema
+"...Okay, I guess that means I need{n}to tell you what happened."
+char Apollo hide
+"Thank you, Ema."
+char Ema e=profile
+"Don't thank me yet. You're{n}defending a well-known serial{n}killer, and this case is more"
+"open-and-shut than that{n}Misham one."
+"Are you doing this for your{n}career, or do you really{n}think he's innocent?"
+char Apollo hide
+"I think he's innocent."
+"...If I start to think he's guilty,{n}I'm dropping the case."
+char Ema e=smirks
+"Then at least one of us will get a{n}Christmas break..."
+char Apollo hide
+"{c099}(Thanks for the confidence boost.)"
+char Ema e=snacks
+"..."
+char Apollo hide
+"...What?"
+char Ema e=profile
+"Oh, nothing. It's just{n}that... {ehiya}you really are{n}Mr. Wright's protégé."
+char Apollo hide
+"N-Never mind.{n}Let's get down to business."
+mus 122 - Apollo Justice - Ema.ogg
+setflag scene68repeat
+menu scene68ema
+
+label skipEma
+mus 122 - Apollo Justice - Ema.ogg
+menu scene68ema

@@ -1,0 +1,12 @@
+#-version-1
+mus
+noflag firstwrightanything introductionscene4
+flag firstwrightanything scene4
+label introductionscene4
+bg nothing
+nt
+"{c090}{center}{type}December 26{n}Wright Anything Agency"
+setflag firstwrightanything
+label scene4
+bg aj/wrightanything fade
+menu scene4

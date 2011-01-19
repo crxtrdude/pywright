@@ -1,0 +1,4 @@
+horizontal 8
+vertical 10
+length 76
+loops 1

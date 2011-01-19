@@ -1,0 +1,44 @@
+horizontal 4
+vertical 10
+length 40
+loops 1
+framedelay 0 12
+framedelay 1 6
+framedelay 2 6
+framedelay 3 1
+framedelay 4 9
+framedelay 5 1
+framedelay 6 6
+framedelay 7 6
+framedelay 8 12
+framedelay 9 12
+framedelay 10 12
+framedelay 11 12
+framedelay 12 12
+framedelay 13 12
+framedelay 14 12
+framedelay 15 12
+framedelay 16 12
+framedelay 17 12
+framedelay 18 12
+framedelay 19 12
+framedelay 20 12
+framedelay 21 12
+framedelay 22 12
+framedelay 23 12
+framedelay 24 12
+framedelay 25 6
+framedelay 26 6
+framedelay 27 1
+framedelay 28 9
+framedelay 29 1
+framedelay 30 6
+framedelay 31 6
+framedelay 32 12
+framedelay 33 12
+framedelay 34 12
+framedelay 35 12
+framedelay 36 12
+framedelay 37 12
+framedelay 38 12
+framedelay 39 12

@@ -1,0 +1,31 @@
+set _debug true
+
+"missing brackets"
+"{f{ and so on!} Wow."
+
+
+"offscreen text"
+set _textbox_wrap false
+"this line is really long it's going to be off the screen so booya"
+
+
+
+"Bad name="
+scroll
+fg dbench name=ddd
+scroll name=ccc
+tint name=ccc
+grey name=ccc
+invert name=ccc
+fade name=ccc
+rotate name=ccc
+zoom name=ccc
+globaldelay 1 name=ccc
+controlanim loop name=ccc
+emo silly name=ccc
+emo silly
+bemo silly name=ccc
+bemo silly
+delete name=ccc
+
+

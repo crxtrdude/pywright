@@ -1,0 +1,43 @@
+macro outoftime
+mus
+bg judgestand
+char G.Strings e=serious
+"Mr. Justice, you have run out{n}of your allotted time."
+bg defence
+fg dbench
+char Apollo e=ohshit-nobrac
+"Wh-{p15}{sfx/Shock.ogg}{s 20 20}What?!"
+bg witness
+fg wbench
+char Rhea e=smiling1
+"{sfx/Ding.ogg}{f}Too slow, Polly."
+bg judgestand
+char G.Strings e=serious
+"Considering the amount of time{n}you had to plan,{n}I am assuming you are not"
+"presenting evidence because{n}you have {f}{s 5 5}no evidence."
+"Therefore, there is no reason{n}to continue this trial!"
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit
+endmacro

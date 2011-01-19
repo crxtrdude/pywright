@@ -1,0 +1,4 @@
+"test zoom"
+bg lobby
+zoom mag=3 frames=120
+"blah"

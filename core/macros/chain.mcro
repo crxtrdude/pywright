@@ -1,0 +1,168 @@
+macro psyche_center_lock
+fg locks/1-lock-appears $1 name=cl
+sfx after=60 lock.ogg
+setflag center_locked
+endmacro
+
+macro psyche_center_chain
+sfx Rolling.ogg
+fg locks/chain x=-340 y=260 name=c1
+scroll x=340 y=-260 speed=5 name=c1 nowait
+fg locks/chain x=340 y=260 flipx name=c2
+scroll x=-340 y=-260 speed=5 name=c2 nowait
+endmacro
+
+macro psyche_left_lock
+fg locks/1-lock-appears x=-100 y=-20 $1 name=ll
+sfx after=60 lock.ogg
+setflag left_locked
+endmacro
+
+macro psyche_left_chain
+sfx Rolling.ogg
+fg locks/chain x=-440 y=240 name=l1
+scroll x=340 y=-260 speed=5 name=l1 nowait
+fg locks/chain x=240 y=240 flipx name=l2
+scroll x=-340 y=-260 speed=5 name=l2 nowait
+endmacro
+
+macro psyche_right_lock
+fg locks/1-lock-appears $1 x=100 y=-20 name=rl
+sfx after=60 lock.ogg
+setflag right_locked
+endmacro
+
+macro psyche_right_chain
+sfx Rolling.ogg
+fg locks/chain x=-240 y=240 name=r1
+scroll x=340 y=-260 speed=5 name=r1 nowait
+fg locks/chain x=440 y=240 flipx name=r2
+scroll x=-340 y=-260 speed=5 name=r2 nowait
+endmacro
+
+macro psyche_unlock_center
+sfx lockbreaks.ogg
+delete name=cl
+fg locks/1-lock-breaks x=-29 y=35 name=cul
+pause 40
+delete name=cul
+scroll x=-340 y=260 speed=8 name=c1 nowait 
+scroll x=340 y=260 speed=8 name=c2
+delete name=c1
+delete name=c2
+endmacro
+
+macro psyche_unlock_left
+sfx lockbreaks.ogg
+delete name=ll
+fg locks/1-lock-breaks x=-129 y=20 name=lul
+pause 40
+delete name=lul
+scroll x=-340 y=260 speed=8 name=l1 nowait 
+scroll x=340 y=260 speed=8 name=l2
+delete name=l1
+delete name=l2
+endmacro
+
+macro psyche_unlock_right
+sfx lockbreaks.ogg
+delete name=rl
+fg locks/1-lock-breaks x=70 y=20 name=rul
+pause 40
+delete name=rul
+scroll x=-340 y=260 speed=8 nowait name=r1
+scroll x=340 y=260 speed=8 name=r2
+delete name=r1
+delete name=r2
+endmacro
+
+macro psyche_init
+delflag left_locked
+delflag center_locked
+delflag right_locked
+endmacro
+
+macro psyche5
+sfx Rolling.ogg
+fg locks/chain x=-440 y=240 name=l1
+scroll x=340 y=-260 speed=6 name=l1 nowait
+fg locks/chain x=240 y=280 flipx name=l2
+scroll x=-340 y=-260 speed=6 name=l2 nowait
+fg locks/chain x=-240 y=280 name=r1
+scroll x=340 y=-260 speed=6 name=r1 nowait
+fg locks/chain x=440 y=240 flipx name=r2
+scroll x=-340 y=-260 speed=6 name=r2 nowait
+fg locks/chain x=-340 y=260 name=c1
+scroll x=340 y=-260 speed=6 name=c1 nowait
+fg locks/chain x=340 y=260 flipx name=c2
+scroll x=-340 y=-260 speed=6 name=c2 nowait
+fg locks/1-lock-appears y=12 name=lock1
+sfx after=60 lock.ogg
+pause 10
+fg locks/1-lock-appears x=-65 y=-35 name=lock2
+sfx after=60 lock.ogg
+pause 10
+fg locks/1-lock-appears x=65 y=-35 name=lock3
+sfx after=60 lock.ogg
+pause 10
+fg locks/1-lock-appears x=65 y=50 name=lock4
+sfx after=60 lock.ogg
+pause 10
+fg locks/1-lock-appears x=-65 y=50 name=lock5
+sfx after=60 lock.ogg
+pause 20
+endmacro
+
+macro psyche3
+{psyche_init}
+{psyche_right_chain}
+{psyche_left_chain}
+{psyche_center_chain}
+{psyche_right_lock nowait}
+pause 10
+{psyche_left_lock nowait}
+pause 10
+{psyche_center_lock}
+pause 10
+endmacro
+
+macro psyche2
+{psyche_init}
+{psyche_right_chain}
+{psyche_left_chain}
+{psyche_right_lock nowait}
+pause 10
+{psyche_left_lock}
+pause 10
+endmacro
+
+macro psyche1
+{psyche_init}
+{psyche_center_chain}
+{psyche_center_lock}
+pause 2
+endmacro
+
+macro psyche_unlock
+flag center_locked $0_u1_
+flag left_locked $0_u2_
+flag right_locked $0_u3_
+goto $0_u4_
+
+label $0_u1_
+delflag center_locked
+{psyche_unlock_center}
+goto $0_u4_
+
+label $0_u2_
+delflag left_locked
+{psyche_unlock_left}
+goto $0_u4_
+
+label $0_u3_
+delflag right_locked
+{psyche_unlock_right}
+goto $0_u4_
+
+label $0_u4_
+endmacro

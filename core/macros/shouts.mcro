@@ -1,0 +1,57 @@
+macro doshout
+joinvar shout_snd $shout_char / $shout_type .ogg
+joinvar dest $0 _ $shout_type
+
+goto $dest
+
+label $0_objection
+fg ObjectionAnim name=ob
+goto $0_end
+
+label $0_takethat
+fg TakeThatAnim name=ob
+goto $0_end
+
+label $0_holdit
+fg HoldItAnim name=ob
+goto $0_end
+
+label $0_gotcha
+fg GotchaAnim name=ob
+goto $0_end
+
+label $0_end
+sfx $shout_snd
+pause 30
+delete name=ob
+endmacro
+
+macro shout
+set shout_char $1
+set shout_type $2
+doshout
+endmacro
+
+macro objection
+set shout_char $_speaking_name
+set shout_type objection
+{doshout}
+endmacro
+
+macro holdit
+set shout_char $_speaking_name
+set shout_type holdit
+{doshout}
+endmacro
+
+macro takethat
+set shout_char $_speaking_name
+set shout_type takethat
+{doshout}
+endmacro
+
+macro gotcha
+set shout_char $_speaking_name
+set shout_type gotcha
+{doshout}
+endmacro

@@ -1,0 +1,21 @@
+#-version-1
+mus
+bg ts/larrybutzhighschool fade
+
+flag scene73repeat scene71menu
+
+flag EmaGone scene73
+
+flag scene71repeat scene71menu
+setflag scene71repeat
+nt
+"{c090}{center}{type}December 28{n}Larry Butz High School"
+char Apollo hide
+"{c099}(Ema went ahead to the crime{n}scene... I should follow her!{n}I don't have any time to waste!)"
+menu scene71
+
+label scene73
+script scene73rhea
+
+label scene71menu
+menu scene71

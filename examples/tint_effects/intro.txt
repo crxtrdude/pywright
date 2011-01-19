@@ -1,0 +1,14 @@
+bg lobby
+char phoenix fade
+
+tint name=phoenix start=ffffff end=ff0000
+"I am tinted"
+tint name=phoenix start=ffffff end=ffffff
+
+invert name=phoenix
+"I am inverted"
+invert value=0 name=phoenix
+
+grey name=phoenix
+"I am grey"
+grey value=0 name=phoenix

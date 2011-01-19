@@ -1,0 +1,38 @@
+#-version-1
+mus
+bg aj/courtlobby
+flag Pooleintro60 skipPoole
+nt
+"{c090}{center}{type}December 27{n}District Court{n}Defendant Lobby No. 4"
+pause 60
+char Apollo hide
+"{c099}(This is pretty intimidating. Poole{n}wanted to talk to me alone, so{n}I assume it's important...)"
+"{c099}(Does it have something to do with{n}the case?)"
+mus 145 - Turnabout Substitution - Jessica Poole - To the Bitter End.ogg
+set _music_loop 145 - Turnabout Substitution - Jessica Poole - To the Bitter Endloop.ogg
+char Poole fade e=normal-outofcourt
+"Ah, you finally came, Mr. Justice.{esarcastic-outofcourt} I've{n}been waiting for quite a while, you{n}know."
+char Apollo hide
+"I was rather busy with the{n}Erlenmeyer situation..."
+char Poole e=serious-outofcourt
+"You mean his escape from Paul's{n}office?Don't concern yourself."
+"I've been working with the{n}police since I received the{n}news of that incident"
+"to make sure he's arrested before{n}he commits another crime."
+"The area where he lives is surrounded{n}by policemen. Airports, train{n}stations, taxi cabs,"
+"even stupid teenagers that pick up{n}hitchhikers...{p40} they've all been duly{n}warned about him."
+"His face is now everywhere on{n}television, and by extension, so is{n}Fisher's."
+"But quite frankly, that's not what{n}we're here to talk about, Apollo."
+"{enormal-outofcourt}Oh, do you mind if I call you{n}by your first name? You can call{n}me Jessica if you want."
+char Apollo hide
+"Er...{p30} no, not at all.{c099} (What's with{n}this weird change in her personality?{n}Suddenly, she's being nice.)"
+char Poole e=normal-outofcourt
+"Coffee?"
+char Apollo hide
+"Uh, sure, thank you. {c099}(I'm not sure{n}why, but I have a bad feeling {n}about this conversation.)"
+"So, what were we going to talk{n}about?"
+setflag Pooleintro60
+label scene60
+script scene60menu
+
+label skipPoole
+script scene60menu
