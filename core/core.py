@@ -1500,13 +1500,13 @@ class portrait(object):
         self.emoname = emo
         self.blinkemo = blinkemo
         self.modename = mode
+        self.supermode = "lipsync"
         
         if not self.emoname: hide = "wait"
         self.hide = hide
         if self.hide: return self.init_sounds()
         self.talk_sprite = fadesprite()
         self.blink_sprite = fadesprite()
-        self.cur_sprite = self.talk_sprite
         self.combined = fadesprite()
         def shrink(t):
             if not t.startswith("/"):
@@ -1605,8 +1605,6 @@ class portrait(object):
     def delete(self):
         self.kill = 1
     def update(self):
-        if getattr(self,"single",None):
-            self.cur_sprite.loopmode = "loop"
         if not self.hide and getattr(self.cur_sprite,"img",None):
             return self.cur_sprite.update()
     def set_emotion(self,emo):
@@ -1620,13 +1618,26 @@ class portrait(object):
         self.hide = False
         self.init(self.charname+"/"+self.emoname+"("+self.modename+")",blinkname=emo,init_basic=False)
     def set_talking(self):
-        if self.hide: return
-        self.cur_sprite = self.talk_sprite
         self.modename = "talk"
     def set_blinking(self):
-        if self.hide: return
-        self.cur_sprite = self.blink_sprite
         self.modename = "blink"
+    def set_single(self):
+        self.modename = "blink"
+        self.supermode = "blink"
+    def set_lipsync(self):
+        self.supermode = "lipsync"
+        self.modename = "blink"
+    def get_current_sprite(self):
+        if self.supermode == "lipsync":
+            mode = self.modename
+        else:
+            mode = self.supermode
+        if mode == "blink":
+            return self.blink_sprite
+        if mode == "talk":
+            return self.talk_sprite
+        return self.blink_sprite
+    cur_sprite = property(get_current_sprite)
     def setfade(self,*args):
         self.blink_sprite.setfade(*args)
         self.talk_sprite.setfade(*args)

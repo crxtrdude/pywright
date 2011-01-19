@@ -33,7 +33,7 @@ def save(ob):
         oprops["id"] = ob.id
         return ["evidence",[],oprops]
     elif isinstance(ob,portrait):
-        cp(["clicksound","nametag","charname","emoname","modename","blinkemo"],ob,oprops)
+        cp(["clicksound","nametag","charname","emoname","modename","blinkemo","supermode"],ob,oprops)
         tsprops = {}
         bsprops = {}
         copy = ["loops","x","blinkspeed","spd","start","end","loopmode","dim"]
