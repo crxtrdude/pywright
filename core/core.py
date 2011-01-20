@@ -1467,8 +1467,8 @@ class portrait(object):
             self.clicksound = "blipfemale.ogg"
         if self.charname in self.male:
             self.clicksound = "blipmale.ogg"
-        if "char_defsound_"+self.charname in assets.variables:
-            self.clicksound = assets.variables["char_defsound_"+self.charname]
+        if "char_"+self.charname+"_defsound" in assets.variables:
+            self.clicksound = assets.variables["char_"+self.charname+"_defsound"]
     def init(self,name=None,hide=False,blinkname=None,init_basic=True):
         if not name: return self.init_sounds()
         charname,rest = name.split("/",1)
@@ -1478,7 +1478,7 @@ class portrait(object):
             self.pos = [0,0]
             self.rot = [0,0,0]
             self.name = name
-            self.nametag = charname+"\n"
+            self.nametag = assets.variables.get("char_"+charname+"_name",charname)+"\n"
         super(portrait,self).__init__()
         
         emo = rest
