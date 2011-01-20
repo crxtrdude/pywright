@@ -1,5 +1,7 @@
 from errors import *
-
+import sys
+sys.path.append("core/include")
+sys.path.append("include")
 import time
 import gui
 import zlib
@@ -8,12 +10,19 @@ import pygame
 pygame.font.init()
 import random
 import pickle
-import pygame.movie
+try:
+    import pygame.movie as pymovie
+except:
+    pymovie = None
 try:
     import audiere
     aud = audiere.open_device()
 except:
     audiere = None
+try:
+    import android
+except:
+    android = None
     
 from pwvlib import *
 
@@ -578,9 +587,11 @@ set _font_new_resume_size 14""".split("\n"):
             traceback.print_exc()
             return False
     def open_movie(self,movie):
+        if not pymovie:
+            raise script_error("No movie player component in this pywright")
         movie = self.get_path(movie,"movie","movies")
         try:
-            mov = pygame.movie.Movie(movie)
+            mov = pymovie.Movie(movie)
             return mov
         except:
             import traceback
@@ -894,7 +905,7 @@ class SoundEvent(object):
     def delete(self):
         self.kill = 1
     def update(self):
-        self.wait-=1
+        self.wait-=assets.dt
         if self.wait<=0:
             assets.play_sound(self.name)
             self.delete()
@@ -1177,7 +1188,7 @@ class sprite(gui.button):
         dest.blit(img,pos)
     def update(self):
         if self.next>0:
-            self.next-=1
+            self.next-=assets.dt
         if self.next<=0:
             if self.sounds.get(self.x,None):
                 assets.play_sound(self.sounds[self.x])
@@ -1228,8 +1239,8 @@ class surf3d(sprite):
     def draw(self,dest):
         dest.blit(self.surf,self.pos)
     def update(self):
-        self.next -= 1
-        if self.next:
+        self.next -= assets.dt
+        if self.next>0:
             return
         if [x for x in self.context.objects if x.changed]:
             self.surf = self.context.draw().convert()
@@ -1334,6 +1345,8 @@ class fadesprite(sprite):
         if self.fade == 0:
             return
         if self.fade == 255 and not self.invert and not self.tint and not self.greyscale:
+            return sprite.draw(self, dest)
+        if android is None:
             return sprite.draw(self, dest)
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
@@ -1718,10 +1731,10 @@ class penalty(fadesprite):
     def update(self):
         v = self.gv()
         if self.end<v:
-            v -= 1
+            v -= assets.dt
             if v<0: v = 0
         elif self.end>v:
-            v += 1
+            v += assets.dt
             if v>100: v = 100
         elif self.delay:
             self.delay -= 1
@@ -1760,7 +1773,7 @@ class fg(fadesprite):
         self.spd = int(assets.variables.get("_default_fg_frame_delay",self.spd))
     def update(self):
         super(fg,self).update()
-        if self.next!=-1 and self.wait:
+        if self.next>=0 and self.wait:
             return True
         
 class testimony_blink(fg):
@@ -2121,7 +2134,7 @@ class textbox(gui.widget):
             raise script_error("Text macro brackets don't match:%s"%repr(self.text))
         num_chars = 0
         if self.next_char==0:
-            num_chars = self.speed
+            num_chars = int(self.speed*assets.dt)
         if self.skipping:
             num_chars = self.skipping
         cnum = num_chars
@@ -2858,6 +2871,7 @@ class case_menu(fadesprite,gui.widget):
         spd = (self.choice*256-self.x)/25.0
         if abs(spd)>0 and abs(spd)<10:
             spd = 10*abs(spd)/spd
+        spd *= assets.dt
         if self.x<self.choice*sw:
             self.x+=spd
             if self.x>self.choice*sw:
@@ -3041,16 +3055,16 @@ class examine_menu(sprite,gui.widget):
                 del self.scrollbut
             return
         keys = pygame.key.get_pressed()
-        spd = 3
+        spd = 3*assets.dt
         d = [0,0]
         if keys[pygame.K_LEFT] or pygame.jsleft():
-            d[0]-=3
+            d[0]-=spd
         if keys[pygame.K_RIGHT] or pygame.jsright():
-            d[0]+=3
+            d[0]+=spd
         if keys[pygame.K_UP] or pygame.jsup():
-            d[1]-=3
+            d[1]-=spd
         if keys[pygame.K_DOWN] or pygame.jsdown():
-            d[1]+=3
+            d[1]+=spd
         self.mx+=d[0]
         self.my+=d[1]
         if self.mx-5<0: self.mx=5
@@ -3632,7 +3646,7 @@ class delay(sprite):
         if self.ticks<=0:
             self.delete()
             return False
-        self.ticks-=1
+        self.ticks-=assets.dt
         return True
         
 class timer(sprite):
@@ -3647,7 +3661,7 @@ class timer(sprite):
             self.delete()
             if self.run:
                 ns = self.script.execute_macro(self.run)
-        self.ticks-=1
+        self.ticks-=assets.dt
         assets.variables["_timer_value_"+self.run] = str(self.ticks)
         
 class effect(object):
@@ -3694,16 +3708,16 @@ class scroll(effect):
         if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
             self.delete()
             return False
-        ndx,ndy,ndz = self.dx,self.dy,self.dz
-        self.amtx-=abs(self.dx)
-        if self.amtx<0: 
+        ndx,ndy,ndz = self.dx*assets.dt,self.dy*assets.dt,self.dz*assets.dt
+        self.amtx-=abs(ndx)
+        if self.amtx<0:
             ndx+=self.amtx*(self.dx/abs(self.dx))
             self.amtx=0
-        self.amty-=abs(self.dy)
+        self.amty-=abs(ndy)
         if self.amty<0:
             ndy+=self.amty*(self.dy/abs(self.dy))
             self.amty=0
-        self.amtz-=abs(self.dz)
+        self.amtz-=abs(ndz)
         if self.amtz<0:
             ndz+=self.amtz*(self.dz/abs(self.dz))
             self.amtz=0
@@ -3745,13 +3759,13 @@ class zoomanim(effect):
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
-        self.frames -= 1
+        self.frames -= assets.dt
         if self.frames <= 0:
             self.delete()
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"dim"):
-                o.dim += self.mag_per_frame
+                o.dim += self.mag_per_frame*assets.dt
         if self.wait:
             return True
     def control_last(self):
@@ -3787,7 +3801,7 @@ class rotateanim(effect):
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
-        amt = self.speed
+        amt = self.speed*assets.dt
         if self.degrees>0:
             self.degrees-=amt
             if self.degrees<=0:
@@ -3828,7 +3842,7 @@ class fadeanim(effect):
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
-        amt = self.speed
+        amt = self.speed*assets.dt
         if self.start<self.end:
             self.start+=amt
             if self.start>self.end:
@@ -3872,7 +3886,7 @@ class tintanim(effect):
     def draw(self,dest): pass
     def update(self):
         if self.kill: return False
-        amt = self.speed
+        amt = self.speed*assets.dt
         col = self.start
         done = 0
         for r in range(3):
@@ -3986,7 +4000,7 @@ class flash(effect):
         self.surf.fill(self.color)
         dest.blit(self.surf,[0,0])
     def update(self):
-        self.ttl -= 1
+        self.ttl -= assets.dt
         if self.ttl<=0: self.delete()
         return True
     
@@ -4000,11 +4014,12 @@ class shake(effect):
             assets.play_sound("Shock.ogg")
         self.wait = True
     def draw(self,dest):
-        dest.blit(dest.copy(),[random.randint(-self.offset,self.offset),random.randint(-self.offset,self.offset)])
+        o = int(self.offset)
+        dest.blit(dest.copy(),[random.randint(-o,o),random.randint(-o,o)])
     def update(self):
         self.offset -= abs(self.offset / self.ttl)
         if self.offset < 1: self.offset = 1
-        self.ttl -= 1
+        self.ttl -= assets.dt
         if self.ttl<=0: self.delete()
         return self.wait
         
@@ -4101,7 +4116,7 @@ class saved(fadesprite):
         if self.ticks<=0:
             self.delete()
             return False
-        self.ticks-=1
+        self.ticks-=assets.dt
         return self.block
         
 class error_msg(gui.pane):
