@@ -6,6 +6,8 @@ from errors import script_error
 import pickle
 import zlib
 import os,sys
+sys.path.append("core/include")
+sys.path.append("include")
 if sys.platform=="win32":
     os.environ['SDL_VIDEODRIVER']='windib'
 import random
@@ -2375,6 +2377,7 @@ useful to use 'resume' in the 'fail' case, because you won't know where the play
         "This is just a test. Jumping elsewhere in the code..."
         "Here we have jumped, but now we go back..."
         "And now we are back."}}}"""
+        print assets.variables["_statements"],self.statement
         if self.statement:
             for x in assets.variables["_statements"]:
                 if x["words"]==self.statement:
@@ -3009,7 +3012,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        dt = clock.tick(60)
+        assets.dt = clock.tick(10)
+        assets.dt = assets.dt*.001*60
+        #assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
         if not assets.cur_script: break
