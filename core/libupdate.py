@@ -1,4 +1,6 @@
 import os,sys
+sys.path.append("core/include")
+sys.path.append("include")
 if sys.platform=="win32":
     os.environ['SDL_VIDEODRIVER']='windib'
 import zlib
