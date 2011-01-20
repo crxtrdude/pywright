@@ -1478,7 +1478,7 @@ class portrait(object):
             self.pos = [0,0]
             self.rot = [0,0,0]
             self.name = name
-            self.nametag = assets.variables.get("char_"+charname+"_name",charname)+"\n"
+            self.nametag = assets.variables.get("char_"+charname+"_name",charname.capitalize())+"\n"
         super(portrait,self).__init__()
         
         emo = rest
