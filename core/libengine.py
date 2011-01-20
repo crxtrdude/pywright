@@ -1602,7 +1602,7 @@ throughout the game."""
         y = 0
         pri = None
         name = None
-        nametag = character+u"\n"
+        nametag = ""
         for a in args:
             if a.startswith("z="): z = int(a[2:])
             if a.startswith("e="): e = a[2:]+"(blink)"
@@ -1622,11 +1622,12 @@ throughout the game."""
             p.id_name = name
         else:
             p.id_name = character
-        p.nametag = nametag
+        if nametag:
+            p.nametag = nametag
         if "fade" in args: 
             self._fade("fade","wait","name="+p.id_name,"speed=5")
             p.extrastr = " fade"
-        assets.variables["_speaking_name"] = nametag
+        assets.variables["_speaking_name"] = p.nametag
         if be:
             p.set_blink_emotion(be)
         if "noauto" in args:
