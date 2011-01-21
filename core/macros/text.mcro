@@ -1,0 +1,15 @@
+macro cmode
+setprop name=$_speaking prop=supermode $1
+endmacro
+
+macro blink
+cmode blink
+endmacro
+
+macro talk
+cmode talk
+endmacro
+
+macro lipsync
+cmode lipsync
+endmacro
