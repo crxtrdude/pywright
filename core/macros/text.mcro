@@ -13,3 +13,10 @@ endmacro
 macro lipsync
 cmode lipsync
 endmacro
+
+
+
+
+macro linked
+joinvar _return {spd0} $_last_written_text {spd1}
+endmacro
