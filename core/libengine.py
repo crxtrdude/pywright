@@ -1622,8 +1622,6 @@ throughout the game."""
             p.pri = pri
         if name:
             p.id_name = name
-        else:
-            p.id_name = character
         if nametag:
             p.nametag = nametag
         if "fade" in args: 
@@ -1641,6 +1639,8 @@ throughout the game."""
         char = None
         if not name:
             char = assets.variables.get("_speaking", None)
+            if not isinstance(char,portrait):
+                name = char
         if name:
             for c in self.obs:
                 if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
@@ -2478,7 +2478,7 @@ class DebugScript(Script):
             else:
                 c = self._char(*args)
             assets.variables["_speaking_name"] = c.nametag
-            assets.variables["_speaking"] = c
+            assets.variables["_speaking"] = c.id_name
             self.char_cache[tuple(args)] = c
         if command == "textbox":
             txt = " ".join(args[1:]).replace("{n}","\n")
@@ -3029,9 +3029,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        assets.dt = clock.tick(10)
+        assets.dt = clock.tick(60)
         assets.dt = assets.dt*.001*60
-        #assets.dt = 1
+        assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
         if not assets.cur_script: break

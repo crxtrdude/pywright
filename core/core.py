@@ -700,7 +700,7 @@ set _font_new_resume_size 14""".split("\n"):
             p.z = assets.pz
             assets.pz = None
         self.obs.append(p)
-        assets.variables["_speaking"] = p
+        assets.variables["_speaking"] = p.id_name
         if stack: p.was_stacked = True
         return p
     def clear(self):
@@ -1491,6 +1491,7 @@ class portrait(object):
             self.pos = [0,0]
             self.rot = [0,0,0]
             self.name = name
+            self.id_name = charname
             self.nametag = assets.variables.get("char_"+charname+"_name",charname.capitalize())+"\n"
         super(portrait,self).__init__()
         
@@ -1598,6 +1599,8 @@ class portrait(object):
             self.pos["xy".index(p)] = float(v)
         if p in "z":
             self.z = int(v)
+        if p in ["supermode","mode"]:
+            setattr(self,p,v)
     def set_dim(self,amt):
         self.blink_sprite.dim = amt
         self.talk_sprite.dim = amt
