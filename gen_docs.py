@@ -81,23 +81,6 @@ def make_func_block(func):
         
 commands = {}
 
-f = open("docs/index.html","w")
-f.write("<html>")
-f.write("""<style type='text/css'>
-table
-{
-border-collapse:collapse;
-}
-table, th, td
-{
-border: 1px solid black;
-font-size: 12px;
-}
-th
-{
-background-color:#88ff88;
-}</style>""")
-f.write("<body style='width:640px;background-color:#cccccc'>")
 
 funcs = {}
 
@@ -117,6 +100,51 @@ for fname in dir(scr):
         func.name[0] = fname[1:]
         funcs[func.ftype] = list
 
+def desig(line):
+    code = "{%s}"%line[5:].strip() 
+    d = eval(code)
+    if d.get('args',None):
+        d['args'] = [libengine.VALUE(*x) for x in d['args']]
+    return d
+def addmfunc(d):
+    class x:
+        pass
+    fu = x()
+    fu.name = [d['name']]
+    fu.type = d['type']
+    fu.__doc__ = d['desc']
+    fu.cat = d['args']
+    list = funcs.get(d['type'],[])
+    list.append(fu)
+    funcs[d['type']] = list
+for macro in os.listdir("core/macros/"):
+    d = {}
+    mf = open("core/macros/"+macro)
+    for line in mf.read().split("\n"):
+        if d:
+            d["name"] = line.split(" ")[1]
+            addmfunc(d)
+            d = {}
+        if line.startswith("#@sig"):
+            d = desig(line)
+
+f = open("docs/index.html","w")
+f.write("<html>")
+f.write("""<style type='text/css'>
+table
+{
+border-collapse:collapse;
+}
+table, th, td
+{
+border: 1px solid black;
+font-size: 12px;
+}
+th
+{
+background-color:#88ff88;
+}</style>""")
+f.write("<body style='width:640px;background-color:#cccccc'>")
 f.write("<div style=''>")
 f.write("<h2>Command Categories</h2>")
 for group in funcs:
