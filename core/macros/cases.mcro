@@ -1,9 +1,11 @@
+#@sig 'type':'interface','args':[],'desc':'Call in a game folder level intro.txt to set up locked cases for that game.'
 macro locked_cases
 set _order_cases variable
 set _current_case 0
 set _skipped_one false
 endmacro
 
+#@sig 'type':'interface','args':[('case_name','case folder name to add to the menu')],'desc':'Adds a case to the next menu slot. After calling {locked_cases}, call {addcase [case]} for each case that should be on the menu when they are all unlocked.'
 macro addcase
 print try to add case $1
 set _casename $1
@@ -26,6 +28,7 @@ addvar _current_case 1
 label $0skip
 endmacro
 
+#@sig 'type':'interface','args':[],'desc':'Sets the currently played case as beaten, so that when the case menu comes up again, the next case will be added to the menu. Call {wincase} somewhere in the ending sequence of the case, near the point at which it runs out of code and launches back into the case menu.'
 macro wincase
 set beaten noooo
 set won noo
@@ -35,6 +38,7 @@ set completed_case NOOOO
 exportvars scene3txt beaten won iwin scene completed_case
 endmacro
 
+#@sig 'type':'interface','args':[],'desc':'Sets currently played case as no longer beaten.'
 macro resetcase
 joinvar _case_path $1 /scene3txt
 set beaten  noooo
