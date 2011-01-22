@@ -11,7 +11,7 @@ font-size: 12px;
 th
 {
 background-color:#88ff88;
-}</style><body style='width:640px;background-color:#cccccc'><div style=''><h2>Command Categories</h2><a href=#crossexam>crossexam</a><br><a href=#files>files</a><br><a href=#objects>objects</a><br><a href=#text>text</a><br><a href=#effect>effect</a><br><a href=#evidence>evidence</a><br><a href=#debug>debug</a><br><a href=#gameflow>gameflow</a><br><a href=#animation>animation</a><br><a href=#music>music</a><br><a href=#logic>logic</a><br><a href=#interface>interface</a><br><a href=#sounds>sounds</a><br></div><br><br><br><br><br><hr><h3>Commands</h3><div style=''><a name='crossexam'><h2>Category: crossexam</h2><div style='background-color:#eeeeee;padding:10px'><a name="clearcross"><p>
+}</style><body style='width:640px;background-color:#cccccc'><div style=''><h2>Command Categories</h2><a href=#crossexam>crossexam</a><br><a href=#files>files</a><br><a href=#objects>objects</a><br><a href=#text>text</a><br><a href=#interface/case_menu>interface/case_menu</a><br><a href=#evidence>evidence</a><br><a href=#interface>interface</a><br><a href=#gameflow>gameflow</a><br><a href=#animation>animation</a><br><a href=#music>music</a><br><a href=#logic>logic</a><br><a href=#debug>debug</a><br><a href=#effect>effect</a><br><a href=#sounds>sounds</a><br></div><br><br><br><br><br><hr><h3>Commands</h3><div style=''><a name='crossexam'><h2>Category: crossexam</h2><div style='background-color:#eeeeee;padding:10px'><a name="clearcross"><p>
     <b>clearcross</b> 
     </p><p>Clears all cross exam related variables. A good idea to call this after a testimony
         is officially over, to ensure that 'resumes' don't mistakenly go back to the cross exam, 
@@ -147,44 +147,109 @@ textbox This is some text that is printing
 #The same text could be printed this way:
 char test
 "This is some text that is printing."
-</pre></p></div><br><br><a name='effect'><h2>Category: effect</h2><div style='background-color:#eeeeee;padding:10px'><a name="fade"><p>
-    <b>fade</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>start</td><td>What fade level to start at</td><td>0</td></tr><tr><td>end</td><td>What fade level to end at</td><td>100</td></tr><tr><td>speed</td><td>How many fade steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to fade</td><td>Will try to fade all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Fade an object or objects in or out</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="grey"><p>
-    <b>grey</b> value=VALUE name=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>value</td><td>Whether an object should be greyscale or not: 1=greyscale 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to set to greyscale</td><td>Will try to greyscale all objects</td></tr></table><p>Makes an object display in greyscale.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="invert"><p>
-    <b>invert</b> value=VALUE name=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>value</td><td>Whether an object should be inverted or not: 1=inverted 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr></table><p>Invert the colors of an object.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="rotate"><p>
-    <b>rotate</b> degrees=VALUE speed=VALUE axis=VALUE name=VALUE <i>nowait</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>degrees</td><td>How many degrees to rotate</td><tr><td>speed</td><td>How many degrees to rotate per frame</td><tr><td>axis</td><td>which axis to rotate on, z is the only valid value</td><td>z</td></tr><tr><td>name</td><td>Name a specific object to rotate</td><td>Will try to rotate all objects (not what you might expect)</td></tr><tr><td>nowait</td><td>Continue script while rotation happens</td><td>The script will pause until rotation is finished</td></tr></table><p>Begins an object rotation animation. Will wait for rotation to finish unless
-        'nowait' is included.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="scroll"><p>
-    <b>scroll</b> name=VALUE filter=VALUE x=VALUE y=VALUE z=VALUE speed=VALUE <i>last</i> <i>nowait</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Name of object to scroll</td><td>scrolls everything</td></tr><tr><td>filter</td><td>select only objects on the 'top' screen or 'bottom' screen, leave blank for either</td><td>'top'</td></tr><tr><td>x</td><td>amount to scroll horizontally</td><td>0</td></tr><tr><td>y</td><td>amount to scroll vertically</td><td>0</td></tr><tr><td>z</td><td>amount to scroll into the screen, only really valid for mesh objects</td><td>0</td></tr><tr><td>speed</td><td>pixels per frame to scroll</td><td>1</td></tr><tr><td>last</td><td>select last added object as scroll target</td><tr><td>nowait</td><td>continue script while scrolling</td></table><p>Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
-(consider moving the viewpoint/camera RIGHT) and positive values for y will move objects UP (moving the viewpoint/camera DOWN) If the
-scroll amount does not divide evenly by the speed, it will still stop at the right place. (In older versions you needed to make sure
-the speed would divide evenly over the distance).</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="shake"><p>
-    <b>shake</b> ttl offset <i>nowait</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>ttl</td><td>Time for shake to last in frames</td><td>30</td></tr><tr><td>offset</td><td>How many pixels away to move the screen (how violent)</td><td>15</td></tr><tr><td>nowait</td><td>Continue executing script during shake</td></table><p>Shake the screen for effect.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tint"><p>
-    <b>tint</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>start</td><td>Color tint to start at</td><td>'ffffff' or no tint (full color)</td></tr><tr><td>end</td><td>Color tint to end at</td><td>'000000' or full black tint</td></tr><tr><td>speed</td><td>How many color steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Animate an object's tint from one color to another. You can make an object darker but not brighter. Tinting an object
-        to red subtly can make a blush effect, tinting objects darker if there is a cloud overhead, or mixing tint with greyscale
-        to make a sepia toned flashback scene are different ways this can be used.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="zoom"><p>
-    <b>zoom</b> mag=VALUE frames=VALUE name=VALUE <i>nowait</i> <i>last</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>mag</td><td>How many times to magnify</td><td>1 (will magnify 1 time, which is 2x magnification)</td></tr><tr><td>frames</td><td>how many frames for the zoom to take</td><td>1</td></tr><tr><td>name</td><td>Which object to magnify</td><td>tries to magnify everything</td></tr><tr><td>nowait</td><td>continue script during magnification</td><tr><td>last</td><td>Choose last added object as target</td></table><p>Causes a single object or all objects to be magnified. The value for 'mag' will be added to the current magnification
-        value of an object, and it will take 'frames' frames to get to the new value. By default, all objects are at a magnification
-        of 1. To shrink an object to half it's size for instance, you would use this command:
-<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
-zoom mag=-0.5 frames=10
-</pre>
-        This will subtract half magnification from an object over 10 frames: 1x - 0.5x = 0.5x.</p></div><br><br><a name='evidence'><h2>Category: evidence</h2><div style='background-color:#eeeeee;padding:10px'><a name="addev"><p>
+</pre></p></div><br><br><a name='interface/case_menu'><h2>Category: interface/case_menu</h2><div style='background-color:#eeeeee;padding:10px'><a name="casemenu"><p>
+    <b>casemenu</b> pri=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>pri</td><td>What priority to update the case menu</td><td>Default casemenu priority listed in core/sorting.txt</td></tr></table><p>Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
+and choose one to play. The priority might need to be adjusted if you have any special animation going on, but don't modify it unless
+you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
+run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
+folder be the same, and not show a case menu at all.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="locked_cases"><p>
+    <b>locked_cases</b> 
+    </p><p>Call in a game folder level intro.txt to set up locked cases for that game.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="addcase"><p>
+    <b>addcase</b> case_name 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>case_name</td><td>case folder name to add to the menu</td></table><p>Adds a case to the next menu slot. After calling {locked_cases}, call {addcase [case]} for each case that should be on the menu when they are all unlocked.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="wincase"><p>
+    <b>wincase</b> 
+    </p><p>Sets the currently played case as beaten, so that when the case menu comes up again, the next case will be added to the menu. Call {wincase} somewhere in the ending sequence of the case, near the point at which it runs out of code and launches back into the case menu.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="resetcase"><p>
+    <b>resetcase</b> 
+    </p><p>Sets currently played case as no longer beaten.</p></div><br><br><a name='evidence'><h2>Category: evidence</h2><div style='background-color:#eeeeee;padding:10px'><a name="addev"><p>
     <b>addev</b> tag page 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Name of evidence to add to the court record</td><tr><td>page</td><td>Which page to add evidence to</td><td>Default is to add to the evidence page, unless the tag ends with a '$' in which case it will add to profiles</td></tr></table><p>Adds evidence to the court record based on an evidence 'tag'. The various properties of the evidence should be stored in variables based on this tag:<br><br>set [tag]_name: the name displayed to the player on court record screen for this item, defaults to the tag itself<br><br>set [tag]_pic: the image to use, should be in game/case/art/ev, or game/art/ev, defaults to the tag ([tag].png in art/ev)<br><br>set [tag]_desc: the long description of the evidence, shown on zoomed court record view, defaults to blank<br><br>set [tag]_check: name of a script to run if item is checked by player</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delev"><p>
     <b>delev</b> tag 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>name of evidence to delete from court record</td></table><p>Delete an item from the court record.</p></div><br><br><a name='debug'><h2>Category: debug</h2><div style='background-color:#eeeeee;padding:10px'><a name="debug"><p>
-    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
-        and allow you to skip through any text.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="print"><p>
-    <b>print</b> [text] 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p></div><br><br><a name='gameflow'><h2>Category: gameflow</h2><div style='background-color:#eeeeee;padding:10px'><a name="endscript"><p>
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>name of evidence to delete from court record</td></table><p>Delete an item from the court record.</p></div><br><br><a name='interface'><h2>Category: interface</h2><div style='background-color:#eeeeee;padding:10px'><a name="examine"><p>
+    <b>examine</b> fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
+        based on the spot. Immediately following the examine command, you must use region commands to define where the
+        player can click.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="examine3d"><p>
+    <b>examine3d</b> 
+    </p><p>Turn 3d examinations on</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gui"><p>
+    <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE <i>hold</i> <i>password</i> run=VALUE [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
+don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
+The four types of gui you can create are:<br><br>* Button - This creates a button that can be clicked. When clicked a macro will run.
+* Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
+* Input - this will show an input box allowing the player to input text. This text will be saved into a variable which you define.
+* Wait - this command will pause the script and optionally execute a macro each frame
+</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="li"><p>
+    <b>li</b> [option] result=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>option</td><td>text to display, and if 'result' not given, label to jump to if option is selected</td><tr><td>result</td><td>specifically named label to jump to if this option is chosen</td></table><p>Add an item to the current list. When clicked, PyWright will go to a label either matching the option text, or matching the value of 'result'
+        if that was given. Must be used between 'list' and 'showlist' commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="list"><p>
+    <b>list</b> tag <i>noback</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Tag this list with some name so PyWright can keep track of which list options the player has tried already</td><td>Default is to name the list based on what script it's found in and on what line</td></tr><tr><td>noback</td><td>No back button will be displayed if this token is included</td></table><p>Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
+        they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
+        'goto [tag]' to jump straight to the list without any other labels. If noback is included, then no back button will be displayed, 
+        forcing the player to choose an option. You may not use "noback" as the tag. To actually build the list requires a series of 'li' commands, and then displaying the list 
+        will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
+        under 'li' and 'showlist'. 
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+"What is your favorite food?"<br><br>list faveorite_food
+li hamburger
+li HAMBURGER
+li hamburger?
+showlist<br><br>label hamburger
+"Wow you like hamburgers too?"
+exit<br><br>label HAMBURGER
+"Gee, you don't have to be so grumpy about it."
+exit<br><br>label hamburger?
+"Yes, that is correct. Don't be timid."
+exit</pre>
+</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="localmenu"><p>
+    <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
+        are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="menu"><p>
+    <b>menu</b> scene_name examine=VALUE talk=VALUE present=VALUE move=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>scene_name</td><td>Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'</td><tr><td>examine</td><td>whether to show the examine button</td><td>true</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>true</td></tr><tr><td>present</td><td>whether to show the present button</td><td>true</td></tr><tr><td>move</td><td>whether to show the move button</td><td>true</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, a separate script will be run for that action, as determined by the value of scene_name. When that
+        external script is finished, the game won't return to this spot automatically, so you will need to be sure
+        you can create the proper menu from the external screen as well. People usually do this by creating a script
+        [scene_name].txt which loads the background and shows the menu. Then, any external script can
+        instantly load the proper scene with "script [scene_name]". You can control which options
+        are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="present"><p>
+    <b>present</b> fail=VALUE <i>noback</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr><tr><td>noback</td><td>Don't show back button</td></table><p>Displays the court record and allows the player to present evidence. After the presentation,
+        will jump to the label named after the selected evidence tag. If a label for the chosen evidence
+        is not found, will either jump to 'label none', or the value of 'fail'. To disable showing the back
+        button, use the 'noback' token
+        <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+        #add some evidence
+        addev sillyputty
+        addev redherring<br><br>        #show present screen
+        present fail=badpresent<br><br>        #back was pressed
+        "So you don't want to present anything at all?"
+        goto next<br><br>        #silly putty was presented
+        label sillyputty
+        "That's just what I needed."
+        goto next<br><br>        #Something else was presented
+        label badpresent
+        "I don't care about that."<br><br>        label next
+        #show present with no back button
+        present fail=badpresent noback
+        "the code will never get here"
+        label sillyputty
+        "good I needed that"
+        "by the way, I saw you couldn't press the back button"
+        goto next
+        label badpresent
+        "I don't care about that."
+        label next
+        </pre>
+        </p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="region3d"><p>
+    <b>region3d</b> x y width height label 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>x</td><td>x value of rectangular region on the texture</td><tr><td>y</td><td>y value of rectangular region on the texture</td><tr><td>width</td><td>width of rectangular region on texture</td><tr><td>height</td><td>height of rectangular region on texture</td><tr><td>label</td><td>label to jump to when region is clicked</td></table><p>Creates a clickable region on a 3d object by binding a rectangular region of the object's texture to a wrightscript
+        label event. Applies to current 3d object if there is one.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="showlist"><p>
+    <b>showlist</b> 
+    </p><p>Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
+        a series of 'li' commands.</p></div><br><br><a name='gameflow'><h2>Category: gameflow</h2><div style='background-color:#eeeeee;padding:10px'><a name="endscript"><p>
     <b>endscript</b> 
     </p><p>Ends the currently running script and pops it off the stack. Multiple scripts
         may be running in PyWright, in which case the next script on the stack will
@@ -320,105 +385,40 @@ would set 'x' to 15.</p></div><br><br><div style='background-color:#eeeeee;paddi
 <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>subvar x 3</pre>
 would set 'x' to 30.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="top"><p>
     <b>top</b> 
-    </p><p>Jumps to the top of the currently running script.</p></div><br><br><a name='interface'><h2>Category: interface</h2><div style='background-color:#eeeeee;padding:10px'><a name="casemenu"><p>
-    <b>casemenu</b> pri=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>pri</td><td>What priority to update the case menu</td><td>Default casemenu priority listed in core/sorting.txt</td></tr></table><p>Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
-and choose one to play. The priority might need to be adjusted if you have any special animation going on, but don't modify it unless
-you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
-run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
-folder be the same, and not show a case menu at all.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="examine"><p>
-    <b>examine</b> fail=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
-        based on the spot. Immediately following the examine command, you must use region commands to define where the
-        player can click.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="examine3d"><p>
-    <b>examine3d</b> 
-    </p><p>Turn 3d examinations on</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gui"><p>
-    <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE <i>hold</i> <i>password</i> run=VALUE [text] 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
-don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
-The four types of gui you can create are:<br><br>* Button - This creates a button that can be clicked. When clicked a macro will run.
-* Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
-* Input - this will show an input box allowing the player to input text. This text will be saved into a variable which you define.
-* Wait - this command will pause the script and optionally execute a macro each frame
-</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="li"><p>
-    <b>li</b> [option] result=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>option</td><td>text to display, and if 'result' not given, label to jump to if option is selected</td><tr><td>result</td><td>specifically named label to jump to if this option is chosen</td></table><p>Add an item to the current list. When clicked, PyWright will go to a label either matching the option text, or matching the value of 'result'
-        if that was given. Must be used between 'list' and 'showlist' commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="list"><p>
-    <b>list</b> tag <i>noback</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Tag this list with some name so PyWright can keep track of which list options the player has tried already</td><td>Default is to name the list based on what script it's found in and on what line</td></tr><tr><td>noback</td><td>No back button will be displayed if this token is included</td></table><p>Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
-        they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
-        'goto [tag]' to jump straight to the list without any other labels. If noback is included, then no back button will be displayed, 
-        forcing the player to choose an option. You may not use "noback" as the tag. To actually build the list requires a series of 'li' commands, and then displaying the list 
-        will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
-        under 'li' and 'showlist'. 
+    </p><p>Jumps to the top of the currently running script.</p></div><br><br><a name='debug'><h2>Category: debug</h2><div style='background-color:#eeeeee;padding:10px'><a name="debug"><p>
+    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
+        and allow you to skip through any text.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="print"><p>
+    <b>print</b> [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p></div><br><br><a name='effect'><h2>Category: effect</h2><div style='background-color:#eeeeee;padding:10px'><a name="fade"><p>
+    <b>fade</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>start</td><td>What fade level to start at</td><td>0</td></tr><tr><td>end</td><td>What fade level to end at</td><td>100</td></tr><tr><td>speed</td><td>How many fade steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to fade</td><td>Will try to fade all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Fade an object or objects in or out</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="grey"><p>
+    <b>grey</b> value=VALUE name=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>value</td><td>Whether an object should be greyscale or not: 1=greyscale 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to set to greyscale</td><td>Will try to greyscale all objects</td></tr></table><p>Makes an object display in greyscale.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="invert"><p>
+    <b>invert</b> value=VALUE name=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>value</td><td>Whether an object should be inverted or not: 1=inverted 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr></table><p>Invert the colors of an object.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="rotate"><p>
+    <b>rotate</b> degrees=VALUE speed=VALUE axis=VALUE name=VALUE <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>degrees</td><td>How many degrees to rotate</td><tr><td>speed</td><td>How many degrees to rotate per frame</td><tr><td>axis</td><td>which axis to rotate on, z is the only valid value</td><td>z</td></tr><tr><td>name</td><td>Name a specific object to rotate</td><td>Will try to rotate all objects (not what you might expect)</td></tr><tr><td>nowait</td><td>Continue script while rotation happens</td><td>The script will pause until rotation is finished</td></tr></table><p>Begins an object rotation animation. Will wait for rotation to finish unless
+        'nowait' is included.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="scroll"><p>
+    <b>scroll</b> name=VALUE filter=VALUE x=VALUE y=VALUE z=VALUE speed=VALUE <i>last</i> <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Name of object to scroll</td><td>scrolls everything</td></tr><tr><td>filter</td><td>select only objects on the 'top' screen or 'bottom' screen, leave blank for either</td><td>'top'</td></tr><tr><td>x</td><td>amount to scroll horizontally</td><td>0</td></tr><tr><td>y</td><td>amount to scroll vertically</td><td>0</td></tr><tr><td>z</td><td>amount to scroll into the screen, only really valid for mesh objects</td><td>0</td></tr><tr><td>speed</td><td>pixels per frame to scroll</td><td>1</td></tr><tr><td>last</td><td>select last added object as scroll target</td><tr><td>nowait</td><td>continue script while scrolling</td></table><p>Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
+(consider moving the viewpoint/camera RIGHT) and positive values for y will move objects UP (moving the viewpoint/camera DOWN) If the
+scroll amount does not divide evenly by the speed, it will still stop at the right place. (In older versions you needed to make sure
+the speed would divide evenly over the distance).</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="shake"><p>
+    <b>shake</b> ttl offset <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>ttl</td><td>Time for shake to last in frames</td><td>30</td></tr><tr><td>offset</td><td>How many pixels away to move the screen (how violent)</td><td>15</td></tr><tr><td>nowait</td><td>Continue executing script during shake</td></table><p>Shake the screen for effect.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tint"><p>
+    <b>tint</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>start</td><td>Color tint to start at</td><td>'ffffff' or no tint (full color)</td></tr><tr><td>end</td><td>Color tint to end at</td><td>'000000' or full black tint</td></tr><tr><td>speed</td><td>How many color steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Animate an object's tint from one color to another. You can make an object darker but not brighter. Tinting an object
+        to red subtly can make a blush effect, tinting objects darker if there is a cloud overhead, or mixing tint with greyscale
+        to make a sepia toned flashback scene are different ways this can be used.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="zoom"><p>
+    <b>zoom</b> mag=VALUE frames=VALUE name=VALUE <i>nowait</i> <i>last</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>mag</td><td>How many times to magnify</td><td>1 (will magnify 1 time, which is 2x magnification)</td></tr><tr><td>frames</td><td>how many frames for the zoom to take</td><td>1</td></tr><tr><td>name</td><td>Which object to magnify</td><td>tries to magnify everything</td></tr><tr><td>nowait</td><td>continue script during magnification</td><tr><td>last</td><td>Choose last added object as target</td></table><p>Causes a single object or all objects to be magnified. The value for 'mag' will be added to the current magnification
+        value of an object, and it will take 'frames' frames to get to the new value. By default, all objects are at a magnification
+        of 1. To shrink an object to half it's size for instance, you would use this command:
 <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
-"What is your favorite food?"<br><br>list faveorite_food
-li hamburger
-li HAMBURGER
-li hamburger?
-showlist<br><br>label hamburger
-"Wow you like hamburgers too?"
-exit<br><br>label HAMBURGER
-"Gee, you don't have to be so grumpy about it."
-exit<br><br>label hamburger?
-"Yes, that is correct. Don't be timid."
-exit</pre>
-</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="localmenu"><p>
-    <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
-        is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
-        are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="menu"><p>
-    <b>menu</b> scene_name examine=VALUE talk=VALUE present=VALUE move=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>scene_name</td><td>Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'</td><tr><td>examine</td><td>whether to show the examine button</td><td>true</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>true</td></tr><tr><td>present</td><td>whether to show the present button</td><td>true</td></tr><tr><td>move</td><td>whether to show the move button</td><td>true</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
-        is clicked, a separate script will be run for that action, as determined by the value of scene_name. When that
-        external script is finished, the game won't return to this spot automatically, so you will need to be sure
-        you can create the proper menu from the external screen as well. People usually do this by creating a script
-        [scene_name].txt which loads the background and shows the menu. Then, any external script can
-        instantly load the proper scene with "script [scene_name]". You can control which options
-        are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="present"><p>
-    <b>present</b> fail=VALUE <i>noback</i> 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr><tr><td>noback</td><td>Don't show back button</td></table><p>Displays the court record and allows the player to present evidence. After the presentation,
-        will jump to the label named after the selected evidence tag. If a label for the chosen evidence
-        is not found, will either jump to 'label none', or the value of 'fail'. To disable showing the back
-        button, use the 'noback' token
-        <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
-        #add some evidence
-        addev sillyputty
-        addev redherring<br><br>        #show present screen
-        present fail=badpresent<br><br>        #back was pressed
-        "So you don't want to present anything at all?"
-        goto next<br><br>        #silly putty was presented
-        label sillyputty
-        "That's just what I needed."
-        goto next<br><br>        #Something else was presented
-        label badpresent
-        "I don't care about that."<br><br>        label next
-        #show present with no back button
-        present fail=badpresent noback
-        "the code will never get here"
-        label sillyputty
-        "good I needed that"
-        "by the way, I saw you couldn't press the back button"
-        goto next
-        label badpresent
-        "I don't care about that."
-        label next
-        </pre>
-        </p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="region3d"><p>
-    <b>region3d</b> x y width height label 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>x</td><td>x value of rectangular region on the texture</td><tr><td>y</td><td>y value of rectangular region on the texture</td><tr><td>width</td><td>width of rectangular region on texture</td><tr><td>height</td><td>height of rectangular region on texture</td><tr><td>label</td><td>label to jump to when region is clicked</td></table><p>Creates a clickable region on a 3d object by binding a rectangular region of the object's texture to a wrightscript
-        label event. Applies to current 3d object if there is one.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="showlist"><p>
-    <b>showlist</b> 
-    </p><p>Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
-        a series of 'li' commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="locked_cases"><p>
-    <b>locked_cases</b> 
-    </p><p>Call in a game folder level intro.txt to set up locked cases for that game.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="addcase"><p>
-    <b>addcase</b> case_name 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>case_name</td><td>case folder name to add to the menu</td></table><p>Adds a case to the next menu slot. After calling {locked_cases}, call {addcase [case]} for each case that should be on the menu when they are all unlocked.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="wincase"><p>
-    <b>wincase</b> 
-    </p><p>Sets the currently played case as beaten, so that when the case menu comes up again, the next case will be added to the menu. Call {wincase} somewhere in the ending sequence of the case, near the point at which it runs out of code and launches back into the case menu.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="resetcase"><p>
-    <b>resetcase</b> 
-    </p><p>Sets currently played case as no longer beaten.</p></div><br><br><a name='sounds'><h2>Category: sounds</h2><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>
+zoom mag=-0.5 frames=10
+</pre>
+        This will subtract half magnification from an object over 10 frames: 1x - 0.5x = 0.5x.</p></div><br><br><a name='sounds'><h2>Category: sounds</h2><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>
     <b>sfx</b> [filename] after=VALUE 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>Filename of sound file, searches game/case/sfx, game/sfx, and PyWright/sfx</td><tr><td>after</td><td>Delay sound for this many frames</td></table><p>Play a sound effect. If 'after' will play the sound after a certain number of frames (useful to time an effect with a specific
         frame of an animation).<br><br>        Sound files can be .ogg or uncompressed .wav</p></div><br><br></div></body></html>

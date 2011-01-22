@@ -32,15 +32,10 @@ def pauseandquit():
 
 #~ import psyco
 #~ pscyo.full()
-ALLTYPES = ["crossexam","files","objects",
-"text","effect","evidence","debug",
-"gameflow","animation","music","logic",
-"interface","sounds"]
 def category(cat,type=None):
     def _dec(f):
         f.cat = cat
         if type:
-            assert type in ALLTYPES
             f.ftype = type
         f.name = [""]
         return f
@@ -1294,7 +1289,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                     m.addm(arg)
         m.open_script = False
         self.add_object(m,True)
-    @category([KEYWORD('pri','What priority to update the case menu','Default casemenu priority listed in core/sorting.txt')],type="interface")
+    @category([KEYWORD('pri','What priority to update the case menu','Default casemenu priority listed in core/sorting.txt')],type="interface/case_menu")
     def _casemenu(self,command,*args):
         """Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
 and choose one to play. The priority might need to be adjusted if you have any special animation going on, but don't modify it unless
