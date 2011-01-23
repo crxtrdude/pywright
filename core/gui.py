@@ -14,6 +14,26 @@ class Window(object):
     over = None
 window = Window()
 
+defcol = {
+"bgcol" : [210,210,210],
+"bgcol2" : [180,180,200],
+"bgfocus" : [180,180,220],
+"textcol" : [0,0,0],
+"fgcol" : [140,140,180],
+"olcol" : [0,0,0],
+"butbg" : [200,200,200],
+"butborder" : [30,30,30],
+"buttext" : [0,0,0],
+"buthigh" : [255,255,255],
+"panebg" : [255,255,255],
+"paneborder" : [200,200,200],
+"scrollbg" : [150,150,150],
+"scrollfg" : [200,220,200],
+"sbarbg" : [150,150,150],
+"sbarfg" : [240,240,240],
+}
+
+
 class widget(object):
     visible = 1
     mouse_pos = property(lambda x: pygame.mouse.get_pos())
@@ -290,10 +310,10 @@ class editbox(widget):
             setattr(self.target_ob,self.target_attr,v)
         else:
             self.target_ob[self.target_attr] = v
-    bgcol = [210,210,210]
-    bgcol2 = [180,180,200]
-    bgfocus = [180,180,220]
-    textcol = [0,0,0]
+    bgcol = defcol["bgcol"]
+    bgcol2 = defcol["bgcol2"]
+    bgfocus = defcol["bgfocus"]
+    textcol = defcol["textcol"]
     def draw(self,dest):
         if not self.visible: return
         pos = self.rpos
@@ -330,7 +350,7 @@ class editbox(widget):
                 x = sum([w[4] for w in metrics][:self.carat])+1
             else:
                 x = 0
-            pygame.draw.line(bg,[0,0,0],[x,0],[x,ts[1]+4])
+            pygame.draw.line(bg,textcol,[x,0],[x,ts[1]+4])
         if self.draw_back:
             dest.blit(bg,pos)
         else:
@@ -359,19 +379,19 @@ class checkbox(widget):
         self.checked = val
     def draw(self,dest):
         if not self.visible: return
-        bgcol = [210,210,210]
-        bgcol2 = [140,140,180]
+        bgcol = defcol["bgcol"]
+        bgcol2 = defcol["fgcol"]
         pygame.draw.rect(dest,bgcol,[self.rpos,[14,self.editbox.height]])
-        pygame.draw.rect(dest,[0,0,0],[self.rpos,[14,self.editbox.height]],1)
+        pygame.draw.rect(dest,defcol["olcol"],[self.rpos,[14,self.editbox.height]],1)
         if self.checked:
             pygame.draw.rect(dest,bgcol2,[[self.rpos[0]+1,self.rpos[1]+1],[12,self.editbox.height-2]])
-            pygame.draw.rect(dest,[0,0,0],[[self.rpos[0]+4,self.rpos[1]+4],[14-8,self.editbox.height-8]])
+            pygame.draw.rect(dest,defcol["olcol"],[[self.rpos[0]+4,self.rpos[1]+4],[14-8,self.editbox.height-8]])
         self.editbox.rpos[0]=self.rpos[0]+16
         self.editbox.rpos[1]=self.rpos[1]
         self.editbox.draw(dest)
         self.width = self.editbox.width+16
         if window.over == self:
-            pygame.draw.line(dest,[0,0,0],[self.rpos[0],self.rpos[1]+self.height-1],[self.rpos[0]+self.width,self.rpos[1]+self.height-1])
+            pygame.draw.line(dest,defcol["olcol"],[self.rpos[0],self.rpos[1]+self.height-1],[self.rpos[0]+self.width,self.rpos[1]+self.height-1])
     def click_up(self,pos):
         pass
     def click_down_over(self,mp):
@@ -412,13 +432,13 @@ class radiobutton(checkbox):
         checkbox.__init__(self,text)
     def draw(self,dest):
         if not self.visible: return
-        bgcol = [210,210,210]
-        bgcol2 = [140,140,180]
+        bgcol = defcol["bgcol"]
+        bgcol2 = defcol["fgcol"]
         pygame.draw.circle(dest,bgcol,[self.rpos[0]+7,self.rpos[1]+7],7)
-        pygame.draw.circle(dest,[0,0,0],[self.rpos[0]+7,self.rpos[1]+7],7,1)
+        pygame.draw.circle(dest,defcol["olcol"],[self.rpos[0]+7,self.rpos[1]+7],7,1)
         if self.checked:
             pygame.draw.circle(dest,bgcol2,[self.rpos[0]+7,self.rpos[1]+7],3)
-            pygame.draw.circle(dest,[0,0,0],[self.rpos[0]+7,self.rpos[1]+7],3,1)
+            pygame.draw.circle(dest,defcol["olcol"],[self.rpos[0]+7,self.rpos[1]+7],3,1)
         self.editbox.rpos[0]=self.rpos[0]+16
         self.editbox.rpos[1]=self.rpos[1]
         self.editbox.draw(dest)
@@ -437,10 +457,10 @@ class progress(widget):
         self.editbox.draw_back = False
     def draw(self,dest):
         if not self.visible: return
-        bgcol = [210,210,210]
-        bgcol2 = [140,140,180]
+        bgcol = defcol["bgcol"]
+        bgcol2 = defcol["fgcol"]
         pygame.draw.rect(dest,bgcol,[self.rpos,[self.width,self.height]])
-        pygame.draw.rect(dest,[0,0,0],[self.rpos,[self.width,self.height]],1)
+        pygame.draw.rect(dest,defcol["olcol"],[self.rpos,[self.width,self.height]],1)
         pygame.draw.rect(dest,bgcol2,[[self.rpos[0]+1,self.rpos[1]+1],[(self.width-2)*self.progress,self.height-2]])
         self.editbox.rpos = self.rpos
         self.editbox.draw(dest)
@@ -458,10 +478,10 @@ class button(widget):
         self.target_func = target_func
         self.text = self.target_func.replace("\n","")
         self.height = self.font.render("TEST",1,[0,0,0]).get_height()+2
-        self.bgcolor = [200,200,200]
-        self.bordercolor = [30,30,30]
-        self.textcolor = [0,0,0]
-        self.highlightcolor = [255,255,255]
+        self.bgcolor = defcol["butbg"]
+        self.bordercolor = defcol["butborder"]
+        self.textcolor = defcol["buttext"]
+        self.highlightcolor = defcol["buthigh"]
         self.graphic = None
     def click_down_over(self,mp):
         f = self.target_func.replace(" ","_")
@@ -488,8 +508,8 @@ class button(widget):
 
 class pane(widget):
     align = "vert"
-    bgcolor = [255,255,255]
-    bordercolor = [200,200,200]
+    bgcolor = defcol["panebg"]
+    bordercolor = defcol["paneborder"]
     border = True
     background = True
     def __init__(self,*args,**kwargs):
@@ -533,8 +553,8 @@ class scrollbutton(widget):
     def draw(self,dest):
         if not self.visible: return
         x,y = self.rpos
-        pygame.draw.rect(dest,[150,150,150],[[x,y],[self.width,self.height]])
-        pygame.draw.rect(dest,[200,220,200],[[x+1,y+1],[self.width-2,self.height-2]])
+        pygame.draw.rect(dest,defcol["scrollbg"],[[x,y],[self.width,self.height]])
+        pygame.draw.rect(dest,defcol["scrollfg"],[[x+1,y+1],[self.width-2,self.height-2]])
     def move(self,pos,rel):
         if window.focused==self:
             self.scroll(rel)
@@ -553,8 +573,8 @@ class scrollbar(widget):
         if not self.visible: return
         x,y = self.rpos
         surf = pygame.Surface([self.width,self.height])
-        pygame.draw.rect(surf,[150,150,150],[[0,0],[self.width,self.height]])
-        pygame.draw.rect(surf,[220,240,240],[[1,1],[self.width-2,self.height-2]])
+        pygame.draw.rect(surf,defcol["sbarbg"],[[0,0],[self.width,self.height]])
+        pygame.draw.rect(surf,defcol["sbarfg"],[[1,1],[self.width-2,self.height-2]])
         
         self.scbut.width = self.width-4
         self.scbut.draw(surf)
