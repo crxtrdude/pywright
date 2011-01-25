@@ -2425,6 +2425,17 @@ class TextScript(Script):
     def __init__(self,*args):
         super(TextScript,self).__init__(*args)
         print "initialized TextScript"
+    def enter_text(self,text):
+        return True
+    def enter_list(self,text):
+        try:
+            si = int(text)
+        except:
+            return
+        self.list_ob.si = si
+        self.list_ob.selected = self.list_ob.options[si]
+        self.list_ob.enter_down()
+        return True
     def execute_line(self,line):
         #print "execute:",repr(line)
         super(TextScript,self).execute_line(line)
@@ -2437,9 +2448,24 @@ class TextScript(Script):
             tb.enter_down()
             tb.update()
             print tb.written.encode("utf8")
-            x = raw_input()
+            x = self.get_input(self.enter_text)
+        elif command == "showlist":
+            super(TextScript,self).call_func(command,args)
+            for o in self.obs:
+                if isinstance(o,listmenu):
+                    self.list_ob = o
+            for i,opt in enumerate(self.list_ob.options):
+                print i,opt[0]
+            x = self.get_input(self.enter_list)
         else:
             super(TextScript,self).call_func(command,args)
+    def get_input(self,func):
+        while 1:
+            x = raw_input()
+            if x=="quit":
+                sys.exit()
+            if func(x):
+                return x
     def draw(self,*args):
         pass
 
