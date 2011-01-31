@@ -1699,6 +1699,7 @@ The four types of gui you can create are:
             macroname=args[0]; del args[0]
             graphic = None
             hold = None
+            hotkey = None
             while args:
                 a = args[0]
                 if a.startswith("x="): x=int(a[2:])
@@ -1707,6 +1708,7 @@ The four types of gui you can create are:
                 elif a.startswith("name="): name=a[5:]
                 elif a.startswith("graphic="): graphic = a[8:]
                 elif a == "hold": hold = True
+                elif a.startswith("hotkey="): hotkey = a.split("=",1)[1]
                 else:
                     break
                 del args[0]
@@ -1733,6 +1735,9 @@ The four types of gui you can create are:
                 btn.hold_down_over = func
                 btn.hold_func = macroname
                 setattr(btn,text.replace(" ","_"),lambda *args:0)
+            if hotkey:
+                btn.hotkey = hotkey
+                setattr(btn,hotkey,func)
             self.add_object(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
