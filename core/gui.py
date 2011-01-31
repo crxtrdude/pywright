@@ -15,17 +15,17 @@ class Window(object):
 window = Window()
 
 defcol = {
-"bgcol" : [210,210,210],
+"bgcol" : [145,113,66],
 "bgcol2" : [180,180,200],
 "bgfocus" : [180,180,220],
 "textcol" : [0,0,0],
 "fgcol" : [140,140,180],
 "olcol" : [0,0,0],
-"butbg" : [200,200,200],
+"butbg" : [142,65,0],
 "butborder" : [30,30,30],
-"buttext" : [0,0,0],
-"buthigh" : [255,255,255],
-"panebg" : [255,255,255],
+"buttext" : [253,251,234],
+"buthigh" : [214,165,49],
+"panebg" : [145,113,66],
 "paneborder" : [200,200,200],
 "scrollbg" : [150,150,150],
 "scrollfg" : [200,220,200],
