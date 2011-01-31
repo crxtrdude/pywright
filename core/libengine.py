@@ -2978,7 +2978,15 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     pygame.DISPLAY_LIST=1
     pygame.TEXTURE_CACHE=0
     if os.path.exists("display.ini"):
-        f = open("display.ini","r")
+        f = open("display.ini")
+        t = f.read()
+        f.close()
+        os.remove("display.ini")
+        f = open("settings.ini","w")
+        f.write(t)
+        f.close()
+    if os.path.exists("settings.ini"):
+        f = open("settings.ini","r")
         for line in f.readlines():
             spl = line.split("=")
             if len(spl)!=2: continue

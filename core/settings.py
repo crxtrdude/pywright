@@ -4,7 +4,7 @@ import gui
 
 
 def wini(assets):
-    f = open("display.ini","w")
+    f = open("settings.ini","w")
     f.write(""";standard width is 256
 ;standard height is 192
 width=%s
