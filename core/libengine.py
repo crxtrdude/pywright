@@ -2974,9 +2974,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
     assets.autosave = 1
     assets.autosave_keep = 2 #how many saves to keep
-    pygame.USE_GL=1
-    pygame.DISPLAY_LIST=1
-    pygame.TEXTURE_CACHE=0
     if os.path.exists("display.ini"):
         f = open("display.ini")
         t = f.read()
@@ -2987,27 +2984,23 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         f.close()
     if os.path.exists("settings.ini"):
         f = open("settings.ini","r")
+        i_fl_val = {"width":"swidth","height":"sheight","scale2x":"filter",
+                "fullscreen":"fullscreen","screens":"num_screens",
+                "screen_compress":"screen_compress","autosave":"autosave",
+                "autosave_keep":"autosave_keep", 
+                "sound_format":"sound_format","sound_bits":"sound_bits",
+                "sound_buffer":"sound_buffer"}
+        fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
+                }
+
         for line in f.readlines():
             spl = line.split("=")
             if len(spl)!=2: continue
-            if spl[0]=='width': assets.swidth = int(float(spl[1]))
-            if spl[0]=='height': assets.sheight = int(float(spl[1]))
-            if spl[0]=='scale2x': assets.filter = int(spl[1])
-            if spl[0]=='fullscreen': assets.fullscreen = int(spl[1])
-            if spl[0]=="opengl": pygame.USE_GL = int(spl[1])
-            if spl[0]=="screens": assets.num_screens = int(spl[1])
-            if spl[0]=="displaylists": pygame.DISPLAY_LIST = int(spl[1])
-            if spl[0]=="sound_format": assets.sound_format = int(spl[1])
-            if spl[0]=="sound_bits": assets.sound_bits = int(spl[1])
-            if spl[0]=="sound_buffer": assets.sound_buffer = int(spl[1])
-            if spl[0]=="sound_volume": assets.sound_volume = float(spl[1])
-            if spl[0]=="music_volume": assets.music_volume = float(spl[1])
-            if spl[0]=="screen_compress": assets.screen_compress = int(spl[1])
-            if spl[0]=="autosave": assets.autosave = int(spl[1])
-            if spl[0]=="autosave_keep": assets.autosave_keep = int(spl[1])
+            if spl[0] in i_fl_val:
+                setattr(assets,i_fl_val[spl[0]],int(float(spl[1])))
+            elif spl[0] in fl_val:
+                setattr(assets,fl_val[spl[0]],float(spl[1]))
     
-    pygame.USE_GL=0
-
     #assets.master_volume = 0.0
         
 

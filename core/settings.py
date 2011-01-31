@@ -11,8 +11,6 @@ width=%s
 height=%s
 scale2x=%s
 fullscreen=%s
-opengl=%s
-displaylists=%s
 screens=%s
 sound_format=%s
 sound_bits=%s
@@ -21,8 +19,7 @@ sound_volume=%s
 music_volume=%s
 screen_compress=%s
 autosave=%s
-autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,
-int(pygame.USE_GL),pygame.DISPLAY_LIST,assets.num_screens,
+autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,assets.num_screens,
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
 int(assets.screen_compress),int(assets.autosave),int(assets.autosave_keep)))
     f.close()
