@@ -451,9 +451,6 @@ set _font_new_resume_size 14""".split("\n"):
         self.fonts[full] = imgfont
         return imgfont
     def Surface(self,size,flags=0):
-        if pygame.USE_GL:
-            import gl
-            return gl.TexQuad([0,0],cache=False)
         return pygame.Surface(size,flags)
     def search_locations(self,search_path,name):
         self.game = self.game.replace("\\","/")
@@ -514,9 +511,6 @@ set _font_new_resume_size 14""".split("\n"):
                 if x>=width:
                     x=0
                     y+=incy
-        if getattr(pygame,"USE_GL",False):
-            import gl
-            img = [gl.TexQuad([0,0],surface=x) for x in img]
         img = ImgFrames(img)
         img._meta = self.meta
         img.real_path = self.real_path = pre+name
