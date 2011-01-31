@@ -3,12 +3,16 @@ import pygame
 import numpy
 import math
 import random
-
 try:
-    import psyco
-    psyco.full()
+    import ccontext
 except:
-    pass
+    ccontext = None
+
+#try:
+#    import psyco
+#    psyco.full()
+#except:
+#    pass
 
 
 LOW = 320,240
@@ -45,6 +49,8 @@ class SoftContext:
     def trans(self,p):
         s_w,s_h,r_w,r_h = [self.s_w,self.s_h,self.r_w,self.r_h]
         x,y,z,u,v = p
+        if ccontext:
+            return ccontext.trans(s_w,s_h,r_w,r_h,x,y,z,u,v)
         z = float((z*1.0/300.0)+1)
         if z==0:
             z=0.001
