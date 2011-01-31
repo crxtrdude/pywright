@@ -3110,36 +3110,27 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     assets.sheight = h
                     make_screen()
                     settings.wini(assets)
-                if e.type==pygame.KEYDOWN and \
-                e.key==pygame.K_ESCAPE:
-                    ss = [x for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
-                    if ss:
-                        ss[0].close()
-                    else:
-                        assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
                 if e.type == pygame.QUIT:
                     running = False
-                if e.type == pygame.KEYDOWN and e.key == pygame.K_c:
-                    print "scripts",assets.stack
-                    print [s.scene for s in assets.stack]
-                    print "objects",[x.obs for x in assets.stack]
-                    print [getattr(o,"kill",0) for o in assets.cur_script.obs]
-                if (e.type==pygame.KEYUP and\
-                e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONUP and\
-                e.button==1):
-                    if "enter" in assets.cur_script.held: assets.cur_script.held.remove("enter")
-                    for o in assets.cur_script.upobs:
-                        if hasattr(o,"enter_up"):
-                            o.enter_up()
-                            break
                 if e.type==pygame.KEYDOWN and\
                 e.key==pygame.K_RETURN and pygame.key.get_mods() & pygame.KMOD_ALT:
                     assets.fullscreen = 1-assets.fullscreen
                     make_screen()
                     settings.wini(assets)
-                elif (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_RETURN) or (e.type==pygame.JOYBUTTONDOWN and\
-                e.button==0):
+
+                def toggle_settings():
+                    ss = [x for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
+                    if ss:
+                        ss[0].close()
+                    else:
+                        assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
+                def enter_up():
+                    if "enter" in assets.cur_script.held: assets.cur_script.held.remove("enter")
+                    for o in assets.cur_script.upobs:
+                        if hasattr(o,"enter_up"):
+                            o.enter_up()
+                            break
+                def enter_down():
                     if "enter" not in assets.cur_script.held: assets.cur_script.held.append("enter")
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"enter_down") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
@@ -3151,62 +3142,90 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                                 if "enter" in assets.cur_script.held:
                                     assets.cur_script.held.remove("enter")
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_RIGHT) or (e.type==pygame.JOYHATMOTION and e.value[0]==1):
+                def k_right():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"statement") and not o.statement:
                             continue
                         if hasattr(o,"k_right") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_right()
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_LEFT) or (e.type==pygame.JOYHATMOTION and e.value[0]==-1):
+                def k_left():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"statement") and not o.statement:
                             continue
                         if hasattr(o,"k_left") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_left()
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_UP) or (e.type==pygame.JOYHATMOTION and e.value[1]==1):
+                def k_up():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_up") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_up()
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_DOWN) or (e.type==pygame.JOYHATMOTION and e.value[1]==-1):
+                def k_down():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_down") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_down()
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_SPACE) or (e.type==pygame.JOYBUTTONDOWN and\
-                e.button==1):
+                def k_cancel():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_space") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_space()
                             break
-                if (e.type==pygame.KEYDOWN and \
-                    e.key == pygame.K_TAB) or (e.type==pygame.JOYBUTTONDOWN and\
-                e.button==3):
+                def k_switch():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_tab") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_tab()
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_z) or (e.type==pygame.JOYBUTTONDOWN and\
-                e.button==4):
+                def press():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_z") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_z()
                             break
-                if (e.type==pygame.KEYDOWN and\
-                e.key==pygame.K_x) or (e.type==pygame.JOYBUTTONDOWN and\
-                e.button==5):
+                def present():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_x") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_x()
                             break
+                keybinds = {"keydown":{},"keyup":{},"keyhold":{},"joybuttonup":{},"joybuttondown":{},"joyhatmotion":{}}
+                keybinds["keydown"][pygame.K_ESCAPE] = "toggle_settings"
+                keybinds["keyup"][pygame.K_RETURN] = "enter_up"
+                keybinds["joybuttonup"][0] = "enter_up"
+                keybinds["keydown"][pygame.K_RETURN] = "enter_down"
+                keybinds["joybuttondown"][0] = "enter_down"
+                keybinds["keydown"][pygame.K_RIGHT] = "k_right"
+                keybinds["joyhatmotion"][(1,0)] = "k_right"
+                keybinds["keydown"][pygame.K_LEFT] = "k_left"
+                keybinds["joyhatmotion"][(-1,0)] = "k_right"
+                keybinds["keydown"][pygame.K_UP] = "k_up"
+                keybinds["joyhatmotion"][(0,1)] = "k_up"
+                keybinds["keydown"][pygame.K_DOWN] = "k_down"
+                keybinds["joyhatmotion"][(0,-1)] = "k_down"
+                keybinds["keydown"][pygame.K_SPACE] = "k_cancel"
+                keybinds["joybuttondown"][1] = "k_cancel"
+                keybinds["keydown"][pygame.K_TAB] = "k_switch"
+                keybinds["joybuttondown"][3] = "k_switch"
+                keybinds["keydown"][pygame.K_z] = "press"
+                keybinds["joybuttondown"][4] = "press"
+                keybinds["keydown"][pygame.K_x] = "present"
+                keybinds["joybuttondown"][5] = "present"
+                if e.type==pygame.KEYDOWN:
+                    if e.key in keybinds["keydown"]:
+                        eval(keybinds["keydown"][e.key])()
+                elif e.type==pygame.KEYUP:
+                    if e.key in keybinds["keyup"]:
+                        eval(keybinds["keyup"][e.key])()
+                elif e.type==pygame.JOYBUTTONUP:
+                    if e.button in keybinds["joybuttonup"]:
+                        eval(keybinds["joybuttonup"][e.button])()
+                elif e.type==pygame.KEYDOWN:
+                    if e.key in keybinds["keydown"]:
+                        eval(keybinds["keydown"][e.key])()
+                elif e.type==pygame.JOYBUTTONDOWN:
+                    if e.button in keybinds["joybuttondown"]:
+                        eval(keybinds["joybuttondown"][e.button])()
+                elif e.type==pygame.JOYHATMOTION:
+                    if e.value in keybinds["joyhatmotion"]:
+                        eval(keybinds["joyhatmotion"][e.value])()
                 if e.type==pygame.KEYDOWN and e.key==pygame.K_d and e.mod&pygame.K_LCTRL:
                     assets.variables["_debug"] = "true"
                 if e.type==pygame.KEYDOWN and\
