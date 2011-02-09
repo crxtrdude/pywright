@@ -2601,11 +2601,13 @@ class choose_game(gui.widget):
     def close_button(self,jump=False):
         self.has_close = True
         self.cb = gui.button(self,"close")
-        self.cb.rpos[0]=223
+        self.cb.rpos[0]=224
         self.cb.z = 1005
         self.cb.pri = -1005
         self.children.append(self.cb)
         self.jump_when_close = jump
+        self.list.scbar_y=self.cb.height
+        self.list.scbar_height=-self.cb.height
     def list_games(self,path):
         self.path = path
         games = []
