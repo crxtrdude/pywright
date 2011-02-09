@@ -94,7 +94,7 @@ is collide = 0 doscroll$0
 addvar cx $3
 goto end$0
 label doscroll$0
-scroll name=$1 x=-$3
+scroll name=$1 x=-$3 nowait
 label end$0
 subvar _lli 1
 is _lli > 0 $0
@@ -112,7 +112,7 @@ is collide = 0 doscroll$0
 addvar cx -$3
 goto end$0
 label doscroll$0
-scroll name=$1 x=$3
+scroll name=$1 x=$3 nowait
 label end$0
 subvar _lli 1
 is _lli > 0 $0
@@ -130,7 +130,7 @@ is collide = 0 doscroll$0
 addvar cy $3
 goto end$0
 label doscroll$0
-scroll name=$1 y=-$3
+scroll name=$1 y=-$3 nowait
 label end$0
 subvar _lli 1
 is _lli > 0 $0
@@ -148,7 +148,7 @@ is collide = 0 doscroll$0
 addvar cy -$3
 goto end$0
 label doscroll$0
-scroll name=$1 y=$3
+scroll name=$1 y=$3 nowait
 label end$0
 subvar _lli 1
 is _lli > 0 $0
