@@ -2985,6 +2985,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
     assets.autosave = 1
     assets.autosave_keep = 2 #how many saves to keep
+    assets.show_fps = 0
     if os.path.exists("display.ini"):
         f = open("display.ini")
         t = f.read()
@@ -3000,7 +3001,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 "screen_compress":"screen_compress","autosave":"autosave",
                 "autosave_keep":"autosave_keep", 
                 "sound_format":"sound_format","sound_bits":"sound_bits",
-                "sound_buffer":"sound_buffer"}
+                "sound_buffer":"sound_buffer","show_fps":"show_fps"}
         fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
                 }
 
@@ -3024,8 +3025,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.items = []
 
     running = True
-
-    showfps = True
 
     text_only = False
     if "-text" in sys.argv:
@@ -3089,7 +3088,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             assets.cur_script._shake(*assets.shakeargs)
             assets.shakeargs = 0
         if assets.variables.get("render",1):
-            draw_screen(showfps)
+            draw_screen(assets.show_fps)
         #pygame.image.save(pygame.real_screen,"capture/img%.04d.jpg"%fr)
         #fr+=1
         pygame.event.pump()
