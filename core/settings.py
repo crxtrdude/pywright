@@ -12,6 +12,7 @@ height=%s
 scale2x=%s
 fullscreen=%s
 screens=%s
+show_fps=%s
 sound_format=%s
 sound_bits=%s
 sound_buffer=%s
@@ -20,6 +21,7 @@ music_volume=%s
 screen_compress=%s
 autosave=%s
 autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,assets.num_screens,
+int(assets.show_fps),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
 int(assets.screen_compress),int(assets.autosave),int(assets.autosave_keep)))
     f.close()
@@ -91,6 +93,7 @@ class settings_menu(gui.pane):
         self.align = False
         if self.firstpane == "debug" and not assets.vtrue("_debug"):
             settings_menu.firstpane = "display"
+        self.reses = []
             
         self.sheight = assets.sheight
         self.swidth = assets.swidth
@@ -331,20 +334,23 @@ class settings_menu(gui.pane):
         res_box.add_child(gui.checkbox("dualscreen"))
         ds = self.ds = res_box.pane.children[-1]
         
-        res_box.add_child(gui.checkbox("virtual_dualscreen"))
+        res_box.add_child(gui.checkbox("virtual dualscreen"))
         self.vds = res_box.pane.children[-1]
+        self.vds.visible = 0
+        
+        res_box.add_child(gui.checkbox("show fps"))
+        self.show_fps = res_box.pane.children[-1]
+        s_c = self.show_fps.set_checked
+        def set_checked(val):
+            s_c(val)
+            assets.show_fps = val
+        self.show_fps.set_checked = set_checked
         
         res_box.add_child(gui.button(self,"Change resolution (%sx%s)"%(assets.swidth,assets.sheight)))
         res = res_box.pane.children[-1]
 
         res.checked = True
         res.click_down_over = self.popup_resolution
-        
-        s_c = ds.set_checked
-        def set_checked(val):
-            s_c(val)
-            
-        ds.set_checked = set_checked        
 
         #self.reses = gui.radiobutton.groups["resopt"]
         if assets.fullscreen:
@@ -353,6 +359,8 @@ class settings_menu(gui.pane):
             self.ds.checked = True
         if not assets.screen_compress:
             self.vds.checked = True
+        if assets.show_fps:
+            self.show_fps.checked = True
                 
         self.children.append(gui.button(self,"apply",[10,140]))
     def popup_resolution(self,mp):
