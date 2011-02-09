@@ -2638,22 +2638,26 @@ class choose_game(gui.widget):
             title = d.get("title",f)
             if d.get("author",""):
                 title += " by "+d["author"]
-            txt = item.font.render(title,1,[0,0,0])
+            lines = wrap_text([title],assets.get_image_font("nt"),190)
             req = d.get("min_pywright_version","0")
             reqs = cver_s(req)
-            height = graphic.get_height()+txt.get_height()
-            width = max(graphic.get_width(),txt.get_width())
-            txt2 = None
             if __version__ < req:
-                txt2 = item.font.render("Requires PyWright "+reqs,1,[200,20,30])
-                height += txt2.get_height()
-                width = max(graphic.get_width(),txt.get_width(),txt2.get_width())
-            image = pygame.Surface([width,height])
-            image.fill([200,200,255])
+                lines.append("Requires PyWright "+reqs)
+            height = graphic.get_height()
+            width = 200
+            for i in range(len(lines)):
+                txt = assets.get_font("nt").render(lines[i],1,[0,0,0])
+                lines[i] = txt
+                w,h = txt.get_size()
+                height += h
+            image = pygame.Surface([width+2,height+2])
+            image.fill([0,0,0])
+            pygame.draw.rect(image,gui.defcol["gamebg"],[[1,1],[width,height]])
             image.blit(graphic,[0,0])
-            image.blit(txt,[0,graphic.get_height()])
-            if txt2:
-                image.blit(txt2,[0,graphic.get_height()+txt.get_height()])
+            y = graphic.get_height()
+            for txt in lines:
+                image.blit(txt,[2,y])
+                y+=txt.get_height()
             item.graphic = image
             self.list.add_child(item)
             def _play_game(func=f):
