@@ -36,15 +36,14 @@ import subprocess
 import threading
 
 #game_id = 14571 #JM shot dunk
-game_id = "10711" #My dialogue test case
-#~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=6561"
-#~ game_url = "http://www.aceattorney.sparklin.org/jeu.php?id_proces=11919"
-#~ game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=1167"
-game_id = "14571" #TAP trial former
-game_id = "18928" #TAP medium
-#game_id = "19233" #TAP latter
+#game_id = "10711" #My dialogue test case
 #game_id = "21671" #investigation test 1, moving, talking, presenting, examining, and hide/reveal dialog and frames
 #game_id = "22330"  #investigation test 2: hide/reveal scene, hide/reveal scene intro
+
+
+#game_id="19583" #TAP Case2 Prelude
+#game_id="21329" #TAP Case2 Day1 Investigation
+game_id="21884" #TAP Case2 Day2 Trial
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -115,7 +114,9 @@ if os.path.exists("%s.html"%game_id):
     html = f.read()
     f.close()
 else:
+    print "opening url"
     f = urllib.urlopen(game_url)
+    print "reading"
     html = f.read()
     f.close()
     f = open("%s.html"%game_id,"w")
@@ -214,6 +215,7 @@ def textify(contentlist,colorize=False,replace_line_end=None):
     return t
 
 def wget(url,saveto):
+    saveto = saveto.replace("\\","sl")
     print "get",url,"to",saveto
     import urllib
     if url.endswith(".gif"):
@@ -229,7 +231,9 @@ def wget(url,saveto):
                 pass
     elif url.endswith(".mp3"):
         if not os.path.exists(saveto):
-            urllib.urlretrieve(url.replace(" ","%20"),"mp3ogg/input.mp3")
+            def progress(a,b,c):
+                print int(a)*int(b)/float(c)
+            urllib.urlretrieve(url.replace(" ","%20"),"mp3ogg/input.mp3",reporthook=progress)
             subprocess.call(["mp3ogg\mpg123.exe","-w","mp3ogg\output.wav","mp3ogg\input.mp3"])
             subprocess.call(["mp3ogg\oggenc2.exe","mp3ogg\output.wav","mp3ogg\output.ogg","--resample=44100"])
             f = open("mp3ogg/output.ogg","rb")
@@ -266,7 +270,7 @@ def makeev(t):
     return add_art(t,"ev")
 def setupchar(id, name, talk, blink):
     print char_id_name,"ev"+id+"$"
-    charname = char_id_name["ev"+id+"$"].replace(" ","_")
+    charname = char_id_name["ev"+id+"$"].replace(" ","_").replace("?","_qu_")
     talkname = nice_name(talk).rsplit(".",1)[0]+"(talk).png"
     blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).png"
     for name,url in [[talkname,talk],[blinkname,blink]]:
@@ -296,26 +300,25 @@ def get_ev_id(element):
 f = res.evidence
 print "search for ev"
 soup = BeautifulSoup(html)
-for ev in soup.findAll(id=re.compile("(preuve|profil)_\d")):
+for ev in soup.findAll(id=re.compile("(preuve|profil)_\d+")):
     evid = get_ev_id(ev)
-    print ev["id"]
     if ev["id"].startswith("profil"):
         evid+="$"
     all_evidence[evid] = True
-    for img in ev.findAll(id=re.compile("(preuve|profil)_\d_image")):
-        print img
+    for img in ev.findAll(id=re.compile("(preuve|profil)_\d+_image")):
         src = img["src"]
+        print src
         imname = makeev(src)
         f.write("set %s_pic %s\n"%(evid,imname))
-    for name in ev.findAll(id=re.compile("(preuve|profil)_\d_nom")):
+    for name in ev.findAll(id=re.compile("(preuve|profil)_\d+_nom")):
         name = textify(name.contents,replace_line_end="")
         if evid.endswith("$"):
             char_id_name[evid] = name
         f.write("set %s_name %s\n"%(evid,name))
-    for desc in ev.findAll(id=re.compile("(preuve|profil)_\d_description")):
+    for desc in ev.findAll(id=re.compile("(preuve|profil)_\d+_description")):
         print desc.contents,textify(desc.contents)
         f.write("set %s_desc %s\n"%(evid,textify(desc.contents,replace_line_end="{n}")))
-    for check in ev.findAll(id=re.compile("(preuve|profil)_\d_verifier")):
+    for check in ev.findAll(id=re.compile("(preuve|profil)_\d+_verifier")):
         page_output = ""
         for page in check.contents[1:]:
             page_type,page_content = [textify(x,replace_line_end="{n}") for x in page.contents[:2]]
@@ -479,13 +482,17 @@ delete name=_inb"""%(elements[0][0])
 def TesterVar(vals,elements):
     """Evaluate a variable value
     [varname,valid values in em,jump points in em, fail point]"""
-    varname = elements[0][0]
+    varname = elements[0]
+    indexes_values = elements[1]
+    indexes_jump = elements[2]
+    fail = elements[3]
     code = "\n"
-    for i,valid in enumerate(elements[1]):
-        valid = textify(valid)
-        jump = textify(elements[2][i])
+    keys = indexes_values.keys()
+    keys.sort()
+    for i in keys:
+        valid = indexes_values[i]
+        jump = indexes_jump[i]
         code += "is %s = %s line_%s\n"%(varname,valid,jump)
-    fail = elements[3][0]
     code += "goto line_%s"%fail
     vals["postcode"] += code
 def DefinirVar(vals,elements):
@@ -563,6 +570,27 @@ def DiscussionEnqueteV2(vals,elements):
             vals["postcode"] += "isnot convo_hidden_%s_%s?\n"%(vals["globals"]["current_place"],i+1)
             vals["postcode"] += "li %s result=line_%s\n"%(label,jumpto)
     vals["postcode"] += "showlist\ngoto $CURRENT_PLACE\n"
+    
+def DevoilerVerrousLieu(vals,elements):
+    """Reveal Psyche Locks"""
+    vals["postcode"] = '#TAP MODIFY\n"PSYCHE LOCKS REVEAL!"\n'
+    vals["postcode"]+="#"+repr(elements)
+def LancerVerrous(vals,elements):
+    """Launch Psyche Locks"""
+    vals["postcode"] = '#TAP MODIFY\n"LAUNCH PSYCHE LOCKS!"\n'
+    vals["postcode"]+="#"+repr(elements)
+def afficherVerrous(vals,elements):
+    """Display psyche locks"""
+    vals["postcode"] = '#TAP MODIFY\n"DISPLAY PSYCHE LOCKS!"\n'
+    vals["postcode"]+="#"+repr(elements)
+def DemanderEltVerrous(vals,elements):
+    """Ask locks?"""
+    vals["postcode"] = '#TAP MODIFY\n"ASK PSYCHE LOCKS! (dont ask me what that means, google translate is weird)"\n'
+    vals["postcode"]+="#"+repr(elements)
+def FinVerrous(vals,elements):
+    """Finish locks"""
+    vals["postcode"] = '#TAP MODIFY\n"FINISH LOCKS"\n'
+    vals["postcode"]+="#"+repr(elements)
 
 def DevoilerConversation(vals,elements):
     """Reveal hidden discussion topic"""
