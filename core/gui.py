@@ -15,24 +15,24 @@ class Window(object):
 window = Window()
 
 defcol = {
-"bgcol" : [145,113,66],
-"bgcol2" : [180,180,200],
-"bgfocus" : [180,180,220],
+"bgcol" : [203,178,143],
+"bgcol2" : [183,137,72],
+"bgfocus" : [174,150,115],
 "textcol" : [0,0,0],
-"fgcol" : [140,140,180],
+"fgcol" : [208,144,40],
 "olcol" : [0,0,0],
 "butbg" : [142,65,0],
 "butborder" : [30,30,30],
 "buttext" : [253,251,234],
 "buthigh" : [214,165,49],
 "panebg" : [145,113,66],
-"paneborder" : [200,200,200],
-"scrollbg" : [150,150,150],
-"scrollfg" : [200,220,200],
-"sbarbg" : [150,150,150],
-"sbarfg" : [240,240,240],
+"paneborder" : [0,0,0],
+"scrollbg" : [0,112,0],
+"scrollfg" : [0,184,0],
+"sbarbg" : [108,44,20],
+"sbarfg" : [208,144,40],
+"gamebg":[225,223,175],
 }
-
 
 class widget(object):
     visible = 1
@@ -318,7 +318,7 @@ class editbox(widget):
         if not self.visible: return
         pos = self.rpos
         val = self.val()
-        col = self.textcol
+        textcol = self.textcol
         bgcol = self.bgcol
         bgcol2 = self.bgcol2
         if not bgcol: bgcol = [0,0,0,0]
@@ -326,7 +326,7 @@ class editbox(widget):
         if self == window.focused:
             bgcol = self.bgfocus
         if not getattr(self,"txtrender",None)==val:
-            self.txtrender = self.font.render(val,1,col)
+            self.txtrender = self.font.render(val,1,textcol)
             if hasattr(self,"bg"): del self.bg
         txt = self.txtrender
         ts = list(txt.get_size())
@@ -586,7 +586,7 @@ class scrollpane(pane):
         self.scbar = scrollbar([0,0])
         self.scbar.nolayout = True
         self.scbar_y = 0
-        self.scbar_height = None
+        self.scbar_height = 0
         self.add_child(self.scbar,"root")
         self.pane = pane([0,0])
         self.pane.border = False
@@ -610,7 +610,7 @@ class scrollpane(pane):
         surf = super(self.__class__,self).render()
         self.scbar.rpos = [self.width-15,self.scbar_y]
         self.scbar.width = 15
-        self.scbar.height = self.scbar_height or self.height
+        self.scbar.height = self.height+self.scbar_height
         pages = self.pane.in_height/float(self.pane.height)
         try:
             self.scbar.scbut.height = int(self.scbar.height-4)/(pages)
