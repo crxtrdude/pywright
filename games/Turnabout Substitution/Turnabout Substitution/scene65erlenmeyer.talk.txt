@@ -1,0 +1,293 @@
+#-version-1
+label top
+bg aj/detentioncenter
+
+# TALK MENU
+list scene65erlenmeyertalk1
+li Defend you?
+
+flag WhatHappened65 WhatHappened
+label scene65erlenmeyertalk2
+
+flag DefenseRequest65 DefenseRequest
+label scene65erlenmeyertalk3
+
+showlist
+menu scene65erlenmeyer
+
+label WhatHappened
+li What happened?
+goto scene65erlenmeyertalk2
+
+label DefenseRequest
+li Defense request
+goto scene65erlenmeyertalk3
+
+showlist
+menu scene65erlenmeyer
+#END TALK MENU
+
+
+#TALK DEFEND YOU
+label Defend you?
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer e=sad
+"Please, save... defend me."
+char Apollo hide
+"...Did you, or did you not kill{n}Judge Chambers?"
+delete name=window
+char Rhea e=mad
+"! {emad}Apollo, you said you wouldn't{n}defend him!"
+char Apollo hide
+"Please answer me, Mr. Erlenmeyer."
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+"... {c900}I don't know{c}."
+delete name=window
+char Rhea e=mad
+"L-Liar!! You did it, didn't you?! {emad}First{n}you took my brother, and now{n}you took Judge!"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer e=squinting
+"{f}Rhea... {f}Wits."
+delete name=window
+char Rhea
+"*Gasp!*"
+char Apollo hide
+"Erlenmeyer, please... just tell me{n}what happened."
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+"...Okay."
+delete name=window
+char Rhea e=sad
+"P-Polly! I can't believe you're{n}considering defending him!"
+char Apollo hide
+"I just want to hear what he{n}has to say, Rhea!"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+setflag WhatHappened65
+goto top
+
+
+#TALK WHAT HAPPENED?
+label What happened?
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+char Apollo hide
+"So, what happened last night?"
+char Erlenmeyer
+"I journeyed with the spoon...{n}to the great unknown..."
+char Apollo hide
+"{sfx\Smack.ogg}{f}You're not making any sense!{n}I won't ask you again:{n}what happened?"
+"If you want me to defend you,{n}you need to tell me!"
+char Erlenmeyer e=rage
+"The spoon! An epic journey!{n}I became a dish!"
+char Apollo hide
+"You're already going back to jail,{n}and if you don't talk your fate{n}will just be much worse!"
+char Erlenmeyer e=sad
+"...I... don't know."
+char Apollo hide
+"{c099}(That's what he said before...){c}{n}Please, tell me as much as{n}you can anyway."
+delete name=window
+char Rhea e=mad
+"There's no use, Polly. He did it.{n}Everything he says is a lie."
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer e=sad
+"...I was playing with my mice...{n}and I fell asleep."
+char Apollo hide
+"And...?"
+char Erlenmeyer
+"When I woke up, I was arrested."
+char Apollo hide
+"And...?"
+char Erlenmeyer e=squinting
+"...And then {sfx\oops.wav}{enormal}you came."
+char Apollo hide
+"... Where were you when{n}you fell asleep?"
+char Erlenmeyer e=squinting
+pause 200 script
+char Apollo hide
+"How about when you woke up?"
+char Erlenmeyer
+"Sylvan Remains... a {c900}{sfx\Key.ogg}graveyard{c}."
+char Apollo hide
+"! {c099}(That was probably the scene{n}of the crime!){c} Which one?"
+char Erlenmeyer e=squinting
+"I told you: Sylvan Remains."
+char Apollo hide #MC: This sorta needs to be changed. Honestly, who has heard the word sylvan before?
+"...Argh, I don't get this... Maybe it{n}was in a burnt forest{n}or something?"
+delete name=window
+char Rhea
+"...I really don't want to help you{n}two, but he might mean{n}{c900}Forest Bones Cemetery{c}."
+"...I have quite a few graves there."
+char Apollo hide
+"Ah! That makes sense!{n}Is that where you woke up?"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+"Yes, I told you! I don't remember{n}going there... but I saw the name{n}on the way out."
+char Apollo hide
+"{c099}(...It's just like with Judge{n}Chambers.)"
+"{c099}(He doesn't remember anything, and{n}says he was unconscious the{n}moment of the murder.)"
+"{c099}(I hate to admit it, but he{n}could be telling the truth{n}about this crime...)"
+"{c099}(Without more evidence and{n}information, there's really{n}no way to tell.)"
+"{c099}(It's easy to just assume that he's{n}guilty this time because of{n}previous murders...)"
+"{c099}(But it's been easy to assume a{n}lot of my clients have{n}been guilty.)"
+setflag DefenseRequest65
+goto top
+
+#TALK 3 DEFENSE REQUEST
+label Defense request
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+char Apollo hide
+"{c099}(Oh... he's writing something...)"
+char Erlenmeyer
+"So... will you defend me?{n}Here is my defense request..."
+char Apollo hide
+"Well..."
+delete name=window
+char Rhea e=mad
+"Of course not{f}! Give me that...{n}There's no way you can{n}accept this, Polly!"
+char Apollo hide
+"... It's not just a question of{n}reputation, Rhea. If he{n}really is guilty..."
+"I won't be able to live with{n}myself if I defend him."
+"But what if he's actually{n}telling the truth?"
+char Rhea e=mad
+"No! He {sfx\Smack.ogg}has to be lying!"
+char Apollo hide
+"He may have confessed to the{n}Mysterious Bust killings...{n}but not to this crime."
+char Rhea e=mad
+"{sfx\Slash.ogg}{f}You really think a serial murderer{n}like him is going to tell the truth?"
+char Apollo hide
+"Just listen to him, Rhea...{n}there's no way he's trying to{n}manipulate us."
+"He genuinely doesn't know what{n}happened... He was knocked{n}unconscious and framed,"
+"just like Judge!"
+char Rhea e=mad name=Rhea
+"It's all an act, Polly! Why can't you{n}just see that?"
+"I... I can't believe you're actually{n}considering defending him!"
+delete Rhea
+char ??? hide
+"Robby!"
+char Fisher
+char Apollo hide
+"M-Mr. Fisher?!"
+char Fisher nametag=Bob
+"Just Bob Erlenmeyer, from now on.{n}Hey, Robby! Are you okay? I never{n}thought I'd get to speak with you!"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+"I'm... fine... Thanks... for visiting."
+delete name=window
+char Fisher nametag=Bob
+"Good to hear. {eboastful}Now listen up, Rookie!{n}You'd better defend Robby, or I'm{n}gonna get ya!"
+"He didn't do nothin'!{n}He never did nothin'!"
+char Apollo hide
+"{c099}(I suppose I shouldn't point out{n}that means he did something...)"
+char Fisher e=complaining nametag=Bob
+"This whole damn thing has been a{n}conspiracy! The media, the judge,{n}the prosecutor..."
+"They were all against him,{n}but they had no evidence!"
+"That's why they forged his{n}psychological profile, y'know."
+char Apollo hide
+"Uh, well..."
+char Fisher e=complaining nametag=Bob
+"Listen! They let him go once... If he's{n}found guilty, they won't let{n}him go again."
+"{enormal}I'm sure you didn't come here{n}actually intending to defend{n}Robby..."
+"But you're the only attorney who's{n}even come to reject Robby{n}to his face."
+"'Cause of the simple fact that{n}you just came... you're the only{n}one who'd go all the way to"
+"bring the truth out!"
+"{s}{sfx\Smack.ogg}Please, don't turn{n}your back on Robby!" #MC: Bob and Rob are the same name, y'know.
+char Apollo hide
+"{c099}(I... What do I do?)"
+"{c099}(First, Paul Strings tells me{n}Erlenmeyer is innocent, then I learn{n}they forged evidence to convict him,)"
+"{c099}(and now I've talked to him...{n}and he doesn't seem the type.)"
+"{c099}(...I need to make a decision. Do I{n}trust my instincts, and take this{n}hopeless case?)"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer e=squinting
+char Apollo hide
+"{delay2}...{delay1}Robert Erlenmeyer."
+"At this time, I am inclined to believe{n}that you are innocent of the{n}murder of Judge Chambers."
+delete name=window
+mus
+char Rhea e=mad
+"{f}{sfx\Slash.ogg}WHAT!?" #MC: GOOD TIME TO CHANGE/REMOVE MUSIC???
+char Fisher nametag=Bob
+"Yeah! I knew you'd say yes!"
+char Apollo hide
+"HOWEVER! I still don't know{n}anything about the case, and could{n}be wrong."
+"So, while I'm agreeing to be your{n}attorney for now, if I think{n}that you are guilty..."
+"...I will immediately drop this{n}case. Do you still want{n}me to defend you?"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+"...Yes."
+char Apollo hide
+"Then I will do my best to{n}get you the verdict you deserve."
+delete name=window
+char Rhea e=mad
+"I... I don't believe this!"
+"{emad}Polly, you... you lied to me!"
+"{esad}The verdict he deserves is guilty!{n}I thought you cared about me!" #MC: Maybe change to sweat?
+char Apollo hide
+"Rhea, I--{next}"
+char Rhea e=mad
+"{sfx/Smack.ogg}{s}No excuses! You knew it would hurt{n}me if you took his case... And you{n}still took it!"
+"{esad}{f}I don't really matter{n}to you, do I?"
+char Apollo hide
+"That's not true,--{next}"
+char Rhea e=mad
+"{sfx/Bwaaah.ogg}{s}Yes it is! If I meant anything{n}to you, there's no way you'd{n}agree to defend that... {f}thing!"
+"But I'll tell you this:{n}the worst part isn't that{n}you're hurting me..."
+"The worst part is that{n}you're hurting {f}yourself!"
+"You're throwing away all you stand{n}for by defending someone who{n}{f}{sfx\Dunnn.ogg}kills for no reason at all!"
+char Apollo hide
+"But he's {f}{sfx/Ding.ogg}innocent! I think..."
+char Rhea e=mad
+"Think for one microsecond, Polly!{n}He's obviously just {s}{sfx\Slash.ogg}lying!"
+char Apollo hide
+"But..."
+char Rhea e=mad
+"Is that you or your{n}ambition speaking?"
+char Apollo hide
+"Rhea, I'm just trying to{n}do what's right..."
+char Rhea e=mad name=rheaagain
+"Then we have very different{n}definitions of 'right.'{n}You're on your own, Apollo!{sfx\Hush.ogg}"
+char nothing fade
+pause 60 script
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer
+char game hide
+nt
+addev awfulrequest
+ev awfulrequest name=awfulrequest x=185
+"{sfx/evidence.wav}{c099}Strange Defense Request{n}thrown at head by Rhea."
+delete name=awfulrequest
+char Apollo hide
+"{c099}(What the..? No one's going to{n}believe this chicken scratch is{n}an official document...)"
+delete name=window
+char Fisher nametag=Bob
+"Man, you really pissed her off."
+char Apollo hide
+"{c099}(Yeah. Because of you{n}and your brother.)"
+"{c099}(...But I should've known she'd react{n}like that, and I did tell her{n}I wouldn't defend him...)"
+"{c099}(Did I really do the right thing?)"
+"{c099}(N-No, I don't have any{n}time to second-guess myself!)"
+"{c099}(Especially in a case like this!)"
+char Guard hide
+"Hey, it's time to leave, you two."
+char Fisher e=complaining nametag=Bob
+"Eh?! What for!?"
+char Guard hide
+"The suspect needs to be taken in{n}for questioning."
+char Fisher nametag=Bob
+"...All right. Robby, whatever you do,{n}don't doubt your innocence! Me and{n}Mr. Justice believe in you!"
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer e=squinting
+"..."
+delete name=window
+char Fisher nametag=Bob name=moo
+"See ya, Rookie."
+"You'd better put your heart{n}and soul into setting{n}my brother free!"
+delete moo
+char Apollo hide
+"O-Okay, I will..."
+"{c099}(The crime happened in{n}Forest Bones Cemetery...)"
+"{c099}(That's my only lead right{n}now, I so I guess I{n}should check it out...)"
+setflag openScene68
+menu scene65

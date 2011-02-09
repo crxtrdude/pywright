@@ -1,0 +1,32 @@
+#-version-1
+label top
+bg ts/1deekayandcooffice
+
+examine
+region 250 110 5 10 computer
+region 35 101 10 10 picture
+menu scene67
+
+#EXAMINE COMPY
+label computer
+"When I was here the other day, Rhea{n}bragged about all the stuff she{n}could do on the computer..."
+"But it seemed kinda far-fetched."
+"Maybe I should check it out?"
+"...Nah, she'd probably kill me if{n}she found out I looked through{n}her stuff like that."
+goto top
+
+#EXAMINE PICTURE
+label picture
+"Nathan Wits...{n}To me, he's only one victim."
+"To Rhea, he's the only{n}victim that mattered."
+"...Her reaction to me{n}defending Erlenmeyer was{n}perfectly understandable."
+"But if Erlenmeyer is really innocent..."
+"That's my job, and I'll be able to{n}smooth things over with her if he{n}actually didn't do it."
+"I hope..."
+goto top
+
+#EXAMINE NOTHING
+label none
+char Apollo hide
+"No clues here."
+goto top

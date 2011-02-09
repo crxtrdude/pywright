@@ -1,0 +1,44 @@
+#-version-1
+label top
+bg aj/courtlobby fade
+
+examine
+region 6 15 98 146 doors
+region 146 76 98 55 couch
+region 179 16 53 44 painting            
+menu scene60
+
+label doors
+char Apollo hide
+"I've just noticed it now, but{n}I've been staring at that door the{n}whole time,"
+"like it's about to call me forward{n}into yet another impossible trial."
+"Take it easy, Apollo- it's{n}already over and done with."
+char nothing
+goto top
+
+label couch
+char Apollo hide
+"This couch is so comfortable, plenty{n}of attorneys or clients fall asleep{n}here right before their trial."
+"In the past, from what I hear,{n}it's had disastrous results."
+"I think they ought to replace it{n}with a line of cheap plastic chairs to{n}prevent that sort of"
+"thing from happening."
+char nothing
+goto top
+
+label painting
+char Apollo hide
+"So much meaning can be derived{n}from this painting. It could be a wise{n}old man looking to the sun for advice,"
+"or a sick elderly cripple gazing{n}off into the distance..."
+char Poole fade e=normal-outofcourt
+"Or it could be an indentured servant{n}looking up with sweat on his brow{n}from a hard day's work."
+char Apollo hide
+"Hm...{p30} I did not think of{n}it like that."
+char nothing
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+char nothing
+goto top
+

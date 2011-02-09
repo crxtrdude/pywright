@@ -1,0 +1,49 @@
+#-version-1
+mus
+bg ts/2cemeterycrimescenewithoutcar fade
+
+flag scene75repeat scene75menu
+setflag scene75repeat
+
+char game hide
+nt
+"{c090}{center}{type}December 28{n}Forest Bones Cemetery"
+
+char Apollo hide
+"Hey, Judge's car is{n}no longer here..."
+"{c099}(I guess the police took it away.)"
+
+char Poole e=normal-outofcourt fade
+
+char Apollo hide
+"Oh! Jessica!"
+
+char Poole e=serious-outofcourt
+"{sfx/Smack.ogg}{s}Who told you you could call me{n}by my first name?"
+
+char Apollo hide
+"S-Sorry, Mrs. Poole!{n}{c099}(...You did. Yesterday.{n}In the courthouse.)"
+"So, uh, what are you doing here?"
+
+char Poole e=normal-outofcourt
+"Isn't it obvious? Building{n}my case against Erlenmeyer."
+
+char Apollo hide
+"...Huh? Didn't you say{n}you were going to retire?"
+
+char Poole e=sarcastic-outofcourt
+"You must be imagining things,{n}Lady Justice."
+
+char Rhea
+"It looks like she's{n}in denial mode, Polly."
+
+char Poole e=normal-outofcourt
+"If you have something to say,{n}say it quick. Unlike some people,{n}I don't have much time."
+mus 145 - Turnabout Substitution - Jessica Poole - To the Bitter End.ogg
+set _music_loop 145 - Turnabout Substitution - Jessica Poole - To the Bitter Endloop.ogg
+menu scene75poole
+
+label scene75menu
+mus 145 - Turnabout Substitution - Jessica Poole - To the Bitter End.ogg
+set _music_loop 145 - Turnabout Substitution - Jessica Poole - To the Bitter Endloop.ogg
+menu scene75poole

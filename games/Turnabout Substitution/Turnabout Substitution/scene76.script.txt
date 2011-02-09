@@ -1,0 +1,35 @@
+#-version-1
+mus
+bg ts/judgesbedroom fade
+
+flag scene76repeat scene76menu
+setflag scene76repeat
+nt
+"{c090}{center}{type}December 28{n}Judge's Mansion{n}Judge's Bedroom"
+
+char Apollo hide
+"I never would have guessed{n}Judge lived in a mansion like this..."
+
+char Rhea
+"He had a long and productive{n}career, and knew where to{n}invest his money."
+
+char Apollo hide
+"...Or maybe he made a deal{n}with the Mafia."
+
+char Rhea e=mad
+"{s}{sfx/Smack.ogg}Hey! Don't insult him like that!{n}He'd never do that!"
+
+char Apollo hide
+"I-I was kidding! But...{n}you're right. Sorry."
+
+char Rhea
+"...It's okay. I know you{n}didn't really mean it."
+
+char Apollo hide
+"Anyway, if the secret of Judge's{n}death is really here, then we'd{n}better start investigating!"
+mus 123 - Apollo Justice - Search Opening.ogg
+menu scene76
+
+label scene76menu
+mus 123 - Apollo Justice - Search Opening.ogg
+menu scene76

@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg aj/courtlobby
+
+list scene60move
+li Wright Anything Agency
+showlist
+menu scene60
+
+label Wright Anything Agency
+script scene55menu

@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg aj/detentioncenter
+
+list scene65
+li Wright Anything Agency
+showlist
+menu scene65
+
+label Wright Anything Agency
+script scene66menu

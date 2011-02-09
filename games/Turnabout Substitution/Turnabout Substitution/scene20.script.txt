@@ -1,0 +1,52 @@
+#-version-1
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness nothing
+set _judge G.Strings
+set _helper Rhea
+startcourt
+prosecutor
+"And how do you know{n}this is the right one?"
+judge
+"Th-This is Courtroom 4, right...?"
+prosecutor
+"{sfx/Ding.ogg}{f}Is it?"
+judge
+pause 30 script
+sfx /swoop.wav
+char nothing
+pause 30 script
+sfx /dooropens.wav
+pause 120
+sfx /dooropens.wav
+pause 30 script
+sfx /swoop.wav
+char G.Strings fade
+"Yes, it is!"
+prosecutor
+char Poole
+"{sfx/Ding.ogg}{f}Are you sure that the sign{n}you read corresponded{n}to this courtroom?"
+judge
+char G.Strings
+pause 30 script
+sfx /swoop.wav
+char nothing
+pause 30 script
+sfx /dooropens.Wav
+defense
+char Apollo e=sweats
+char Apollo hide
+"..."
+prosecutor
+char Poole
+"..."
+judge
+char nothing
+sfx /dooropens.wav
+pause 30 script
+sfx /swoop.wav
+char G.Strings fade
+"Yes, I am!"
+script scene21

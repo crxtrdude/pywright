@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg ts/2cemeterycrimescenewithoutcar
+
+list scene75poole
+li Forest Bones Cemetery
+showlist
+menu scene75poole
+
+label Forest Bones Cemetery
+script scene68menu

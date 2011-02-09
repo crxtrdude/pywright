@@ -1,0 +1,21 @@
+#-version-1
+label top
+mus
+bg ts/1deekayandcooffice fade
+
+# After leaving Larry Butz High with Rhea in scene 19
+
+flag scene74repeat scene74menu
+setflag scene74repeat
+char Rhea
+nt
+"{c090}{center}{type}December 28{n}Dee Kay and Co Offices"
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+menu scene74rhea
+
+label scene74menu
+char Rhea
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+menu scene74rhea

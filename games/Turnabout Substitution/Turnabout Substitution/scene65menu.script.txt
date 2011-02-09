@@ -1,0 +1,6 @@
+#-version-1
+label top
+bg aj/detentioncenter
+mus 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain So.ogg
+set _music_loop 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain Soloop.ogg
+menu scene65

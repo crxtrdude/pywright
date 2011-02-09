@@ -1,0 +1,31 @@
+"click next to start two timers"
+
+macro timeup
+clear
+"Time is up!{n}.{n}.{n}stuff"
+script intro label=end
+endmacro
+
+macro timeup2
+timer 60 timeup2
+"value of timer 1 is {$_timer_value_timeup}{n}restart timer2"
+endmacro
+
+timer 180 timeup
+timer 60 timeup2
+
+list x
+li wait about 6 seconds
+li click any to see timer
+li no time
+li to actually
+li choose something
+showlist
+
+label none
+"timer1={$_timer_value_timeup}{n}timer2={$_timer_value_timeup2}"
+goto x
+
+label end
+"so{n}tha'ts how timers work yada                            blah blah blah {n}..."
+"this is the end of the file, that means that the first timer ran out and jumped here"

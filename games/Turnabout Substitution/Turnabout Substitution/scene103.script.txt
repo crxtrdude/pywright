@@ -1,0 +1,319 @@
+mus
+clear
+pause 50 script
+fg ani-judge-gavel 
+pause 50 script
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+judge
+"Court is back in session for{n}the trial of Robert{n}Erlenmeyer!"
+"{eserious}Are you ready, Mr. Justice?"
+defense
+"{enormal-nobrac}{sfx/Shing.ogg}{f}{s 10 10}I was born ready!"
+prosecutor
+"{eserious}{p20}{sfx /Ding.ogg}{f}...But are you ready now?"
+defense
+"{enormal-nobrac}Oh...{p40}{esweats-nobrac}{sfx/oops.wav}{f}yeah."
+mus
+witness
+"{esad}{sfx /Key.ogg}{f}Y-{p15}Your Honor?"
+"B-{p15}{s 5 5}Before the defense starts{n}harshly attacking me, I'd{n}like to make a...{p60}{sfx /Key.ogg}{f}{c900}{enormal} special request{c}."
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+defense
+"{ehandsondesk-nobrac(blink)}{sfx /Ding.ogg}{f}!"
+judge
+"{enormal}What is it, Ms. Wits?"
+witness
+"This trial has {s 8 8}unquestionably shown{n}what I believe is a{sfx /Ding.ogg}{f}{c900} fundamental flaw{c}{n}in our new legal system."
+"Of course, I'm talking{n}about the {s 8 8}unquestionable bias{n}for the defense!"
+defense
+"{esweats-nobrac(blink)}{sfx /Smack.ogg}{s}{c099}(What?! She can't be serious! Our{n}position was less disadvantageous{n}in the Middle Ages!)"
+witness
+"As you would obviously know,{n}Your Honor, criminal law in the{n}past few years"
+"has been based on the{n}{f}following principle:"
+"one who has been arrested by the{n}police on solid grounds is most{n}likely {sfx/Ding.ogg}{f}guilty."
+"This seems like a good way for{n}prosecutors to be able to do{n}their job," 
+"but it has some undesired...{p60}{sfx /Key.ogg}{f}{n}side effects."
+"{esmiling2}For instance, the {s 8 8}only way for a{n}defense attorney to get an acquittal{n}is
+"to {s 8 8}accuse someone else of the crime!"
+"Therefore, defense attornies like{n}the {f}now-disbarred Phoenix Wright{n}and the man"
+"to my right have {s 8 8}shamelessly{n}and {s 8 8}unexpectedly accused{n}witnesses!" 
+"{emad}They are {s 10 10}pressured and{n}pressured, until they"
+"finally {sfx/Dunnn.ogg}{f}{s 10 10}crack and admit to{n}a crime they didn't commit!"
+"Defense attorneys have access to{n}all sorts of {f}documents and{n}{f}information,"
+"and have plenty of time to{n}devise arguments and {f}"find"{n}evidence to distort the truth."
+"On the other hand, witnesses have{n}{f}no extra information, and are{n}expected to {f}quickly refute" 
+"the defense's arguments on the{n}spot, lest they be declared guilty."
+"{sfx/Smack.ogg}{s 10 10}Especially now that we have{n}jurists, who can easily be {s 10 10}swayed{n}by professional liars like Apollo!"
+judge
+"{eserious}{sfx /Ding.ogg}{f}What exactly are you{n}proposing, Ms. Wits?"
+witness
+"{enormal}{sfx /Key.ogg}{f}I propose we make the game even."
+"Just as witnesses only have a{n}limited time to {c900}respond{c} to{n}the defense's arguments,"
+"the defense should only have limited{n}time to {sfx/Ding.ogg}{f}{c900}present{c} said arguments!{p20} It's{n}only {f}{c900}logical{c}!"
+defense
+"{ehandsondesk-nobrac}Wh-{p10}{sfx /Shock.ogg}{f}{s 12 12}What?!"
+witness
+"{esmiling1}{sfx /Ding.ogg}{f}Why are you so concerned, Polly?"
+"You just had half an hour{n}to prepare your arguments..."
+"You {s 8 8}shouldn't need extra{n}time to get it together!"
+defense
+"{ehandsondesk-nobrac(blink)}{sfx /Key.ogg}{f}!"
+"{c099}(She was planning this{n}the entire time...{p40}{sfx /Smack.ogg}{s} I fell{n}for her trap completely!)"
+"{enormal-nobrac}{sfx /Ding.ogg}{f}Th-{p15}{s 12 12}This isn't standard{n}procedure!{p20} It {s 10 10}has to be{n}illegal!"
+judge
+"I'm afraid it's not,{n}Mr. Justice."
+"In anticipation for my first trial, I{n}perused the new laws of the{n}Jurist System,"
+"and nowhere is Ms. Wits' idea{n}{f}expressly prohibited, whether it is{n}a good idea or not."
+"{enormal}{sfx /Ding.ogg}{f}Besides, there are many{n}precedents of judges experimenting{n}with procedure."
+defense
+"{esweats-nobrac}Wh-{p10}{sfx /Shock.ogg}{f}{s 10 10}What?!
+"{esweats-nobrac(blink)}{c099}(Why did I have to get the{n}{f}only judge that actually{n}knows law?)"
+witness
+"{esmiling1}Wasn't the motto of judicial reform{n}in the 21st century {sfx/Ding.ogg}{f}"Flexible with{n}methods, {f}inflexible with results"?"
+defense
+"{ehandsondesk-nobrac(blink)}{c099}(If this is what they call{n}"justice," {s 8 8}I'd better change{n}my name back to Gramarye!)"
+witness
+"Just think, Your Honor..."
+"If this works, you'll get{n}all the {c900}{f}{s 5 5}{sfx /Ding.ogg}credit{c}!"  
+"Other judges will follow{n}in your footsteps!"
+"They'll dub you a {s 5 5}{c900}genius{c} for{n}devising this system in only{n}your second trial!"
+judge
+"{eshocked}{f}{sfx /Ding.ogg}!!{p20}{ethinking}{n}...{s 5 5}True, but...{p30} I'm {s 5 5}not sure...{n}{enormal} this would go through."
+"Perhaps it would get caught{n}on {s 8 8}something stupid, like{n}{c900}{f}{sfx /Key.ogg}human rights{c}?"
+prosecutor
+"..."
+defense
+"{ehandsondesk-nobrac(blink)}{s}{sfx /Smack.ogg}{c099}(What is going on here?)"
+"{c099}(It's like Rhea is...{p60}{c900}{sfx /Key.ogg}{f}{witness} infecting{n}{c}everyone with her insanity!)"
+witness
+"And of all people, you know{n}who would respect you the most{n}for this, don't you?"
+"{c900}Your father,{c}{p50} of course."
+mus
+judge
+"{eshocked}{sfx /Key.ogg}{f}{s 10 10}!!!!"
+"{enormal}V-{p15}{s 8 8}Very well!"
+"Your request is perfectly...{p50}{n}{s 5 5}reasonable, and shall{n}be implemented"
+"for the remainder{n}of this trial."
+fg ObjectionAnimApollo
+pause 5 script
+defense
+"{ehandsondesk-nobrac}{f}{s 8 8}Don't listen to her!"
+"{enormal-nobrac}Aren't you the one who said earlier{n}that when {s 8 8}dealing with men's lives,{n}the {f}ends don't justify the {f}means?"
+judge
+"{sfx /Ding.ogg}{f}Be quiet, Mr. Justice."
+defense
+"{enormal-nobrac}If this doesn't work, your{n}career will--{p10}{next}"
+judge
+"{eserious}{sfx /Bwaaah.ogg}{f}{s 20 20}SHUT UP!"
+"I've had enough of you questioning{n}my judgment, {s 10 10}especially when you{n}aren't experienced yourself!"
+witness
+"{sfx /Key.ogg}{f}Hee hee..."
+"Honestly, Apollo. You need{n}to learn some respect." 
+judge
+"{f}That's right!"
+"I have been very indulgent with{n}you, and given you the benefit{n}of the doubt many times."
+"You are making extremely {s 8 8}grave{n}accusations, and will thus{n}be held {f}accountable in exchange."
+"You will have a {sfx/Ding.ogg}{f}limited time to{n}present proof to substantiate"
+"the claims you are making{n}against Ms. Wits."
+mus
+defense
+"{ehandsondesk-nobrac}{sfx /Key.ogg}All right..."
+"Rhea, you {s 8 8}may have changed{n}the rules of the game, but{n}you {s 8 8}still won't win!"
+"{ehandsondesk-nobrac(blink)}{c099}(...{p30}Okay. Right now, the only{n}person I can rely on is{n}{f}myself.)"
+"{c099}(But it's okay, because{n}I have the {s 8 8}evidence{n}on my side!)"
+"{ethinking-nobrac(blink)}{c099}(I just need to {s 5 5}stay calm,{n}{s 5 5}think logically, and {s 5 5}trust{n}my intuition.)"
+witness  
+"{sfx /Ding.ogg}{f}This is your last chance{n}to save yourself from{n}a humiliating defeat, Apollo."
+"Are you {f}{s 5 5}sure you want to go through{n}with this then, even though it's{n}{f}{s 5 5}obvious you're going to lose?"
+set _allow_saveload false
+set _allow_click_load false
+defense
+"{enormal-nobrac}{sfx /Key.ogg}{f}Of course."
+"Even if I'm the {s 8 8}only person in{n}this room who hasn't fallen{n}for your tricks,"
+"{ehandsondesk-nobrac}{sfx/Smack.ogg}{s 10 10}I still won't let you win!"
+mus 147 - Turnabout Substitution - Final Battle.ogg
+judge
+"Very well."
+"You may now present your{n}arguments, Mr. Justice."
+defense
+"{enormal-nobrac(blink)}{c099}(Okay, I need to be careful{n}about that {f}{c900}number{c} in{n}the upper-left corner now...)"
+"{enormal-nobrac}All right.{p40}{n}{ehandsondesk-nobrac(blink)}{c099}(Here comes Justice!)"
+"{ehandsondesk-nobrac}On the night of December 27th, you{n}snuck out of my office{n}and came to {f}{s 8 8}this place...!"
+
+label question1
+timer 7200 outoftime
+set _double_screen_examine_fade false
+set _examine_showbars false
+bg timeline
+show_timer
+examine hide
+region 177 115 48 48 wrightanything
+region 120 7 48 48 rheasoffice
+region 63 60 48 48 cemetery
+region 121 60 48 48 cemetery2
+region 177 6 48 48 larrybschool
+region 63 115 48 48 bcroom
+scene103
+
+label wrightanything
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+witness
+"{sfx /Ding.ogg}{f}{emad}Hey, if there's {sfx/Ding.ogg}{f}any{n}place I didn't go to,{n}it's there."
+"{enormal}After all, that's{n}where I started."
+judge
+"Yes, that is true."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Now you'd {s 10 10}better get{n}your story together, Mr.{n}Justice!"
+goto question1
+
+label rheasoffice
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+witness
+"{sfx /Ding.ogg}{f}{emad}That's where I was{n}trying to go."
+"I was kinda {f]kidnapped by{n}Erlenmeyer and didn't{n}make it."
+judge
+"{eserious}{sfx /Ding.ogg}{f}Or are you saying{n}that she {c900}did{c} make it?"
+defense
+"{esweats-nobrac}N-No..."
+judge 
+"{eserious}Then please don't waste{n}the court's time like{n}this, Mr. Justice."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Now {s 10 10}get your{n}story together!"
+goto question1
+
+label cemetery
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+witness
+"{esmiling1}{sfx /Ding.ogg}{f}Why would I go there?"
+"If Judge went there by chance, and{n}Erlenmeyer wasn't actually planning{n}to murder anyone..."
+defense
+"{enormal-nobrac}{sfx /Ding.ogg}{f}Oh,{p10}{esweats-nobrac} good point..."
+judge
+"{eserious}While that seems like the{n}obvious answer, it certainly{n}isn't the correct one."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Now {s 10 10}get your story{n}together, Mr. Justice!"
+goto question1
+
+lablel cemetery2
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+witness
+"{esmiling1}{sfx /Ding.ogg}{f}Why would I go there?"
+"If Judge went there by chance, and{n}Erlenmeyer wasn't actually planning{n}to murder anyone..."
+defense
+"{enormal-nobrac}{sfx /Ding.ogg}{f}Oh,{p10}{esweats-nobrac} good point..."
+judge
+"{eserious}While that seems like the{n}obvious answer, it certainly{n}isn't the correct one."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Now {s 10 10}get your story{n}together, Mr. Justice!"
+goto question1
+
+label larrybschool
+setflag choselarryb
+script scene104
+
+label bcroom
+setflag chosebcroom
+script scene104
+
+label none
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+endtimer
+fg TakeThatAnimApollo
+pause 5 script
+witness
+"{sfx /Ding.ogg}{f}...I'll put it bluntly:{p20} there's{n}no way I would've{n}gone there."
+judge
+"Yes, I must agree."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Now {s 10 10}get your story{n}together, Mr. Justice!"
+goto question1
+
+
+label gameover
+script gameover
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

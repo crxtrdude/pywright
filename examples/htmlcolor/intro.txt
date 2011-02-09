@@ -1,0 +1,7 @@
+set color_red ff0000
+set color_blue 0000ff
+set color_green 00ff00
+
+set _debug true
+"{c ff0000}Html color codes work."
+"also, {c blue}variable {c red}colors {c green} work."

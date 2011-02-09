@@ -1,0 +1,85 @@
+mus
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+
+# PRESENT EVIDENCE OF KILLER'S IDENTITY
+defense
+emo handsondesk-nobrac name=dc
+"{c089}(And the evidence....)"
+setvar _cr_back_button false
+setvar _allow_present_profiles false
+setvar _allow_present_evidence true
+present fail=MovingOn
+
+# PLAYER CHOOSES GUM
+label gum
+setflag ItsTheGum
+goto MovingOn
+
+# AFTER PRESENTING
+label MovingOn
+setvar _cr_back_button true
+helper
+emo aide name=hc
+"...P-{p15}{sfx/Ding.ogg}{f}{s 5 5}Polly? Wh-{p15}{sfx/Smack.ogg}{s 8 8}What are you doing?"
+prosecutor
+"...{p30}{f}Hmph.{p30} Trying to accuse your {f}{c900}own{n}assistant{c}, just to stall for time?"
+"I never thought I'd see the day{n}when a defense attorney stooped{n}so low."
+defense
+emo normal-nobrac name=dc
+"N-{p15}{s 8 8}No! I-{p15}{s 8 8}I..."
+judge
+"Are you serious about this,{n}Mr. Justice?"
+scrolldefense
+"{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}Yes!"
+judge
+"...If you are so serious...{n}why did you present nonsensical{n}evidence?"
+"{sfx/Bwaaah.ogg}{s 10 10}It doesn't prove anything!"
+defense
+emo sweats-nobrac name=dc
+"U-{p20}{f}Uh..."
+helper
+emo aideserious name=hc
+"I {sfx/Smack.ogg}{s 10 10}helped you in court before!"
+"I even put aside that Erlenmeyer{n}{s 10 10}killed my brother, and {f}helped you{n}today!"
+"Think about all the times I {f}urged{n}you on today.{p30} Would I really do{n}that if I were the killer?"
+"I-{p15}{s 5 5}{f}I...{p30} I {sfx/Dunnn.ogg}{f}{s 10 10}can't believe you'd{n}do something like this!"
+"Couldn't you have thought about{n}it for one, little second before{n}opening your mouth?"
+"{delay2}Apollo Justice, I..."
+bg helper
+char Rhea e=aideserious
+"{sfx/Owned.ogg}{s 20 20}I HATE YOU!!"
+sfx /swoop.wav
+char nothing fade
+pause 120 script
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Erlenmeyer
+startcourt
+defense
+emo normal-nobrac name=dc
+"{sfx/Smack.ogg}{s 10 10}Rhea, wait!!"
+judge
+"{s 8 8}Mr. Justice, you can settle your{n}{s 8 8}personal conflicts at the end{n}of this trial..."
+"which I'm sure will be in{n}just a moment."
+
+# WHAT EVIDENCE DID THE PLAYER CHOOSE?
+flag ItsTheGum Psych fail=YouLose
+
+# IF THE PLAYER CHOSE GUM
+label Psych
+script scene99
+
+# IF THE PLAYER CHOSE ANYTHING BUT GUM
+label YouLose
+script gameover

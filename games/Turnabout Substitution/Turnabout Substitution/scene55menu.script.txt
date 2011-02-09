@@ -1,0 +1,6 @@
+#-version-1
+nt
+bg aj/wrightanything fade
+char nothing
+mus 123 - Apollo Justice - Search Opening.ogg
+menu scene55

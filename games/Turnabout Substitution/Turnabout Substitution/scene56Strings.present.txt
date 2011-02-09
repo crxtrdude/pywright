@@ -1,0 +1,159 @@
+#-version-1
+present
+label top
+bg aj/detentioncenter fade
+menu scene56Strings
+
+label pstrings$
+fg detentionfg loops=0 nowait
+char Strings fade e=normal
+"You want to know about me, Mr.{n}Justice? A man wrapped up in himself{n}makes a very small bundle,"
+"Benjamin Franklin once said."
+char Apollo hide
+"{c099}(That's sort of ironic, coming from{n}someone so wrapped up in himself.)"
+char Strings e=normal
+"Contrary to what you may expect, I{n}came from a poor, uneducated{n}working-class family."
+"I was almost entirely self-made{n}and self-taught."
+"I was regularly beaten by my father."
+char Apollo hide
+"...{p40} {c099}(I want to feel sorry for him,{n}but I can't do it...)"
+char Strings e=normal
+"I chose to read books in order to{n}escape from my troubles. In them, I{n}discovered a fascinating world"
+"of ancient, civilized cultures{n}so different from the one I{n}inhabited."
+ "I was filled with awe by the greatness{n}of these ancient civilizations." 
+"I do not know what I may appear to{n}the world- but to myself I seem to{n}have been only like a boy"
+"playing on the seashore, while the{n}great ocean of truth lay all{n} undiscovered before me,"
+"Isaac Newton once said."
+"What I found truly fascinating about{n}these stories was this world of pure{n}ideas: concepts such as truth,"
+"justice, and honor. Amicus Plato,{n}amicus Aristoteles, magis amica{n}veritas."
+char Apollo hide
+"{c099}(What's all this Latin?)"
+char Strings e=normal
+"The reason I became a judge was to{n}feel the reality of these notions.{n}At least,"
+"that is what I believed." 
+"But now I must wonder, was I merely{n}attracted by power, fame, and{n}fortune?"
+"Was it that I actually wanted to{n}show my father my worth?" 
+"Perhaps if that was my goal, then I{n}have failed."
+char Rhea hide
+"Why would you need to be worthy{n}of such a despicable person!?"
+char Strings fade e=normal
+"Nonsense. My father was a good{n}man- how could my father be {n}anything else?"
+"Even in his violence, he was{n}being good to me." 
+"It was his way of being honest,{n}however brutal. Though he never{n}read about the concept of truth,"
+"he never lied to me."
+"But what have I done, but lie?{n}Lying is all I have done, all{n}of it to advance my career."
+"My ambitions for greatness have{n}brought me to ruin. I believe that{n}my father recognized that in me,"
+"and he tried to warn me in his own{n}way. But now, finally, I have changed."
+"I've chosen to sacrifice all of{n}my ill-gotten power in order to do{n}what I knew was right."
+"Though I may never again be{n}powerful, I will no longer be cursed{n}with misery."
+"Finally, though I am imprisoned,{n}I feel that I am free for the first time."
+char Apollo hide
+"{c099}(He does seem to have changed a{n}little. Maybe Strings isn't really our{n}enemy after all...)"
+char Strings e=normal
+"But I have rambled on too long{n}already about myself."
+"The secret of being a bore{n}is to tell everything, Voltaire{n}once said."
+char nothing
+goto top
+
+label gstrings$
+fg detentionfg loops=0 nowait
+char Strings fade e=normal
+"Such a brilliant and accomplished{n}young man, and he's my own son. I{n}could not possibly be"
+"more proud of him." 
+"I realize now that he may not{n}know that. But maybe he doesn't{n}need to know."
+"At any rate, his truly remarkable{n}property is his insatiable curiosity."
+"Just about anything may take{n}his interest, whether or not it is truly{n}worthy of his attention."
+"No matter whether it is eighteenth{n}century mathematics, or intellectual{n}property law, or"
+"the sexuality of insects,"
+"or merely the newest video game, he{n}will take to them all with equal fervor.{n}In his mind, it seems, learning and"
+"having fun are one and the same,{n}a property that is as beneficial as it is{n}remarkable. Education,"
+"Socrates once said, is the{n}kindling of a flame, not{n}the filling of a vessel.
+char Apollo hide
+sfx /sfx general/sfx-whoops.wav
+"{c099}(I wish I could say the same of{n}myself... but I can't.)"
+char Strings e=thinking
+"Then again, his learning can{n}sometimes become so excessive{n}as to be troublesome."
+"He's often so busy enjoying himself{n}with these intellectual pursuits that{n}he neglects the"
+"social aspects of his life."
+char Strings e=normal
+"To be rather frank, this worries{n}me on occasion. Neither abstinence{n}nor excess ever renders man happy,"
+"Voltaire once said. Attending parties,{n}seducing women, these activities are{n}necessary to lead a"
+"happy and successful life."
+"But he has such low self-esteem,{n}it pains me to say. He's shy and{n}awkward, and even when he's"
+"comfortable with himself, others{n}are surprised by his eccentricity."
+char Apollo hide
+"{c099}(Don't you also put people off with{n}your eccentricity? If I spend too{n}much longer with this guy,"
+"{c099}(I'll find myself quoting famous{n}people and speaking Latin in{n}everyday conversation.)"
+char Strings e=normal
+"I want society to accept my son, but{n}he just doesn't seem to care whether{n}they do or not."
+"That's why I had to help him in that{n}regard, though I often think that I{n}ought to leave him be." 
+"Now I can't help but think that he{n}might not have even wanted to be a{n}judge." 
+"He seems to be missing a certain{n}concept of justice."
+"He enjoys a criminal case because he{n}views it as a puzzle to be solved, but{n}he doesn't seem"
+"to have a full grasp of the{n}human consequences of his{n}decisions."
+"Four things belong to a judge:{n}to hear courteously, to answer{n}wisely, to consider soberly,"
+"and to decide impartially,{n}Socrates once said."
+char Apollo hide
+"{c099}(Even though he keeps criticizing his{n}son, it's abundantly clear that he{n}loves him. Wait... {sfx/sfx general/sfx-realization.wav}abundantly?)"
+sfx /shock.ogg
+"{c099}(Shoot, I am starting to think{n}like him!)"
+char nothing 
+goto top
+
+label goldenplate
+fg detentionfg loops=0 nowait
+char Apollo hide
+"What is the real significance{n}of this thing?"
+char Strings fade e=normal
+"Oh, Gerald offered that to me. It's{n}a private joke between us, you see,{n}like the hedgehog in Montaigne."
+"Think of it as a sort of common{n}ground between our schools of{n}thought that we can enjoy sharing." 
+"For example, Gerald and I love{n}to joke about the Battle of{n}Thermopylae..."
+Do you know what I mean,{n}Mr. Justice?"
+char Apollo hide
+"Oh, y-yes,{p20} of course. Just{n}like all fathers and sons..."
+char nothing
+goto top
+
+label bust
+fg detentionfg loops=0 nowait
+char Apollo hide
+"Justice Strings, I was wondering{n}if you could tell us how this phone{n}really works."
+char Strings fade e=normal
+"Hm? I'm sorry, but I'm afraid{n}that is quite impermissible."
+char Apollo hide
+"{sfx/sfx general/sfx-realization.wav}What?{sfx/shock.ogg} Why?"
+char Strings e=normal
+"The most logical reason is that{n}the contacts and messages stored{n}on this phone must not be"
+"revealed to the public." 
+"They contain information that is{n}irrelevant to the trial, but the{n}publication of which could"
+"jeopardize the interests of{n}the state."
+char Apollo hide
+"We have no interest in that{n}information. Even if we had it,{n}we would keep it"
+"completely confidential."
+char Strings e=normal
+"Yes, the police told me the same{n}thing, thinking they could make some{n}kind of deal. But of course"
+"I did not trust them." 
+"I have too many enemies in law{n}enforcement who would be all too{n}willing to use"
+"this information against me."
+char Apollo hide
+"But we're not with the police!"
+char Strings e=thinking
+"But you could profit from selling that{n}information, or perhaps share it{n}with the police in exchange for"
+"information about the case." 
+"No, I'm sorry, but I cannot{n}tell you."
+char nothing
+goto top
+
+label none
+fg detentionfg loops=0 nowait
+char Strings
+char Apollo hide
+"Mr. Chief Justice! What do you{n}know about this evidence?
+char Strings
+"Well, as for me, all I know{n}is that I know nothing...{n}Socrates once said."
+char Apollo hide
+"{c099}(Yeah, and maybe he wouldn't{n}have been sentenced to death{n}if he hadn't been so clueless.)"
+char nothing
+goto top
+
+

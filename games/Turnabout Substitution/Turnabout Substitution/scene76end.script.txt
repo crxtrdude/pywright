@@ -1,0 +1,191 @@
+#-version-1
+label top
+bg ts/judgesbedroom
+mus
+char Rhea
+"Poole said that what we found here{n}would change the meaning of what{n}happened, but I don't see anything..."
+
+char Apollo hide
+"Well, the strangest piece of{n}evidence is that post-it,"
+"with the date and location{n}of the murder."
+
+char Rhea
+"Hm... Do we have anything that{n}could shed some light on why he{n}wrote that post-it?"
+Present1
+
+macro Present1
+set _cr_back_button false
+label wrongoPolly
+present
+
+label ht5files2
+goto rightoPolly
+
+label none
+char Apollo hide
+"{c099}(No, that's not it... It must be{n}something different!)"
+goto wrongoPolly
+
+label rightoPolly
+#turn it back on
+set _cr_back_button true
+endmacro
+
+fg TakeThatAnimApollo
+pause 5 script
+char Rhea
+char Apollo hide
+"Yeah, this file. Check out the{n}victims' page... Arthur was{n}killed on {sfx/Key.ogg}{c900}December 27{c} last year!"
+
+char Rhea
+"And he was buried in {sfx/Key.ogg}{c900}Forest Bones{n}Cemetery{c}!"
+"He was visiting his brother's{n}grave on the anniversary of{n}his death!"
+
+char Apollo hide
+"Two other facts show this: his car{n}was close to Arthur's grave, and{n}flowers were in his trunk."
+"I already suspected why he went,{n}but this confirms it. This must be{n}that 'important matter' he"
+"mentioned after his trial."
+
+char Rhea
+"But... something {c900}doesn't make{n}sense{c}. The trial finished in{n}the afternoon, so why did he"
+"wait until the middle of the{n}night to go to the graveyard?"
+"I doubt he spent 8 hours{n}in the cemetery."
+
+char Apollo hide
+"...Of course! Rhea, I have a{n}theory about this..."
+
+char Rhea e=smiling2
+"Sock it to me, Polly."
+
+char Apollo hide
+"The reason Judge went to the{n}graveyard in the middle of{n}the night is...!"
+Present2
+
+macro Present2
+  set _cr_back_button false
+  label wrongoPolly
+    present
+
+  label soporific
+    goto rightoPolly
+
+  label none
+    char Rhea
+    "...I don't see what you're saying,{n}Polly. Sorry..."
+
+    char Apollo hide
+    "...That's because I picked up{n}the wrong evidence. The actual{n}reason he went in the middle of"
+    "the night is...!"
+    goto wrongoPolly
+
+  label rightoPolly
+endmacro
+
+fg TakeThatAnimApollo
+pause 5 script
+mus 115 - Apollo Justice - Tell the Truth.ogg
+set _music_loop 115 - Apollo Justice - Tell the Truthloop.ogg
+char Rhea
+char Apollo hide
+"He must have fallen asleep from{n}these sleeping pills! Suppose{n}the pills work for 9 hours, a full"
+"night's sleep. The trial ended{n}around half-past three... if he{n}took these pills, and we account"
+"for the time it took for him to{n}drive home and to the graveyard,{n}then he would arrive at {sfx/Key.ogg}{c900}1AM{c}, the"
+"time of the murder!"
+
+char Rhea
+"Ah...!{p30}{n}...But wait."
+"Even if the times work out...{n}{c900}why would he take sleeping pills{c}{n}at all?"
+
+char Apollo hide
+"It's simple. He took the sleeping{n}pills because of this...!"
+Present3
+
+macro Present3
+  set _cr_back_button false
+  label wrongoPolly
+    present
+
+  label tranquilizer
+    goto rightoPolly
+
+  label none
+    char Rhea
+    "...Y'know, it's okay to just say{n}that you don't know."
+
+    char Apollo hide
+    "B-But I do know! He took the{n}sleeping pills because of{n}this...!"
+    goto wrongoPolly
+
+  label rightoPolly
+endmacro
+fg TakeThatAnimApollo
+pause 5 script
+set _cr_back_button true
+char Rhea
+char Apollo hide
+"He never {c900}meant{c} to take sleeping{n}pills at all!"
+"He wanted to take the{n}tranquilizers, but {c900}accidentally{n}{s}{sfx/Bwaaah.ogg}took sleeping pills instead{c}!"
+
+char Rhea
+"I see! His trial must have put him{n}under a lot of stress, and he{n}would be much more likely to make"
+"a mistake like confusing the{n}medicines when under stress.{n}When he woke up he rushed to the"
+"cemetery, only to meet his death..."
+
+mus
+char Apollo hide
+"...Rhea, do you get what{n}this means?"
+
+char Rhea
+"Yeah... Judge's presence in the{n}cemetery was an {sfx/Key.ogg}{c900}accident{c}."
+
+char Apollo hide
+"So how could the killer know{n}Judge would be there?"
+
+char Rhea
+"Well, maybe he assumed Judge{n}would go on that day to visit{n}Arthur, and waited for hours?"
+"After all, the accident wasn't{n}visiting the cemetery, but{n}visiting the cemetery at night."
+
+char Apollo hide
+"Maybe... but whatever the reason,{n}we need to find it out if we want{n}to win the case."
+
+char Rhea
+"I guess Poole was right about--"
+
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}"
+
+char Apollo hide
+"Hello?"
+
+char Ema hide
+"Apollo! The lab results for the{n}mice came back."
+
+char Apollo hide
+"And?"
+
+char Ema hide
+"They're... {sfx/Key.ogg}{c900}interesting{c}, to say the{n}least. I'll tell you in person..."
+"I'll be waiting at the{n}police station."
+
+char Apollo hide
+"Thanks, Ema. I'll be right over!"
+
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}"
+
+char Rhea
+"And who was that?"
+
+char Apollo hide
+"Ema. She found something out{n}about those mice in the{n}biology classroom."
+
+char Rhea
+"Really? Then what are we standing{n}around here for? Let's go!"
+
+setflag openScene77
+menu scene76
