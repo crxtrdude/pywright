@@ -1866,6 +1866,21 @@ class record_button(fadesprite,gui.widget):
             return
         assets.addevmenu()
         
+def wrap_text(lines,font,width,wrap=True):
+    page = []
+    while lines:
+        line = lines.pop(0)
+        if wrap:
+            left,right = font.split_line(line,width)
+        else:
+            left,right = line,""
+        page.append(left)
+        if right.strip():
+            if not lines: lines.append("")
+            lines[0]=right+u" "+lines[0]
+    print page
+    return page
+        
 class textbox(gui.widget):
     pri = 30
     def click_down_over(self,pos):
@@ -1898,23 +1913,8 @@ class textbox(gui.widget):
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
                 wrap = False
-        pages = []
-        page = []
-        while lines:
-            line = lines.pop(0)
-            if wrap:
-                left,right = assets.get_image_font("tb").split_line(line,250)
-            else:
-                left,right = line,""
-            page.append(left)
-            if right.strip():
-                if not lines: lines.append("")
-                lines[0]=right+u" "+lines[0]
-            if len(page)==3:
-                pages.append(self.nametag+u"\n".join(page))
-                page = []
-        if [1 for x in page if x]:
-            pages.append(self.nametag+"\n".join(page))
+        page = wrap_text(lines,assets.get_image_font("tb"),250,wrap)
+        pages = [self.nametag+u"\n".join(page[i:i+3]) for i in xrange(0, len(page), 3)]
         self._text = u"\n".join(pages)
     text = property(lambda self: self._text,set_text)
     def __init__(self,text="",color=[255,255,255],delay=2,speed=1,rightp=True,leftp=False,nametag="\n"):
