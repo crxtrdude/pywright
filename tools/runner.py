@@ -13,7 +13,7 @@ LINUX_REG = {"gifsicle":"gifsicle",
 
 DIR = os.path.split(os.path.abspath(__file__))[0]
 def get_registry():
-    reg = {}
+    reg = LINUX_REG
     if "win" in sys.platform:
         reg = WIN_REG
     tool_config = os.path.join(DIR,"tools.ini")
