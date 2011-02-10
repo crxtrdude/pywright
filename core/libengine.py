@@ -1419,6 +1419,8 @@ as having a non looping animation play several times, or only playing a portion 
                         o = o.blink_sprite
                     elif t:
                         o = o.talk_sprite
+                    else:
+                        o = o.cur_sprite
                 if start is not None:
                     o.start = start
                     if o.x<start:

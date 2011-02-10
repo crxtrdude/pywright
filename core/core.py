@@ -672,7 +672,7 @@ set _font_new_resume_size 14""".split("\n"):
     py = 0
     pz = None
     def gportrait(self):
-        id_name = self.variables.get("_speaking",None)
+        id_name = self.variables.get("_speaking","")
         if isinstance(id_name,portrait) or not id_name:
             return id_name
         ports = []
@@ -1658,6 +1658,9 @@ class portrait(object):
             return self.blink_sprite
         if mode == "talk":
             return self.talk_sprite
+        if mode == "loop":
+            self.blink_sprite.loopmode = "loop"
+            return self.blink_sprite
         return self.blink_sprite
     cur_sprite = property(get_current_sprite)
     def setfade(self,*args):
