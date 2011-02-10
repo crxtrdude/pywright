@@ -337,9 +337,17 @@ class Assets(object):
                 if macros.get(args[0],None):
                     newlines = "\n".join(macros[args[0]])
                     args = args[1:]
+                    kwargs = {}
+                    for a in args[:]:
+                        if a.count("=")==1:
+                            args.remove(a)
+                            k,v = a.split("=",1)
+                            kwargs[k] = v
                     newlines = newlines.replace("$0",str(i))
                     for i2 in range(len(args)):
                         newlines = newlines.replace("$%s"%(i2+1),args[i2])
+                    for k in kwargs:
+                        newlines = newlines.replace("$%s"%k,kwargs[k])
                     newlines = newlines.split("\n")
                     for l in reversed(newlines):
                         lines.insert(i+1,l)
