@@ -1,4 +1,6 @@
-import os,sys,subprocess,pygame,math,urllib2
+import os,sys,pygame,math,urllib2
+sys.path.append("core")
+import external
 import re
 try:
     pygame.display.set_mode([1,1])
@@ -8,10 +10,10 @@ except:
 
 MAX_SURFACE_WIDTH=1024
 
-def go(path_to_gif,saveto=None,delete=False):
+def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     if path_to_gif.startswith("http://"):
         f = urllib2.urlopen(path_to_gif)
-        path_to_gif = path_to_gif.rsplit("/",1)[1]
+        path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
         out = open(path_to_gif,"wb")
         out.write(f.read())
         f.close()
@@ -23,9 +25,7 @@ def go(path_to_gif,saveto=None,delete=False):
     strip_name = root+".png"
     txt_name = root+".txt"
 
-    proc = subprocess.Popen('gifsicle -I "%s"'%(path_to_gif),stdout=subprocess.PIPE)
-    stdout,stderr = proc.communicate()
-    print stdout,stderr
+    stdout,stderr = external.run({"command":"gifsicle","operation":"info","path":path_to_gif})
     loop = "loop forever" in stdout
     delays = []
     for x in stdout.split("  + ")[1:]:
@@ -41,8 +41,7 @@ def go(path_to_gif,saveto=None,delete=False):
     delays = [x*60.0 for x in delays if x]
     print loop,delays
     
-    proc = subprocess.Popen('gifsicle --no-background -U -e "%s" -o "%s"'%(path_to_gif,path_to_gif))
-    proc.wait()
+    stdout,stderr = external.run({"command":"gifsicle","operation":"explode","path":path_to_gif})
     if delete:
         os.remove(path_to_gif)
     i = 0

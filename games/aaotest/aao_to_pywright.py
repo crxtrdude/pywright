@@ -32,7 +32,12 @@ from BeautifulSoup import BeautifulSoup
 import urllib
 import urllib2
 import re
-import subprocess
+import sys
+sys.path.append("../../core")
+sys.path.append("../../tools")
+import external
+import gif2strip
+
 import threading
 
 #game_id = 14571 #JM shot dunk
@@ -223,7 +228,6 @@ def wget(url,saveto):
         prefix=saveto.rsplit(".",1)[0]
         saveto = prefix+".png"
         txt_name = prefix+".txt"
-        import gif2strip
         if not (os.path.exists(txt_name) or os.path.exists(saveto)):
             try:
                 gif2strip.go(url,saveto)
@@ -234,8 +238,8 @@ def wget(url,saveto):
             def progress(a,b,c):
                 print int(a)*int(b)/float(c)
             urllib.urlretrieve(url.replace(" ","%20"),"mp3ogg/input.mp3",reporthook=progress)
-            subprocess.call(["mp3ogg\mpg123.exe","-w","mp3ogg\output.wav","mp3ogg\input.mp3"])
-            subprocess.call(["mp3ogg\oggenc2.exe","mp3ogg\output.wav","mp3ogg\output.ogg","--resample=44100"])
+            external.run({"command":"mpg123","operation":"towav","input":"mp3ogg/input.mp3","output":"mp3ogg/output.wav"})
+            external.run({"command":"oggenc2","operation":"toogg","input":"mp3ogg/output.wav","output":"mp3ogg/output.ogg"})
             f = open("mp3ogg/output.ogg","rb")
             o = f.read()
             f.close()
