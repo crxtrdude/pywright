@@ -1371,6 +1371,7 @@ in the .txt files that go alongside the graphics. However, sometimes you may wis
     KEYWORD("start","Alter the starting frame of the animation","Leave starting frame what it was."),
     KEYWORD("end","Alter ending frame of the animation","Leave ending frame what it was."),
     KEYWORD("jumpto","Instantly set an animations frame to this value","Don't change frames"),
+    KEYWORD("pause","Pause animation"),
     TOKEN("loop","Force animation to loop"),
     TOKEN("noloop","Force animation not to loop"),
     TOKEN("b","Alter blink animation of chars"),
@@ -1386,6 +1387,8 @@ as having a non looping animation play several times, or only playing a portion 
         jumpto = None
         b = None
         t = None
+        pause = None
+        resume = None
         for a in args:
             if a.startswith("name="):
                 name = a.split("=",1)[1]
@@ -1393,6 +1396,10 @@ as having a non looping animation play several times, or only playing a portion 
                 loop = True
             if a == "noloop":
                 loop = False
+            if a == "pause":
+                pause = 1
+            if a == "resume":
+                pause = -1
             if a.startswith("start="):
                 start = int(a.split("=",1)[1])
             if a.startswith("end="):
@@ -1421,11 +1428,20 @@ as having a non looping animation play several times, or only playing a portion 
                 if loop is not None:
                     if loop:
                         o.loops = 1
+                        o.loopmode = getattr(o,"old_loopmode","loop")
                     else:
                         o.loops = 0
+                        o.old_loopmode = o.loopmode
                         o.loopmode = "stop"
                 if jumpto is not None:
                     o.x = jumpto
+                if pause==1:
+                    o.last_end = o.end
+                    o.end = o.x
+                elif pause==-1:
+                    if hasattr(o,"last_end"):
+                        o.end = o.last_end
+                        del o.last_end
         if name and not any and vtrue(assets.variables.get("_debug","false")):
             raise missing_object("controlanim: No valid objects found by key name "+name)
     def _surf3d(self,command,x,y,sw,sh,rw,rh):
