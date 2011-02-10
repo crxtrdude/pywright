@@ -56,7 +56,8 @@ label wait_input
 #pause to let the gui have a chance to continue character movement, before stopping animation
 pause 1
 set stop_loop 1
-controlanim name=c start=0 end=0
+getprop frame name=c prop=frame
+controlanim name=c start=$frame end=$frame noloop
 gui Wait
 
 label move_left
