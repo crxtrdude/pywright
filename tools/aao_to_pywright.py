@@ -112,10 +112,10 @@ class Resources:
             print x.conversions
         
 
-res = Resources("converted/%s"%game_id,temppath="tmp")
+res = Resources("games/aao_%s"%game_id,temppath="tmp")
 
-if os.path.exists("%s.html"%game_id):
-    f = open("%s.html"%game_id)
+if os.path.exists(res.rootpath+"/%s.html"%game_id):
+    f = open(res.rootpath+"/%s.html"%game_id)
     html = f.read()
     f.close()
 else:
@@ -124,7 +124,7 @@ else:
     print "reading"
     html = f.read()
     f.close()
-    f = open("%s.html"%game_id,"w")
+    f = open(res.rootpath+"/%s.html"%game_id,"w")
     f.write(html)
     f.close()
 
