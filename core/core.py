@@ -1061,12 +1061,16 @@ class sprite(gui.button):
     def getprop(self,p):
         if p in "xy":
             return self.pos["xy".index(p)]
+        if p == "frame":
+            return self.x
         return getattr(self,p,"")
     def setprop(self,p,v):
         if p in "xy":
             self.pos["xy".index(p)] = float(v)
         if p in "z":
             self.z = int(v)
+        if p == "frame":
+            self.x = int(v)
     def delete(self):
         self.kill = 1
     def makestr(self):
