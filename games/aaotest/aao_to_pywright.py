@@ -33,9 +33,9 @@ import urllib
 import urllib2
 import re
 import sys
-sys.path.append("../../core")
 sys.path.append("../../tools")
-import external
+import runner
+external = runner.runner
 import gif2strip
 
 import threading
@@ -237,15 +237,18 @@ def wget(url,saveto):
         if not os.path.exists(saveto):
             def progress(a,b,c):
                 print int(a)*int(b)/float(c)
-            urllib.urlretrieve(url.replace(" ","%20"),"mp3ogg/input.mp3",reporthook=progress)
-            external.run({"command":"mpg123","operation":"towav","input":"mp3ogg/input.mp3","output":"mp3ogg/output.wav"})
-            external.run({"command":"oggenc2","operation":"toogg","input":"mp3ogg/output.wav","output":"mp3ogg/output.ogg"})
-            f = open("mp3ogg/output.ogg","rb")
+            urllib.urlretrieve(url.replace(" ","%20"),"input.mp3",reporthook=progress)
+            external.run({"command":"mpg123","operation":"towav","input":"input.mp3","output":"output.wav"})
+            external.run({"command":"oggenc2","operation":"toogg","input":"output.wav","output":"output.ogg"})
+            f = open("output.ogg","rb")
             o = f.read()
             f.close()
             f = open(saveto,"wb")
             f.write(o)
             f.close()
+            os.remove("input.mp3")
+            os.remove("output.wav")
+            os.remove("output.ogg")
     elif not os.path.exists(saveto):
         print "retrieving"
         urllib.urlretrieve(url.replace(" ","%20"),saveto)

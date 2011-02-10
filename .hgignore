@@ -12,3 +12,4 @@ glob:PyWright_t/*
 glob:build/*
 glob:core/cache/*
 glob:scriptdist/*
+glob:tools/tools.ini
