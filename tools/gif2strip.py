@@ -1,6 +1,7 @@
 import os,sys,pygame,math,urllib2
-sys.path.append("core")
-import external
+sys.path.append("tools")
+import runner
+external = runner.runner
 import re
 try:
     pygame.display.set_mode([1,1])
