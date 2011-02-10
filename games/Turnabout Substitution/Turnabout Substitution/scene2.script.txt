@@ -1,0 +1,84 @@
+#-version-1
+mus
+set _cr_button true
+nt
+"{c090}{center}{type}December 26, 4:28 AM{n}Wright Anything Agency{n}Apollo's Bedroom"
+bg apolloroom fade
+char Apollo hide
+"Home sweet home..."
+pause 60
+"Hey voice? How do you do?{n}It's nice to see you again."
+pause 120
+"...Now is my chance to finally{n}{s 5 5} *hic* let it all out."
+"{f}{sfx/Bwaaah.ogg}This birthday party was even worse {n}than I thought it would be!"
+"Everyone talking behind poor Mark's{n}back... Amy getting {s 5 5}*hic* completely{n}drunk and not realizing it..."
+sfx /Awe.ogg
+"Even the music was about as good as{n}{s 5 5}*hic* Mr.Wright's piano playing!"
+pause 120
+"...My phone IS off, isn't it?"
+pause 60
+"...And to think this is why I missed{n}a plane to Borginia."
+"I mean, there must be plenty of{n}other reasons not to go to some{n}dreary country in Northern Europe{p10}{next}"
+"with a magic freak and{n}a disbarred lawyer who{n}cheats at poker, right?"
+pause 60
+"Better start packing{n}my stuff, though."
+pause 120
+"...On second thought, I think{n}I'll just wait until tomorrow."
+pause 60
+"I could really use some sleep...{n}{s 5 5}*hic*"
+pause 60
+"Now, let's put on some good music{n}and go to bed."
+pause 60
+mus 130 - Apollo Justice - Guitar Serenade.ogg
+pause 1200
+"{c099}(It's still weird to think of them as{n}my family.){p60}{next}"
+"{c099}(Must be weird for{n}them too, actually.){p60}{next}"
+"{c099}(I mean, I'd rather be a witness to a{n}murder than a mother to someone{n}like me, that's for sure.){p120}{next}"
+"{c099}(Mr.Wright sure knows how to{n}properly announce important news.){p60}{next}"
+"{c099}(Merry Christmas Apollo! I couldn't{n}buy you a new shirt, but I found you{n}a mother instead!){next}"
+"{c099}(Oh, and by the way, this is your{n}sister. Happy?,end quote.){p120}{next}"
+"{c099}(What a stingy old fool.){p120}{next}"
+"{c099}(I'm thinking. Shouldn't be thinking.{n}Should be sleeping.){p60}{next}"
+"{c099}(Still thinking.){p30}{next}"
+"{c099}(Come on, sandman, what are{n}you waiting for?){p30}{next}"
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+char Apollo hide
+"{c099}(Wish everybody would leave{n}me alone...They're always calling{n}on my telephone...){p30}{next}" 
+mus
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+char ??? hide 
+"{s}{sfx/Shock.ogg}{c900}{center}HEEEEEELP!!!!"
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+char Apollo hide
+"{c099}(What the...?){p60}{next}"
+char Phone hide 
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+sfx /bip.wav
+"{c090}beep{p30}{next}"
+char ??? hide
+"{f}Sorry, I was trying to put it on{n}speaker!"
+"My hearing isn't quite what{n}it used to be..."
+"{sfx/Dunnn.ogg}Anyway! You absolutely need{n}to go to the detention center!{sfx/Dunnn.ogg} Now!"
+"Oh, and could you bring Mr.Wright{n}with you, please?"
+char Apollo hide
+"I'm afraid he's not here{n}at the moment."
+"...{sfx/Key.ogg}Wait a minute! Isn't it a bit{n}early for visiting hours?"
+char ??? hide
+"Visiting... towers? Sorry, but I don't{n}have the time for sightseeing."
+char Apollo hide
+"{sfx/Smack.ogg}But it's 4 AM! Listen, can we{n}talk about this later?"
+char ??? hide
+"{sfx/Smack.ogg}Wait, 4 AM already? ...Anyway, you{n}need to come as soon as you can.{n}Thank you!"
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+char Apollo hide
+"{c099}(Thank you for ruining my sleep...){p30}{next}" 
+"{c099}(Well, so much for cheap hotels.){p60}{next}" 
+"{c099}(His voice was kinda familiar...{n}I wonder if we already met?){p60}{next}" 
+script scene3

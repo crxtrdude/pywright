@@ -1,0 +1,113 @@
+#-version-1
+label top
+bg records fade
+
+list scene59talk
+li Erlenmeyer's location
+li Your first trial
+li Your father
+showlist
+menu scene59
+
+label Erlenmeyer's location
+char G.Strings fade e=normal-outofcourt
+"Well, Miss Wits, you would be more{n}likely to know Erlenmeyer's location{n}than I:"
+"after all, you were a witness in the{n}trial, were you not?"
+char Rhea fade e=sad
+"Sadly, though, I have no idea.{n}If I did know, I would've told{n}the police,"
+"but it isn't as if he ever{n}said in court where he would go{n}if he escaped from prison."
+"Really, he didn't really say{n}anything of use."
+"And besides, I've tried to{n}forget that trial as{n}much as possible -"
+"it was far from the happiest{n}time of my life."
+char G.Strings fade e=normal-outofcourt
+"That is true, but I've{n}been wondering."
+char G.Strings e=normal-outofcourt
+"What if he was trying to tell the{n}court something, but no one{n}understood what he was saying?"
+"Erlenmeyer is certainly a{n}fascinating case:"
+"His madness makes him obsess{n}over a few small details and ignore{n}what is readily apparent."
+"Maybe those details are related{n}to his early life, somehow?"
+"Looking at his statements, you{n}can see that he's repeating himself..."
+"Even though whatever he's saying{n}is completely intelligible."
+"If I had to offer my guess,{n}I'd say he knew exactly where{n}he wanted to go if he escaped."
+"And wherever that is, he'll{n}be there not because the police{n}won't be able to find him,"
+"but because in his mind, he{n}couldn't possibly go anywhere else."
+char Apollo hide
+"But we already know he's very good{n}at hiding and keeping himself alive."
+"Don't you think he's probably{n}somewhere out in the countryside{n}by now?"
+char G.Strings e=normal-outofcourt
+"Well, yes, he easily could be.{n}It all depends on how you think{n}his mind works."
+"Does he have the unrelenting{n}strength of the mindless animal..."
+"Or the complex weakness{n}of the human being?"
+"That distinction could place{n}him in very different locations."
+setflag erlenmeyerslocation
+char nothing
+goto top
+
+
+label Your first trial
+char G.Strings fade e=normal-outofcourt
+"Well, I certainly didn't expect{n}that my first trial would happen the{n}way it did."
+"After all, I prepared for it{n}twenty-four hours a day,"
+"reading every detail about{n}the case and talking in{n}front of the mirror."
+"I hate being unprepared for{n}situations like this, because I'm{n}expected to be"
+"highly professional and good{n}at what I do."
+char Rhea fade e=normal
+"I know what you mean. I'm much{n}like that myself."
+char Apollo hide
+"I wish I could be prepared,{n}but it always seems like I get{n}my cases the day"
+"before they go to trial, and I{n}always end up winging it."
+char G.Strings fade e=normal-outofcourt
+"But then, when I walked into{n}the wrong courtroom,{n}I felt a sudden rush."
+char G.Strings e=shocked-outofcourt
+"I wasn't sure what to do in that{n}unexpected situation, so I...{p40}{n}improvised."
+"Once I was in the judge's chair, I{n}wasn't thinking ahead anymore- I{n}was just focused on the case at hand."
+"I might have made some mistakes,{n}but that's all behind me."
+char G.Strings e=normal-outofcourt
+"I have to admit, being a judge{n}is even harder than I thought."
+"There are two or three people{n}shouting nonsense at each other,"
+"and it's up to me to make{n}sure that they're actually making{n}progress on the case."
+"Otherwise, the case degenerates{n}into hurling insults and before you{n}know it the defense and the"
+"prosecution are just arguing over{n}who is a bimbo and who is a foolish{n}fool and nothing gets done."
+char Apollo hide
+"I thought you did pretty well{n}for your first time, actually."
+char G.Strings e=shocked-outofcourt
+"Well, er, thank you...{p25} I think you{n}did well too."
+char Apollo hide
+"{sfx/oops.wav}But that wasn't my first trial..."
+setflag yourfirsttrial
+char nothing
+goto top
+
+label Your father
+char G.Strings fade e=normal-outofcourt
+char Apollo hide
+"I don't suppose that you'll be{n}the one to judge the Chief Justice{n}for what he's done?"
+char G.Strings e=shocked-outofcourt
+"Certainly not. Now that he's been{n}arrested, his investigation has been{n}transferred to the"
+"federal government, a sign{n}that they're looking closely into the{n}matter."
+"I don't think it would slip by{n}if I was the one to rule in his{n}case,"
+"considering the obvious conflict{n}of interest."
+char Apollo hide
+"{sfx/shock.ogg}{s}But that isn't fair at all."
+"Judge Chambers's brother was{n}killed by Erlenmeyer, and he{n}was allowed to judge his case!"
+char G.Strings e=normal-outofcourt
+"You assume that our government{n}is much more altruistic than it{n}actually is."
+"In that case, the government's goal{n}was to ensure that Erlenmeyer{n}received the maximum sentence."
+"The interests of Chambers{n}and the federal government{n}were in complete harmony."
+"Plus, Chambers had sympathy from{n}the public, giving them even more{n}leeway to bend the rules."
+"But here, they would fear that I{n}would tamper with evidence or direct{n}the trial in such a way"
+"that it would get my father{n}out of trouble."
+"Perhaps they're right-"
+"I do really want my father to be{n}found innocent, and I would do{n}anything to make it happen."
+"He's the greatest man who ever{n}lived, and I can't imagine that he{n}would have broken the law."
+char Apollo hide
+"What about the evidence that was{n}presented in the trial? Surely{n}you can't doubt that."
+char G.Strings e=shocked-outofcourt
+"I suppose...{p30} I'm not really sure.{n}I realize that what he did was illegal,{n}but...{p30} I'm sure he did"
+"it for the greater good!"
+"He sacrificed himself for the{n}cause of truth, just like Socrates."
+"It's the only explanation I can{n}come up with. No, it's the only one{n}that makes sense."
+setflag yourfather
+char nothing
+goto top
+

@@ -1,0 +1,174 @@
+###
+This is a simple example of "logic" from the aai games.
+The main function is to draw each logic item, and draw it either as a clickable button,
+or a selected item. When you click a button, it will then redraw the scene, and
+draw it as a selected fg item instead of a button. When two items have been
+selected, a third button will appear asking if the items should be combined.
+
+If the two items are combinable, the logic variables will be modified. The first two
+items will be removed, and a third item added.
+###
+
+
+
+#Macros to work with logic variables
+
+macro resetlogicvars
+set _logic_0 blank        #Reference to first logic item. item "blank" means the end of the list. "skip" means its a hole
+set _logic_0_desc blank
+set _logic_back 0        #Reference to the last logic item, this item should be blank
+endmacro
+
+#Get some item/desc from the list at $1
+macro getlogicitem
+joinvar item _logic_ $1
+joinvar desc _logic_ $1 _desc
+joinvar icon _logic_ $1 _icon
+joinvar x _logic_ $1 _x
+joinvar y _logic_ $1 _y
+endmacro
+
+#Get the item/desc from the end of the list
+macro getlastlogic
+{getlogicitem $_logic_back}
+endmacro
+
+#Find the next "skip" in the list
+macro find_hole
+setvar i 0
+label start$0
+{getlogicitem $i}
+getvar aitem $item
+is $item = skip done$0
+is $item = blank done$0
+addvar i 1
+goto start$0
+label done$0
+endmacro
+
+
+#Add a new logic to the end of the list
+macro addlogic
+setvar push_end 0
+
+#Find a place to put the next logic item
+find_hole
+is $item != blank next$0
+setvar push_end 1
+
+#Set the logic item data
+label next$0
+setvar $item $logic_name
+setvar $desc $logic_description
+
+is push_end = 0 done$0
+addvar _logic_back 1
+getlastlogic
+setvar $item blank
+setvar $desc blank
+label done$0
+endmacro
+
+macro deletelogic
+setvar i -1
+label start$0
+addvar i 1
+{getlogicitem $i}
+getvar aitem $item
+is $item = skip start$0
+is $item = blank done$0
+is $item = $logic_name deleteit$0
+goto start$0
+label deleteit$0
+setvar $item skip
+setvar $desc skip
+label done$0
+endmacro
+
+
+#################################
+Starting actual test code
+#################################
+
+### commented out testing list commands ###
+resetlogicvars
+setvar logic_name test1
+setvar logic_description Something about rocks
+addlogic
+setvar logic_name test2
+setvar logic_description Something about cheese
+addlogic
+setvar logic_name test3
+setvar logic_description Something about roses
+addlogic
+
+"{$_logic_2} == test3{n}{$_logic_3} == blank{n}now delete logic_1"
+setvar logic_name test2
+deletelogic
+"{$_logic_0} {$_logic_1} {$_logic_2} {$_logic_3}"
+setvar logic_name test4
+setvar logic_description something about flowers
+addlogic
+"{$_logic_0} {$_logic_1} {$_logic_2} {$_logic_3}"
+setvar logic_name test5
+setvar logic_description something about rainbows
+addlogic
+"{$_logic_0} {$_logic_1} {$_logic_2} {$_logic_3} {$_logic_4}{n}{$_logic_1_desc}{n}{$_logic_3_desc}"
+###
+
+
+
+##############
+Logic interface commands
+##############
+
+macro eachlogic
+setvar i -1
+label start$0
+addvar i 1
+{getlogicitem $i}
+getvar aitem $item
+is $item = skip start$0
+is $item = blank done$0
+$logic_cmd
+goto start$0
+label done$0
+endmacro
+
+macro goclick
+script intro label=click
+endmacro
+
+macro logicbutton
+getvar ddesc $desc
+gui Button click x=$dx y=$dy $ddesc
+addvar dy 20
+endmacro
+
+macro drawlogic
+setvar dx 0
+setvar dy 0
+setvar logic_cmd logicbutton
+{eachlogic}
+endmacro
+
+###############
+Logic interface test
+###############
+resetlogicvars
+setvar logic_name green_curtains
+setvar logic_description The curtains are green
+addlogic
+setvar logic_name paint_can
+setvar logic_description There was a red paint can by the body
+addlogic
+setvar logic_name likes_green
+setvar logic_description The villain likes green
+addlogic
+
+label draw
+{drawlogic}
+gui Wait
+
+label click
+"clicked {$_selected}"

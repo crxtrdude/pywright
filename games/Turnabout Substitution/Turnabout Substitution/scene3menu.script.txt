@@ -1,0 +1,5 @@
+#-version-1
+bg aj/detentioncenter fade
+char Udgey y=22
+mus 124 - Apollo Justice - Police Cell.ogg
+menu scene3judge

@@ -1,0 +1,74 @@
+macro notguilty
+set _x 0
+pause 20
+obj general/Not x=$_x y=60 z=4 pri=1000 name=____1
+sfx Whaaa.ogg
+pause 50
+addvar _x 95
+obj general/guilty x=$_x y=60 z=4 pri=1000 name=____2
+sfx Whaaa.ogg
+pause 50
+delete name=____1
+delete name=____2
+endmacro
+
+macro guilty_words
+set _x 49
+pause 20
+
+obj general/guilty_g x=$_x y=60 z=4 pri=1000 name=____1
+sfx Whaaa.ogg
+pause 20
+addvar _x 37
+
+obj general/guilty_u x=$_x y=60 z=4 pri=1000 name=____2
+sfx Whaaa.ogg
+pause 20
+addvar _x 31
+
+obj general/guilty_i x=$_x y=60 z=4 pri=1000 name=____3
+sfx Whaaa.ogg
+pause 20
+addvar _x 18
+
+obj general/guilty_l x=$_x y=60 z=4 pri=1000 name=____4
+sfx Whaaa.ogg
+pause 20
+addvar _x 18
+
+obj general/guilty_t x=$_x y=60 z=4 pri=1000 name=____5
+sfx Whaaa.ogg
+pause 20
+addvar _x 22
+
+obj general/guilty_y x=$_x y=60 z=4 pri=1000 name=____6
+sfx Whaaa.ogg
+pause 20
+
+pause 50
+
+pause 50
+delete name=____1
+delete name=____2
+delete name=____3
+delete name=____4
+delete name=____5
+delete name=____6
+endmacro
+
+macro guilty_door
+obj general/guiltydoor name=d1 x=-128 z=4
+obj general/guiltydoor name=d2 x=256 z=4 flipx
+scroll name=d1 x=128 speed=14 nowait
+scroll name=d2 x=-128 speed=14 nowait
+sfx Owned.ogg
+pause 50
+fg black fade z=5
+pause 50
+clear
+endmacro
+
+macro guilty
+{guilty_words}
+{guilty_door}
+endmacro

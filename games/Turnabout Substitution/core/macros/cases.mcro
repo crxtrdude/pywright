@@ -1,0 +1,42 @@
+macro locked_cases
+set _order_cases variable
+set _current_case 0
+set _skipped_one false
+endmacro
+
+macro addcase
+print try to add case $1
+set _casename $1
+joinvar _case_string _case_ $_current_case
+print _case_string = $_case_string
+is _skipped_one = true $0skip
+is _current_case = 0 $0addit
+joinvar _case_path $_last_case_added /scene3txt
+print casepath: $_case_path
+importvars $_case_path
+is beaten = noooo $0addit
+set _skipped_one true
+goto $0skip
+label $0addit
+print adding it $_case_string , $_casename
+set beaten
+set $_case_string $_casename
+set _last_case_added $_casename
+addvar _current_case 1
+label $0skip
+endmacro
+
+macro wincase
+set beaten noooo
+set won noo
+set iwin noooooo
+set scene nooo
+set completed_case NOOOO
+exportvars scene3txt beaten won iwin scene completed_case
+endmacro
+
+macro resetcase
+joinvar _case_path $1 /scene3txt
+set beaten  noooo
+exportvars $_case_path beaten
+endmacro

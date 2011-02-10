@@ -1,0 +1,17 @@
+bg black z=10 stack name=topblack
+bg black y=192 z=10 stack
+
+getvar pic $_selected _bg
+bg $pic stack name=photobg
+
+getvar x $_selected _x
+
+getvar y $_selected _y
+
+getvar mag $_selected _mag
+
+scroll x=$x y=$y name=pic speed=50 name=photobg
+zoom mag=$mag frames=1 name=photobg
+
+delete name=topblack
+"It's a photo of the scene."

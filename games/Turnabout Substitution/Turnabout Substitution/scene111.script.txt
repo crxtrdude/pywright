@@ -1,0 +1,187 @@
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+fg TakeThatAnimApollo
+pause 10 script
+
+mus 142 - Turnabout Substitution - Recollection - Charles Darwin and Music.ogg
+set _music_loop 142 - Turnabout Substitution - Recollection - Charles Darwin and Musicloop.ogg
+emo handsondesk-nobrac name=dc
+defense
+"This psychological profile is{n}the key to understanding{n}Erlenmeyer's insanity..."
+"and with it, the {sfx/Key.ogg}{f}whole case."
+"As the court can read in the{n}psychological profile, when{n}Erlenmeyer was eight years old,"
+"his {f}cat Charles was run over{n}by a black car."
+"When Erlenmeyer witnessed his{n}parents burying Charles,"
+"he believed he{n}was the{sfx/Key.ogg}{f}{c900} killer{c},"
+"even though he had done{n}{f}{s 10 10}{c900}absolutely nothing{c}!"
+pause 60 script
+"Now {f}what if something happened{n}that caused Erlenmeyer to {s 8 8}remember{n}this trauma?"
+"And {sfx/Ding.ogg}{f}what if this something led{n}him to believe he was the{n}Mysterious Bust killer,"
+"{f}{s 8 8}just as he thought he killed{n}Charles?"
+
+emo surprised name=wc
+scrollwitness
+sfx /Key.ogg
+"{f}Wh-{p15}{s 8 8}What do you mean?"
+
+emo thinking-nobrac name=dc
+defense
+"I believe history has {f}{s 10 10}repeated{n}itself!"
+"Erlenmeyer is driving during{n}the night, and gets into an{n}accident..."
+"...{p40}{f}like the one that killed Charles."
+"After that he comes upon Rhea{n}{s 10 10}burying a victim,"
+"{sfx/Shing.ogg}{f}{s 10 10}just as he witnessed{n}his parents bury his cat!"
+"The impression was just too strong{n}for Erlenmeyer."
+"In his mind, {s 10 10}everything was{n}connected, and {sfx/Owned.ogg}{f}he was the{n}one responsible."
+"He lost his {s 10 10}sanity, and was{n}{s 10 10}convinced that he had killed the{n}person being buried!"
+"Normally, Rhea would have {f}killed{n}a witness like that,"
+"just as she did with Judge, but{n}this time something{n}unusual happened..."
+
+sfx /swoop.wav
+"{f}{next}"
+clear
+
+char Erlenmeyer hide
+"I'm {f}sorry.{p30} I {f}knew I shouldn't{n}have killed him. I've been{n}a {f}very bad boy."
+"I {f}promise, I'm telling {f}everything{n}to the police, Mommy!"
+sfx /swoop.wav
+"{f}{next}"
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo handsondesk-nobrac name=dc
+defense
+"Rhea understood what he{n}meant...{p40} {sfx/Key.ogg}{f}Insane minds think{n}alike."
+"She {s 10 10}fed his fantasy, and told{n}him {s 10 10}details of the murder only the{n}killer would know!"
+"Erlenmeyer then turned himself{n}into the police...{p40} and I think we {f}all{n}know the rest."
+pause 60 script
+"And {sfx/Shing.ogg}{f}{s 12 12}that, ladies and gentlemen{n}of the jury, is how{n}{f}Rhea Wits,"
+"the woman you see now,{n}{s 10 10}murdered a dozen people,{n}{s 10 10}tricked Robert Erlenmeyer"
+"into believing he was the{n}Mysterious Bust killer, and{n}then"
+"{s 10 10}killed Judge Chambers to{n}protect her secret!!"
+mus
+"{enormal-nobrac}...{p50} The defense {f}rests its case."
+
+emo normal name=pc
+prosecutor
+"{f}{sfx/Awe.ogg}{delay2}...{p60}{next}"
+
+emo thinking name=jc
+judge
+"{f}{sfx/Awe.ogg}{delay2}...{p60}{next}"
+
+#Insert courtroomoverview here
+
+char Rhea hide name=???
+"{f}{s 10 10}Hee hee...{p30} {f}{s 12 12}Ha ha ha ha!!"
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+set _helper nothing
+startcourt
+
+emo smiling2 name=wc
+witness
+"You're {sfx/Ding.ogg}{f}{s 8 8}resting your case,{n}Apollo?{p20} At that?{p20}{n}{sfx/Smack.ogg}{s 10 10}Aha ha ha!"
+
+emo handsondesk-nobrac name=dc
+scrolldefense
+"Wh-{p20}{s 10 10}What do you mean?"
+
+emo smiling2 name=wc
+witness
+"A {f}fascinating narrative{n}you wove, Apollo!"
+"Sure there are no contradictions,{n}but there are still your {s 10 10}leaps in{n}logic and crazy assertions!"
+"And you can only psychoanalyze{n}to divert us from the truth{n}so much."
+"{f}How much can we truly understand{n}the human mind?"
+"And do you have {s 10 10}reports of this{n}alleged accident Erlenmeyer{n}got into before meeting me?"
+"{sfx/Smack.ogg}{s 10 10}Everything you have is{n}circumstantial!"
+"You still lack the most important{n}part...{p40}{sfx/Key.ogg}{f} decisive evidence."
+
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+emo sweats-nobrac name=dc
+defense
+sfx /Ding.ogg
+"{f}Ah...!"
+
+emo normal name=wc
+witness
+"And you've {f}rested your case,{n}meaning you have shown us{n}{f}everything you have..."
+"but {f}{s 10 10}none of it was decisive!"
+"I'll admit, I may look suspicious...{p30}{n}but you can twist it around onto{n}almost {f}{s 10 10}anyone!"
+"{f}How about Detective Marshall?{p20}{n}{sfx/Ding.ogg}{f}Why did he suddenly come back?{p20}{n}{sfx/Ding.ogg}{f}How did he know so much?"
+"{sfx/Ding.ogg}{f}Where did those {f}drops of{n}whiskey at the crime scene come{n}from?"
+
+emo sheepish-nobrac name=dc
+defense
+"Uh,{p20} he...{p20}{next}"
+
+emo normal name=wc
+witness
+"You're a {sfx/Smack.ogg}{s 10 10}crook, Apollo,{n}you know that?"
+"{s 10 10}Accusing me when you've known{n}from the start that you {s 10 10}don't{n}have decisive evidence!"
+"I'm sure the {f}press is going{n}to love hearing about this..."
+"{f}{c090}"Desperate Defender Accuses{n}Innocent Woman of Serial Killing!"{c}"
+"Even if you're not {s 10 10}disbarred,{n}like your {s 10 10}{f}{c900}rotten mentor{c}, I doubt{n}you'll get many cases for a while."
+
+emo serious name=pc
+scrollprosecutor
+"I wouldn't go so far to say that,{n}little lady..."
+
+emo thinking-nobrac name=dc
+defense
+"{c099}(...{p30}If I {f}do have decisive evidence,{n}I can turn this all around{n}for sure.)"
+"{ehandsondesk}{c099}(But I'd better {s 10 10}figure it out,{n}quickly!)"
+
+timer 5400 outoftime
+show_timer
+list decisiveevidence?
+li Decisive Evidence
+li No Decisive Evidence
+showlist
+scene111
+
+label Decisive Evidence
+script scene112
+
+label No Decisive Evidence
+setflag chosenodecisiveevidence
+script scene112
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

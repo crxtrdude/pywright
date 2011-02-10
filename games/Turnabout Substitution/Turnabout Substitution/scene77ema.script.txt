@@ -1,0 +1,21 @@
+#-version-1
+label top
+mus
+bg policehq fade
+
+flag scene77repeat skipEma
+
+char Apollo hide
+nt
+"{c090}{center}{type}December 28{n}Police Headquarters"
+
+char Ema e=hiya
+char Apollo hide
+"{c099}(Ema's waiting for us, just like{n}she's promised. Maybe we'll start{n}to get to the bottom of"
+"{c099}this mystery...)"
+
+setflag scene77repeat
+script scene77menu
+
+label skipEma
+script scene77menu

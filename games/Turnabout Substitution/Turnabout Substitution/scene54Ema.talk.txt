@@ -1,0 +1,74 @@
+#-version-1
+label top
+bg ts/1stringsoffice
+
+list scene54Ematalk
+li What happened?
+li What now?
+showlist
+menu scene54Ema
+
+label What happened?
+char Ema fade e=normal
+"Well, as soon as it was revealed that{n}Strings was behind the escape, I{n}headed down to the"
+"Supreme Court Building with{n}plenty of men."
+"By the time we got here, though,{n}Paul Strings and Robert Erlenmeyer{n}were both gone."
+"We searched everywhere and{n}couldn't find a trace of Erlenmeyer.{n}So we made ourselves scarce and,"
+"sure enough, Strings returned."
+"The moment he walked in, we had{n}additional forces surround the{n}building, and he was trapped."
+"He didn't suspect a thing, and we{n}were able to apprehend him easily."
+char Rhea fade e=normal
+"Maybe Strings knew this would{n}happen, and intentionally released{n}Erlenmeyer before you arrived."
+char Ema fade e=mu
+"Then why would he return, if he{n}knew he would be arrested?{sfx/sfx general/sfx-stab.wav} Gah!"
+"If we had only got here faster, we{n}could have arrested Erlenmeyer and{n}this whole nightmare would be over."
+char Apollo hide
+"Don't get too upset, Detective Skye.{n}In so little time, Erlenmeyer can't{n}have gotten too far."
+char Ema e=mu
+"No. He may not look it, but{n}Erlenmeyer runs fast."
+"The entire area surrounding this{n}building have been blocked off by the{n}police for a while already,"
+"and he would have been found by{n}now if he was still nearby."
+char Apollo hide
+"How could this possibly{n}have happened? Erlenmeyer didn't{n}just happen to leave-"
+"He must have been{n}warned by someone."
+"Did Fisher betray us? That jerk!{n}{p40}{c099}(Wait, but that means... oh no, it's {sfx/Key.ogg}{f}my{n}fault that a serial killer escaped!)"
+char Rhea fade e=normal
+"It's not all your fault, Apollo. We{n}need to stay calm if we're going to{n}catch this killer, {c900}before he catches us."
+char Apollo hide
+"{c099}(How is saying something like that{n}going to help me stay calm!?)"
+setflag whathappened
+flag whathappened AND whatnow finishema
+char nothing
+goto top
+
+label What now?
+char Ema fade e=normal
+"Well, if you guys discover any{n}information that could lead{n}us to Erlenmeyer,"
+"come straight to{n}me, got it?"
+char Apollo hide
+"Well, sorry, but we really don't{n}have a clue at the moment."
+char Rhea fade e=normal
+"Me either."
+char Apollo hide
+"I guess we can try talking to Justice{n}Strings. After all, he's the most likely{n}to know where Erlenmeyer went."
+"If all else fails, I might be able{n}to use my bracelet to get him to talk."
+char Rhea e=normal
+"I thought you could only{n}use that in court."
+char Apollo hide
+"What? Why would you think{n}something like that?"
+char Rhea e=normal
+"It's just...{p40} never mind. I guess{n}that's a pretty good idea."
+char Apollo hide
+"Anyway, good luck with your{n}investigation, Ema."
+char Ema fade e=hiya
+"There's no such thing as luck,{n}scientifically speaking."
+char Ema e=mu
+"And even if there is, I'll need{n}more than just luck to catch a serial{n}killer on the loose."
+"Make sure you come to me if{n}you find even the slightest clue as to{n}where Erlenmeyer might be hiding."
+setflag whatnow
+flag whathappened AND whatnow finishema
+char nothing
+goto top
+
+label finishema
+script scene54amenu

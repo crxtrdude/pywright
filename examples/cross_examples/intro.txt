@@ -1,0 +1,179 @@
+addev t
+goto blah3
+
+cross blah
+
+statement AAA
+"I didn't kill that man."
+
+statement BBB
+"I don't even own a Remington Rifle".
+
+statement CCC
+"I also have an airtight alibi."
+
+endcross
+
+label panic
+"Oh shoot, I'm not sure how to break him."
+"Just keep on pressing!"
+goto blah
+
+label press AAA
+"But how can you claim that with no evidence?"
+"Just let me continue my testimony and I'll show you the evidence!"
+"Yeah, stop interrupting and let the man tell his story."
+"sheesh, ok"
+goto BBB
+
+label press BBB
+"An easy lie to make."
+"Not really. The only place to buy them would have a record, no?"
+"But..."
+"And I recall there was already an interview with the owner of the store..."
+"And he backed me up."
+"So let me continue please"
+"Ok"
+goto CCC
+
+label press CCC
+"This hasn't been proven."
+"You are correct. Maybe you need to give testimony on this airtight alibi?"
+goto testimony
+
+
+
+
+cross blah4
+
+statement AAA
+set next BBB
+"I didn't kill that man."
+
+statement BBB
+set next CCC
+"I don't even own a Remington Rifle".
+
+statement CCC
+set next panic
+"I also have an airtight alibi."
+
+endcross
+
+label panic
+"Oh shoot, I'm not sure how to break him."
+"Just keep on pressing!"
+goto blah
+
+label press AAA
+"But how can you claim that with no evidence?"
+"Just let me continue my testimony and I'll show you the evidence!"
+"Yeah, stop interrupting and let the man tell his story."
+"sheesh, ok"
+goto $next
+
+label press BBB
+"An easy lie to make."
+"Not really. The only place to buy them would have a record, no?"
+"But..."
+"And I recall there was already an interview with the owner of the store..."
+"And he backed me up."
+"So let me continue please"
+"Ok"
+goto $next
+
+label press CCC
+"This hasn't been proven."
+"You are correct. Maybe you need to give testimony on this airtight alibi?"
+goto testimony
+
+
+
+
+cross blah3
+
+statement AAA
+"I didn't kill that man."
+
+statement BBB
+"I don't even own a Remington Rifle".
+
+statement CCC
+"I also have an airtight alibi."
+
+endcross
+
+"Oh shoot, I'm not sure how to break him."
+"Just keep on pressing!"
+goto blah
+
+label press AAA
+"But how can you claim that with no evidence?"
+"Just let me continue my testimony and I'll show you the evidence!"
+"Yeah, stop interrupting and let the man tell his story."
+"sheesh, ok"
+resume
+
+label press BBB
+"An easy lie to make."
+"Not really. The only place to buy them would have a record, no?"
+"But..."
+"And I recall there was already an interview with the owner of the store..."
+"And he backed me up."
+"So let me continue please"
+"Ok"
+resume
+
+label press CCC
+"This hasn't been proven."
+"You are correct. Maybe you need to give testimony on this airtight alibi?"
+goto testimony
+
+label none
+"that's not valid evidence
+resume
+
+
+cross blah2
+
+statement AAA
+"I didn't kill that man."
+goto BBB
+
+label press AAA
+"But how can you claim that with no evidence?"
+"Just let me continue my testimony and I'll show you the evidence!"
+"Yeah, stop interrupting and let the man tell his story."
+"sheesh, ok"
+
+statement BBB
+"I don't even own a Remington Rifle".
+goto CCC
+
+label press BBB
+"An easy lie to make."
+"Not really. The only place to buy them would have a record, no?"
+"But..."
+"And I recall there was already an interview with the owner of the store..."
+"And he backed me up."
+"So let me continue please"
+"Ok"
+
+statement CCC
+"I also have an airtight alibi."
+goto e
+
+label press CCC
+"This hasn't been proven."
+"You are correct. Maybe you need to give testimony on this airtight alibi?"
+
+label e
+endcross
+
+"Oh shoot, I'm not sure how to break him."
+"Just keep on pressing!"
+goto blah
+
+
+
+

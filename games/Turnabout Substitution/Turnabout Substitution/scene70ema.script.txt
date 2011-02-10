@@ -1,0 +1,12 @@
+bg policehq
+mus
+flag scene70repeat skipEma
+setflag scene70repeat
+nt
+"{c090}{center}{type}December 28{n}Police Headquarters"
+char Ema e=hiya
+"Hey, Apollo. Found anything{n}interesting to show me?"
+script scene70menu
+
+label skipEma
+script scene70menu

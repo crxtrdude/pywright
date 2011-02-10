@@ -1,0 +1,85 @@
+#-version-1
+set _list_back_button false
+set _cr_back_button false
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Meekins
+set _judge G.Strings
+set _helper Rhea
+startcourt
+judge
+present
+
+label none
+set _cr_back_button true
+prosecutor
+"How exactly is he / she{n}supposed to use that{n}to pretend to be Fisher?"
+defense
+emo sweats name=dc
+"Uh... isn't it obvious?"
+scrollprosecutor
+emo sarcastic name=pc
+"The only thing obvious... is that{n}you're {sfx/Slash.ogg}{f}{s 15 15}completely wrong!"
+defense
+"{sfx/oops.wav}{s 5 5}Oops."
+judge
+emo serious name=jc
+"That's more than just{n}an "oops", Mr. Justice!"
+sfx /Bwaaah.ogg
+penalty -25
+is penalty 0 gameover
+"Now, how about another go?"
+helper
+emo aideserious name=hc
+"{sfx/Smack.ogg}{s 10 10}Come on! You can do{n}better than that!"
+set _speaking dc
+"Proving that there were two{n}of someone is pretty difficult!"
+helper
+emo aide name=hc
+"Well, you need to figure out who it{n}was first! There was barely anything{n}available at the crime scene, so you"
+"need to figure out how any of{n}the possible suspects could have{n}disguised himself as Fisher."
+set _speaking dc
+"Okay..."
+helper
+emo aide name=hc
+"And once you know who it was, the{n}evidence proving it should{n}be {sfx/Ding.ogg}{f}obvious!"
+set _speaking dc
+"I suppose so. Alright,{n}let's give it another shot..."
+setflag doubleevidence
+script scene41
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

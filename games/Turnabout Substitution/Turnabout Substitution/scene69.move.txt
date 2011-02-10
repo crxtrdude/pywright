@@ -1,0 +1,12 @@
+#-version-1
+label top
+bg ts/2cemeterycrimescene
+
+list scene69
+li Forest Bones Cemetery Entrance
+showlist
+menu scene69
+
+label Forest Bones Cemetery Entrance
+bg ts/2cemetery fade
+menu scene68

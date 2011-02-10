@@ -1,0 +1,34 @@
+clear
+
+label court
+clearcourt
+set _defense Apollo
+set _witness Rhea
+set _judge G.Strings
+set _prosecutor Poole
+startcourt
+
+mus
+fg TakeThatAnimApollo
+pause 5 script
+judge
+emo serious name=jc
+"...{p30}I'm sorry, but I still see no{n}connection between the case, what{n}Ms. Wits just said..."
+"...and {f}{s 5 5}that evidence."
+witness
+"Oh well.{p20} {sfx/Ding.ogg}{f}Better luck next time, eh?"
+judge
+"...{p20}None of the jurors have been{n}convinced, either.{p20} Their vote stands."
+defense
+set _speaking dc
+"{eohshit-nobrac}{c099}(No...{p30} {f}{s 15 15}{sfx/Dunnn.ogg}Nooooooooooo!!)"
+judge
+"Now then, I will render the verdict."
+"This court finds the defendant,{n}Robert Erlenmeyer...{p20}{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

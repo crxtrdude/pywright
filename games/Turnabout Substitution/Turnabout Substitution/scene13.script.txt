@@ -1,0 +1,40 @@
+#-version-1
+mus
+noflag firststringsoffice introductionscene13
+flag firststringsoffice scene13
+label introductionscene13
+bg nothing
+nt
+"{c090}{center}{type}December 26{n}Supreme Court Building{n}Chief Justice Strings's Office"
+bg ts/1stringsoffice fade
+pause 60
+char Apollo hide
+"Wow. I can't believe I'm actually{n}in the office of the Chief Justice."
+char rhea e=smiling2
+"Who knows? Maybe one day{n}it'll be your office."
+char Apollo hide
+"...Nah. No chance.{n}{c099}(Honestly, I don't have the time to{n}think about my career right now.)"
+"Anyway, he's obviously{n}not here, so{p10}{next}" 
+char Rhea
+"{sfx/Ding.ogg}Sounds like a perfect time{n}to take a look around!"
+char Apollo hide
+"{sfx/oops.wav}Yeah, of course no one's going to{n}blame us for searching the office of{n}the highest-ranking judge in the"
+"country without any kind{n}of warrant. It's not like{n}it's illegal or anything."
+"...And don't you dare give me{n}those eyes. There's {sfx/Smack.ogg}no way I'm{n}defending you if you get arrested!"
+char Rhea e=smiling2
+"Hey, you're kinda cute{n}when you're mad... {sfx/Key.ogg}Apollo."
+"Come on, just looking won't hurt.{n}And there's no way you're{n}NOT defending me."
+char Apollo hide
+"...Yeah, you're right."
+char Rhea e=smiling1
+"Meaning we can investigate?{n}I {sfx/Ding.ogg}knew you wouldn't{n}say no to me, Apollo!"
+char Apollo hide
+"I meant about the defense thing."
+char Rhea e=smiling1
+"{sfx/Smack.ogg}Too late, mate!"
+char Apollo hide
+"{c099}(Please grow up, Rhea.)"
+"{c099}(...Well, I guess there's no{n}harm in looking around a bit...)
+setflag firststringsoffice
+label scene13
+script scene13menu

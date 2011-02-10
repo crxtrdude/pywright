@@ -1,0 +1,5 @@
+version 2
+version_notes shrunk blink animations, fixed some animations that shouldn't loop, added some alternative blink animations
+version_date 3/18/2010
+author saluk, court-records.net
+website court-records.net

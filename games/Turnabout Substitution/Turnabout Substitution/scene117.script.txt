@@ -1,0 +1,237 @@
+mus
+bg aj/courtlobby fade
+nt
+"{c090}{center}{type}December 29, 5:43 PM{n}District Court{n}Defendant Lobby No. 4"
+mus 109 - Apollo Justice - Victory.ogg
+set _music_loop 109 - Apollo Justice - Victoryloop.ogg
+char Apollo hide
+"{c099}(This whole case is over for good!{p20}{n}This feels so great!)"
+char Erlenmeyer fade e=squinting
+"Mr. Justice, {sfx/Ding.ogg}{f}{s 5 5}thank you...{p40}{n}for everything."
+char Erlenmeyer e=normal
+"For my acquittal and...{p30} Hearing your{n}arguments of what really happened,{p15}{n}and why I'm not the killer..."
+"I feel like I'm starting{n}to {sfx/Key.ogg}{f}{c900}get better{c}."
+char Apollo hide
+"R-{p20}{sfx/Ding.ogg}{f}Really?{p20} That's great news!"
+char Erlenmeyer
+"And it's all thanks to you.{n}So,{p10} uh...{p30} {sfx/Key.ogg}{f}how is my brother?"
+char Apollo hide
+"Um...{p30} He's currently in detention{n}for bailing you out of prison."
+char Erlenmeyer e=sad
+"I see...{p15}"
+"We may not have been the{n}best of brothers,{p15} but there's no way"
+"I'm turning my back on him now,{p15}{n}like I did when I was younger."
+char ??? hide
+"{sfx/Shock.ogg}{s 15 15}LADY.{p30} {sfx/Shock.ogg}{s 15 15}JUSTICE."
+char Apollo hide
+"{c099}({s 5 5}Uh oh,{p10} that doesn't sound good.)"
+char Poole fade e=serious-outofcourt
+"I {sfx/Smack.ogg}{s 10 10}won't forgive you for this!"
+char Apollo hide
+"F-{p20}{sfx/Ding.ogg}{f}For what? {c099}(I thought she{n}didn't hate my anymore...{p30}{n}...{p20}In private, at least.)"
+char Poole e=serious-outofcourt
+"The entire reason I've been{n}prosecuting was to{n}{sfx/Smack.ogg}{s 10 10}catch the Mysterious Bust killer!"
+"Now you went and caught her{n}{f}all by yourself, while {f}I{n}had nothing to do with it!"
+char Apollo hide
+"...{p30}{sfx/Key.ogg}{f}What are you talking about?"
+char Poole e=serious-outofcourt
+"{sfx/Bwaaah.ogg}{f}{s 10 10}Don't play dumb with me!"
+char Apollo hide
+"{f}No, I'm serious!{n}Mrs. Poole...{p30}{n}I {sfx/Key.ogg}{f}couldn't have done it without you!"
+char Poole e=serious-outofcourt
+"Empty words.{p20}{n}I want {s 8 8}proof, Antennas!"
+char Apollo hide
+"Evidence?{p15} Sure.{n}{c099}(The evidence that Poole{n}helped us is...{p20})"
+present
+
+label postit
+char Poole e=normal-outofcourt
+"{sfx/Ding.ogg}{f}Judge's note?"
+char Apollo hide
+"And his drugs.{p30} These are what let me{n}find out why Judge was actually killed,{p20}{n}and let me {f}figure everything out!"
+"And I wouldn't have ever found{n}them if you never told me{n}where Judge's house was."
+char Poole e=normal-outofcourt
+"Hm...{p30} I suppose...{p20}"
+char Apollo hide
+"Also, if you hadn't pointed out{n}the holes in my theories..."
+"...I wouldn't have been able to fill{n}them in and {f}convince the jurors!"
+char Poole e=normal-outofcourt
+"...I suppose I can't have{n}expected to do much,"
+"since I was the prosecutor and the{n}real criminal was not the defendant."
+"What I did was probably the{n}most I could have done,{p15}{n}considering my position..."
+"I'm glad this is finally all{n}over...{p30} that I can finally {sfx/Key.ogg}{f}{s 8 8}retire."
+char Apollo hide
+"I wasn't nearly as tied up in{n}this as you,{p15} but I'm {f}glad, too."
+char Poole e=serious-outofcourt
+"I was wrong to let my personal{n}feelings interfere with justice..."
+"I've decided to {sfx/Dunnn.ogg}{f}turn myself in for{n}submitting that forged psychological{n}profile in Erlenmeyer's first trial."
+char Apollo hide
+"Wh-{p20}{sfx/Shock.ogg}{f}{s 10 10}What?!"
+char Poole e=sarcastic-outofcourt
+"And even though I'm admitting I'm{n}guilty...{p40} I'd still like you to{n}be my {sfx/Key.ogg}{f}attorney."
+char Apollo hide
+"{sfx/Shock.ogg}{f}{s 10 10}Double what?!"
+char Poole e=sarcastic-outofcourt
+"I think you heard me clearly."
+char Apollo hide
+"I...{p40} I need to {s 5 5}think about it."
+char Poole e=sarcastic-outofcourt
+"I eagerly await your decision."
+"{enormal-outofcourt}...{p30}I'm glad I met you.{p30}{n}And I'm glad you were the{n}attorney for this case...{p40} {sfx/Key.ogg}{f}Apollo."
+char nothing fade
+char Apollo hide
+"That was...{p30} {s 5 5}weird."
+goto stringsresignation
+
+
+label tranquilizer
+char Poole e=normal-outofcourt
+"{sfx/Ding.ogg}{f}Judge's drugs?"
+char Apollo hide
+"And his note.{p30} These are what let me{n}find out why Judge was actually killed,{p20}{n}and let me {f}figure everything out!"
+"And I wouldn't have ever found{n}them if you never told me{n}where Judge's house was."
+char Poole e=normal-outofcourt
+"Hm...{p30} I suppose...{p20}"
+char Apollo hide
+"Also, if you hadn't pointed out{n}the holes in my theories..."
+"...I wouldn't have been able to fill{n}them in and {f}convince the jurors!"
+char Poole e=normal-outofcourt
+"...I suppose I can't have{n}expected to do much,"
+"since I was the prosecutor and the{n}real criminal was not the defendant."
+"What I did was probably the{n}most I could have done,{p15}{n}considering my position..."
+"I'm glad this is finally all{n}over...{p30} that I can finally {sfx/Key.ogg}{f}{s 8 8}retire."
+char Apollo hide
+"I wasn't nearly as tied up in{n}this as you,{p15} but I'm {f}glad, too."
+char Poole e=serious-outofcourt
+"I was wrong to let my personal{n}feelings interfere with justice..."
+"I've decided to {sfx/Dunnn.ogg}{f}turn myself in for{n}submitting that forged psychological{n}profile in Erlenmeyer's first trial."
+char Apollo hide
+"Wh-{p20}{sfx/Shock.ogg}{f}{s 10 10}What?!"
+char Poole e=sarcastic-outofcourt
+"And even though I'm admitting I'm{n}guilty...{p40} I'd still like you to{n}be my {sfx/Key.ogg}{f}attorney."
+char Apollo hide
+"{sfx/Shock.ogg}{f}{s 10 10}Double what?!"
+char Poole e=sarcastic-outofcourt
+"I think you heard me clearly."
+char Apollo hide
+"I...{p40} I need to {s 5 5}think about it."
+char Poole e=sarcastic-outofcourt
+"I eagerly await your decision."
+"{enormal-outofcourt}...{p30}I'm glad I met you.{p30}{n}And I'm glad you were the{n}attorney for this case...{p40} {sfx/Key.ogg}{f}Apollo."
+char nothing fade
+char Apollo hide
+"That was...{p30} {s 5 5}weird."
+goto stringsresignation
+
+label soporific
+char Poole e=normal-outofcourt
+"{sfx/Ding.ogg}{f}Judge's drugs?"
+"And his note.{p30} These are what let me{n}find out why Judge was actually killed,{p20}{n}and let me {f}figure everything out!"
+"And I wouldn't have ever found{n}them if you never told me{n}where Judge's house was."
+char Poole e=normal-outofcourt
+"Hm...{p30} I suppose...{p20}"
+char Apollo hide
+"Also, if you hadn't pointed out{n}the holes in my theories..."
+"...I wouldn't have been able to fill{n}them in and {f}convince the jurors!"
+char Poole e=normal-outofcourt
+"...I suppose I can't have{n}expected to do much,"
+"since I was the prosecutor and the{n}real criminal was not the defendant."
+"What I did was probably the{n}most I could have done,{p15}{n}considering my position..."
+"I'm glad this is finally all{n}over...{p30} that I can finally {sfx/Key.ogg}{f}{s 8 8}retire."
+char Apollo hide
+"I wasn't nearly as tied up in{n}this as you,{p15} but I'm {f}glad, too."
+char Poole e=serious-outofcourt
+"I was wrong to let my personal{n}feelings interfere with justice..."
+"I've decided to {sfx/Dunnn.ogg}{f}turn myself in for{n}submitting that forged psychological{n}profile in Erlenmeyer's first trial."
+char Apollo hide
+"Wh-{p20}{sfx/Shock.ogg}{f}{s 10 10}What?!"
+char Poole e=sarcastic-outofcourt
+"And even though I'm admitting I'm{n}guilty...{p40} I'd still like you to{n}be my {sfx/Key.ogg}{f}attorney."
+char Apollo hide
+"{sfx/Shock.ogg}{f}{s 10 10}Double what?!"
+char Poole e=sarcastic-outofcourt
+"I think you heard me clearly."
+char Apollo hide
+"I...{p40} I need to {s 5 5}think about it."
+char Poole e=sarcastic-outofcourt
+"I eagerly await your decision."
+"{enormal-outofcourt}...{p30}I'm glad I met you.{p30}{n}And I'm glad you were the{n}attorney for this case...{p40} {sfx/Key.ogg}{f}Apollo."
+char nothing fade
+char Apollo hide
+"That was...{p30} {s 5 5}weird."
+goto stringsresignation
+
+label none
+char Poole e=serious-outofcourt
+"...{p30}Don't {sfx/Smack.ogg}{s 8 8}humor me,{n}Mr. Justice!"
+char Apollo hide
+"W-{p20}{sfx/Ding.ogg}{f}{s 5 5}What?{n}I was being serious!"
+char Poole e=sarcastic-outofcourt
+"My only regret is already turning in{n}my {sfx/Key.ogg}{f}{s 8 8}letter of resignation!{p30} Otherwise I{n}would stay to {f}mop the floor with you."
+char Erlenmeyer e=normal
+"...{p30}That could have gone better."
+char Apollo hide
+"Maybe...{p30} But I'm sure she's happy{n}on the inside that the Mysterious{n}Bust killer was caught,{p15} period."
+goto stringsresignation
+
+label stringsresignation
+char G.Strings fade e=normal-outofcourt
+"{sfx/Ding.ogg}{f}{s 5 5}Salutations, Mr. Justice!"
+char Apollo hide
+"{sfx/Ding.ogg}{f}{s 10 10}Ah!{p15} Hi, Your Honor!"
+char G.Strings e=normal-outofcourt
+"Court isn't in session{n}anymore, Mr. Justice."
+char Apollo hide
+"O-{p15}{sfx/oops.wav}{f}{s 5 5}Oh...{p20} sorry."
+char G.Strings e=normal-outofcourt
+"No need to apologize.{p15}{n}{s 5 5}{f}Congratulations, Mr. Erlenmeyer!"
+char Erlenmeyer fade
+"...{p20} Thank you."
+char G.Strings e=normal-outofcourt
+"Besides...{p20} I won't be called{n}{sfx/Key.ogg}{f}"Your Honor" at all from now on."
+char Apollo hide
+"{sfx/Shock.ogg}{s 8 8}What?"
+char G.Strings e=shocked-outofcourt
+"I...{p30} I was a horrible{n}judge,{p10} I've realized."
+"I changed the rules for you in the{n}middle of the trial,{p10} and was completely{n}biased...{p20} for the {sfx/Smack.ogg}{s 10 10}real killer, no less!"
+"And this was only my {s 5 5}second trial!{n}I cannot remain a judge...{p20}{n}I must resign."
+char Apollo hide
+"N-{p10}{sfx/Ding.ogg}{f}{s 5 5}No!{p15} You may have gotten{n}a little...{p20} weird, but you{n}were {s 5 5}fine in the end!"
+char G.Strings e=normal-outofcourt
+"I appreciate it, but don't try to{n}console me, Mr. Justice.{p20}{n}I've been indecisive all my life."
+"The sole reason I became a judge{n}was because of my {f}{s 5 5}father...{p20}{n}I never actually wanted it."
+"This is the first decision I've made{n}for myself,{p15}and I'm sticking to it."
+char Apollo hide
+"...{p20}A-{p10}{s 5 5}All right.{p10}{n}Good luck in...{p20} well, {s 5 5}whatever{n}you do from now on!"
+char G.Strings e=normal-outofcourt
+"Thank you.{p20} I truly hope{n}we will meet again...{p20}"
+char nothing fade
+pause 60 script
+char Erlenmeyer fade
+"...{p20}It doesn't seem like{n}anyone else is coming."
+char Apollo hide
+"Nope."
+char Erlenmeyer
+"Once again, thank you{n}for everything..."
+"I suppose I need to go back to my{n}{f}cell in Clooney Prison's Asylum now."
+char Apollo hide
+"Wh-{p20}{sfx/Bwaaah.ogg}{f}{s 10 10}What?{p10} {sfx/Ding.ogg}{f}Why?"
+char Erlenmeyer
+"Even if you proved Rhea was the{n}serial killer, I was only technically{n}acquitted for the murder of {sfx/Key.ogg}{f}Judge."
+"...{p20}But I'm sure I will{n}have a {f}re-trial soon."
+char Apollo hide
+"...{p10}Yeah, I'm sure you will."
+char Erlenmeyer
+"And then I can find the meaning{n}in my life again..{p20}."
+"From Shawn,{p10} from the{n}kids I'll teach...{p20}{n}and from {f}you."
+"Good-bye, Mr. Justice...{p30}{n}I look forward to our next meeting."
+char Apollo hide
+"Good-bye...{p40} Robert."
+char nothing fade
+char Apollo hide
+"{c099}(It's all over now. Rhea has been{n}exposed for the psychopath she is,)"
+"{c099}(and all the lives she's dragged down{n}with her can finally continue{n}from where they left off.)"
+"{c099}(She had no meaning in her life,{p15}{n}and drained the meaning of others'...)"
+"{c099}(But that's all over now.{p20} And{n}speaking of the meaning of my life,{p15}{n}I have a plane to Borginia to catch...)"
+pause 120 script
+script scene118

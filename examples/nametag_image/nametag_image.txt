@@ -1,0 +1,40 @@
+set _debug true
+bg black
+
+textblock 0 0 100 100 name=x standard, oldstyle
+char blue_badger hide
+"Hello, my name is the blue badger{n}blah{n}blah"
+delete name=x
+
+textblock 0 0 100 100 name=x blank standard
+nt
+"no nametag!"
+delete name=x
+
+
+textblock 0 0 100 100 name=x talkchoice nametag
+set _nt_image general/talkchoice
+set _nt_text_color 000
+set _nt_text_x 20
+char blue_badger hide
+"next box"
+delete name=x
+
+
+textblock 0 0 100 100 name=x talkchoice nametag
+set _nt_image general/talkchoice
+set _nt_text_color 000
+set _nt_text_x 20
+nt
+"no nametag! (but still image cause we said so)"
+delete name=x
+
+
+textblock 0 150 100 10 name=x textbox on top
+set _nt_image 
+set _nt_text_color 
+set _nt_text_x 
+set _textbox_y 0
+set _nt_y 60
+char ??? hide
+"Wow, we are on top!"

@@ -1,0 +1,45 @@
+label question1
+timer 7200 outoftime
+show_timer
+"is timer moving?"
+addev item
+present
+label item
+"timer hello"
+bg courtroomfull
+examine
+#I tried putting it after the bg as well
+set _double_screen_examine_fade false
+set _examine_showbars false
+bg timeline
+examine
+#hide
+region 176 114 51 53 wrightanything
+region 119 9 51 53 rheasoffice
+region 61 61 51 53 cemetery
+region 117 62 51 53 cemetery2
+region 177 9 51 53 larrybschool
+region 62 116 51 53 bcroom
+nameofthescript
+
+#Labels here
+label wrightanything
+"is timer moving now?"
+
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro
