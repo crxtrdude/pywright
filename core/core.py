@@ -1352,7 +1352,7 @@ class fadesprite(sprite):
             return
         if self.fade == 255 and not self.invert and not self.tint and not self.greyscale:
             return sprite.draw(self, dest)
-        if android is None:
+        if android:
             return sprite.draw(self, dest)
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
@@ -1429,6 +1429,19 @@ class fadesprite(sprite):
         self.img = self.mockimg_base[self.x]
         if self.greyscale:
             self.img = self.gsimg_base[self.x]
+        if 0:#self.greyscale:
+            self.img = self.img.convert(8)
+            pal = self.img.get_palette()
+            gpal = []
+            for col in pal[1:]:
+                avg = (col[0]+col[1]+col[2])//3
+                gpal.append([avg,avg,avg])
+            gpal = [[255,0,255]]+gpal
+            self.img.set_palette(gpal)
+            self.img.set_colorkey(gpal[0])
+            self.img = self.img.convert()
+            pygame.image.save(self.img,"test.png")
+            print "do greyscale"
         sprite.draw(self,dest)
         self.img = img
     def mockdraw(self, dest):
@@ -1579,12 +1592,14 @@ class portrait(object):
             raise art_error("Character folder %s not found"%charname)
         
         if hasattr(self.talk_sprite,"img") and not hasattr(self.blink_sprite,"img"):
-            self.blink_sprite.img = self.talk_sprite.img
+            self.blink_sprite.img = i = self.talk_sprite.img
+            self.blink_sprite.base = [i]
             self.blink_sprite.blinkmode = "stop"
             #self.blink_sprite.load(self.talk_sprite.base[:])
             #self.blink_sprite.base = [self.blink_sprite.base[0]]
         if hasattr(self.blink_sprite,"img") and not hasattr(self.talk_sprite,"img"):
-            self.talk_sprite.img = self.blink_sprite.img
+            self.talk_sprite.img = i = self.blink_sprite.img
+            self.talk_sprite.base = [i]
             #self.talk_sprite.load(self.blink_sprite.base[:])
             #self.talk_sprite.base = [self.talk_sprite.base[0]]
         self.blink_sprite.loopmode = self.blink_sprite.blinkmode
