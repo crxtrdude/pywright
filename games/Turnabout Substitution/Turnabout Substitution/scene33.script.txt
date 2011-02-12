@@ -1,0 +1,30 @@
+#-version-1
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Fisher
+set _judge G.Strings
+set _helper Rhea
+startcourt
+witness
+pause 60 script
+scrollprosecutor
+"Name and occupation."
+scrollwitness
+"Shawn O.Fisher. I'm a guard at{n}Clooney Prison's Asylum."
+judge
+"I understand that you{n}witnessed the murder...?"
+witness
+emo boastful name=wc
+"I sure did."
+judge
+"Then if you would please{n}testify about that..."
+mus
+witness
+fg TestimonyAnim fade name=thatstupidanim
+delete name=thatstupidanim
+nt
+"{n}{c900}{center}-- What I Saw --"
+script scene34fishertestimony1

@@ -1,0 +1,5 @@
+horizontal 2
+vertical 4
+length 8
+loops 1
+blinkspeed 1 10

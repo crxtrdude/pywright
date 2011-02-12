@@ -1,0 +1,154 @@
+#Copy this file into your game directory and edit the values from there
+#It's a bit safer and clearer than changing these values in the middle of the case
+
+#Below variables control various things about how things look
+#This is automatically called at the very beginning before the game loads
+
+macro init_defaults
+print customizing defaults
+
+#When on, players can fastforward through all text, and more errors are produced
+set _debug off
+
+#When on, players can fastforward through all text
+set _textbox_allow_skip false
+
+#The punctuation characters in texts that should not be lip synced
+set _punctuation .。?!,;、
+
+#Not currently used, preload used characters at the beginning of the game so they pop in faster
+set _preload off
+
+#Sets global animation speed when it is not controlled via art text files or in-game
+set _default_port_frame_delay 6
+set _default_fg_frame_delay 6
+
+#Images to use for interface items
+set _list_checked_img general/checkmark
+set _list_bg_image general/black
+set _list_checked_x -10
+set _list_checked_y -10
+set _bigbutton_img general/buttonpress
+#Change to bg/main2 for horizontal bars
+set _bigbutton_bg bg/main
+
+#How many lines to fit text into, can be 2, 3, or auto
+set _textbox_lines auto
+
+#Whether text is automatically wrapped
+set _textbox_wrap true
+#Whether text containing {n} follows the above wrap rules
+set _textbox_wrap_avoid_controlled true
+
+#Change the examine cursor color
+set _examine_cursor_col FFFFFF
+
+#How much investigation menus fade the screen
+set _menu_fade_level 50
+
+#Whether lists fade the screen in double screen mode
+set _double_screen_list_fade false
+
+#Autoplay sounds for shakes and flashes
+set _flash_sound false
+set _shake_sound false
+
+#Changes min and max frames to wait between character blinks
+#Example: set _blinkspeed_global 1 10
+#           waits between 1 and 10 frames between blinks (very blinky)
+set _blinkspeed_global default
+#Same but only affects next added character
+set _blinkspeed_next 
+
+#Whether or not to sort objects
+#set to "stack" to leave objects in the order they were added
+set _layering_method zorder
+
+#Automatically jump to a specific script if penalty bar goes to zero
+set _penalty_script  
+
+#Position/properties of textbox and nametag
+set _textbox_x  
+set _textbox_y  
+set _nt_x  
+set _nt_y  
+set _nt_text_x 0
+set _nt_text_y 0
+set _nt_text_color  
+
+set _cr_button_loadsave on
+
+{defaults}
+endmacro
+
+
+
+
+#These properties change features of specific things, usually
+#for a specialized situation
+#This macro is automatically called every time a new script is run, to prevent
+#you from forgetting to change a value back
+
+macro defaults
+print resetting defaults
+#Used for macros inside a textbox to output something into the textbox
+set _return  
+
+#Whether the continue button is shown. If false, make sure text can be continued without the button
+set _textbox_show_button true
+
+#Whether court record is accessible
+set _cr_button true
+
+#When on, the script will continue to execute while text is printed
+set _textbox_skipupdate off
+
+#Sets a unique image to be used as the nametag, disables automatic character name printing
+set _nt_image  
+
+#Lets the script continue while an examine menu is being shown
+set _examine_skipupdate off
+
+#Shows horizontal bars on examine screen
+set _examine_showbars true
+
+#Show the cursor on examine screen
+set _examine_showcursor true
+
+#When using "examine", scroll existing name=this object instead of copying background
+set _examine_use  
+
+#Show this cursor image instead of the cross hairs
+set _examine_cursor_img  
+
+#Run this macro when clicking the mouse during examine
+set _examine_mousedown false
+
+#Allow or disallow the blinking testimony object during cross examinations
+set _testimony_blinker true
+
+#Whether user can click the save/load buttons
+set _allow_click_save true
+set _allow_click_load true
+
+#Whether user can save/load at all - hotkey or buttons
+set _allow_saveload true
+
+#Whether user can see these pages, and whether they can present from them
+#If you rename existing pages, or add new pages, you will need similar variables for each page
+set _profiles_enable true
+set _profiles_present true
+set _evidence_enable true
+set _evidence_present true
+
+#Whether the user can back out of some interface
+set _cr_back_button true
+set _list_back_button true
+
+{load_defaults}
+endmacro
+
+
+#These values are set when a saved game is loaded, use these to force certain settings at all times
+macro load_defaults
+endmacro

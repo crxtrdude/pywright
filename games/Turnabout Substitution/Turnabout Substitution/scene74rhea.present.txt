@@ -1,0 +1,95 @@
+#-version-1
+present
+label top
+bg ts/1deekayandcooffice
+menu scene74rhea
+
+label rhea$
+char Rhea e=sad
+"...I can't believe all this time{n}I might have been angry at the{n}wrong person."
+"Nathan would be furious at me{n}if I was..."
+char Apollo hide
+"No, that's not true!"
+"I hate to admit it, but the{n}case against Erlenmeyer{n}was pretty compelling..."
+"And you had just lost your{n}brother. It was natural to{n}want to blame someone."
+char Rhea e=sad
+"R-Really?{n}{enormal}Thanks..."
+goto top
+
+label erlenmeyerupdated$
+char Rhea
+"I always thought he was the only{n}one who could have done it.{n}He confessed, and knew about"
+"Nathan's tattoo..."
+char Apollo hide
+"Well, those photographs of him{n}pretty much confirm he's innocent."
+"He just had to have found out{n}that stuff some other way..."
+goto top
+
+label ht5files2
+char Rhea
+nt
+char Apollo hide
+"Rhea, was the fact that all of{n}the victims were unmarried{n}brought up in the trial?"
+char Rhea
+"Yeah, but the police couldn't{n}figure out what it meant."
+"Erlenmeyer wasn't married, but{n}that's all they could come up{n}with..."
+"But considering how many victims{n}he had, it's definitely{n}not a coincidence."
+char Apollo hide
+"Of course, Judge was married.{n}Well, he was a widower,{n}but still..."
+char Rhea
+"Then there has to be some{n}{sfx/Key.ogg}{c900}other reason{c} the real serial{n}killer murdered him."
+"Especially if it was Erlenmeyer{n}in those photos."
+goto top
+
+label Strange Defense Request
+goto DidntSahwit
+
+label Car Alarm
+goto DidntSahwit
+
+label Chambers' Autopsy Report
+goto DidntSahwit
+
+label Chambers' Car
+goto DidntSahwit
+
+label Pieces of Gum
+goto DidntSahwit
+
+label Weather Report
+goto DidntSahwit
+
+label Car Interior Photo
+goto DidntSahwit
+
+label sheetmusic
+goto DidntSahwit
+
+label erlenmeyerphotos
+goto DidntSahwit
+
+label mice
+goto DidntSahwit
+
+label DidntSahwit
+char Rhea e=sad
+"...Sorry, I wasn't there when you{n}found this.{enormal}It's my first time{n}seeing this piece of evidence, so"
+"I'm sure you know a lot more{n}about it than I do!"
+goto top
+
+label none
+char rhea
+char Apollo hide
+"Rhea... What do you think{n}of this evidence?"
+char Rhea e=smiling2
+"If you want some juicy details{n}about my personal life,{n}ask for it plainly."
+pause 30 script
+"{enormal}...Just in case you were wondering,{n}I hate Canadian accents,"
+"and my chewing habits{n}are downright fascinating."
+char Apollo hide
+"{c099}(Somebody please stop her.)"
+char Rhea e=normal
+"I'm also really into astrology.{n}{esmiling1}So, are you a Leo, Polly?{n}Or maybe... a Virgo?"
+char Apollo hide
+"Shhh!{n}...Just let them keep guessing."
+goto top

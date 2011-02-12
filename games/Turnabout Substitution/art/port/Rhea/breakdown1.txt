@@ -1,0 +1,15 @@
+horizontal 4
+vertical 2
+length 6
+loops 1
+framedelay 1 11
+framedelay 2 11
+framedelay 3 11
+framedelay 4 11
+framedelay 5 11
+sfx 1 Roar.wav
+sfx 2 Roar.wav
+sfx 3 Roar.wav
+sfx 4 Roar.wav
+sfx 5 Roar.wav
+sfx 6 Roar.wav

@@ -1,0 +1,27 @@
+#-version-1
+label top
+bg aj/detentioncenter
+
+examine
+region 30 40 20 20 securitycamera
+region 200 80 25 70 guard
+menu scene56Strings
+
+label securitycamera 
+char Apollo hide
+"Smile! Big Brother is watching you!"
+"Does anyone ever look at{n}the data anyway?"
+"Still, it's kind of scary."
+"This always makes me wonder...{n}What if my life's some sort of{n}drama, like a television program?"
+"...Though a comic strip might{n}suit me better."
+goto top
+
+label guard
+char Apollo hide
+"This guard doesn't look too{n}motivated... I personally wouldn't{n}let him guard my precious hair gel."
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+goto top

@@ -1,0 +1,48 @@
+addev bus
+mus pa1_s1/02 - Courtroom Lounge  - Beginning Prelude.ogg
+
+list save_menu
+li set1
+li set2
+showlist
+
+list set1
+li graphics
+li scrolling
+li zoom
+li penalty
+li investigate
+showlist
+
+list set2
+li delays
+li guis
+showlist
+
+label delays
+script delays
+goto save_menu
+
+label guis
+script guis
+goto save_menu
+
+label graphics
+script scene1
+goto save_menu
+
+label scrolling
+script scene2
+goto save_menu
+
+label penalty
+script scene3
+goto save_menu
+
+label zoom
+script scene4
+goto save_menu
+
+label investigate
+script scene5
+goto save_menu

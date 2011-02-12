@@ -1,0 +1,25 @@
+set _bigbutton_bg bg/main2
+addev camera
+addev card
+addev shadow
+addev maya$
+addev lana profiles
+addev bellboy profilees
+
+set ev_z_text_col 111
+
+set _ev_pages evidence
+"There is only an evidence screen now!"
+set _ev_pages profiles
+"The first screen is profiles now!"
+set _ev_pages profiles evidence
+"Wow, item types are backwards."
+set _ev_pages evidence profiles
+"Ok, item types are normal"
+set _ev_pages evidence profilees
+"Ah, misnamed profilees screen has the bellboy"
+set _ev_pages evidence profiles profilees
+"Wow, 3 screens!"
+delev bellboy
+addev bellboy profiles
+"Bellboy added to correct profile screen"

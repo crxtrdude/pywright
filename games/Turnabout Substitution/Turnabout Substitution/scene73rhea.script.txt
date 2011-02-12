@@ -1,0 +1,82 @@
+#-version-1
+label top
+mus
+bg ts/larrybutzhighschool
+
+flag scene73repeat skipintro
+setflag scene73repeat
+
+nt
+"{c090}{center}{type}December 28{n}Larry Butz High School"
+
+char ??? hide
+"{sfx/Ding.ogg}{f}Polly!!"
+
+char Apollo hide
+"?"
+
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Rhea fade
+"Polly, I finally found you!"
+
+char Apollo hide
+"Rhea! What are you doing here?"
+
+char Rhea e=sad
+"I... want to apologize for how{n}I acted at the detention center.{n}{enormal}You've been so nice to me!"
+"{esad}...It was stupid to think you{n}took the case to spite me."
+
+char Apollo hide
+"No, I should've known{n}how you'd react--"
+
+char Rhea
+"You didn't do anything wrong,{n}so {s}{sfx/Smack.ogg}{emad}just let me apologize, okay?{n}{enormal}You only did what you thought"
+"was right. You thought he might{n}have been wrongly accused...{n}just like with Chambers three"
+"days ago. Nobody believed him,{n}all the evidence pointed to him,{n}yet you believed in his innocence"
+"and took the case... and won.{n}Your strong conviction... that's{n}what I {sfx/Key.ogg}like about you, Polly."
+"...Maybe you'll be right this{n}time, too. {esad}And even if Erlenmeyer{n}killed my brother..."
+"I suppose if he really didn't{n}kill Judge, he doesn't deserve{n}to be declared guilty for it."
+"{esmiling1}I figured I'd give you a second{n}chance. {enormal}So what have you found{n}so far?"
+
+char Apollo hide
+"Well, there's a{n}{c900}Mysterious Bust crime scene{c}{n}in this school here."
+
+char Rhea e=surprised
+"{sfx/Shock.ogg}{s}What?!"
+
+char Apollo hide
+"Yeah, in Erlenmeyer's{n}old biology classroom."
+
+char Rhea
+"...This isn't very good{n}for our case, Polly."
+
+char Apollo hide
+"No, it's great! Remember how{n}there would always be pictures{n}of the victim?"
+"This time there were{n}pictures of {sfx/Key.ogg}{c900}Erlenmeyer{c}."
+
+char Rhea e=surprised
+"{sfx/Smack.ogg}!!{p30}{n}But that means...{n}Erlenmeyer is innocent!"
+"{emad}...Argh! {esad}I should have just{n}trusted you from the start..."
+
+char Apollo hide
+"Your reaction was perfectly{n}understandable, Rhea."
+
+char Rhea
+"...Thanks, Polly."
+
+char Apollo hide
+"Rhea, I think I'm onto something.{n}Something big. I think maybe{n}Erlenmeyer isn't just innocent"
+"of this murder... maybe he's{n}innocent of {sfx/Ding.ogg}{c900}all{c} the murders.{n}And the real serial killer is"
+"out there, feeling cocky and{n}confident because the police took{n}the wrong guy."
+"But to bring this guy out of the{n}shadow and expose him..."
+"I'm going to need your insight,{n}your strength... your wit.{n}I need {sfx/Key.ogg}{c900}you{c}, Rhea."
+
+char Rhea e=smiling2
+"Don't worry, Polly. I'll do{n}everything in my power to help{n}you! {enormal}...Phew, I'm glad"
+"everything is back to normal!{n}Now then, let's continue{n}investigating!"
+
+script scene71
+
+label skipintro
+script scene71

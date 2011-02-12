@@ -1,0 +1,11 @@
+#-version-1
+label top
+bg ts/1stringsoffice
+
+list scene16stringsmove
+li Wright Anything Agency
+showlist
+menu scene16strings
+
+label Wright Anything Agency
+script scene11menu

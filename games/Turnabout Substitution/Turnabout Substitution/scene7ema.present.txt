@@ -1,0 +1,163 @@
+#-version-1
+present
+label top
+bg ts/1clooneyprisonasylumcell
+menu scene7ema
+
+label blood
+char Ema e=profile
+char Apollo hide
+sfx /evidenceshoop.wav
+ev blood name=blood x=185
+"This blood..."
+char Ema e=profile
+"...is the victim's blood, yes."
+"This was confirmed{n}by DNA analysis."
+sfx /evidenceshoop.wav
+delete name=blood
+char Apollo hide
+"And yet the police{n}couldn't find the body."
+char rhea
+"Which means the killer must have{n}disposed of it in some way."
+char Apollo hide
+"But how did he do it?"
+char rhea
+"I think there's a more{n}important question to ask:"
+"{sfx/Ding.ogg}why are there no traces of{n}blood outside the cell?"
+char Ema e=hair
+"..."
+char Ema e=mu
+"{sfx/oops.wav}Hmph. I have no idea...{n}scientifically speaking."
+char game hide
+nt 
+delev blood
+addev bloodupdated
+"{sfx/evidence.wav}{c099}Blood updated in the Court Record."
+setflag halfinvestigation1
+noflag halfinvestigation1 AND halfinvestigation2 continueinvestigation
+flag halfinvestigation1 AND halfinvestigation2 endinvestigation
+
+label gun
+char Ema e=uninterested
+char Apollo hide
+sfx /evidenceshoop.wav
+ev gun name=gun x=185
+"About this gun..."
+char Ema e=whoa
+"{sfx/Ding.ogg}Oh, you found it? {esmirks}Sherlock Holmes{n}would have been proud of you."
+sfx /evidenceshoop.wav
+delete name=gun
+char Ema
+"Alright, here's some information{n}for you."
+"The gun has Judge Chambers's{n}{c900}fingerprints{c} on it."
+"The single bullet we found{n}matches the gun perfectly,{n}making it the {sfx/Dunnn.ogg}{c900}murder weapon{c}."
+char Apollo hide
+"But according to Chambers,{n}the weapon was fired {sfx/Key.ogg}{c900}twice{c}..."
+char Ema 
+"{sfx/Ding.ogg}Absolutely. One bullet{n}missed - the other is still{n}in Erlenmeyer's body."
+char rhea e=surprised
+"How could he miss at{n}such close range?"
+char Ema e=uninterested
+"Well, your client certainly doesn't{n}look like the sharpest sniper around."
+"It may have been his first{n}time using a gun."
+char rhea e=surprised
+"Why was a judge carrying a{n}gun in the first place?"
+char Apollo hide
+"{c099}(Because it's more effective{n}than a {sfx/Gavel.ogg}gavel?)"
+char Rhea
+"As you probably know, guns{n}aren't that easy to{n}come by these days."
+char Ema e=mu
+"Hmph. Yes, I do know that."
+char Ema 
+"I'm sorry Apollo, I...{n}I can't reveal that information.{n}Not yet."
+char game hide
+nt 
+delev gun
+addev gunupdated
+"{sfx/evidence.wav}{c099}Gun updated in the Court Record."
+setflag halfinvestigation2
+noflag halfinvestigation1 AND halfinvestigation2 continueinvestigation
+flag halfinvestigation1 AND halfinvestigation2 endinvestigation
+
+label continueinvestigation
+char nothing
+goto top
+
+label endinvestigation
+mus 
+char Ema e=uninterested 
+"Well, judging by the evidence,{n}it looks like your client{n}is guilty this time."
+"There really is no other solution.{n}Are you still going to defend him?"
+pause 60 script
+char Apollo hide
+"I don't know. I... I don't{n}know what to think anymore."
+char rhea
+"But you know how you {sfx/Key.ogg}{c900}feel{c}, Apollo.{n}You know Chambers."
+"He's fickle.{n}He's afraid of responsibilities."
+"Murder...{p30} is an irreparable{n}decision - much like a {f}verdict."
+"Chambers just doesn't{n}have what it takes."
+char Apollo hide
+"But what if it's all a facade?"
+char Ema e=hair
+"{sfx/Ding.ogg}Interesting. So you intend{n}to prove your case{n}based on barroom psychology?"
+"I wish you good luck then."
+char Apollo hide
+"{c099}(Better interrupt them...)"
+"Er, {sfx/Smack.ogg}thanks for everything, Ema."
+char Ema e=mu
+"{sfx/Shock.ogg}{s 8 8}Thanks for what?{n}Thanks for being a{n}good-for-nothing detective?"
+char Apollo hide
+"But!{p10}{next}"
+char Ema e=mu
+"Scientifically speaking,{n}the investigation didn't{n}reveal anything new."
+"A {sfx/Smack.ogg}{s 10 10}patrolman could have{n}solved this case!"
+char Apollo hide
+"But!!{p10}{next}"
+char Ema e=mu
+"This is even more depressing{n}than an empty bag of {sfx/Whaaa.ogg}snackoos!"
+char Ema e=hair
+"Oh, and that reminds me."
+char Ema e=snacks
+"{c090}{sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH{n}{sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH"
+char Apollo hide
+"Right, we'd better{p10}{next}"
+char Ema e=mu
+char Ema hide
+"{c090}{sfx/snackood.wav}ka-tonk {sfx/snackood.wav}ka-tonk"
+char Apollo hide
+"Never min{p10}{next}"
+char Ema hide
+"{c090}{sfx/snackood.wav}ka-tonk {sfx/snackood.wav}ka-tonk"
+char Apollo hide 
+"{c099}(Chocolate rain... some stay dry{n}and others feel the pain...)"
+char Ema 
+"You can talk now.{n}...But I won't be listening."
+char Ema e=glasses
+"I'm going to the precinct.{n}Feel free to drop by anytime."
+char Apollo hide
+"Okay. See y{p10}{next}"
+sfx /swoop.wav
+char nothing fade
+pause 60
+char Apollo hide
+"{c099}(There she goes...)"
+pause 30
+char rhea e=mad
+"A simple case, huh?"
+char Apollo hide
+"Almost {c900}too{c} simple."
+char Rhea e=mad
+"Almost... like a {sfx/Key.ogg}{c900}setup{c}.
+char nothing
+script scene9menu
+
+label none
+char Ema e=snacks
+"{c090}{sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH {sfx/munch.wav}MUNCH"
+char Ema e=won't-share
+"You know, I'm not actually{n}munching. I'm just pretending{n}because I don't want to talk to you."
+"...About this."
+char Apollo hide
+"{c099}(Thanks a lot. You gave a whole{n}new meaning to the word helpful.)"
+char nothing
+goto top

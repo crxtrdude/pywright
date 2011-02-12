@@ -1,0 +1,613 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+
+# RHEA'S STATEMENT
+witness
+fg TestimonyAnim fade name=thatstupidanim
+delete name=thatstupidanim
+nt
+"{n}{c900}{center}-- The Fatal Moment --"
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+witness
+"Erlenmeyer seemed to have{n}trouble starting the car."
+"The body wasn't perfectly aligned{n}with the car, so he turned a{n}little to the right as he backed up."
+"Backing up was also hard for him.{n}He kept looking behind him outside{n}the window to see what was going on."
+"He backed up enough, stopped{n}for a moment, and then went{n}forward."
+"{witness}{esad}Then he did it again.{p20}{n}And {s}again.{p20}{n}{delay2}At least four times..."
+"{witness}{esad}And he was screaming, a scream of{n}pain and victory... {emad}I'll never{n}forgive that animal for what he did!"
+
+mus
+witness
+emo mad name=wc
+"Are you {sfx/Ding.ogg}{f}satisfied, Polly?{p30} Are you{n}really going to make me relive{n}this {f}{s 5 5}nightmare again and again?"
+defense
+emo normal-nobrac name=dc
+"I won't be satisfied until{n}I get the {f}truth, Rhea."
+witness
+emo mad name=wc
+"Until you get the real truth,{n}or the {sfx/Key.ogg}{f}truth you want to hear?"
+judge
+emo serious name=jc
+"{sfx/Smack.ogg}{s 10 10}Please, stop this needless{n}bickering!{p30} Mr. Justice,{n}finding the truth is fine,"
+"but harassing the witness{n}is not.{p20} If you badger her,{n}I will {sfx/Ding.ogg}{c900}penalize you severely{c}."
+pause 30
+"Now then, you may begin{n}your cross-examination."
+
+
+# SETTING VARIABLES FOR CROSS EXAMINATION
+set wrongevidence 1
+
+# BEGIN CROSS EXAMINATION
+pause 20 script
+witness
+fg Cross-ExaminationAnim fade
+nt
+"{n}{c900}{center}-- The Fatal Moment --"
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+label start
+witness
+cross rheatestimony2
+
+statement rhea2A
+witness
+emo normal name=wc
+"Erlenmeyer seemed to have{n}trouble starting the car."
+
+statement rhea2B
+witness
+emo normal name=wc
+"The body wasn't perfectly aligned{n}with the car, so he turned a{n}little to the right as he backed up."
+
+statement rhea2C
+witness
+emo normal name=wc
+"Backing up was also hard for him.{n}He kept looking behind him outside{n}the window to see what was going on."
+
+statement rhea2D
+witness
+emo normal name=wc
+"He backed up enough, stopped{n}for a moment, and then went{n}forward."
+
+statement rhea2E
+witness
+emo sad name=wc
+"Then he did it again.{p20}{n}And {s}again.{p20}{n}{delay2}At least four times..."
+
+statement rhea2F
+witness
+emo sad name=wc
+"And he was screaming, a scream of{n}pain and victory... {emad}I'll never{n}forgive that animal for what he did!"
+endcross
+goto comments
+
+# PRESS POINTS
+
+label press rhea2A
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal-nobrac name=dc
+"Why do you suppose that is?"
+witness
+emo normal name=wc
+"Well, I was kind of far away...{p30}{n}I suppose the cold and his anxiety{n}just made it more difficult."
+"And it wasn't really the{n}newest model."
+prosecutor
+emo normal name=pc
+"That car was an old wreck...{p30}{n}Judge was never too good at{n}getting up to date."
+judge
+emo normal name=jc
+"Yes, everyone would have{n}difficulty starting the car{n}under those conditions."
+"Mr. Justice, if you have anything{n}to say, say it now.{p20} Is there a{n}problem with the statement the"
+"witness just made?"
+# PROBLEMS?
+set _list_back_button false
+list pressRhea2A
+li No problem
+li Yes, and a big one
+showlist
+#  NO PROBLEMS
+label No problem
+set _list_back_button true
+defense
+emo normal-nobrac name=dc
+"...{p30}{f}No, Your Honor."
+judge
+emo normal name=jc
+"Very well. {p20}Please continue,{n}witness."
+resume
+# BIG PROBLEMS
+label Yes, and a big one
+set _list_back_button true
+mus
+defense
+"{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}Yes, I do! Those are {f}{s 10 10}no reasons{n}for Erlenmeyer to have difficulty{n}starting the car!"
+judge
+emo normal name=jc
+"{delay2}...Yes, they are."
+sfx /Bwaaah.ogg
+penalty -34
+is penalty 0 gameover
+defense
+emo sheepish-nobrac name=dc
+"{p5}...O-{p15}{sfx/oops.wav}{f}Oh.{p20} Oops..."
+judge
+"Oops is right.{p20} Please continue,{n}witness."
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+resume
+
+label press rhea2B
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal-nobrac name=dc
+"If he moved the body anyway,{n}{s 8 8}why didn't he move it so it{n}was aligned?"
+witness
+emo mad name=wc
+"{sfx/Smack.ogg}{s}I don't know! Ask him, not me.{p20}{n}{enormal}Of course it was dark and he{n}was under a lot of stress, so"
+"he could have just misjudged{n}the angle."
+judge
+emo normal name=jc
+"That is indeed possible.{p20} Mr.{n}Justice, if you have anything{n}to say, say it now.{p20} Is there"
+"a problem with the statement{n}the witness just made?"
+# PROBLEMS?
+set _list_back_button false
+list pressRhea2B
+li No problem
+li Yes, and a big one
+showlist
+#  NO PROBLEMS
+label No problem
+set _list_back_button true
+defense
+emo normal-nobrac name=dc
+"...{p30}{f}No, Your Honor."
+judge
+emo normal name=jc
+"Very well.{p20} Please continue,{n}witness."
+resume
+# BIG PROBLEMS
+label Yes, and a big one
+set _list_back_button true
+mus
+defense
+"{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}Even if it was dark, it {f}{s 10 10}still{n}shouldn't be difficult to{n}align a body with a car!"
+witness
+emo mad name=wc
+"Well it apparently was.{p20} You {sfx/Smack.ogg}{s 8 8}can't{n}use rational logic to try and{n}understand the actions of someone"
+"like Erlenmeyer!{p20} Besides, {sfx/Ding.ogg}{f}what{n}does this have to do with{n}anything?{p20} {f}How would the fact"
+"that the body wasn't aligned{n}prove I'm the murderer?"
+defense
+emo sheepish-nobrac name=dc
+"Uh...{p30} I {sfx/oops.wav}{f}hadn't thought{n}that far ahead yet..."
+judge
+emo serious name=jc
+"Please think before you speak so{n}that you don't waste the court's{n}time, Mr. Justice."
+sfx /Bwaaah.ogg
+penalty -34
+is penalty 0 gameover
+"Please continue, witness."
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+resume
+
+label press rhea2C
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal-nobrac name=dc
+"{f}Why did he look outside instead{n}of at the rear-view mirror?"
+witness
+emo normal name=wc
+"It was {sfx/Ding.ogg}{f}broken, remember?"
+defense
+emo sheepish-nobrac name=dc
+"...{p30}{sfx/oops.wav}{f}Oh yeah. {p20}Sorry."
+judge
+emo normal name=jc
+"If that's that, let's move on.{p20}{n}Unless Mr. Justice believes{n}there is something wrong with"
+"the witness' statement...?"
+# PROBLEMS?
+set _list_back_button false
+list pressRhea2C
+li No problem
+li Yes, and a big one
+showlist
+#  NO PROBLEMS
+label No problem
+set _list_back_button true
+defense
+emo normal-nobrac name=dc
+"...{p30}{f}No, Your Honor."
+judge
+emo normal name=jc
+"Very well.{p20} Please continue,{n}witness."
+resume
+# BIG PROBLEMS
+label Yes, and a big one
+goto GuiltyKnowledge
+
+label press rhea2D
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal-nobrac name=dc
+"{sfx/Ding.ogg}'{c900}A moment{c}'?"
+witness
+emo normal name=wc
+"A few seconds.{p20} He probably{n}realized Judge might still{n}be alive."
+prosecutor
+emo normal name=pc
+"Not exactly the most {sfx/Key.ogg}{f}shrewd{n}and meticulous killer..."
+witness
+"I guess even the {f}best have{n}off-days...{p30} Thank God..."
+judge
+emo normal name=jc
+"Yes, and let's continue.{p20} Unless{n}Mr. Justice believes there is{n}something wrong with"
+"the witness' statement...?"
+# PROBLEMS?
+set _list_back_button false
+list pressRhea2D
+li No problem
+li Yes, and a big one
+showlist
+#  NO PROBLEMS
+label No problem
+set _list_back_button true
+defense
+emo normal-nobrac name=dc
+"...{p30}{f}No, Your Honor."
+judge
+emo normal name=jc
+"Very well.{p20} Please continue,{n}witness."
+resume
+# BIG PROBLEMS
+label Yes, and a big one
+set _list_back_button true
+mus
+defense
+"{sfx/Ding.ogg}{f}Why didn't Erlenmeyer just{n}check Chambers' pulse, or{n}even if he was breathing?"
+prosecutor
+"Because he was panicked, and the{n}last person you'd expect to have{n}rational thoughts like that."
+judge
+"Although those arguments would{n}work for a regular person at a{n}normal time, I do not think"
+"they apply to a psychotic serial{n}killer under tons of stress."
+sfx /Bwaaah.ogg
+penalty -34
+is penalty 0 gameover
+"Please continue, witness."
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+resume
+
+label press rhea2E
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal-nobrac name=dc
+"Isn't four times a bit{delay2}...{n}{delay1}{f}excessive?"
+
+witness
+emo normal name=wc
+"What can I say?{p20} We're dealing with{n}a complete {s 8 8}animal here...{p20} Maybe he{n}was {f}angry at Judge that he would"
+"cause him to get caught, or was{n}releasing all his {s 8 8}anger from being{n}locked up in prison.{p20} I can only"
+"tell you Erlenmeyer's actions,{n}not his reasons."
+judge
+emo normal name=jc
+"Yes, that is true.{p20} Mr. Justice, if{n}you have anything to say, say it{n}now.{p20} Is there a problem with the"
+"statement the witness just made?"
+# PROBLEMS?
+set _list_back_button false
+list pressRhea2E
+li No problem
+li Yes, and a big one
+showlist
+#  NO PROBLEMS
+label No problem
+set _list_back_button true
+defense
+emo normal-nobrac name=dc
+"...{p30}{f}No, Your Honor."
+judge
+emo normal name=jc
+"Very well.{p20} Please continue,{n}witness."
+resume
+# BIG PROBLEMS
+label Yes, and a big one
+set _list_back_button true
+mus
+defense
+"{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}{s 8 8}Running over Chambers four times{n}doesn't make sense!{p30} Even he knew{n}the police were on their way,"
+"so {sfx/Shing.ogg}{f}{s 10 10}why not try to get out of{n}there as quickly as possible?"
+witness
+emo mad name=wc
+"He wasn't {sfx/Smack.ogg}{s 19 19}thinking straight,{n}Apollo!{p30} Can't you get that{n}through {s 10 10}your thick skull?"
+defense
+"{c089}(Well, he couldn't be {f}that stupid{n}if he supposedly got away with a{n}{s 8 8}dozen murders before!)"
+judge
+"If he was concerned with getting{n}away, I doubt he would have run{n}over Chambers with the car at all."
+sfx /Bwaaah.ogg
+penalty -34
+is penalty 0 gameover
+"Anyway, please continue,{n}witness."
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+resume
+
+label press rhea2F
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal-nobrac name=dc
+"And yet a little while ago, you{n}were {sfx/Ding.ogg}{f}standing next to me,{n}trying to get him acquitted."
+witness
+emo normal name=wc
+"The truth is I never wanted to{n}defend Erlenmeyer...{p30} {esad}I just{n}{sfx/Key.ogg}{f}{s 8 8}didn't want to lose you, Polly!"
+defense
+"{eheadshakes-nobrac}{p11}{enormal-nobrac}So your relationship with me,{n}which has lasted for a few days,{n}is {f}{s 10 10}more important to you than" 
+"putting away the murderer of{n}your brother and one of your{n}close friends?"
+witness
+emo mad name=wc
+"{sfx/Bwaaah.ogg}{s 10 10}Of course not!{p30} I haven't told{n}you everything yet. {enormal}Testifying{n}against Erlenmeyer..." 
+"was my {sfx/Ding.ogg}{c900}plan all along{c}!{p20} But I{n}waited until you called me to{n}testify. {esad}I didn't want it"
+"to look like I wanted you to lose{n}the trial, or else you would have{n}gotten mad at me.{p30} {emad}Of course,"
+"I {f}never thought you'd interpret{n}the gum as a sign that I was{n}{sfx/Smack.ogg}{s}the {c900}killer{c}!"
+prosecutor
+emo serious name=pc
+"Empty threats and cheap{n}intimidation tricks won't{n}work, Antennas."
+"Either attack her with{n}tangible evidence, or {f}give up."
+judge
+emo serious name=jc
+"Exactly, Mr. Justice.{p30} {enormal}If you have{n}something to say about Ms. Wits'{n}statement, please say it now."
+# PROBLEMS?
+set _list_back_button false
+list pressRhea2F
+li No problem
+li Yes, and a big one
+showlist
+#  NO PROBLEMS
+label No problem
+set _list_back_button true
+defense
+emo normal-nobrac name=dc
+"...{p30}{f}No, Your Honor."
+judge
+emo normal name=jc
+"Very well. Please continue,{n}witness."
+goto comments
+# BIG PROBLEMS
+label Yes, and a big one
+set _list_back_button true
+mus
+defense
+"{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}So you mean you {sfx/Key.ogg}{f}{c900}planted{c} the gum?{n}Because a moment ago you reasoned{n}it fell out of your pocket"
+"while you were unconscious."
+witness
+emo sweating name=wc
+"{delay2}...{sfx/Ding.ogg}{f}!"
+defense
+"Face it:{p20} you didn't plant{n}anything.{p30} {econfident}You messed up,{n}plain and simple, and now"
+"you're {f}trapped."
+witness
+"{delay2}N-{p15}{s 5 5}No, I...{p30} {delay1}While I was hiding{n}behind the tombstone, I saw the{n}gum..."
+"{enormal}And I {s 5 5}thought I could{n}use it like that!"
+defense
+emo normal-nobrac name=dc
+"Oh, {sfx/Smack.ogg}{s}come on!{p30} You're {s 8 8}making{n}this up on the spot!"
+judge
+emo serious name=jc
+"{s 10 10}Please, Mr. Justice! Unless you{n}have evidence that she is lying,{n}don't be so harsh!"
+sfx /Bwaaah.ogg
+penalty -34
+is penalty 0 gameover
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+goto comments
+
+# COMMENTS BETWEEN CROSS LOOPS
+label comments
+defense
+emo normal-nobrac name=dc
+"{c089}(She's giving a lot of details...{p30}{n}But maybe, just maybe, I can use{n}that against her!)"
+goto start
+
+# CAUGHT HER
+label GuiltyKnowledge
+# RESETTING VARIABLES AND UI
+clearcross
+set _list_back_button true
+# LEAD-OUT SCRIPT
+mus 118 - Apollo Justice - Pursuit Overtaken.ogg
+set _music_loop 118 - Apollo Justice - Pursuit Overtakenloop.ogg
+defense
+"{defense}{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}There's a {f}{s 10 10}BIG{p5} problem with what{n}you just said, Rhea. You're right{n}in that the rear-view mirror is"
+"broken, but...{p30} {sfx/Key.ogg}{f}{c900}how could you know{n}that{c}?{p30} {enormal-nobrac}I initially investigated{n}the scene on my own, and the car"
+"was {f}{s 8 8}gone by the time you joined{n}me!{p30} Given the fact that it was{n}so dark, and the color of"
+"Chambers' car, you had to be {f}very{n}close to the car or {f}inside it to{n}see that the mirror was broken."
+"{defense}{econfident}{s 8 8}Get it now?{p30} By telling us about{n}the mirror, you revealed that{n} {sfx/Shing.ogg}{s 12 12}{f}{c900}you were driving the car{c} and"
+"murdered Chambers!"
+witness
+emo normal name=wc
+"You're right that in order to see{n}the rear-view mirror was broken,{n}I needed to be next to or inside"
+"the car.{p30} But {sfx/Ding.ogg}{f}{s 8 8}why did it have to{n}be on the night of the murder?{p30} I{n}could've sworn you were there"
+"when Judge said this..."
+# FLASHBACK
+bg aj/detentioncenter fade
+char Udgey y=22 nametag=Judge fade
+"Rhea... is a friend of mine.{n}We met at the trial."
+"I had severe back pains at the time,{n}and she was kind enough to"
+"give me a ride home{n}every evening."
+bg nothing fade
+clear
+# BACK TO COURT
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+witness
+emo normal name=wc
+"I knew about the rear-view mirror{n}from driving the car then.{p30} I saw{n}Erlenmeyer looking back through"
+"the window, and inferred that{n}was the reason."
+defense
+emo normal-nobrac name=dc
+"But that was {sfx/Smack.ogg}{s 10 10}months ago!{p20} Would{n}Chambers really drive around{n}with a {s 10 10}broken rear-view mirror"
+"for months without getting it{n}fixed?"
+mus
+prosecutor
+emo normal name=pc
+"There's {sfx/Ding.ogg}{f}no point in arguing over{n}this. There are plenty of people,{n}like Chambers' grandchildren,"
+"who can testify about whether the{n}rear-view mirror was fixed. If we{n}find out it was..."
+"{eserious}{delay2}...you're in {sfx/Key.ogg}{f}trouble, little lady."
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+witness
+emo sweating name=wc
+"{sfx/Awe.ogg}{s}!!{p20}"
+"Since {s 8 8}when has the prosecution{n}joined the defense and started{n}{s 8 8}going after innocent people"
+"like me? First Judge, and now{n}myself...{p30} {emad}{s 8 8}Didn't you stand for{n}justice before?"
+prosecutor
+emo serious name=pc
+"I stand for the {f}victims, and{n}certainly not for Mr. Justice.{p30}{n}But I don't want you to say"
+"anything you might...{p30} {sfx/Key.ogg}{f}regret.{n}{p20}I'm still convinced Erlenmeyer{n}is guilty, but I'll be frank:"
+"you {sfx/Ding.ogg}{f}aren't helping.{p20} I don't know{n}what you {s 5 5}have or {s 5 5}haven't done,{n}but you obviously have something"
+"to hide.{p30} If it's not a literal{n}{f}skeleton in your closet, {sfx/Smack.ogg}{s 10 10}speak{n}up already!{p30} It'll save many"
+"innocent people."
+witness
+emo sweating name=wc
+"But I {s 10 10}don't have anything{n}to hide, I swear!"
+defense
+"{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}Then {f}{s 10 10}how did you know{n}about the mirror!"
+witness
+emo sweating name=wc
+"I-{p20}{s 5 5}I...{p30} I {s 5 5}don't remember, Apollo!{p20}{n}{esmiling1}{delay2}Do you know what a {sfx/Ding.ogg}{f}petunia is?"
+defense
+"{delay2}O-{p20}Of course, a flower.{p30} {enormal-nobrac}{delay1}But what{n}does that have to do with this?"
+witness
+emo normal name=wc
+"{f}When, {f}where, and {f}how did you{n}learn that a petunia is a flower?"
+defense
+emo thinking-nobrac name=dc
+"...{p30}{f}Uh...{p30}"
+witness
+"{sfx/Ding.ogg}{f}Exactly.{p30} Can't you see I'm{n}{s 8 8}confused, and under a {f}ton of{n}stress?{p20} I instinctively said"
+"the rear-view mirror was broken,{n}but I {s 8 8}can't remember where I{n}learned it!{p30} I thought it was from"
+"driving Judge before, but {s 8 8}maybe it{n}was something else! {esad}I'm sorry, I{n}just can't remember... {p30}{emad}However,"
+"the fact of the matter is the{n}mirror in {sfx/Smack.ogg}{s 10 10}no way proves I'm the{n}murderer!{p20} Why are you doing this,"
+"to {f}buy more time?{p30} {enormal}If Erlenmeyer is{n}the protagonist, it's simple to{n}make a {f}coherent, {f}evidence-based"
+"narrative of the murder. {esmiling2}But with{n}me, you're {f}{s 10 10}bound to run into a{n}contradiction at some point!"
+mus
+defense
+emo normal-nobrac name=dc
+"...{p30}{sfx/Key.ogg}{f}Okay, I accept."
+witness
+emo normal name=wc
+"...{p20}{sfx/Ding.ogg}{f}Excuse me?"
+defense
+"A {s 8 8}{f}'{c900}coherent, evidence-based{n}narrative{c}' where you are the{n}murderer!{p30} {sfx/Shing.ogg}{f}{s 12 12}{eobjects-nobrac}{p7}{epointing-nobrac}I'll make it!"
+"{enormal-nobrac}I would just like a 30-minute{n}recess to gather my thoughts."
+judge
+emo serious name=jc
+"...{p40}{f}Very well.{p30} But you'd better{n}have evidence when we reconvene,{n}or {f}else...{p40} well, I'll leave that"
+"up to your imagination.{p20}{n}Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+script scene102
+
+# TOO MANY PENALTIES
+label gameover
+script gameover
+
+# PRESENT SOMETHING WRONG
+label none
+is wrongevidence 1 wrongevidence1
+is wrongevidence 2 wrongevidence2
+is wrongevidence 3 wrongevidence3
+
+label wrongevidence1
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo objects name=dc
+"{sfx/Dunnn.ogg}{s}Your Honor!{n}That statement contradicts{n}the evidence!"
+judge
+"...{sfx/Key.ogg}{f}Really? Let me see that..."
+"...{sfx/Ding.ogg}{f}! Why, you're right!"
+"This is... unheard of{n}in this courtroom!"
+"You single-handedly turned{n}the case around with{n}this one piece of evidence!"
+defense
+emo confident name=dc
+"Didn't I? Didn't I?"
+judge
+"...{sfx/oops.wav}Of course you didn't."
+"What IS unheard of in this courtroom{n}is your credulity, Mr.Justice.{n}You deserve this penalty."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(My ego... it hurts...)"
+is penalty 0 gameover
+set wrongevidence 2
+clear
+goto start
+
+label wrongevidence2
+fg ObjectionAnimApollo
+pause 5 script
+judge
+"{sfx/Dunnn.ogg}{s}Penalty!"
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo objects name=dc
+"{sfx/Shing.ogg}{f}What?!{n}I haven't said anything yet!"
+judge
+"But you were definitely going{n}to say something{n}ridiculous, weren't you?"
+defense
+set _speaking dc
+"{c099}(Actually, he's right...)"
+judge
+"Which is why I decided{n}to prevent you from{n}further embarrassing yourself."
+"You should be grateful."
+defense
+emo sheepish name=dc
+"Thank you, Your Honor."
+set _speaking dc
+"{c099}(Though I AM embarrassed now.)"
+is penalty 0 gameover
+set wrongevidence 3
+clear
+goto start
+
+label wrongevidence3
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+"..."
+emo sheepish name=dc
+"{sfx/oops.wav}Please give me a penalty, Your{n}Honor. I swear I was going{n}to say something stupid."
+judge
+"...You sure do learn fast, Mr.Justice.{n}Alright, I'd be glad to."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(I a-bso-lu-tely need{n}to remember to{n}forget that moment.)"
+is penalty 0 gameover
+set wrongevidence 1
+clear
+goto start

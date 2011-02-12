@@ -1,0 +1,93 @@
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+mus 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain So.ogg
+set _music_loop 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain Soloop.ogg
+witness
+char Erlenmeyer e=normal-witness(blink)
+pause 150 script
+prosecutor
+char Poole
+"{prosecutor}Please state your name{n}and occupation."
+witness
+char Erlenmeyer 
+"{witness}{enormal-witness}{p50}...{sfx /Key.ogg}{f}Apollo Justice.{n}I'm a defense attorney."
+prosecutor
+char Poole
+"{prosecutor}...{p30}This is a complete waste of time."
+defense
+char Apollo
+"{defense}{esweats-nobrac}{sfx /Smack.ogg}{s}'You' referring to you, not me!"
+witness
+char Erlenmeyer 
+"{witness}{enormal-witness}{p30}...Robert Erlenmeyer, {sfx /Key.ogg}{f}{esad-witness}{c900}murderer{c}.
+defense
+char Apollo
+"{esweats-nobrac}WH{p30}-{sfx /Smack.ogg}{s 25}WHAT?!"
+prosecutor
+char Poole
+"{prosecutor}{sfx /Ding.ogg}{f}Then again, maybe I spoke{n}too soon."
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}But...{p40}{esad-witness}{sfx /Key.ogg}{f} that's what Ms. Plum has{n}been saying all this time..."
+helper
+char Rhea e=aide
+"{helper}I think he just called Poole fat."
+witness
+char Erlenmeyer 
+"{witness}{esad-witness}It's what...{p30} {f}everyone...{p40} has{n}been saying..."
+defense
+char Apollo 
+"{defense}{ehandsondesk-nobrac}{sfx /Smack.ogg}{s}I don't care what other people{n}said!"
+"{enormal-nobrac}{sfx /Ding.ogg}{f}Are you really a murderer?"
+witness
+char Erlenmeyer
+"{witness}{esad-witness}{delay2}..."
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac(blink)}{c099}(Mayday, mayday!)"
+"{ehandsondesk-nobrac}D-{sfx /Smack.ogg}{s}Did you kill Judge Chambers?!"
+witness 
+char Erlenmeyer
+"{esad-witness}...{p30}{enormal-witness}{sfx /Key.ogg}{f}No."
+defense
+char Apollo
+"{defense}{esweats-nobrac(blink)}{c099}(...Finally.{p20} I think my life expectancy{n}just got cut in half...)"
+"{enormal-nobrac}Do you know why we asked{n}you to testify?"
+witness
+char Erlenmeyer
+pause 60 script
+"{witness}{enormal-witness}...{p30}{f}Yes."
+prosecutor
+char Poole
+"{prosecutor}{sfx /Smack.ogg}{s}Cut the act already and answer{n}the questions normally."
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}{sfx /Key.ogg}{f}Jessica... Poole."
+prosecutor
+char Poole
+"{prosecutor}{sfx /Shock.ogg}*Gasp!*"
+mus
+witness
+char Erlenmeyer
+"{witness}{enormal-witness}...I prefer...{p40}{sfx /Key.ogg}{f}billiards.{n}{p90}May I have...{p40}{sfx /Key.ogg}{f} fruit salad for lunch?"
+prosecutor
+char Poole
+"{prosecutor}..."
+defense
+char Apollo
+"{esweats-nobrac(blink)}{sfx /Shock.ogg}{f}{c099}(If it's an act, he's the{n}best actor I've ever seen...)"
+"{enormal-nobrac}Mr. Erlenmeyer, please testify{n}about the night of the crime."
+pause 20 script
+witness
+char Erlenmeyer
+fg TestimonyAnim fade name=thatstupidanim
+delete name=thatstupidanim
+pause 5 script
+nt
+"{n}{c900}{center}--Why Fruit Salad?--"
+script scene89erlenmeyertestimony1

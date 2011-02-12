@@ -1,0 +1,9 @@
+bg lobby
+set _examine_cursor_col ff0000
+"red cursor"
+examine
+label none
+set _examine_cursor_img ev/card
+"card"
+examine
+label none

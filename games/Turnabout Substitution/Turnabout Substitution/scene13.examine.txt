@@ -1,0 +1,232 @@
+#-version-1
+label top
+bg ts/1stringsoffice
+
+examine
+region 75 50 22 35 bust
+region 485 75 15 20 goldenplate
+region 0 10 70 75 books
+region 100 10 75 85 windowA
+region 185 10 83 85 windowB
+menu scene13
+
+label bust
+char Apollo hide
+"The Chief did strike me as{n}the self-important type,{n}but come on."
+"What kind of narcissistic prig{n}exhibits a bust of himself{n}in his own office?"
+char rhea
+"You're so right - except you're{n}wrong. This has nothing to do{n}with Strings whatsoever."
+char rhea e=smiling2
+"...It's actually a bust of an{n}unhelmeted {sfx/Key.ogg}{c900}King Leonidas{c}."
+char Apollo hide
+"{sfx/Smack.ogg}L-Leonidas? You mean,{n}like the chocolate?"
+char Rhea e=mad
+"...{sfx/oops.wav}And you try to pass yourself{n}off as a Greek god?"
+setflag bust
+char nothing
+goto top
+
+label goldenplate
+noflag threateningmessage goldenplatebefore
+flag threateningmessage goldenplateafter
+label goldenplatebefore
+char Apollo hide
+"An ancient-looking{n}golden plate."
+char rhea
+"...Maybe the Chief Justice{n}is {sfx/Key.ogg}Mormon?"
+char Apollo hide
+"Or maybe we should just{n}read what it says{n}before making assumptions."
+"..."
+clear
+nt
+"{sfx/Dunnn.ogg}{c090}{center}480 is real putsch! Hes a culprits!"
+char Apollo hide
+"{sfx/Ding.ogg}!"
+"{c099}(What could that possibly mean?)
+bg ts/1stringsoffice
+flag bust goldenplatesolved
+goto top
+label goldenplateafter
+char Apollo hide
+"The infamous golden plate."
+"... 480 is real putsch!{n}Hes a culprits! ..."
+char rhea e=smiling1
+"Whoever wrote this must{n}have a great sense of humor."
+char Apollo hide
+"..."
+"Whoever wrote this{n}must have had a{n}great sense of humor..."
+"but then lost his wife in a{n}tragic accident and decided to{n}write anagrams to the Chief Justice."
+goto top
+
+label books
+char Apollo hide
+char rhea e=sad
+"Ugh. Law books.{n}Now that's a horrid sight."
+"They remind me of ex-boyfriends:{n}you erase them from your memory{n}because you're scared it might"
+"come back to haunt you. I myself{n}bury everything that makes me{n}think of my ex-boyfriends."
+pause 60 script
+"...{sfx/Key.ogg}Except the aforementioned{n}boyfriends, of course."
+"The Chief Justice should{n}do the same, really."
+"After reading so many law books{n}at school, you'd figure he'd want{n}to throw a little book-burning party."
+char Apollo hide
+"Sorry to ruin your metaphor{p10}{next}"
+char Rhea e=mad
+"{sfx/Smack.ogg}Simile!"
+char Apollo hide
+"Simile, but these are most{n}definitely not law books."
+"Homer's Iliad... Aesop's Fables...{n}Plato's Republic...{n}Sophocles's Oedipus Rex..."
+"I guess we could say{n}he's a Greek geek."
+char rhea
+"I guess we could say you're {sfx/Ding.ogg}stupid."
+char Apollo hide
+"I guess..."
+char nothing
+goto top
+
+label windowA
+char rhea e=sad
+"Such a sad,{n}melancholic window."
+char Apollo hide
+"{sfx/Ding.ogg}What exactly about this{n}window is melancholic?"
+char Rhea e=mad
+"Think about it.{n}It's Christmas.{n}It's snowing - it's snowing!"
+"You could be snowmanning, or{n}snowthrowing, but here you are,{n}legalling, and lawing... and stuff!"
+char Apollo hide
+"That's... quite an impressive number{n}of verbs you just invented."
+char Rhea
+"I know."
+char Apollo hide
+"I wonder... who needs snow{n}when you're already snowed{n}under with work?"
+char Rhea
+"{sfx/Key.ogg}..."
+char Apollo hide
+"That's... not a very good pun."
+char Rhea
+"I know."
+char nothing
+goto top
+
+label windowB
+char rhea e=sad
+"Such a sad,{n}melancholic window."
+char Apollo hide
+"{sfx/Ding.ogg}What exactly about this{n}window is melancholic?"
+char Rhea e=mad
+"Think about it.{n}It's Christmas.{n}It's snowing - it's snowing!"
+"You could be snowmanning, or{n}snowthrowing, but here you are,{n}legalling, and lawing... and stuff!"
+char Apollo hide
+"That's... quite an impressive number{n}of verbs you just invented."
+char Rhea
+"I know."
+char Apollo hide
+"I wonder... who needs snow{n}when you're already snowed{n}under with work?"
+char Rhea
+"{sfx/Key.ogg}..."
+char Apollo hide
+"That's... not a very good pun."
+char Rhea
+"I know."
+char nothing
+goto top
+
+label goldenplatesolved
+char rhea
+"{sfx/Key.ogg}Wait!{n}Did you just say {c900}480{c}?"
+char Apollo hide
+"Yeah, what about it?"
+char Rhea
+"{sfx/Ding.ogg}Hang on. Leonidas... 480...{n}480... Leonidas... {sfx/Dunnn.ogg}{c900}Thermopylae{c}! 
+char Apollo hide
+"Hmm... Pteridospermopsida...{n}Avestan... I see!{n}{sfx/Dunnn.ogg}{c900}Chromoplasm{c}!"
+char Rhea e=mad
+"{sfx/Shock.ogg}Apollo!{n}You're smarter than that!"
+"The Battle of {c900}Thermopylae{c}{n}was when the Spartan army,{n}led by {c900}King Leonidas{c},"
+"fought against the Persians.{n}And it ocurred in {sfx/Awe.ogg}{c900}480{c} BC!"
+"This can't be a coincidence.{n}The golden plate... the bust...{n}they're all related somehow."
+"..."
+"{sfx/Ding.ogg}Let me see that inscription again."
+clear
+nt
+"{sfx/Dunnn.ogg}{c090}{center}480 is real putsch! Hes a culprits!"
+bg ts/1stringsoffice
+char rhea
+"I see..."
+"That message is not a{n}threat - there are too many{n}spelling mistakes to begin with."
+"...It's an {sfx/Key.ogg}{c900}anagram{c}."
+char Apollo hide
+"An anagram?"
+char Rhea
+"...The gods really are facetious,{n}don't you think?"
+"Sometimes the greatest mysteries{n}can be solved by a mere wordplay."
+"...{sfx/Key.ogg}{c900}Pleistarchus{c}.{n}That's what we're{n}supposed to read."
+"Incidentally, Pleistarchus was{n}King Leonidas's son."
+char Apollo hide
+"..."
+"...So {sfx/Shock.ogg}that's it?{n}That's your big mystery?"
+"We now know the Answer to Life,{n}the Universe, and Everything,{n}and it's... {sfx/oops.wav}480."
+"I'm sure Chambers will be{n}relieved to hear that{n}when he's on {sfx/Bwaaah.ogg}death row!"
+char Rhea
+"Well, if someone went{n}through the trouble of{n}hiding its true meaning..."
+"...then my guess is there must be{n}a secret behind this golden plate."
+"And where there's a secret,{n}there's bound to be a clue."
+nt
+addev goldenplate
+"{sfx/evidence.wav}{c099}Golden Plate added to{n}the Court Record."
+pause 30 script
+mus 140 - Turnabout Substitution - Paul Strings - Ex officio.ogg
+set _music_loop 140 - Turnabout Substitution - Paul Strings - Ex officioloop.ogg
+pause 300 script
+char Apollo hide
+"Where's that music coming from?"
+char Rhea
+"A ringtone, perhaps?"
+char nothing fade
+pause 60 script
+char Apollo hide
+set _shake_sound true
+"{s}Rhea? {sfx/Smack.ogg}What are you doing ?!"
+"{sfx/Bwaaah.ogg}RHEA!"
+"{sfx/Dunnn.ogg}I'm pressing charges!"
+pause 30 script
+"{sfx/Smack.ogg}Rhea! {sfx/Bwaaah.ogg}Behind you! {sfx/Dunnn.ogg}THE BUST!"
+"{s 60 30}AAAAAAAAAAGGGHHHHHH!!!{p10}{next}"
+set _shake_sound false
+mus
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+char ??? hide
+"Hello? You there?"
+pause 60 script
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+"{sfx/Dunnn.ogg}Hey! If you wanna pretend you're{n}not there, you don't answer the{n}damn phone, it's as simple as that!"
+char Apollo hide
+"{c099}(So that bust was actually...{n}a phone?)"
+char ??? hide
+"Now listen good, 'cause{n}I'm only gonna say it once."
+"I want my goddamn money,{n}and I want it now."
+"Not tomorrow, not tomorrow's{n}tofreakingmorrow - {sfx/Owned.ogg}{s}NOW!"
+"I did my part of the deal.{n}Now it's your turn."
+"Or else..."
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+mus
+pause 120 script
+char Apollo hide
+"{sfx/Bwaaah.ogg}What the hell was that?"
+"The Chief Justice... {sfx/Key.ogg}{c900}blackmailed?{c}"
+nt
+addev bust
+"{sfx/evidence.wav}{c099}Bust added to the Court Record."
+char rhea e=sad
+"I don't care much for{n}the atmosphere here.{n}Let's return to the agency."
+setflag threateningmessage
+char nothing
+script scene11menu
+
+label none
+char Apollo hide
+"No clues here."
+goto top

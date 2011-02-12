@@ -1,0 +1,14 @@
+macro tb
+bg black
+textblock $x 0 100 100 color=900 Some Text
+addvar x 1
+endmacro
+
+set x 0
+gui Button finish x=0 y=192 FINISH
+gui Wait run=tb
+print executed next line
+
+
+label finish
+"done"

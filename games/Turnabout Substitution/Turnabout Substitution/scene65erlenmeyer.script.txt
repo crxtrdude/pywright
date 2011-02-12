@@ -1,0 +1,49 @@
+#-version-1
+label top
+mus
+bg aj\detentioncenter
+
+flag repeatScene65 skipIntro
+nt
+"{c090}{center}{type}December 28{n}Detention Center{n}Visitor's Room"
+char Guard hide
+"Here he is. I hope{n}you've brought your{n}English-to-Crazy Dictionary."
+char Apollo hide
+"Thanks..."
+fg detentionfg loops=0 nowait name=window
+char Erlenmeyer fade e=squinting
+char Apollo hide
+"{c099}(This is it, the infamous serial killer{n}Robert Erlenmeyer...)"
+nt
+"{center}..."
+"{center}... ... ..."
+"{center}..."
+char Erlenmeyer
+"{f}Apollo... {f}Justice."
+char Apollo hide
+"{p25}{delay3}Y-Yes..?"
+char Erlenmeyer
+"Why did you bring... your{n}{f}{sfx\oops.wav}grandmother?"
+char Rhea hide
+"Did he just call me... old?"
+char Apollo hide
+"{c099}(Wh-What is he talking about?)"
+char Rhea hide
+"Polly, tell me I'm pretty!"
+char Apollo hide
+"Uh, Mr. Erlenmeyer..."
+delete name=window
+char Rhea e=mad
+"{sfx\Smack.ogg}{s}TELL ME I'M PRETTY!"
+char Apollo hide
+"Okay, okay, you're beautiful!!{n}Now please let me talk to{n}Erlenmeyer for a minute..."
+"{c099}(Note to self: Investigate Rhea{n}being a sociopath.)"
+setflag repeatScene65
+mus 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain So.ogg
+set _music_loop 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain Soloop.ogg
+menu scene65erlenmeyer
+
+label skipIntro
+mus 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain So.ogg
+set _music_loop 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain Soloop.ogg
+menu scene65erlenmeyer

@@ -1,0 +1,284 @@
+#-version-1
+label top
+bg ts/judgesbedroom
+
+examine
+region 424 31 62 161 closet
+region 173 59 24 43 painting
+region 210 101 65 15 pillow
+region 196 116 81 53 bed
+region 122 124 92 48 bed2
+region 0 17 95 162 balcony
+region 213 69 8 10 postit
+region 342 72 86 39 desk
+menu scene76
+
+
+label closet
+char Apollo hide
+"This seems like an ordinary{n}dresser to me...{n}No skeletons here."
+goto top
+
+
+label painting
+char Apollo hide
+"I didn't know Judge was into{n}modern art... It's pretty awful."
+goto top
+
+
+label pillow
+char Apollo hide
+"{s}Aha!{n}Let's see what's under his pillow!{p30}{n}...Nothing..."
+
+char Rhea
+"What were you expecting?"
+
+char Apollo hide
+"I don't know!{n}A gavel or something?"
+
+char Rhea e=smiling2
+"...Keep working on that logic,{n}lawyer-boy."
+goto top
+
+
+label bed
+char Rhea
+"Am I the only one who finds{n}this bed... scary?"
+
+char Apollo hide
+"...Why would it be scary?{n}It's a bed."
+
+char Rhea
+"Well, every single morning Judge{n}woke up in this bed."
+
+char Apollo hide
+"...And?"
+
+char Rhea
+"Every morning he thought that he'd{n}wake up the next morning in this{n}bed. He expected that yesterday,"
+"too... He had no idea it would end{n}so abruptly. What's scary is{n}waking up, and not knowing it's"
+"the last time..."
+
+char Apollo hide
+"You want to know when you{n}are going to die?"
+
+char Rhea e=mad
+"Yeah, so I can die bravely{n}and with dignity."
+
+char Apollo hide
+"...Okay, now you're starting to{n}creep me out."
+
+char Rhea e=sad
+"...Sorry, Polly."
+goto top
+
+label bed2
+char Rhea
+"Am I the only one who finds{n}this bed... scary?"
+
+char Apollo hide
+"...Why would it be scary?{n}It's a bed."
+
+char Rhea
+"Well, every single morning Judge{n}woke up in this bed."
+
+char Apollo hide
+"...And?"
+
+char Rhea
+"Every morning he thought that he'd{n}wake up the next morning in this{n}bed. He expected that yesterday,"
+"too... He had no idea it would end{n}so abruptly. What's scary is{n}waking up, and not knowing it's"
+"the last time..."
+
+char Apollo hide
+"You want to know when you{n}are going to die?"
+
+char Rhea e=mad
+"Yeah, so I can die bravely{n}and with dignity."
+
+char Apollo hide
+"...Okay, now you're starting to{n}creep me out."
+
+char Rhea e=sad
+"...Sorry, Polly."
+goto top
+
+
+label balcony
+char Apollo hide
+"Hey, his bedroom has a balcony..."
+
+char Rhea
+"{s}{sfx/Smack.ogg}Don't open the door!"
+
+char Apollo hide
+"Huh?"
+
+char Rhea
+"...All that snow will blow in{n}here. Do you really want to ruin{n}Judge's room like that?"
+"You can see from in here{n}there's nothing there."
+
+char Apollo hide
+"...Yeah, I guess you're right."
+goto top
+
+
+label desk
+char Apollo hide
+"This is Judge's desk... There{n}might be a clue here! Let's{n}take a closer look..."
+bg ts/judgesdesk stack fade
+JudgesDesk
+
+
+label postit
+char Rhea
+"Hey! Post-its are soooo 1990s.{n}Why isn't he using iStickies?"
+
+char Apollo hide
+"Let's see what he wrote on it...{n}'12/27 Forest Bones.' Whoa! It's{n}the date and location of"
+"the murder! This can't be{n}a coincidence!"
+
+char Rhea
+"...Technically, the murder was{n}on the 28th."
+
+char Apollo hide
+"Well, it was probably the night of{n}the 27th when he got there."
+"Anyway, this post-it means he{n}wanted to ensure he wouldn't{n}forget to go to the cemetery."
+"Of course, now we need to{n}figure out why..."
+
+flag openScene77 top
+flag postitAdded top
+char game hide
+nt 
+addev postit
+ev postit
+"{sfx/evidence.wav}{c099}Post-It Note added{n}to the Court Record."
+setflag postitAdded
+flag postitAdded AND soporificAdded EmaCalls
+goto top
+
+
+#----- Judge's Desk Zoom -----#
+macro JudgesDesk
+label examineDesk
+bg ts/judgesdesk
+examine
+region 103 0 39 114 lamp
+region 178 35 78 96 ArthurPic
+region 25 49 80 99 dogPic
+region 142 80 36 67 bottles
+script scene76menu
+
+
+label lamp
+char Apollo hide
+"It's a lamp. ...Rhea,{n}what are you doing?"
+
+char Rhea hide
+"Rubbing it to see if a genie{n}will come out!"
+
+char Apollo hide
+"{c099}(...It looks like she's{n}having fun. I won't ruin it{n}for her.)"
+goto examineDesk
+
+
+label ArthurPic
+char Apollo hide
+"It's a picture of Judge's brother,{n}Arthur..."
+
+char Rhea hide
+"Yeah. They were really close... Of{n}course he'd have a picture here.{n}He has pictures of Arthur all over"
+"the house."
+
+char Apollo hide
+"{c099}(Now both Chambers brothers{n}are gone...)"
+goto examineDesk
+
+
+label dogPic
+char Apollo hide
+"Hey, does Judge have a dog{n}or something?"
+
+char Rhea hide
+"He's never mentioned anything{n}about one."
+
+char Apollo hide
+"Then this must be a vital clue!{n}I bet this picture is the key{n}to the entire case!"
+"Its presence makes {sfx/Bwaaah.ogg}absolutely{s}{n}no sense!"
+
+char Rhea hide
+"...Or maybe he had a dog when he{n}was younger, and he has a picture{n}to remember it by, just like"
+"he has a picture of Arthur."
+
+char Apollo hide
+"...Or maybe that."
+goto examineDesk
+
+
+label bottles
+char Apollo hide
+"There are two bottles of medicine{n}here. Let's see... the blue one is{n}labeled 'tranquilizer.'"
+
+char Rhea hide
+"His career as a judge must have{n}given him a lot of stress. With{n}everything that's happened,"
+"I kind of understand him...{n}in fact, I think I'd like a pill{n}right now."
+
+char Apollo hide
+"...Are you serious?"
+
+char Rhea hide
+"Of course."
+
+char Apollo hide
+"Um, okay... Just be careful...{n}they aren't that great for you."
+
+char Rhea hide
+"I know, I know..."
+
+flag tranqAdded DoneAddingTranq
+addev tranquilizer
+ev tranquilizer name=tranq x=185
+char game hide
+nt
+"{sfx/Ding.ogg}{c099}Tranquilizer given to Rhea."
+delete name=tranq
+setflag tranqAdded
+goto DoneAddingTranq
+
+label DoneAddingTranq
+char Apollo hide
+"Anyway, this green one is{n}apparently a soporific."
+
+char Rhea hide
+"Judge told me he had trouble{n}sleeping after Arthur's murder."
+
+char Apollo hide
+"I wonder if these have anything to{n}do with our case. ...And why Judge{n}put these two similar-looking"
+"medicine bottles right next to{n}each other!"
+
+flag soporificAdded examineDesk
+addev soporific
+ev soporific
+char game hide
+nt
+"{sfx/evidence.wav}{c099}Soporific added{n}to the Court Record."
+setflag soporificAdded
+goto examineDesk
+
+
+label none
+char Apollo hide
+"No clues here."
+goto examineDesk
+endmacro
+#--- End Judge's Desk Zoom ---#
+
+
+label EmaCalls
+script scene76end
+
+
+label none
+char Apollo hide
+"No clues here."
+goto top

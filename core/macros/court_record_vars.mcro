@@ -1,0 +1,96 @@
+#If you want to customize your court record
+#   -   copy this file into your case directory
+#   -   At the begining of intro.txt add the line 
+#           "include court_record_vars.txt"
+#       without quotes
+#   -   modify numbers in the copied file to reposition court
+#            record items on the screen
+#   -   modify image names if you use different images
+
+macro init_court_record_settings
+print setting it
+
+#Where present button goes if it exists
+set ev_present_x 90
+set ev_present_y 0
+
+#Display evidence or profiles in left corner
+set ev_show_mode_text true
+
+#Background image shown for evidence or profile
+#_profile and _back will be appended to this filename if either of those buttons is highlighted
+#In the default case, it also needs general/evidence_back, and general/evidence_profile
+set ev_mode_bg_evidence general/evidence
+set ev_mode_bg_profiles general/evidence
+
+#Position of mode (evidence/profiles) text display if enabled
+set ev_mode_x 4
+set ev_mode_y 12
+
+#Cursor surounding evidence icons
+set ev_cursor_img general/cursor_ev
+
+#Position of the evidence name
+set ev_currentname_x 30
+set ev_currentname_y 35
+
+#Position of the mode switching button
+set ev_modebutton_x 196
+set ev_modebutton_y 7
+
+#Where to start showing item buttons
+set ev_items_x 38
+set ev_items_y 63
+
+#How much space from the left of an item button, to the left of the next one
+set ev_spacing_x 48
+#How much space from top of items on row 1, to top of items on row 2
+set ev_spacing_y 46
+
+#Position of left arrow
+set ev_larrow_x 2
+set ev_larrow_y 90
+
+#Position of right arrow
+set ev_rarrow_x 240
+set ev_rarrow_y 90
+
+#Image to use for the left/right arrows
+set ev_arrow_img general/arrow_right
+
+#Image to use for zoomed in left/right arrows
+set ev_zarrow_img general/arrow_right
+
+#Position of left arrow when zoomed
+set ev_zlarrow_x 2
+set ev_zlarrow_y 90
+
+#Position of right arrow when zoomed
+set ev_zrarrow_x 240
+set ev_zrarrow_y 90
+
+#Image to display for check button(Back button is built in to background)
+set ev_check_img general/check
+
+#Position of "about" text for zoomed view
+set ev_z_textbox_x 100
+set ev_z_textbox_y 70
+
+#Size of "about" text for zoomed view
+set ev_z_textbox_w 130
+set ev_z_textbox_h 100
+
+#Color of "about" text for zoomed view (default white)
+set ev_z_text_col FFFFFF
+
+#Position of zoomed evidence icon
+set ev_z_icon_x 25
+set ev_z_icon_y 60
+
+#Overlay background in zoom view
+set ev_z_bg general/evidence_zoom
+
+#Position of overlay background in zoomed view
+set ev_z_bg_x 0
+set ev_z_bg_y 0
+endmacro

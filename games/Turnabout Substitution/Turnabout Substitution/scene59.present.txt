@@ -1,0 +1,158 @@
+#-version-1
+present
+label top
+bg records
+menu scene59
+
+label gstrings$
+char G.Strings fade e=normal-outofcourt
+"What, me? Well, I don't like to{n}talk about myself. I tend to stay out{n}of social events, parties, etc.,"
+"as I find them rather uneasy{n}and stressful."
+"Personally, I prefer solitary{n}pleasures such as reading, chess,{n}studying dolphins,"
+"role-playing games, semi-scientific{n}experiments, making Ace Attorney{n}fangames,"
+"and attempting to create artificial{n}life with a dead goldfish wired to{n}a potato."
+char Apollo hide
+"That's...{p30} quite a variety of{n}interests you have there. {c099}(Well,{n}if there's one thing he and"
+"{c099}his father have in common, it's{n}that they're both self-loathing and{n}self-absorbed at the same time.)
+char nothing
+goto top
+
+label poole$
+char Apollo hide
+"What do you think of this{n}person, Judge Strings?"
+char G.Strings fade e=shocked-outofcourt
+"Aaaaaaaaaaaaaaaaaaaaah!"
+char Apollo hide
+"{c099}(Not again.)"
+char G.Strings e=normal-outofcourt
+"I apologize. I thought{n}Mephistopheles had just appeared{n}before me!"
+char Apollo hide
+"You mean Prosecutor Poole?"
+char G.Strings e=shocked-outofcourt
+"Be warned, Mr. Justice. The only{n}way to defeat Mephistopheles is to{n}learn his true name."
+"That's all I have to say{n}about that."
+char Apollo hide
+"{c099}(He seems rather afraid of Poole. I{n}can't say I blame him.)
+char nothing
+goto top
+
+label ht5files
+char Rhea fade e=normal
+"Twelve poor innocent victims, each{n}with their families. What a{n}fiendish, psychopathic...{p40} wacko!"
+"How could they let a monster{n}like him get away?"
+char G.Strings fade e=normal-outofcourt
+"Actually, miss, it's quite{n}possible that he may have had more{n}than twelve victims."
+"The only way we know that these{n}people were killed by the serial killer is{n}because he left clues at their homes."
+"Erlenmeyer could easily have killed{n}others, perhaps witnesses, and{n}chose not to leave clues,"
+"simply dumping the bodies in{n}a river somewhere."
+"It is quite likely that other{n}people who have disappeared were{n}murdered by that man."
+"Such truly frightening crimes,{n}but one thing bothers me..."
+char Apollo hide
+"What?"
+char G.Strings e=normal-outofcourt
+"If you look at the files and{n}combine that knowledge with what{n}occurred yesterday,"
+char G.Strings e=shocked-outofcourt
+"well...{p40} the pieces don't match.{n}He leaves clues at the scene of the{n}crime, but he hides the bodies."
+"He confesses to the crimes, and{n}then he goes through a lot of work{n}to escape from prison."
+"It's almost as if he wants to get{n}caught in one case, and in another{n}he tries desperately to avoid capture."
+char Apollo hide
+"Some of that could be explained{n}by his madness, I guess...{p40}"
+"But what if some of these{n}killings weren't {c900}committed by{n}Erlenmeyer?"
+char G.Strings e=normal-outofcourt
+"My thoughts exactly."
+char nothing
+goto top
+
+label goldenplate
+char G.Strings fade e=normal-outofcourt
+"Ah, a battle of wits! You will serve us{n}each of a plate of food, but one{n}will be poisoned with atroquinine,"
+"and I will have to figure out{n}which plate to eat from."
+"Then we will find out who is{n}right, and who is dead. What an{n}excellent idea for a game, Apollo!"
+char Apollo hide
+"What? Oh nonononono..."
+char G.Strings e=normal-outofcourt
+"I accept."
+char Apollo hide
+"Mr. Strings, there isn't going{n}to be any battle of wits to the{n}death!"
+char G.Strings e=normal-outofcourt
+"Now, a clever man would put{n}the poison in his own food, because{n}he would know that only"
+"a great fool would reach for{n}what he was given."
+"I am not a great fool, so I can{n}clearly not choose the plate in front{n}of you."
+"But you must have known I was{n}not a great fool- you would have{n}counted on it,"
+char Apollo hide
+"You've made your decision, then?{n}{c099}(Might as well get this over with.)"
+char G.Strings e=normal-outofcourt
+"Not remotely. Because atroquinine{n}comes from America, as everyone{n}knows!"
+"And America is entirely populated{n}with obese people."
+"And Americans are used to having{n}people not trust them with food as{n}you are not trusted by me"
+"with this food, so I can clearly{n}not choose the plate in front{n}of you."
+char Apollo hide
+"Truly, you have a dizzying intellect."
+char G.Strings e=normal-outofcourt
+"Wait until I get going! Uh...{p40}{n}where was I?"
+char Rhea fade e=normal
+"America."
+char G.Strings fade e=normal-outofcourt
+"Yes, America! And you must have{n}suspected that I knew the poison's{n}origin,"
+"so I can clearly not choose{n}the plate in front of me."
+char Apollo hide
+"You're just stalling now."
+char G.Strings e=normal-outofcourt
+"You'd like to think that, wouldn't{n}you!? You've beaten Prosecutor{n}Poole, which means you"
+"are exceptionally fearsome, so you{n}could have put the poison in your{n}own food trusting on your"
+"strength to save you."
+"But you've also bested my father,{n}which means you must have studied{n}and in studying you"
+"must have learned that man is mortal,{n}so you would have put the poison{n}as far from yourself as possible,"
+"so I can clearly not choose{n}the plate in front of me."
+char Apollo hide
+"You're trying to trick me into{n}giving away something. It won't work."
+char G.Strings e=normal-outofcourt
+"It has worked! You've given{n}everything away! I know where{n}the poison is!"
+char Apollo hide
+"Well, then make your choice."
+char G.Strings e=normal-outofcourt
+"I will! And I choose...{p40} What{n}in the world can that be!?"
+char Apollo hide
+"What? Where?"
+char Rhea fade e=normal
+"Huh? I don't see anything."
+char G.Strings fade e=normal-outofcourt
+"Well, uh...{p40} I could have{n}sworn I saw something. Heh heh{n}heh..."
+char Apollo hide
+"What's so funny?"
+char G.Strings e=normal-outofcourt
+"I'll tell you in a minute.{n}Now, let's eat. Me from my{n}plate, and you from yours."
+char Apollo hide
+"Mr. Strings, I think you've{n}forgotten that there is only one{n}plate, and there is no poison."
+char G.Strings e=shocked-outofcourt
+"Oh...{p40} my word, I apologize.{n}It would seem that I got{n}carried away."
+char Apollo hide
+"{c099}(That's an understatement.)"
+char nothing
+goto top
+
+label none
+char Apollo hide
+"What do you know about this,{n}Judge Strings?"
+char G.Strings fade e=normal-outofcourt
+"My, Mr. Justice, you sure enjoy{n}showing irrelevant things to people{n}in order to impress them."
+"If only I could give out{n}penalties in real life- that would{n}make things so much easier."
+char Apollo hide
+"Hm...{p30} Justice Strings would have{n}answered that with an obscure{n}Latin phrase..."
+char G.Strings e=normal-outofcourt
+"Oh, a challenge, Mr. Justice?{n}I accept."
+char Apollo hide
+"Do you even know Latin, Judge{n}Strings?"
+char G.Strings e=normal-outofcourt
+"Of course I do. Estuans interius, ira{n}vehementi...{p40} Sephiroth! Sors{n}immanis, et inanis... Veni veni venias,"
+"ne me mori facias! Veni{n}veni venias, ne me mori facias!"
+char Apollo hide
+"All right, all right, I get{n}it- you do speak Latin. What{n}were you saying, anyway?"
+char G.Strings e=shocked-outofcourt
+"What? Mr. Justice, that was{n}just ominous Latin chanting."
+char Apollo hide
+"Oh. Well, glue a black wing{n}to my back and call me a SOLDIER."
+char Rhea fade e=mad
+"Apollo, just stop now."
+char nothing
+goto top

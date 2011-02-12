@@ -1,0 +1,120 @@
+#-version-1
+present
+label top
+bg ts/1deekayandcooffice fade
+menu scene57
+
+label rhea$
+char Rhea fade e=normal
+"It's kind of sad, really."
+char Apollo hide
+"{sfx/sfx general/sfx-realization.wav}Huh? What is?"
+char Rhea e=normal
+"Chambers and I helped each{n}other to cope with the losses of{n}those dear to us."
+"I knew all along that he was{n}a good person- he could never kill{n}another human being."
+char Apollo hide
+"What's so sad about that?"
+char Rhea e=normal
+Hm? Well, Strings would try to{n}frame that poor old man for murder{n}for no good reason."
+"What kind of person would{n}do something like that?"
+char Apollo hide
+"I see."
+char Rhea e=mad
+"What?"
+char Apollo hide
+"Oh, it just seemed like you{n}were going to say something{n}different...{p40} {s}{f}{sfx/sfx general/sfx-lightbulb.wav}Wait!"
+"Didn't I ask about {c900}you{c}? And{n}you're going on about Chambers!"
+char Rhea e=normal
+"Well, I've pretty much covered{n}that ground already. Hmm...{p60} there's{n}my chewing habits, of course!"
+char Apollo hide
+"Yes, I know, they're downright{n}fascinating. Never mind."
+char nothing
+goto top
+
+label apollo$
+char Rhea fade e=mad
+"Apollo, why are you showing{n}me a picture of...{p40}{c900} yourself?"
+char Apollo hide
+"What? Oh, well, I thought{n}you might want one, or something..."
+char Rhea e=mad
+"You're trying to figure out what I{n}think of you, aren't you? If you're{n}going to say something, just say it."
+char Apollo hide
+"{c099}(How did she see through my{n}ingenious ruse!?){p20}{c} Yes, ma'am..."
+char Rhea e=normal
+"What do I think of you? Well,{n}your chewing habits aren't really{n}very special..."
+"and I hate to tell you this,{n}but you've got a bit of a...{n}{p40} {c900}Canadian accent."
+char Apollo hide
+"{sfx/sfx general/sfx-objection.wav}{s}OBJECTION! I most certainly do not{n}have even the slightest trace of{n}an accent!"
+"I have no idea what you are{n}talking {c900}aboot!{c099} {sfx/sfx general/sfx-whoops.wav}(Whoops.)"
+char Rhea e=smiling2
+"{c900}A boot?{c} What do you call that?{n}It's like you're describing appropriate{n}footwear for a rainy day."
+char Apollo hide
+"No, no, I merely misspoke!{n}It was a one-time thing, {c900}yoo knoo!"
+char Rhea e=normal
+"I rest my case, Your Honor."
+char Apollo hide
+"{c099}(What's going on!? I never talk like{n}this! Does Rhea have some kind of{n}power over people's accents?)"
+char Rhea e=normal
+"A word of caution. If you watch{n}me chew for long enough, you'll{n}go insane."
+"Of course, once you start{n}talking funny, it's really too{n}late."
+char Apollo hide
+"{c099}(She must be joking. She{n}can't possibly be serious. Right?)"
+char nothing
+goto top
+
+label photograph
+char Rhea fade e=normal
+"This photograph isn't real, but...{p40}{n}I can still see him, almost as{n}if he were right here in front of me."
+"I suppose it's a pretty convincing{n}image."
+char Apollo hide
+"{c099}(I don't know why, but I almost{n}feel bad for thinking it was a real{n}photograph in the first place.)"
+char nothing
+goto top
+
+
+label ht5files
+char Rhea fade e=normal
+"It never really made sense to{n}me, why Erlenmeyer chose the{n}symbols that he did."
+"The part about Charles Darwin makes{n}some sense, considering that he's{n}a biology teacher."
+"He was probably inspired by{n}natural selection or something. But...{p40}{n}what was with the music sheet,"
+"and the issue of the bust. Whether{n}or not he really was mad, surely{n}he had a reason for"
+"arranging the scene of every killing{n}in such a precise manner. At least,{n}I hope there was some reason to it."
+"Not that it would change{n}things either way..."
+char Apollo hide
+"Hmm...{p40} This music sheet. Is it{n}a well-known piece?"
+char Rhea e=normal
+"I don't think so. That's the{n}problem, really- if there was a certain{n}recognizable tune, it could be a clue."
+"Maybe it would have something to do{n}with the name of the composer, or{n}something else along those lines."
+"But there's really nothing of{n}the sort."
+char Apollo hide
+"Well, if the music isn't really a{n}recognizable tune, and it doesn't{n}have a name...{p40} maybe it's"
+"really a secret code! The notes could{n}be the letters of a message,{n}or something!"
+char Rhea e=normal
+"Yes, but the police had already{n}thought of that. There was no such{n}code."
+char Apollo hide
+"Oh, well, that's too bad.{c099} (I was{n}sure I had figured out something...)"
+char nothing
+goto top
+
+
+label none
+char Rhea fade e=normal
+char Apollo hide
+"Rhea...{p40} What do you think{n}of this evidence?"
+char Rhea e=mad
+"Apollo. You don't really want to{n}know what I think of it. What you're{n}really interested in is my reaction."
+char Apollo hide
+"{sfx/shock.ogg}{c099}{s}(Who the hell does she think{n}she is?)"
+char Rhea e=mad
+"If you wanted some juicy details{n}about my personal life, well...{p40}you{n}should've asked earlier!"
+"I don't feel like sharing at{n}the moment."
+char Apollo hide
+"{s}What!? {c099}({sfx/sfx general/sfx-whoops.wav}I think I just got burned,{n}but I'm not really sure...)"
+char nothing
+goto top
+
+
+
+
+
+
