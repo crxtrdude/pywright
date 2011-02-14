@@ -79,64 +79,6 @@ def to_triplets(li):
 def other_screen(y):
     return y+(assets.num_screens-1)*sh
 
-def load_gif_anim(file,fc):
-    import Image
-    frames = []
-    pil_image = Image.open(file)
-    try:
-        time_between_frames = pil_image.info['duration']
-    except:
-        time_between_frames = 1
-    palette = to_triplets(pil_image.getpalette())
-    last = None
-    fullframes = []
-    size = pil_image.size
-    size = (0,0,size[0],size[1])
-    blit_over = False
-    framecompress = 0
-    i = 0
-    try:
-        while 1:
-            if len(pil_image.tile) > 0:
-                (x0, y0, x1, y1) = pil_image.tile[0][1]
-                if (x0,y0,x1,y1)!=size:
-                    blit_over = True
-            else:
-                (x0, y0, x1, y1) = size
-            try:
-                thestr = pil_image.tostring()
-            except IOError:
-                continue
-            image = pygame.image.fromstring(thestr, [size[2],size[3]], 'P')
-            image.set_palette(palette)
-            try:
-                image.set_colorkey(pil_image.info['transparency'])
-            except:
-                pass
-            new_image = pygame.Surface([size[2],size[3]]).convert_alpha()
-            new_image.fill([0,0,0,0])
-            new_image.blit(image, (x0, y0), (x0, y0, x1 - x0, y1 - y0))
-            if fc and fc[0]==i:
-                framecompress = fc[1]
-                del fc[0]
-                del fc[0]
-            if not framecompress and last and blit_over:
-                last.blit(new_image,[0,0])
-                frames.append(last)
-                last = last.copy()
-            else:
-                frames.append(new_image)
-                last = new_image.copy()
-            pil_image.seek(pil_image.tell() + 1)
-            i+=1
-    except EOFError:
-        pass # end of sequence
-    if not os.path.exists(file.replace(".gif",".txt")):
-        f = open(file.replace(".gif",".txt"),"w")
-        f.write("length %s\nloops 1\n"%len(frames))
-        f.close()
-    return frames,meta().load_from(open(file.replace(".gif",".txt")))
-    
 class meta:
     def __init__(self):
         self.horizontal = 1
@@ -497,28 +439,25 @@ set _font_new_resume_size 14""".split("\n"):
                 import traceback
                 traceback.print_exc()
                 raise art_error("Art textfile corrupt:"+pre+name[:-4]+".txt")
-        if name.endswith(".gif"):
-            img,self.meta = load_gif_anim(pre+name,self.meta.framecompress)
+        texture = pygame.image.load(pre+name)
+        if texture.get_flags()&pygame.SRCALPHA: 
+            texture = texture.convert_alpha()
         else:
-            texture = pygame.image.load(pre+name)
-            if texture.get_flags()&pygame.SRCALPHA: 
-                texture = texture.convert_alpha()
-            else:
-                texture = texture.convert()
-            if key:
-                texture.set_colorkey(key)
-            img = []
-            x = 0
-            y = 0
-            width,height = texture.get_size()
-            incx = width//self.meta.horizontal
-            incy = height//self.meta.vertical
-            for frame in range(self.meta.length):
-                img.append(texture.subsurface([[x,y],[incx,incy]]))
-                x+=incx
-                if x>=width:
-                    x=0
-                    y+=incy
+            texture = texture.convert()
+        if key:
+            texture.set_colorkey(key)
+        img = []
+        x = 0
+        y = 0
+        width,height = texture.get_size()
+        incx = width//self.meta.horizontal
+        incy = height//self.meta.vertical
+        for frame in range(self.meta.length):
+            img.append(texture.subsurface([[x,y],[incx,incy]]))
+            x+=incx
+            if x>=width:
+                x=0
+                y+=incy
         img = ImgFrames(img)
         img._meta = self.meta
         img.real_path = self.real_path = pre+name
@@ -1365,11 +1304,6 @@ class fadesprite(sprite):
                 self.gs_base = [x[:] for x in self.origc_base]
                 mat = numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]])
                 self.gs_base = [[y*mat for y in x] for x in self.gs_base]
-                self.gsimg_base = [x.convert_alpha() for x in self.base]
-                for i,x in enumerate(self.gsimg_base):
-                    x = pygame.surfarray.pixels3d(x)
-                    x[:] = self.gs_base[i]
-                    del x
                 self.draw_func = self.numpydraw
             else:
                 self.draw_func = self.mockdraw
@@ -1415,9 +1349,9 @@ class fadesprite(sprite):
         change = getattr(self,"lgs",None)!=self.greyscale or getattr(self,"li",None)!=self.invert or getattr(self,"lt",None)!=self.tint
         if change:
             px[:] = self.origc_base[self.x]
-            if self.greyscale:
-                px[:] = self.gs_base[self.x][:]
-            self.lgs = self.greyscale
+            #if self.greyscale:
+            #    px[:] = self.gs_base[self.x][:]
+            #self.lgs = self.greyscale
             if self.invert:
                 px[:] = 255-px[:]
             self.li = self.invert
@@ -1427,21 +1361,33 @@ class fadesprite(sprite):
         del px
         img = self.img
         self.img = self.mockimg_base[self.x]
-        if self.greyscale:
-            self.img = self.gsimg_base[self.x]
         if 0:#self.greyscale:
-            self.img = self.img.convert(8)
-            pal = self.img.get_palette()
+            ximg = img#img.convert_alpha()
+            x = pygame.surfarray.pixels3d(ximg)
+            x[:] = self.gs_base[self.x]
+            self.img = ximg
+            del x
+        if self.greyscale:
+            self.lgs = self.greyscale
+            ximg = pygame.Surface(self.img.get_size())
+            ximg.fill([255,0,255])
+            ximg.blit(self.img,[0,0])
+            ximg = ximg.convert(8)
+            pal = ximg.get_palette()
             gpal = []
-            for col in pal[1:]:
+            for col in pal:
+                if col == (255,0,255):
+                    gpal.append(col)
+                    continue
                 avg = (col[0]+col[1]+col[2])//3
                 gpal.append([avg,avg,avg])
-            gpal = [[255,0,255]]+gpal
-            self.img.set_palette(gpal)
-            self.img.set_colorkey(gpal[0])
-            self.img = self.img.convert()
-            pygame.image.save(self.img,"test.png")
-            print "do greyscale"
+            ximg.set_palette(gpal)
+            ximg = ximg.convert()
+            ximg.set_colorkey([255,0,255])
+            yimg = pygame.Surface(self.img.get_size()).convert_alpha()
+            yimg.fill([0,0,0,0])
+            yimg.blit(ximg,[0,0])
+            self.img = yimg
         sprite.draw(self,dest)
         self.img = img
     def mockdraw(self, dest):
