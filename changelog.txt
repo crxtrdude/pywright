@@ -6,6 +6,7 @@
     and _cr_back_button variables. With the variables you can forget to unset them, causing
     very difficult to find and nasty game ending bugs.
     - loading a game saved during a localmenu command would go to the next line after the menu
+    - changed gui colors to better represent phoenix stylings
 
 *PyWright 0.980/0.981: September 21, 2010*
     (0.981 fixed some last minute bugs with mac, the updater, and cross examination arrows)
