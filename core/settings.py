@@ -344,6 +344,7 @@ class settings_menu(gui.pane):
         def set_checked(val):
             s_c(val)
             assets.show_fps = val
+            wini(assets)
         self.show_fps.set_checked = set_checked
         
         res_box.add_child(gui.button(self,"Change resolution (%sx%s)"%(assets.swidth,assets.sheight)))
