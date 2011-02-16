@@ -2601,10 +2601,11 @@ class choose_game(gui.widget):
         self.z = 1000
         self.pri = -1000
         
-        self.list = gui.scrollpane([0,0])
-        self.list.width,self.list.height = [sw,sh]
+        self.list = gui.scrollpane([0,10])
+        self.list.width,self.list.height = [sw,sh-10]
         self.add_child(self.list)
         self.jump_when_close = None
+        self.sort = "played"
     def update(self,*args):
         self.rpos[1] = other_screen(0)
         [x.update() for x in self.children]
@@ -2624,8 +2625,28 @@ class choose_game(gui.widget):
         self.cb.pri = -1005
         self.children.append(self.cb)
         self.jump_when_close = jump
-        self.list.scbar_y=self.cb.height
+        self.list.scbar_y=self.cb.height-7
         self.list.scbar_height=-self.cb.height
+
+        self.sort_played_btn = gui.button(self,"played")
+        self.sort_played_btn.rpos[0]=2
+        self.sort_played_btn.z = 1005
+        self.sort_played_btn.pri = -1005
+        self.children.append(self.sort_played_btn)
+
+        self.sort_az_btn = gui.button(self,"A to Z")
+        self.sort_az_btn.rpos[0]=40
+        self.sort_az_btn.z = 1005
+        self.sort_az_btn.pri = -1005
+        self.children.append(self.sort_az_btn)
+    def A_to_Z(self,*args):
+        self.sort = "az"
+        self.list.children[1].children[:] = []
+        self.list_games(self.path)
+    def played(self,*args):
+        self.sort = "played"
+        self.list.children[1].children[:] = []
+        self.list_games(self.path)
     def list_games(self,path):
         self.path = path
         games = []
@@ -2642,10 +2663,12 @@ class choose_game(gui.widget):
             f.close()
         except:
             assets.played = []
-        for i in reversed(assets.played):
-            if i in games:
-                games.remove(i)
-                games.insert(0,i)
+        games.sort(key=lambda x: x.lower())
+        if self.sort == "played":
+            for i in reversed(assets.played):
+                if i in games:
+                    games.remove(i)
+                    games.insert(0,i)
         for f in games:
             item = gui.button(self,f)
             d = get_data_from_folder(self.path+"/"+f)
@@ -2663,6 +2686,9 @@ class choose_game(gui.widget):
                 lines.append("Requires PyWright "+reqs)
             height = graphic.get_height()
             width = 200
+            times_played = assets.played.count(f)
+            if times_played:
+                lines.append("played: %s"%times_played)
             for i in range(len(lines)):
                 txt = assets.get_font("nt").render(lines[i],1,[0,0,0])
                 lines[i] = txt
