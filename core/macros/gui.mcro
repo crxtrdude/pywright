@@ -1,0 +1,10 @@
+macro crbut
+showrecord
+delete name=_crbut_
+print deleted
+gui Wait
+endmacro
+
+macro show_court_record_button
+gui Button {crbut} name=_crbut_ graphic=general/record x=0 y=0 hotkey=k_tab
+endmacro
