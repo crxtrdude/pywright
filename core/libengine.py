@@ -1234,6 +1234,9 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         """Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
         resume."""
         del assets.stack[-1]
+    @category([],type="interface")
+    def _showrecord(self,command,*args):
+        assets.addevmenu()
     @category([VALUE("scene_name","Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'"),
     KEYWORD('examine','whether to show the examine button','true'),
     KEYWORD('talk','whether to show the talk button','true'),
