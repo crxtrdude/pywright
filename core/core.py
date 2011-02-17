@@ -993,6 +993,11 @@ class ImgFont(object):
     def get_descent(self):
         """return number of pixels from font baseline to bottom"""
 
+class ws_button(gui.button):
+    """A button created from wrightscript"""
+    def delete(self):
+        self.kill = 1
+
 class sprite(gui.button):
     blinkspeed = [100,200]
     autoclear = False

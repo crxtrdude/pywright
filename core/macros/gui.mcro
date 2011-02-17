@@ -1,10 +1,21 @@
 macro crbut
 showrecord
-delete name=_crbut_
-print deleted
-gui Wait
 endmacro
 
 macro show_court_record_button
-gui Button {crbut} name=_crbut_ graphic=general/record x=0 y=0 hotkey=k_tab
+isnot _cr_enable exit
+gui Button {crbut} name=_crbut_ graphic=general/record x=177 y=192 hotkey=k_tab
+label exit
+endmacro
+
+macro hide_court_record_button
+delete name=_crbut_
+endmacro
+
+macro disable_court_record_button
+set _cr_enable false
+endmacro
+
+macro enable_court_record_button
+set _cr_enable true
 endmacro

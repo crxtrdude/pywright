@@ -1735,7 +1735,7 @@ The four types of gui you can create are:
                 del args[0]
             text = ""
             text = " ".join(args)
-            btn = gui.button(None,text)
+            btn = ws_button(None,text)
             btn.s_text = text
             if graphic:
                 btn.s_graphic = graphic
@@ -2185,6 +2185,7 @@ exit}}}
         for o in reversed(self.obs):
             if getattr(o,"id_name",None)==name:
                 any = True
+                print "found",o
                 o.delete()
                 break
         if name and not any and vtrue(assets.variables.get("_debug","false")):
