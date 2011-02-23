@@ -6,7 +6,8 @@
 3  sprite fadesprite graphic mesh evidence fg movie testimony_blink 
 4  textblock textbox penalty notguilty guilty
 5  press_button present_button menu listmenu examine_menu gui
-7  evidence_menu record_button guiBack guiScroll press_button present_button
+6  record_button
+7  evidence_menu guiBack guiScroll press_button present_button
 8  case_menu
 9 flash shake
 10 saved
@@ -17,7 +18,7 @@
 [pri]
 -10000	error_msg
 -5000 saved
--1000	waitenter scroll rotateanim fadeanim guiBack guiScroll timer zoomanim uglyarrow flash shake
+-1000	waitenter scroll rotateanim fadeanim guiScroll timer zoomanim uglyarrow flash shake
 -500 examine_menu
 0	fg evidence_menu movie sprite fadesprite
 20	portrait

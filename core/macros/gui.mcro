@@ -1,21 +1,27 @@
-macro crbut
+macro _crbut
 showrecord
 endmacro
 
+macro _default_court_record_button
+gui Button {_crbut} name=_crbut_ graphic=general/record x=177 y=0 hotkey=k_tab z=6 pri=-5000
+endmacro
+
 macro show_court_record_button
-isnot _cr_enable exit
-gui Button {crbut} name=_crbut_ graphic=general/record x=177 y=192 hotkey=k_tab
+isnot _cr_button exit
+{hide_court_record_button}
+{_default_court_record_button}
 label exit
 endmacro
 
 macro hide_court_record_button
-delete name=_crbut_
+delete name=_crbut_ suppress
 endmacro
 
 macro disable_court_record_button
-set _cr_enable false
+set _cr_button false
+delete name=_crbut_ suppress
 endmacro
 
 macro enable_court_record_button
-set _cr_enable true
+set _cr_button true
 endmacro

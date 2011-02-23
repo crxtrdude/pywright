@@ -214,6 +214,23 @@ class Assets(object):
     _music_vol = 100
     sw = sw
     sh = sh
+    def get_stack(self):
+        stack = []
+        for s in self.stack:
+            def gp(s,i):
+                si = s.si+i
+                if si<0:
+                    return "PRE"
+                if si>=len(s.scriptlines):
+                    return "END"
+                if not s.scriptlines:
+                    return "NOSCRIPT"
+                return s.scriptlines[si]
+            p0 = gp(s,-1)
+            p1 = gp(s,0)
+            p2 = gp(s,1)
+            stack.append([p0,p1,p2])
+        return stack
     def smus(self,v):
         self._music_vol = v
         try:
@@ -992,7 +1009,7 @@ class ImgFont(object):
         """return hieght in pixels from font baseline to top"""
     def get_descent(self):
         """return number of pixels from font baseline to bottom"""
-
+        
 class ws_button(gui.button):
     """A button created from wrightscript"""
     def delete(self):
@@ -1813,39 +1830,39 @@ class present_button(fadesprite,gui.widget):
     def click_down_over(self,mp):
         self.parent.k_x()
 
-class record_button(fadesprite,gui.widget):
-    z = 7
-    def __init__(self,parent):
-        self.normal = assets.open_art("general/record")[0]
-        self.high = assets.open_art("general/record_high")[0]
-        self.highlight = False
-        self.pos = [sw-self.normal.get_width(),other_screen(0)]
-        gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
-        #self.width = 40
-        self.height = 17
-    def draw(self,dest):
-        if not vtrue(assets.variables.get("_cr_button","on")):
-            return
-        surf = {False:self.normal,True:self.high}[self.highlight is True]
-        dest.blit(surf,self.pos)
-    def click_down_over(self,mp):
-        if not vtrue(assets.variables.get("_cr_button","on")):
-            return
-        if mp[0]>=self.pos[0] and mp[0]<=self.pos[0]+self.normal.get_width() and\
-            mp[1]>=self.pos[1] and mp[1]<=self.pos[1]+self.height:
-            if mp[0]>self.pos[0]+38 or not vtrue(assets.variables.get("_cr_button_loadsave","on")):
-                self.showmenu()
-                return True
-            elif mp[0]>self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_save","true")):
-                assets.save_game()
-                return True
-            elif mp[0]<=self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_load","true")):
-                assets.load_game_menu()
-                return True
-    def showmenu(self):
-        if not vtrue(assets.variables.get("_cr_button","on")):
-            return
-        assets.addevmenu()
+#~ class record_button(fadesprite,gui.widget):
+    #~ z = 7
+    #~ def __init__(self,parent):
+        #~ self.normal = assets.open_art("general/record")[0]
+        #~ self.high = assets.open_art("general/record_high")[0]
+        #~ self.highlight = False
+        #~ self.pos = [sw-self.normal.get_width(),other_screen(0)]
+        #~ gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
+        #~ #self.width = 40
+        #~ self.height = 17
+    #~ def draw(self,dest):
+        #~ if not vtrue(assets.variables.get("_cr_button","on")):
+            #~ return
+        #~ surf = {False:self.normal,True:self.high}[self.highlight is True]
+        #~ dest.blit(surf,self.pos)
+    #~ def click_down_over(self,mp):
+        #~ if not vtrue(assets.variables.get("_cr_button","on")):
+            #~ return
+        #~ if mp[0]>=self.pos[0] and mp[0]<=self.pos[0]+self.normal.get_width() and\
+            #~ mp[1]>=self.pos[1] and mp[1]<=self.pos[1]+self.height:
+            #~ if mp[0]>self.pos[0]+38 or not vtrue(assets.variables.get("_cr_button_loadsave","on")):
+                #~ self.showmenu()
+                #~ return True
+            #~ elif mp[0]>self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_save","true")):
+                #~ assets.save_game()
+                #~ return True
+            #~ elif mp[0]<=self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_load","true")):
+                #~ assets.load_game_menu()
+                #~ return True
+    #~ def showmenu(self):
+        #~ if not vtrue(assets.variables.get("_cr_button","on")):
+            #~ return
+        #~ assets.addevmenu()
         
 def wrap_text(lines,font,width,wrap=True):
     page = []
@@ -1942,16 +1959,20 @@ class textbox(gui.widget):
         
         self.pressb = press_button(self)
         self.presentb = present_button(self)
-        self.recordb = record_button(self)
         self.pressing = 0
         self.presenting = 0
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
+    def init_cross(self):
+        pass
+    def init_normal(self):
+        assets.cur_script.execute_macro("show_court_record_button")
     def delete(self):
         self.pressb.delete()
         self.presentb.delete()
         self.kill = 1
         assets.cur_script.refresh_arrows(self)
+        assets.cur_script.execute_macro("hide_court_record_button")
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
         if assets.portrait:
@@ -1993,8 +2014,6 @@ class textbox(gui.widget):
         if self.statement and not self.presenting:
             self.presentb.highlight = True
             self.presenting = 15
-    def k_tab(self):
-        self.recordb.showmenu()
     def forward(self,sound=True):
         spl = self.written.split("\n",1)
         if spl[1:]:
@@ -2082,12 +2101,6 @@ class textbox(gui.widget):
                 assets.cur_script.obs.append(self.pressb)
             if not h2:
                 assets.cur_script.obs.append(self.presentb)
-        if assets.num_screens == 2 and self.statement:
-            self.recordb.pos = [self.recordb.pos[0],192*2-self.recordb.height]
-        elif assets.num_screens == 1 and self.statement:
-            self.recordb.pos = [self.recordb.pos[0],192]
-        self.recordb.draw(dest)
-        self.children+=[self.recordb]
     def update(self):
         #assets.play_sound(self.clicksound)
         if self.statement:
@@ -2396,11 +2409,6 @@ class uglyarrow(fadesprite):
             if self.high == None:
                 self.high = True
     def click_down_over(self,mp):
-        #BAD - send clicks to record button
-        for widget in assets.cur_script.obs:
-            if hasattr(widget,"recordb"):
-                if widget.recordb.click_down_over(mp):
-                    return
         gui.window.focused = self
         over = self.over(mp)
         if over == True and not self.high and self.can_click():
@@ -2433,8 +2441,6 @@ class menu(fadesprite,gui.widget):
             self.click_down_over(pos)
     def click_down_over(self,mp):
         gui.window.focused = self
-        if self.recordb.click_down_over(mp):
-            return
         o = self.over(mp)
         if o is not None:
             self.selected = o
@@ -2482,10 +2488,12 @@ class menu(fadesprite,gui.widget):
             y+=self.opthigh.get_height()//2+1
             x = 0
         self.oimgshigh = {"examine":imgs[0],"move":imgs[1],"talk":imgs[2],"present":imgs[3]}
-        self.recordb = record_button(assets.cur_script)
         self.open_script = True
-    def k_tab(self):
-        self.recordb.click_down_over([256,0])
+    def init_normal(self):
+        assets.cur_script.execute_macro("show_court_record_button")
+    def delete(self):
+        super(menu,self).delete()
+        assets.cur_script.execute_macro("hide_court_record_button")
     def update(self):
         if not self.options:
             self.delete()
@@ -2562,7 +2570,6 @@ class menu(fadesprite,gui.widget):
                     dest.blit(self.oimgshigh[o],self.opos[o])
                 else:
                     dest.blit(self.oimgs[o],self.opos[o])
-        self.recordb.draw(dest)
 
 class listmenu(fadesprite,gui.widget):
     fail = "none"
@@ -2588,8 +2595,6 @@ class listmenu(fadesprite,gui.widget):
     def click_down_over(self,mp):
         if getattr(self,"kill",0):
             return False
-        if self.recordb.click_down_over(mp):
-            return
         gui.window.focused = self
         si = self.over(mp)
         if si is not None:
@@ -2622,12 +2627,10 @@ class listmenu(fadesprite,gui.widget):
         self.choice_high = fadesprite().load("general/talkchoice_high")
         self.hidden = True
         self.tag = tag
-        self.recordb = record_button(assets.cur_script)
-    def k_tab(self):
-        if getattr(self,"kill",0):
-            return False
-        self.recordb.click_down_over([256,0])
+    def init_normal(self):
+        assets.cur_script.execute_macro("show_court_record_button")
     def delete(self):
+        assets.cur_script.execute_macro("hide_court_record_button")
         self.kill = 1
         if hasattr(self,"bck"):
             self.bck.kill = 1
@@ -2669,12 +2672,12 @@ class listmenu(fadesprite,gui.widget):
             return False
         if self.tag:
             assets.lists[self.tag][self.selected[0]] = 1
-        self.delete()
         if self.selected[1] != "Back":
             assets.variables["_selected"] = self.selected[1]
             assets.cur_script.goto_result(self.selected[1],backup=self.fail)
         else:
             assets.variables["_selected"] = "Back"
+        self.delete()
     def draw(self,dest):
         if getattr(self,"kill",0):
             return False
@@ -2720,7 +2723,6 @@ class listmenu(fadesprite,gui.widget):
                 cy = int(assets.variables.get("_list_checked_y","-10"))
                 dest.blit(checkmark.base[0],[x+cx,y+cy])
             y+=self.choice.img.get_height()+5
-        self.recordb.draw(dest)
     def k_space(self):
         if getattr(self,"kill",0):
             return False
@@ -2936,6 +2938,7 @@ class examine_menu(sprite,gui.widget):
         self.pri = ulayers.index(self.__class__.__name__)
         sprite.__init__(self)
         self.pos = [0,other_screen(0)]
+        self.z = zlayers.index(self.__class__.__name__)
         self.width = sw
         self.height = sh
         gui.widget.__init__(self,[0,other_screen(0)],[sw,sh])
@@ -2960,9 +2963,15 @@ class examine_menu(sprite,gui.widget):
         if scroll_amt==-1:
             assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
-        #self.recordb = record_button(assets.cur_script)
-    #~ def k_tab(self):
-        #~ self.recordb.click_down_over([256,0])
+    def init_normal(self):
+        assets.cur_script.execute_macro("show_court_record_button")
+    def delete(self):
+        self.kill = 1
+        if hasattr(self,"bck"):
+            self.bck.delete()
+        if hasattr(self,"scrollbut"):
+            self.scrollbut.delete()
+        assets.cur_script.execute_macro("hide_court_record_button")
     def getoffset(self):
         x = [o.pos[0] for o in self.bg]
         if not x:
@@ -3034,7 +3043,6 @@ class examine_menu(sprite,gui.widget):
             y = int(assets.variables.get("_examine_offsety",0))
             tb = textblock("offsetx:%s offsety%s"%(x,y),[0,192],[256,20],[255,255,255])
             tb.draw(dest)
-        #self.recordb.draw(dest)
     def update(self,*args):
         if self.xscrolling:
             assets.cur_script.obs.append(scroll(-self.xscrolling,0,speed=16))
@@ -3114,12 +3122,6 @@ class examine_menu(sprite,gui.widget):
     def k_space(self):
         if not self.hide:
             self.delete()
-    def delete(self):
-        self.kill = 1
-        if hasattr(self,"bck"):
-            self.bck.delete()
-        if hasattr(self,"scrollbut"):
-            self.scrollbut.delete()
 
 class evidence_menu(fadesprite,gui.widget):
     fail = "none"
@@ -3183,6 +3185,7 @@ class evidence_menu(fadesprite,gui.widget):
     def __init__(self,items=[],gba=True):
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,other_screen(0)
+        self.z = zlayers.index(self.__class__.__name__)
         fadesprite.__init__(self,x=x,y=y)
         gui.widget.__init__(self,[x,y],[sw,sh])
         self.items = items
@@ -4040,8 +4043,6 @@ class guiBack(sprite,gui.widget):
     def k_space(self):
         self.delete()
         print "only kill back button"
-    def update(self):
-        return True
         
 class guiScroll(sprite,gui.widget):
     def click_down_over(self,mp):
