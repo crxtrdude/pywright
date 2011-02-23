@@ -508,6 +508,8 @@ class Script(gui.widget):
     def update_objects(self):
         for o in self.world.update_order():
             if o.update():
+                if o.cur_script not in assets.stack:
+                    o.cur_script = assets.cur_script
                 if o.cur_script==self: return False
         return True
     def update(self):
@@ -616,12 +618,15 @@ char test
         self.refresh_arrows(tbox)
         self.tboff()
         if self.cross is not None and self.instatement:
+            tbox.init_cross()
             self.tbon()
             if self.cross == "proceed":
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
                 tbox._text = nt+"\n{c283}"+t
                 #tbox.color = (20,200,40)
+        else:
+            tbox.init_normal()
     def execute_line(self,line):
         if not line:
             return
@@ -1236,6 +1241,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         del assets.stack[-1]
     @category([],type="interface")
     def _showrecord(self,command,*args):
+        print "show ev menu"
         assets.addevmenu()
     @category([VALUE("scene_name","Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'"),
     KEYWORD('examine','whether to show the examine button','true'),
@@ -1269,6 +1275,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         self.add_object(m,True)
         self.execute_macro("defaults")
         self.autosave()
+        m.init_normal()
     @category([KEYWORD('examine','whether to show the examine button','false'),
     KEYWORD('talk','whether to show the talk button','false'),
     KEYWORD('present','whether to show the present button','false'),
@@ -1292,6 +1299,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                     m.addm(arg)
         m.open_script = False
         self.add_object(m,True)
+        m.init_normal()
     @category([KEYWORD('pri','What priority to update the case menu','Default casemenu priority listed in core/sorting.txt')],type="interface/case_menu")
     def _casemenu(self,command,*args):
         """Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
@@ -2125,6 +2133,7 @@ exit}}}
         if noback and noback != "noback":
             raise script_error("Unknown token '%s'"%noback)
         self.add_object(lm,True)
+        lm.init_normal()
     @category([COMBINED("option","text to display, and if 'result' not given, label to jump to if option is selected"),
     KEYWORD('result','specifically named label to jump to if this option is chosen')],type="interface")
     def _li(self,command,*label):
@@ -2173,14 +2182,17 @@ exit}}}
         for o in self.obs:
             o.delete()
         pygame.screen.fill([0,0,0])
-    @category([KEYWORD("name","Unique name of object to delete.")],type="objects")
+    @category([KEYWORD("name","Unique name of object to delete."),TOKEN("suppress","Don't show error message even if object cannot be found to delete")],type="objects")
     def _delete(self,command,*args):
         """Deletes the named object from the scene. (Any time you give an object a name, such as 'ev bloody_knife name=bk' you can
         use this command to delete it later, such as 'delete name=bk'."""
         name = None
+        suppress = False
         for a in args:
             if a.startswith("name="):
                 name = a[5:]
+            if a=="suppress":
+                suppress = True
         any = False
         for o in reversed(self.obs):
             if getattr(o,"id_name",None)==name:
@@ -2188,7 +2200,7 @@ exit}}}
                 print "found",o
                 o.delete()
                 break
-        if name and not any and vtrue(assets.variables.get("_debug","false")):
+        if not suppress and name and not any and vtrue(assets.variables.get("_debug","false")):
             print "error"
             raise missing_object("Delete: cannot find "+name)
     @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none"),
@@ -2269,6 +2281,7 @@ exit}}}
                 k,v = a.split("=",1)
                 if k == "fail":
                     em.fail = v
+        em.init_normal()
     @category([VALUE("x","x value of rectangular region on the texture"),VALUE("y","y value of rectangular region on the texture"),
     VALUE("width","width of rectangular region on texture"),VALUE("height","height of rectangular region on texture"),
     VALUE("label","label to jump to when region is clicked")],type="interface")
@@ -3100,7 +3113,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     #~ while time.time()<end:
         #~ pass
     #~ sys.exit()
-
+    laststack = []
     while running:
         #~ ticks = time.time()-lt
         #~ lt = time.time()
@@ -3114,6 +3127,15 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
+        #~ if vtrue(assets.variables.get("_debug","false")):
+            #~ ns = assets.get_stack()
+            #~ if ns != laststack:
+                #~ laststack = ns
+                #~ print "^^^^^^^^^^^^^^^^^^^"
+                #~ for s in ns:
+                    #~ print s
+                #~ print "vvvvvvvvvvvvvvvvvvvvvvv"
+                #~ print [[x,x.pri] for x in assets.cur_script.obs]
         if not assets.cur_script: break
         [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
         for o in assets.cur_script.world.all[:]:
