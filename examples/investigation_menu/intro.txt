@@ -1,3 +1,4 @@
+set _debug on
 set examine off
 set talk off
 set present off
@@ -18,6 +19,7 @@ goto toggle
 
 label Talk off
 set talk on
+goto toggle
 
 label Present off
 set present on
