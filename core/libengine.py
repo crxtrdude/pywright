@@ -1765,6 +1765,8 @@ The four types of gui you can create are:
                 btn.hold_func = macroname
                 setattr(btn,text.replace(" ","_"),lambda *args:0)
             if hotkey:
+                if hold:
+                    hotkey = hotkey+"_hold"
                 btn.hotkey = hotkey
                 setattr(btn,hotkey,func)
             self.add_object(btn)
@@ -2197,7 +2199,6 @@ exit}}}
         for o in reversed(self.obs):
             if getattr(o,"id_name",None)==name:
                 any = True
-                print "found",o
                 o.delete()
                 break
         if not suppress and name and not any and vtrue(assets.variables.get("_debug","false")):
@@ -3168,6 +3169,35 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 for o in assets.cur_script.upobs:
                     if hasattr(o,"enter_hold"):
                         o.enter_hold()
+            keybinds = {"keydown":{},"keyup":{},"keyhold":{},"joybuttonup":{},"joybuttondown":{},"joyhatmotion":{}}
+            keybinds["keydown"][pygame.K_ESCAPE] = "toggle_settings"
+            keybinds["keyup"][pygame.K_RETURN] = "enter_up"
+            keybinds["joybuttonup"][0] = "enter_up"
+            keybinds["keydown"][pygame.K_RETURN] = "enter_down"
+            keybinds["joybuttondown"][0] = "enter_down"
+            keybinds["keydown"][pygame.K_RIGHT] = "k_right"
+            keybinds["joyhatmotion"][(1,0)] = "k_right"
+            keybinds["keydown"][pygame.K_LEFT] = "k_left"
+            keybinds["keyhold"][pygame.K_LEFT] = "k_hold_left"
+            keybinds["joyhatmotion"][(-1,0)] = "k_right"
+            keybinds["keydown"][pygame.K_UP] = "k_up"
+            keybinds["joyhatmotion"][(0,1)] = "k_up"
+            keybinds["keydown"][pygame.K_DOWN] = "k_down"
+            keybinds["joyhatmotion"][(0,-1)] = "k_down"
+            keybinds["keydown"][pygame.K_SPACE] = "k_cancel"
+            keybinds["joybuttondown"][1] = "k_cancel"
+            keybinds["keydown"][pygame.K_TAB] = "k_switch"
+            keybinds["joybuttondown"][3] = "k_switch"
+            keybinds["keydown"][pygame.K_z] = "press"
+            keybinds["joybuttondown"][4] = "press"
+            keybinds["keydown"][pygame.K_x] = "present"
+            keybinds["joybuttondown"][5] = "present"
+            for k in keybinds["keydown"]:
+                if pygame.key.get_pressed()[k]:
+                    evt = keybinds["keydown"][k]+"_hold"
+                    for o in assets.cur_script.upobs:
+                        if hasattr(o,evt):
+                            getattr(o,evt)()
             for e in pygame.event.get():
                 if e.type==150:
                     if assets.variables.get("_music_loop",None):
@@ -3266,28 +3296,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,"k_x") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_x()
                             break
-                keybinds = {"keydown":{},"keyup":{},"keyhold":{},"joybuttonup":{},"joybuttondown":{},"joyhatmotion":{}}
-                keybinds["keydown"][pygame.K_ESCAPE] = "toggle_settings"
-                keybinds["keyup"][pygame.K_RETURN] = "enter_up"
-                keybinds["joybuttonup"][0] = "enter_up"
-                keybinds["keydown"][pygame.K_RETURN] = "enter_down"
-                keybinds["joybuttondown"][0] = "enter_down"
-                keybinds["keydown"][pygame.K_RIGHT] = "k_right"
-                keybinds["joyhatmotion"][(1,0)] = "k_right"
-                keybinds["keydown"][pygame.K_LEFT] = "k_left"
-                keybinds["joyhatmotion"][(-1,0)] = "k_right"
-                keybinds["keydown"][pygame.K_UP] = "k_up"
-                keybinds["joyhatmotion"][(0,1)] = "k_up"
-                keybinds["keydown"][pygame.K_DOWN] = "k_down"
-                keybinds["joyhatmotion"][(0,-1)] = "k_down"
-                keybinds["keydown"][pygame.K_SPACE] = "k_cancel"
-                keybinds["joybuttondown"][1] = "k_cancel"
-                keybinds["keydown"][pygame.K_TAB] = "k_switch"
-                keybinds["joybuttondown"][3] = "k_switch"
-                keybinds["keydown"][pygame.K_z] = "press"
-                keybinds["joybuttondown"][4] = "press"
-                keybinds["keydown"][pygame.K_x] = "present"
-                keybinds["joybuttondown"][5] = "present"
                 if e.type==pygame.KEYDOWN:
                     if e.key in keybinds["keydown"]:
                         eval(keybinds["keydown"][e.key])()
