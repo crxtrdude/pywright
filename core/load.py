@@ -1,4 +1,3 @@
-import gui
 from core import *
 
 def load(script,olist):
@@ -106,7 +105,7 @@ def load(script,olist):
         o = guiWait()
         o.script = script
     if cls == "button":
-        o = gui.button(None,props["s_text"])
+        o = ws_button(None,props["s_text"])
         if props.get("s_graphic",""):
             graphic = props["s_graphic"]
             graphic = assets.open_art(graphic)[0]
