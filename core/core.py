@@ -3208,7 +3208,7 @@ class evidence_menu(fadesprite,gui.widget):
         fadesprite.load(self,*args,**kwargs)
     def __init__(self,items=[],gba=True):
         self.pri = ulayers.index(self.__class__.__name__)
-        x,y = 0,other_screen(0)
+        x,y = 0,192
         self.z = zlayers.index(self.__class__.__name__)
         fadesprite.__init__(self,x=x,y=y)
         gui.widget.__init__(self,[x,y],[sw,sh])
@@ -3250,6 +3250,7 @@ class evidence_menu(fadesprite,gui.widget):
             self.delete()
         self.item_set = self.pages_set[0]
         self.layout()
+        self.screen_setting = "try_bottom"
     def update(self):
         self.choose()
         if not getattr(self,"kill",None) and not getattr(self,"hidden",None):
@@ -3499,8 +3500,9 @@ class evidence_menu(fadesprite,gui.widget):
         return False
     def draw(self,dest):
         if assets.gbamode: self.mode = "zoomed"
-        dest.blit(self.img,self.pos)
-        x,y=self.pos
+        pos = self.getpos()
+        dest.blit(self.img,pos)
+        x,y=pos
         if not assets.gbamode:
             if vtrue(assets.variables["ev_show_mode_text"]):
                 dest.blit(assets.get_image_font("itemset").render(self.item_set.capitalize(),[255,255,255]),
@@ -3522,8 +3524,8 @@ class evidence_menu(fadesprite,gui.widget):
             page = self.pages[self.page]
         if self.mode != "zoomed":
             cx,cy=0,0
-            sx = self.pos[0]+int(assets.variables["ev_items_x"])
-            sy = self.pos[1]+int(assets.variables["ev_items_y"])
+            sx = pos[0]+int(assets.variables["ev_items_x"])
+            sy = pos[1]+int(assets.variables["ev_items_y"])
             x,y = sx,sy
             w = int(assets.variables["ev_spacing_x"])
             h = int(assets.variables["ev_spacing_y"])
@@ -3543,11 +3545,11 @@ class evidence_menu(fadesprite,gui.widget):
                 cy+=1
             if len(self.pages)>1:
                 arr = assets.open_art(assets.variables["ev_arrow_img"])[0]
-                dest.blit(arr,[self.pos[0]+int(assets.variables["ev_rarrow_x"]),
-                            self.pos[1]+int(assets.variables["ev_rarrow_y"])])
+                dest.blit(arr,[pos[0]+int(assets.variables["ev_rarrow_x"]),
+                            pos[1]+int(assets.variables["ev_rarrow_y"])])
                 dest.blit(pygame.transform.flip(arr,1,0),
-                    [self.pos[0]+int(assets.variables["ev_larrow_x"]),
-                    self.pos[1]+int(assets.variables["ev_larrow_y"])])
+                    [pos[0]+int(assets.variables["ev_larrow_x"]),
+                    pos[1]+int(assets.variables["ev_larrow_y"])])
         if self.mode == "zoomed":
             showarrow = 0
             for p in self.pages:
@@ -3557,22 +3559,22 @@ class evidence_menu(fadesprite,gui.widget):
             if showarrow>1:
                 if not getattr(self,"arr",None):
                     self.arr = assets.open_art(assets.variables["ev_zarrow_img"])[0]
-                dest.blit(self.arr,[self.pos[0]+int(assets.variables["ev_zrarrow_x"]),
-                                self.pos[1]+int(assets.variables["ev_zrarrow_y"])])
+                dest.blit(self.arr,[pos[0]+int(assets.variables["ev_zrarrow_x"]),
+                                pos[1]+int(assets.variables["ev_zrarrow_y"])])
                 dest.blit(pygame.transform.flip(self.arr,1,0),
-                    [self.pos[0]+int(assets.variables["ev_zlarrow_x"]),
-                    self.pos[1]+int(assets.variables["ev_zlarrow_y"])])
+                    [pos[0]+int(assets.variables["ev_zlarrow_x"]),
+                    pos[1]+int(assets.variables["ev_zlarrow_y"])])
             if getattr(self,"chosen_icon",None) and getattr(self,"chosen",None):
                 if self.scroll:
                     self.scroll -= 16
-                    self.draw_ev_zoom(self.lastchoose,[(256-self.scroll+self.pos[0])*self.scroll_dir,self.pos[1]],dest)
-                    self.draw_ev_zoom(self.chosen_icon,[256*(-self.scroll_dir)+(256-self.scroll+self.pos[0])*self.scroll_dir,self.pos[1]],dest)
+                    self.draw_ev_zoom(self.lastchoose,[(256-self.scroll+pos[0])*self.scroll_dir,pos[1]],dest)
+                    self.draw_ev_zoom(self.chosen_icon,[256*(-self.scroll_dir)+(256-self.scroll+pos[0])*self.scroll_dir,pos[1]],dest)
                 else:
-                    self.draw_ev_zoom(self.chosen_icon,self.pos[:],dest)
+                    self.draw_ev_zoom(self.chosen_icon,pos[:],dest)
                 chk = assets.variables.get(self.chosen+"_check",None)
                 if chk:
                     check = assets.open_art(assets.variables["ev_check_img"]+assets.appendgba)[0]
-                    dest.blit(check,[self.pos[0]+sw-check.get_width(),self.pos[1]+sh-check.get_height()])
+                    dest.blit(check,[pos[0]+sw-check.get_width(),pos[1]+sh-check.get_height()])
             else:
                 self.mode = "overview"
         if self.canback():
