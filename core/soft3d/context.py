@@ -1,6 +1,9 @@
 import os
 import pygame
-import numpy
+try:
+    import numpy
+except:
+    numpy = None
 import math
 import random
 try:
