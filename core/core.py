@@ -23,6 +23,10 @@ try:
     import android
 except:
     android = None
+if android:
+    import android_mixer as mixer
+else:
+    import pygame.mixer as mixer
     
 from pwvlib import *
 
@@ -234,7 +238,7 @@ class Assets(object):
     def smus(self,v):
         self._music_vol = v
         try:
-            pygame.mixer.music.set_volume(v/100.0*(int(assets.variables.get("_music_fade","100"))/100.0))
+            mixer.music.set_volume(v/100.0*(int(assets.variables.get("_music_fade","100"))/100.0))
         except:
             pass
     def gmus(self):
@@ -501,13 +505,13 @@ set _font_new_resume_size 14""".split("\n"):
         if reset or not self.sound_init:
             self.snds = {}
             try:
-                pygame.mixer.stop()
-                pygame.mixer.quit()
+                mixer.stop()
+                mixer.quit()
             except:
                 pass
             try:
-                pygame.mixer.pre_init(self.sound_format, self.sound_sign*self.sound_bits, 2, self.sound_buffer)
-                pygame.mixer.init()
+                mixer.pre_init(self.sound_format, self.sound_sign*self.sound_bits, 2, self.sound_buffer)
+                mixer.init()
                 self.sound_init = 1
                 self.music_volume = self._music_vol
                 return True
@@ -538,7 +542,7 @@ set _font_new_resume_size 14""".split("\n"):
         if not p:
             return False
         try:
-            pygame.mixer.music.load(p)
+            mixer.music.load(p)
             return True
         except:
             import traceback
@@ -568,7 +572,7 @@ set _font_new_resume_size 14""".split("\n"):
                 if path.endswith(".mp3") and audiere:
                     snd = aud.open_file(path)
                 else:
-                    snd = pygame.mixer.Sound(path)
+                    snd = mixer.Sound(path)
             except:
                 import traceback
                 traceback.print_exc()
@@ -594,19 +598,20 @@ set _font_new_resume_size 14""".split("\n"):
             track = self.open_music(track,pre)
         if track:
             try:
-                pygame.mixer.music.play(loop)
+                mixer.music.play(loop)
             except:
                 import traceback
                 traceback.print_exc()
         else:
             self.stop_music()
-        pygame.mixer.music.set_endevent(150)
+        if not android:
+            mixer.music.set_endevent(150)
     def stop_music(self):
         if self.sound_init == -1: return
         self._track = None
         self._loop = 0
         try:
-            pygame.mixer.music.stop()
+            mixer.music.stop()
         except:
             pass
     def set_emotion(self,e):
@@ -4100,13 +4105,13 @@ class guiWait(sprite):
         self.script = assets.cur_script
         self.mute = mute  #Mute sound while waiting
         if self.mute:
-            pygame.mixer.pause()
-            pygame.mixer.music.pause()
+            mixer.pause()
+            mixer.music.pause()
     def delete(self):
         self.kill = 1
         if self.mute:
-            pygame.mixer.unpause()
-            pygame.mixer.music.unpause()
+            mixer.unpause()
+            mixer.music.unpause()
     def update(self):
         if self.run:
             ns = self.script.execute_macro(self.run)
