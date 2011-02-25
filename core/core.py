@@ -1010,10 +1010,28 @@ class ImgFont(object):
     def get_descent(self):
         """return number of pixels from font baseline to bottom"""
         
+def trans_y(y):
+    """Alter y value to place us in the proper screen"""
+    if assets.num_screens==1:
+        y-=192
+    return y
+        
 class ws_button(gui.button):
     """A button created from wrightscript"""
+    screen_setting = ""
     def delete(self):
+        print "deleting ws_button"
         self.kill = 1
+    def getrpos(self):
+        rpos = self.rpos[:]
+        if self.screen_setting == "try_bottom":
+            rpos[1] = trans_y(rpos[1])
+        return rpos
+    def draw(self,dest):
+        orpos = self.rpos[:]
+        self.rpos = self.getrpos()
+        super(ws_button,self).draw(dest)
+        self.rpos = orpos
 
 class sprite(gui.button):
     blinkspeed = [100,200]
@@ -1022,11 +1040,16 @@ class sprite(gui.button):
     #widget stuff
     def _g_rpos(self):
         if not hasattr(self,"pos"): return [0,0]
-        return self.pos
+        return self.getpos()
     rpos = property(_g_rpos)
     width,height = [sw,sh]
     children = []
     spd = 6
+    def getpos(self):
+        pos = self.pos[:]
+        if self.screen_setting == "try_bottom":
+            pos[1] = trans_y(pos[1])
+        return pos
     def getprop(self,p):
         if p in "xy":
             return self.pos["xy".index(p)]
@@ -1125,6 +1148,7 @@ class sprite(gui.button):
         self.blinkmode = "blinknoset"
         if kwargs.get("screen",None)==2:
             self.pos[1]=other_screen(self.pos[1])
+        self.screen_setting=""
         self.base = []
         self.delays = {}
         self.start = 0
@@ -1134,7 +1158,7 @@ class sprite(gui.button):
         img = self.img
         if self.flipx:
             img = pygame.transform.flip(img,1,0)
-        pos = self.pos[:]
+        pos = self.getpos()
         if hasattr(self,"offsetx"): pos[0]+=self.offsetx
         if hasattr(self,"offsety"): pos[1]+=self.offsety
         if hasattr(self,"rot"):
@@ -1204,7 +1228,7 @@ class surf3d(sprite):
                 if isinstance(o,mesh):
                     o.click(pos)
     def draw(self,dest):
-        dest.blit(self.surf,self.pos)
+        dest.blit(self.surf,self.getpos())
     def update(self):
         self.next -= assets.dt
         if self.next>0:
