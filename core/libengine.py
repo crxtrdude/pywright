@@ -18,6 +18,12 @@ import load
 from pwvlib import *
 import settings
 
+try:
+    import android
+    android.map_key(android.KEYCODE_MENU, pygame.K_ESCAPE)
+except:
+    android = None
+
 d = get_data_from_folder(".")
 __version__ = d["version"]
 VERSION = "Version "+cver_s(d["version"])
@@ -3175,6 +3181,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         o.enter_hold()
             keybinds = {"keydown":{},"keyup":{},"keyhold":{},"joybuttonup":{},"joybuttondown":{},"joyhatmotion":{}}
             keybinds["keydown"][pygame.K_ESCAPE] = "toggle_settings"
+            keybinds["keydown"][pygame.K_m] = "toggle_settings"
             keybinds["keyup"][pygame.K_RETURN] = "enter_up"
             keybinds["joybuttonup"][0] = "enter_up"
             keybinds["keydown"][pygame.K_RETURN] = "enter_down"
