@@ -3173,6 +3173,10 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         #pygame.image.save(pygame.real_screen,"capture/img%.04d.jpg"%fr)
         #fr+=1
         pygame.event.pump()
+        if android:
+            if android.check_pause():
+                assets.save_game("android_pause",True)
+                android.wait_for_resume()
         try:
             assets.cur_script.handle_events(pygame.event.get([pygame.MOUSEMOTION,pygame.MOUSEBUTTONUP,pygame.MOUSEBUTTONDOWN]))
             if "enter" in assets.cur_script.held:
