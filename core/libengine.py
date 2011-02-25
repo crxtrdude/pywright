@@ -1755,8 +1755,6 @@ The four types of gui you can create are:
                 btn.s_graphic = graphic
                 graphic = assets.open_art(graphic)[0]
             btn.graphic = graphic
-            if y>=192 and assets.num_screens == 1 and assets.screen_compress:
-                y -= 192
             btn.rpos = [x,y]
             btn.z = int(assets.variables["_layer_gui"])
             if z is not None: btn.z = z
