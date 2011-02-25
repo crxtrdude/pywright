@@ -3,7 +3,7 @@ showrecord
 endmacro
 
 macro _default_court_record_button
-gui Button {_crbut} name=_crbut_ graphic=general/record x=177 y=0 hotkey=k_tab z=6 pri=-5000
+gui Button {_crbut} name=_crbut_ graphic=general/record x=177 y=192 hotkey=k_tab z=6 try_bottom
 endmacro
 
 macro show_court_record_button

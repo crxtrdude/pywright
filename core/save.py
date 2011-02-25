@@ -4,7 +4,6 @@
 #instance attributes which are based on assets.variables: one object created, change variable, create another -
 #   need to save the actual variable and not rely on assets.variables entry to be accurate
 
-import gui
 from core import *
 
 
@@ -20,7 +19,7 @@ def save(ob):
     if hasattr(ob,"fail"):
         oprops["fail"] = ob.fail
     if isinstance(ob,(sprite,portrait,listmenu,menu)):
-        cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd","blinkspeed","loops","loopmode","start","end"],ob,oprops)
+        cp(["dim","pos","z","rot","x","id_name","scale","name","pri","fade","wait","spd","blinkspeed","loops","loopmode","start","end","screen_setting"],ob,oprops)
     if isinstance(ob,fadesprite) or isinstance(ob,portrait):
         cp(["invert","tint","greyscale"],ob,oprops)
     if isinstance(ob,bg):
@@ -104,8 +103,8 @@ def save(ob):
     elif isinstance(ob,guiWait):
         cp(["run"],ob,oprops)
         return ["guiWait",[],oprops]
-    elif isinstance(ob,gui.button) and hasattr(ob,"s_text"):
-        cp(["s_text","s_graphic","rpos","s_macroname","id_name","z","pri","hold_func"],ob,oprops)
+    elif isinstance(ob,ws_button) and hasattr(ob,"s_text"):
+        cp(["s_text","s_graphic","rpos","s_macroname","id_name","z","pri","hold_func","screen_setting"],ob,oprops)
         return ["button",[],oprops]
     elif isinstance(ob,waitenter):
         return ["waitenter",[],oprops]

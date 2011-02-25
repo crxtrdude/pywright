@@ -1694,6 +1694,7 @@ KEYWORD('name','id to give object for later reference, valid for (Back, Button, 
 KEYWORD('graphic','path to graphic file, valid for (Button)','default for buttons is to have an outline with the text of the button label'),
 TOKEN('hold','hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)','default is that it only executes with each distinct click'),
 TOKEN('password','typed text will be displayed with stars *****, valid for (Input)','default is to show text'),
+TOKEN('try_bottom','Try to keep object in bottom screen, but if no bottom screen exists move it up, valid for (Button)'),
 KEYWORD('run','repeatedly execute this macro, valid for (Wait)','default is no macro will be run'),
 COMBINED('text','remaining text will display for Button if there is no graphic, valid for (Button)','default is no text')],type="interface")
     def _gui(self,command,guitype,*args):
@@ -1729,6 +1730,7 @@ The four types of gui you can create are:
             graphic = None
             hold = None
             hotkey = None
+            try_bottom = None
             while args:
                 a = args[0]
                 if a.startswith("x="): x=int(a[2:])
@@ -1738,12 +1740,16 @@ The four types of gui you can create are:
                 elif a.startswith("graphic="): graphic = a[8:]
                 elif a == "hold": hold = True
                 elif a.startswith("hotkey="): hotkey = a.split("=",1)[1]
+                elif a=="try_bottom": try_bottom = True
                 else:
                     break
                 del args[0]
             text = ""
             text = " ".join(args)
             btn = ws_button(None,text)
+            if try_bottom:
+                btn.screen_setting = "try_bottom"
+            print btn.screen_setting
             btn.s_text = text
             if graphic:
                 btn.s_graphic = graphic
