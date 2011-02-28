@@ -1829,16 +1829,16 @@ class press_button(fadesprite,gui.widget):
     def __init__(self,parent):
         fadesprite.__init__(self)
         self.z = zlayers.index(self.__class__.__name__)
-        self.normal = assets.open_art("general/crossex")[0]
-        self.high = assets.open_art("general/crossex_high")[0]
-        self.rect = [[0,0],[64,16]]
+        self.normal = assets.open_art("general/press/press_old")[0]
+        self.high = assets.open_art("general/press/press_old_high")[0]
         self.highlight = False
-        self.pos = [0,other_screen(0)]
-        gui.widget.__init__(self,self.pos,[64,16],parent)
-        self.width,self.height = 64,16
+        self.pos = [0,192]
+        self.screen_setting = "try_bottom"
+        gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
+        self.width,self.height = self.normal.get_size()
     def draw(self,dest):
-        surf = {False:self.normal,True:self.high}[self.highlight is True]
-        dest.blit(surf.subsurface(self.rect),self.pos)
+        self.img = {False:self.normal,True:self.high}[self.highlight is True]
+        super(press_button,self).draw(dest)
     def click_down_over(self,mp):
         self.parent.k_z()
 
@@ -1846,16 +1846,17 @@ class present_button(fadesprite,gui.widget):
     def __init__(self,parent):
         fadesprite.__init__(self)
         self.z = zlayers.index(self.__class__.__name__)
-        self.normal = assets.open_art("general/crossex")[0]
-        self.high = assets.open_art("general/crossex_high")[0]
-        self.rect = [[0,16],[64,16]]
+        self.normal = assets.open_art("general/press/present_old")[0]
+        self.high = assets.open_art("general/press/present_old_high")[0]
+        self.rect = self.normal.get_rect()
         self.highlight = False
-        self.pos = [sw-64,other_screen(0)]
-        gui.widget.__init__(self,self.pos,[64,16],parent)
-        self.width,self.height = 64,16
+        self.pos = [sw-64,192]
+        self.screen_setting = "try_bottom"
+        gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
+        self.width,self.height = self.normal.get_size()
     def draw(self,dest):
-        surf = {False:self.normal,True:self.high}[self.highlight is True]
-        dest.blit(surf.subsurface(self.rect),self.pos)
+        self.img = {False:self.normal,True:self.high}[self.highlight is True]
+        super(present_button,self).draw(dest)
     def click_down_over(self,mp):
         self.parent.k_x()
 
