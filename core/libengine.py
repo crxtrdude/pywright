@@ -3049,44 +3049,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         sys.exit()
     
     assets.init_sound()
-    assets.fullscreen = 0
-    assets.swidth = 256
-    assets.sheight = 192*2
-    assets.filter = 0
-    assets.num_screens = 2
-    assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
-    assets.autosave = 1
-    assets.autosave_keep = 2 #how many saves to keep
-    assets.show_fps = 0
-    if os.path.exists("display.ini"):
-        f = open("display.ini")
-        t = f.read()
-        f.close()
-        os.remove("display.ini")
-        f = open("settings.ini","w")
-        f.write(t)
-        f.close()
-    if os.path.exists("settings.ini"):
-        f = open("settings.ini","r")
-        i_fl_val = {"width":"swidth","height":"sheight","scale2x":"filter",
-                "fullscreen":"fullscreen","screens":"num_screens",
-                "screen_compress":"screen_compress","autosave":"autosave",
-                "autosave_keep":"autosave_keep", 
-                "sound_format":"sound_format","sound_bits":"sound_bits",
-                "sound_buffer":"sound_buffer","show_fps":"show_fps"}
-        fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
-                }
-
-        for line in f.readlines():
-            spl = line.split("=")
-            if len(spl)!=2: continue
-            if spl[0] in i_fl_val:
-                setattr(assets,i_fl_val[spl[0]],int(float(spl[1])))
-            elif spl[0] in fl_val:
-                setattr(assets,fl_val[spl[0]],float(spl[1]))
-    
-    #assets.master_volume = 0.0
-        
+    settings.load(assets)
 
     game = "menu"
     scene = "intro"

@@ -1,4 +1,4 @@
-import pygame,sys
+import pygame,sys,os
 
 import gui
 
@@ -20,11 +20,50 @@ sound_volume=%s
 music_volume=%s
 screen_compress=%s
 autosave=%s
+autosave_interval=%s
 autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,assets.num_screens,
 int(assets.show_fps),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
-int(assets.screen_compress),int(assets.autosave),int(assets.autosave_keep)))
+int(assets.screen_compress),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep)))
     f.close()
+    
+def load(assets):
+    assets.fullscreen = 0
+    assets.swidth = 256
+    assets.sheight = 192*2
+    assets.filter = 0
+    assets.num_screens = 2
+    assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
+    assets.autosave = 1
+    assets.autosave_interval = 5 #minutes between autosaves
+    assets.autosave_keep = 2 #how many saves to keep
+    assets.show_fps = 0
+    if os.path.exists("display.ini"):
+        f = open("display.ini")
+        t = f.read()
+        f.close()
+        os.remove("display.ini")
+        f = open("settings.ini","w")
+        f.write(t)
+        f.close()
+    if os.path.exists("settings.ini"):
+        f = open("settings.ini","r")
+        i_fl_val = {"width":"swidth","height":"sheight","scale2x":"filter",
+                "fullscreen":"fullscreen","screens":"num_screens",
+                "screen_compress":"screen_compress","autosave":"autosave",
+                "autosave_keep":"autosave_keep", 
+                "sound_format":"sound_format","sound_bits":"sound_bits",
+                "sound_buffer":"sound_buffer","show_fps":"show_fps"}
+        fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
+                }
+
+        for line in f.readlines():
+            spl = line.split("=")
+            if len(spl)!=2: continue
+            if spl[0] in i_fl_val:
+                setattr(assets,i_fl_val[spl[0]],int(float(spl[1])))
+            elif spl[0] in fl_val:
+                setattr(assets,fl_val[spl[0]],float(spl[1]))
 
 def get_screen_mode(assets):
     mode="two_screens"
@@ -176,7 +215,7 @@ class settings_menu(gui.pane):
         line = gui.pane([0,30],[sw,20])
         line.align = "horiz"
         self.children.append(line)
-        line.children.append(gui.label("Autosave on scene changes"))
+        line.children.append(gui.label("Autosave?"))
         class myb(gui.checkbox):
             def click_down_over(self,*args):
                 super(myb,self).click_down_over(*args)
@@ -190,6 +229,24 @@ class settings_menu(gui.pane):
         if assets.autosave: cb.checked = True
             
         line = gui.pane([0,50],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        line.children.append(gui.label("Minutes between autosave"))
+        class mymin(gui.editbox):
+            def insert(self,val):
+                if val not in u"0123456789":
+                    return
+                super(mymin,self).insert(val)
+            def set(self,val):
+                super(mymin,self).set(val)
+                if not val:
+                    val = 0
+                assets.autosave_interval = int(val)
+                wini(assets)
+        self.autosave_interval = str(assets.autosave_interval)
+        line.children.append(mymin(self,"autosave_interval"))
+            
+        line = gui.pane([0,70],[sw,20])
         line.align = "horiz"
         self.children.append(line)
         line.children.append(gui.label("Autosave backups"))
