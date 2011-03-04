@@ -1342,8 +1342,6 @@ class fadesprite(sprite):
             return
         if self.fade == 255 and not self.invert and not self.tint and not self.greyscale:
             return sprite.draw(self, dest)
-        if android:
-            return sprite.draw(self, dest)
         if getattr(self,"img",None) and not getattr(self,"mockimg",None):
             if pygame.use_numpy:
                 self.mockimg = self.img.convert_alpha()
@@ -1358,29 +1356,38 @@ class fadesprite(sprite):
                 self.draw_func = self.numpydraw
             else:
                 self.draw_func = self.mockdraw
-                nn = self.name.replace("/","sl")
-                exists = os.path.exists("core/cache/"+nn+".mock.png")
-                if exists and self.real_path:
-                    cache_t = os.stat("core/cache/"+nn+".mock.png").st_mtime
-                    content_t = os.stat(self.real_path).st_mtime
-                    if content_t>cache_t:
-                        exists = False
-                if not exists:
-                    self.mockimg = self.img.convert()
-                    #self.tenpercent = self.img.convert_alpha()
-                    invis = [255,0,255]
-                    for y in range(self.img.get_height()):
-                        for x in range(self.img.get_width()):
-                            rgba = self.img.get_at([x,y])
-                            if rgba[3]==0:
-                                self.mockimg.set_at([x,y],invis)
-                            rgba=rgba[0],rgba[1],rgba[2],int(0.1*rgba[3])
-                    pygame.image.save(self.mockimg,"core/cache/"+nn+".mock.png")
-                    self.mockimg.set_colorkey(invis)
-                else:
-                    self.draw_func = self.mockdraw
-                    self.mockimg = pygame.image.load("core/cache/"+nn+".mock.png").convert()
-                    self.mockimg.set_colorkey([255,0,255])
+                ximg = pygame.Surface(self.img.get_size())
+                ximg.fill([255,0,255])
+                ximg.blit(self.img,[0,0])
+                ximg = ximg.convert(8)
+                ximg = ximg.convert()
+                ximg.set_colorkey([255,0,255])
+                self.mockimg = ximg
+            #~ else:
+                #~ self.draw_func = self.mockdraw
+                #~ nn = self.name.replace("/","sl")
+                #~ exists = os.path.exists("core/cache/"+nn+".mock.png")
+                #~ if exists and self.real_path:
+                    #~ cache_t = os.stat("core/cache/"+nn+".mock.png").st_mtime
+                    #~ content_t = os.stat(self.real_path).st_mtime
+                    #~ if content_t>cache_t:
+                        #~ exists = False
+                #~ if not exists:
+                    #~ self.mockimg = self.img.convert()
+                    #~ #self.tenpercent = self.img.convert_alpha()
+                    #~ invis = [255,0,255]
+                    #~ for y in range(self.img.get_height()):
+                        #~ for x in range(self.img.get_width()):
+                            #~ rgba = self.img.get_at([x,y])
+                            #~ if rgba[3]==0:
+                                #~ self.mockimg.set_at([x,y],invis)
+                            #~ rgba=rgba[0],rgba[1],rgba[2],int(0.1*rgba[3])
+                    #~ pygame.image.save(self.mockimg,"core/cache/"+nn+".mock.png")
+                    #~ self.mockimg.set_colorkey(invis)
+                #~ else:
+                    #~ self.draw_func = self.mockdraw
+                    #~ self.mockimg = pygame.image.load("core/cache/"+nn+".mock.png").convert()
+                    #~ self.mockimg.set_colorkey([255,0,255])
         try:
             self.draw_func(dest)
         except Exception:
