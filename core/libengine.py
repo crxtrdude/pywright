@@ -3101,7 +3101,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ lt = time.time()
         #~ dt = ticks*1000.0
         assets.dt = clock.tick()
-        assets.dt = assets.dt*.001*60
+        assets.dt = min(assets.dt*.001*60,1.0)
         #assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
