@@ -3088,6 +3088,10 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         #~ pass
     #~ sys.exit()
     laststack = []
+    assets.screen_refresh = 1
+    if android:
+        assets.screen_refresh = 3 #limit fps on android to make it faster
+    assets.next_screen = assets.screen_refresh
     while running:
         #~ ticks = time.time()-lt
         #~ lt = time.time()
@@ -3096,7 +3100,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        assets.dt = clock.tick(60)
+        assets.dt = clock.tick()
         assets.dt = assets.dt*.001*60
         #assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
@@ -3131,8 +3135,11 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         if assets.shakeargs:
             assets.cur_script._shake(*assets.shakeargs)
             assets.shakeargs = 0
-        if assets.variables.get("render",1):
-            draw_screen(assets.show_fps)
+        assets.next_screen -= assets.dt
+        if assets.next_screen < 0:
+            if assets.variables.get("render",1):
+                draw_screen(assets.show_fps)
+            assets.next_screen = assets.screen_refresh
         #pygame.image.save(pygame.real_screen,"capture/img%.04d.jpg"%fr)
         #fr+=1
         pygame.event.pump()
