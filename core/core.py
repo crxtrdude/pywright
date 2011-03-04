@@ -1739,6 +1739,7 @@ class penalty(fadesprite):
         self.flash_amount = flash_amount
         self.flash_color = [255,242,129,150]
         self.flash_dir = 1
+        self.change = 0
     def gv(self):
         v = assets.variables.get(self.var,100)
         try:
@@ -1771,19 +1772,22 @@ class penalty(fadesprite):
                 self.flash_dir = -self.flash_dir
         self.sv(v)
     def update(self):
-        v = self.gv()
-        if self.end<v:
-            v -= assets.dt
-            if v<0: v = 0
-        elif self.end>v:
-            v += assets.dt
-            if v>100: v = 100
-        elif self.delay:
-            self.delay -= 1
-            if self.delay==0:
-                self.die()
-                self.delete()
-        self.sv(v)
+        self.change += assets.dt
+        while self.change>1:
+            self.change -= 1
+            v = self.gv()
+            if self.end<v:
+                v -= 1
+                if v<0: v = 0
+            elif self.end>v:
+                v += 1
+                if v>100: v = 100
+            elif self.delay:
+                self.delay -= 1
+                if self.delay==0:
+                    self.die()
+                    self.delete()
+            self.sv(v)
         if self.delay:
             return True
     def die(self):
