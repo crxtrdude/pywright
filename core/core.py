@@ -2166,7 +2166,7 @@ class textbox(gui.widget):
             raise script_error("Text macro brackets don't match:%s"%repr(self.text))
         num_chars = 0
         if self.next_char==0:
-            num_chars = int(self.speed*assets.dt)
+            num_chars = max(int(self.speed*assets.dt),1)
         if self.skipping:
             num_chars = self.skipping
         cnum = num_chars
@@ -2281,7 +2281,7 @@ class textbox(gui.widget):
                             assets.portrait.set_talking()
                         if self.in_paren:
                             assets.portrait.set_blinking()
-                    if char.strip():
+                    if not android and char.strip():
                         assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
                     addchar = False
                     self.next_char = int(self.next_char*self.delay)
