@@ -1359,7 +1359,6 @@ class fadesprite(sprite):
                 ximg = pygame.Surface(self.img.get_size())
                 ximg.fill([255,0,255])
                 ximg.blit(self.img,[0,0])
-                ximg = ximg.convert(8)
                 ximg = ximg.convert()
                 ximg.set_colorkey([255,0,255])
                 self.mockimg = ximg
