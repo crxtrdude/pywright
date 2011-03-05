@@ -479,6 +479,7 @@ class settings_menu(gui.pane):
             assets.screen_compress = 0
         assets.make_screen()
         self.display()
+        wini(assets)
     def save_resolution(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
