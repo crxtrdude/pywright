@@ -1,0 +1,3 @@
+title=pywright
+author=saluk
+orientation=landscape
