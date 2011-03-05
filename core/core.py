@@ -1032,6 +1032,11 @@ class ws_button(gui.button):
         if self.screen_setting == "try_bottom":
             rpos[1] = trans_y(rpos[1])
         return rpos
+    def event(self,name,pos,*args):
+        orpos = self.rpos[:]
+        self.rpos = self.getrpos()
+        super(ws_button,self).event(name,pos,*args)
+        self.rpos = orpos
     def draw(self,dest):
         orpos = self.rpos[:]
         self.rpos = self.getrpos()
