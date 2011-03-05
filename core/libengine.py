@@ -20,7 +20,6 @@ import settings
 
 try:
     import android
-    android.map_key(android.KEYCODE_MENU, pygame.K_ESCAPE)
 except:
     android = None
 
@@ -2881,7 +2880,10 @@ def make_screen():
         assets.sheight = 192*assets.num_screens
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
-    SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen)
+    flags = pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen
+    if android:
+        flags = flags|pygame.HWSURFACE|pygame.DOUBLEBUF
+    SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],flags)
     ns = assets.num_screens
     if assets.cur_screen:
         ns = 2
@@ -3136,11 +3138,12 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             assets.next_screen = assets.screen_refresh
         #pygame.image.save(pygame.real_screen,"capture/img%.04d.jpg"%fr)
         #fr+=1
-        pygame.event.pump()
         if android:
+            android.map_key(android.KEYCODE_MENU, pygame.K_ESCAPE)
             if android.check_pause():
                 assets.save_game("android_pause",True)
                 android.wait_for_resume()
+        pygame.event.pump()
         try:
             assets.cur_script.handle_events(pygame.event.get([pygame.MOUSEMOTION,pygame.MOUSEBUTTONUP,pygame.MOUSEBUTTONDOWN]))
             if "enter" in assets.cur_script.held:
