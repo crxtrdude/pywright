@@ -1,0 +1,24 @@
+char phoenix e=deskslam
+pause 60
+set _debug true
+set _ev bus
+set _name Bus
+set _description Type: Other{n}A bus seen fleeing the{n}crime.
+addev bus
+addevanim
+showevl
+pause 60
+hideevl
+showevr
+pause 60
+hideevr
+"check cr"
+set _ev burntguitar
+set _name Some guitar
+set _description Type: Debris{n}A guitar pulled out of the bus's flaming wreckage
+addevanim
+showevl
+pause 60
+hideevl
+showevr
+"check cr again"
