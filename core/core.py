@@ -2367,6 +2367,8 @@ class uglyarrow(fadesprite):
         fadesprite.__init__(self,x=0,y=sh)
         self.load(assets.variables.get("_bigbutton_bg","bg/main"))
         self.arrow = sprite(0,0).load("general/arrow_big.png")
+        self.scanlines = fadesprite(0,0).load("fg/scanlines")
+        self.scanlines.fade = 50
         self.button = None
         self.double = None
         self.textbox = None
@@ -2389,7 +2391,7 @@ class uglyarrow(fadesprite):
             self.button = sprite(0,0).load(high)
     def show_cross(self):
         if not self.double:
-            self.double = sprite(0,0).load("general/cross_exam_buttons.png")
+            self.double = sprite(0,0).load(assets.variables.get("_bigbutton_cross","general/cross_exam_buttons.png"))
         self.button = None
     def update(self):
         self.pos[1] = sh
@@ -2413,8 +2415,7 @@ class uglyarrow(fadesprite):
                 self.arrow.pos[0] = (sw-self.arrow.img.get_width())//2
                 self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
                 self.arrow.draw(dest)
-            return
-        if self.double:
+        elif self.double:
             self.double.pos[0] = (sw-self.double.img.get_width())//2
             self.double.pos[1] = (sh-self.double.img.get_height())//2+sh
             self.double.draw(dest)
@@ -2430,7 +2431,9 @@ class uglyarrow(fadesprite):
                 self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
                 self.arrow.img = pygame.transform.flip(self.arrow.img,1,0)
                 self.arrow.draw(dest)
-            return
+        if vtrue(assets.variables.get("_bigbutton_scanlines","off")):
+            self.scanlines.pos = self.pos
+            self.scanlines.draw(dest)
     def over(self,mp):
         if self.button:
             if mp[0]>=self.button.pos[0] and mp[1]>=self.button.pos[1]\
