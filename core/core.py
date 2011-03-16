@@ -1865,7 +1865,7 @@ class present_button(fadesprite,gui.widget):
         self.high = assets.open_art("general/press/present_old_high")[0]
         self.rect = self.normal.get_rect()
         self.highlight = False
-        self.pos = [sw-64,192]
+        self.pos = [sw-self.rect[0],192]
         self.screen_setting = "try_bottom"
         gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
         self.width,self.height = self.normal.get_size()
