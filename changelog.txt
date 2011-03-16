@@ -7,6 +7,27 @@
     very difficult to find and nasty game ending bugs.
     - loading a game saved during a localmenu command would go to the next line after the menu
     - changed gui colors to better represent phoenix stylings
+    - More built-in options for second screen interface:
+        set _bigbutton_bg bg/mainpw : for phoenix wright big button background
+        set _bigbutton_bg bg/mainaj : for apollo justice background
+        set _bigbutton_bg bg/maingk : for edgeworth background
+        
+        set _bigbutton_img general/bigbutton/empty : for no character on the big button
+        set _bigbutton_img general/bigbutton/phoenix : phoenix on big button
+        set _bigbutton_img general/bigbutton/mia : mia on big button
+        set _bigbutton_img general/bigbutton/edgeworth : edgeworth on big button
+        set _bigbutton_img general/bigbutton/gk : pink bigbutton from gk
+        
+        set _bigbutton_cross general/bigbutton/empty_cross : empty crossexam
+        set _bigbutton_cross general/bigbutton/phoenix_cross : phoenix crossexam
+        set _bigbutton_cross general/bigbutton/mia_cross : mia crossexam
+        set _bigbutton_cross general/bigbutton/edgeworth_cross : edgeworth crossexam
+        set _bigbutton_cross general/bigbutton/gk_cross : gk crossexam
+        
+        Most of the new bigbuttons do not have scanlines in the image already, you can
+        turn automatic scanlines on with "set _bigbutton_scanlines on"
+        
+        Check examples/bigbutton_changes
 
 *PyWright 0.980/0.981: September 21, 2010*
     (0.981 fixed some last minute bugs with mac, the updater, and cross examination arrows)
