@@ -12,10 +12,7 @@ scroll x=-147 speed=20 name=text nowait
 scroll x=-147 speed=20 name=text2 nowait
 pause 1
 nt
-addev $_ev
-setvar ev_name $_name
-setvar ev_desc $_description
-setvar ev_pic $_ev			
+addev $_ev		
 "{sound 0%}{spd2}{sfx evidence/added.ogg}{center}{c950}{$_name}{c098} added to the court record"
 scroll x=-480 speed=20 name=fg nowait
 scroll x=-480 speed=20 name=ev nowait
