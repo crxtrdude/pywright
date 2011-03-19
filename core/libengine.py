@@ -460,6 +460,7 @@ class Script(gui.widget):
             self.macros = assets.macros
         self.labels = []
         for i,line in enumerate(self.scriptlines):
+            line = line.lstrip()
             if line.startswith("label ") or line.startswith("result "):
                 rn = line.split(" ",1)[1].strip().replace(" ","_")
                 if rn:
