@@ -1231,6 +1231,7 @@ class surf3d(sprite):
         self.context = context.SoftContext(sw,sh,rw,rh)
         self.surf = self.context.draw()
         self.next = 5
+        self.screen_setting = ""
     def click_down_over(self,pos):
         print "click",pos
         if pos[0]>=self.pos[0] and pos[0]<=self.pos[0]+self.width and pos[1]>=self.pos[1] and pos[1]<=self.pos[1]+self.height:
@@ -1264,6 +1265,7 @@ class mesh(sprite):
         self.meshfile=meshfile
         self.surfname = name
         self.changed = 1
+        self.screen_setting = ""
     def load(self,script=None):
         if not script:
             script = assets.cur_script
@@ -1416,7 +1418,7 @@ class fadesprite(sprite):
             #self.lgs = self.greyscale
             if self.invert:
                 px[:] = 255-px[:]
-            self.li = self.invert
+            self.linvert = self.invert
             if self.tint:
                 px*=self.tint
             self.lt = self.tint
