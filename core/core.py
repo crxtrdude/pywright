@@ -1410,8 +1410,7 @@ class fadesprite(sprite):
         px[:] = self.origa_base[self.x][:]*(self.fade/255.0)
         del px
         px = pygame.surfarray.pixels3d(self.mockimg_base[self.x])
-        change = getattr(self,"lgs",None)!=self.greyscale or getattr(self,"li",None)!=self.invert or getattr(self,"lt",None)!=self.tint
-        if change:
+        if 1:
             px[:] = self.origc_base[self.x]
             #if self.greyscale:
             #    px[:] = self.gs_base[self.x][:]
