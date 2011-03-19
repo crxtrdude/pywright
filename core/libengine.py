@@ -2882,8 +2882,6 @@ def make_screen():
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
     flags = pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen
-    if android:
-        flags = flags|pygame.HWSURFACE|pygame.DOUBLEBUF
     SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],flags)
     ns = assets.num_screens
     if assets.cur_screen:
