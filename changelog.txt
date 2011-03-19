@@ -1,33 +1,125 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.982
+*PyWright 0.986
+    - key support for gui Buttons with 'hotkey=key' keyword argument. Current key list:
+        toggle_settings, enter_down, k_up, k_left, k_right, k_down, k_cancel, k_switch, press, present
+
+*PyWright 0.985
+
+    Wrightscript
     - Fixed letter spacing when using pwinternational font (which changed to be the default)
-    - "noback" option added for `list` and `present`, use this instead of setting _list_back_button
-    and _cr_back_button variables. With the variables you can forget to unset them, causing
-    very difficult to find and nasty game ending bugs.
+    - "noback" option added for 'list' and 'present', USE THIS instead of setting _list_back_button
+        and _cr_back_button variables.
+        The hidden back button on the interface will only be hidden during this specific present
+        screen. You can cause a dangerous bug in your games if you disable the back button with
+        the variable and forget to restore it.
+    - 'is variable' now properly checks if the variable is true/false, instead of only checking
+        if the variable existed. Use 'isempty' or 'isnotempty' to check if a variable exists
     - loading a game saved during a localmenu command would go to the next line after the menu
-    - changed gui colors to better represent phoenix stylings
+    - game pauses when minimized (a few animations continue)
+    - Text macro {linked} when at the start of a textbox will join the current textbox to the previous
+        one. Example:
+                "This is weird."
+                pause 60
+                "{linked} What is going on?"
+            Will print "This is weird. What is going on?" with a pause in between the two sentances.
+    - changed emotions on characters dont erase certain settings, such as their z value
+    - characters with greyscale effect animate in greyscale
+    - Fix for fail= argument with 'examine' command
+    - set a character's default "voice", otherwise known as blipsound, to avoid having to use
+        {sound blipfemale.ogg} on every female character's line:
+        set char_defsound blipmale.ogg - set default blipsound for ALL characters
+        set char_[folder name]_defsound blipfemale.ogg - set default sound for that port folder
+    - also set a characters permanent default nametag:
+        set char_[folder name]_name Bob
+    - If character's nametag is not manually set, it will default to capitalized
+    - can force a character animation to play a certain way with text macros:
+        {blink} {talk} {loop} and {lipsync}
+        Characters default to lipsync, which means they will talk when text is printing,
+        and blink when it is not. {blink} and {talk} will force either of those modes.
+        {loop} will just cause the animation to cycle forever. Example:
+        "{talk}(Even though text is in parenthesis, I'm still talking.){blink}"
+        Only affects currently _speaking character
+    - arguments can be passed to a called macro:
+                macro testmacro
+                "You have passed this argument {$1}"
+                endmacro
+                testmacro some_argument
+        Above script will print "You have passed this argument some_argument"
+    - can pass named values into a macro:
+                macro something
+                "{$passed_value}"
+                endmacro
+                something passed_value=hello
+            Will print "hello"
+    - sometimes would crash if you click before text in a textbox starts displaying
+    - games slow down less if framerate drops, will become more jerky but not slow
+    - force an animation to pause:
+        controlanim name=someanim pause
+        controlanim name=someanim resume
+    - can specifically set the frame of an animation with:
+        setprop name=someanim frame=5
+    - gui button's were not able to be deleted
+    - try_bottom option added for gui button command. If PyWright is running in dual screen
+        mode, the button will appear on the bottom screen. If PyWright is running in single
+        screen mode, the button will appear on the top screen. For x and y values, use values
+        which would place the button on the bottom screen. When the engine forces the button
+        to the top screen, it will subtract 192 from whatever the y value is.
+    
+    Engine/Updater
+    - What used to be called "display.ini" is now called "settings.ini" because it stores
+        more settings than just the display ones.
+    - downloader creates missing folders
+    - less downloader crashes, such as when it tries to resume a failed download
+    - minor pywright gui tweaks to mouse click detection
+    - changed pywright gui colors to better represent phoenix stylings
+    - display games on game list in alphabetical, or most recently played order
+    - game titles on menu have word wrapping
+    - some settings screen adjustments
+    - fps display moved to lower left corner, toggle it in settings
+    - Command line arguments, could be built into a shortcut:
+        Run a game directly with:
+            PyWright.exe -run "games/MyGame"
+        text mode, useful to debug quickly, will get more useful as it gets updated
+            PyWright.exe -run "games/MyGame" -text 
+    
+    Customizability
+    - some helpers to show evidence added graphic:
+        core/macros/evidence.mcro
+            set _ev [evidence_tag]
+            set _description description to display
+            set _name name to display
+                and then
+            addevanim - show scrolling info box about evidence, while also adding evidence to the court record
+            showevl - popup evidence in left corner
+            hideevl - pop away evidence in left corner
+            showevr - popup evidence in right corner
+            hideevr - pop away evidence in right corner
+            If you want the description to match previously set description:
+            set _ev [tag]
+            set _description [tag]_desc
+            set _name [tag]_name
+    - couldnt override press/present buttons with different sized images, replaced custom press/present
+        with ripped versions
+    - hardcoded court_record button replaced with macro in core/macros/gui.mcro
+        You can still change how it looks by overriding the graphic, but if you override
+        the macros you can control how it works too, such as where it is positioned
+        on the screen.
     - More built-in options for second screen interface:
-        set _bigbutton_bg bg/mainpw : for phoenix wright big button background
-        set _bigbutton_bg bg/mainaj : for apollo justice background
-        set _bigbutton_bg bg/maingk : for edgeworth background
-        
-        set _bigbutton_img general/bigbutton/empty : for no character on the big button
-        set _bigbutton_img general/bigbutton/phoenix : phoenix on big button
-        set _bigbutton_img general/bigbutton/mia : mia on big button
-        set _bigbutton_img general/bigbutton/edgeworth : edgeworth on big button
-        set _bigbutton_img general/bigbutton/gk : pink bigbutton from gk
-        
-        set _bigbutton_cross general/bigbutton/empty_cross : empty crossexam
-        set _bigbutton_cross general/bigbutton/phoenix_cross : phoenix crossexam
-        set _bigbutton_cross general/bigbutton/mia_cross : mia crossexam
-        set _bigbutton_cross general/bigbutton/edgeworth_cross : edgeworth crossexam
-        set _bigbutton_cross general/bigbutton/gk_cross : gk crossexam
-        
-        Most of the new bigbuttons do not have scanlines in the image already, you can
-        turn automatic scanlines on with "set _bigbutton_scanlines on"
-        
-        Check examples/bigbutton_changes
+        'theme_bigbutton {theme}' is a macro to set how the big button on the second screen looks
+        replace {theme} with one of:
+            phoenix - from pheonix wright, or GS1-3
+            mia - mia shadow from phoenix wright series
+            edgeworth - edgeworth shadow from phoenix wright series
+            apollo - for apollo justice
+            gk - for pink button from Ace Attorney Investigations or GK
+        You can also configure scanlines, the button images, and the background with
+        more precision by setting _bigbutton_bg, _bigbutton_img, _bigbutton_cross to the
+        respective image path for those elements, and setting _bigbutton_scanlines on or off.
+        Default is to use the old button with scanlines off, since the old button has scanlines
+        in the image already.
+        macro found in core/macros/gui.mcro/theme_bigbutton
+        Check examples/bigbutton_changes for example
 
 *PyWright 0.980/0.981: September 21, 2010*
     (0.981 fixed some last minute bugs with mac, the updater, and cross examination arrows)
