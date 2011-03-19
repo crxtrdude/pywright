@@ -25,3 +25,54 @@ endmacro
 macro enable_court_record_button
 set _cr_button true
 endmacro
+
+macro theme_bigbutton
+    set theme $1
+    print The theme is $theme
+    set _bigbutton_scanlines on
+    is theme = default default
+    is theme = phoenix phoenix
+    is theme = apollo apollo
+    is theme = mia mia
+    is theme = edgeworth edgeworth
+    is theme = gk gk
+    is theme = empty empty
+    "ERROR, NO BIGBUTTON THEME {$theme}"
+    label default
+        set _bigbutton_bg bg/main
+        set _bigbutton_img general/buttonpress
+        set _bigbutton_cross general/cross_exam_buttons
+        set _bigbutton_scanlines off
+        exit
+    label phoenix
+        print label phoenix
+        set _bigbutton_bg bg/mainpw
+        set _bigbutton_img general/bigbutton/phoenix
+        set _bigbutton_cross general/bigbutton/phoenix_cross
+        endscript
+    label empty
+    label apollo
+        print label apollo
+        set _bigbutton_bg bg/mainaj
+        set _bigbutton_img general/bigbutton/empty
+        set _bigbutton_cross general/bigbutton/empty_cross
+        endscript
+    label mia
+        print label mia
+        set _bigbutton_bg bg/mainpw
+        set _bigbutton_img general/bigbutton/mia
+        set _bigbutton_cross general/bigbutton/mia_cross
+        endscript
+    label edgeworth
+        print label edgeworth
+        set _bigbutton_bg bg/mainpw
+        set _bigbutton_img general/bigbutton/edgeworth
+        set _bigbutton_cross general/bigbutton/edgeworth_cross
+        endscript
+    label gk
+        print label gk
+        set _bigbutton_bg bg/maingk
+        set _bigbutton_img general/bigbutton/gk
+        set _bigbutton_cross general/bigbutton/gk_cross
+        endscript
+endmacro

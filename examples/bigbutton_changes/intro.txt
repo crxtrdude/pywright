@@ -1,3 +1,51 @@
+#Setting with macro
+theme_bigbutton phoenix
+"Hello I am phoenix."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_bigbutton mia
+"Hello I am mia."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_bigbutton edgeworth
+"Hello I am edgeworth."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_bigbutton apollo
+"Hello I am apollo(blank)."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_bigbutton gk
+"Hello I am gk(pink)."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+#Setting individually
+theme_bigbutton default
 set _bigbutton_img general/bigbutton/empty
 "No scanlines on bigbutton"
 set _bigbutton_scanlines on
