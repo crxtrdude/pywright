@@ -3,11 +3,13 @@ sys.path.append("tools")
 import runner
 external = runner.runner
 import re
-try:
-    pygame.display.set_mode([1,1])
-except:
-    os.environ["SDL_VIDEODRIVER"] = "dummy"
-    pygame.display.set_mode([1,1])
+
+if __name__=="__main__":
+    try:
+        pygame.display.set_mode([1,1])
+    except:
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
+        pygame.display.set_mode([1,1])
 
 MAX_SURFACE_WIDTH=1024
 

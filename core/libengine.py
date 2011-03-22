@@ -17,6 +17,7 @@ import save
 import load
 from pwvlib import *
 import settings
+import tools_menu
 
 try:
     import android
@@ -2867,6 +2868,17 @@ def make_start_script(logo=True):
     item = gui.button(make_start_script,"SETTINGS")
     item.bordercolor = [255,255,255]
     item.rpos = [190,70]
+    item.z = 999
+    item.pri = -1001
+    bottomscript.obs.append(item)
+    
+    def pl(*args):
+        [x.close() for x in assets.cur_script.obs if isinstance(x,tools_menu.tools_menu)]
+        assets.cur_script.obs.append(tools_menu.tools_menu(sw=sw,sh=sh,assets=assets))
+    setattr(make_start_script,"TOOLS",pl)
+    item = gui.button(make_start_script,"TOOLS")
+    item.bordercolor = [255,255,255]
+    item.rpos = [190,90]
     item.z = 999
     item.pri = -1001
     bottomscript.obs.append(item)
