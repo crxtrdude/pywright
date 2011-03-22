@@ -3095,7 +3095,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        assets.dt = clock.tick()
+        assets.dt = clock.tick(60)
         assets.dt = min(assets.dt*.001*60,10.0)
         #assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
@@ -3151,7 +3151,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         o.enter_hold()
             keybinds = {"keydown":{},"keyup":{},"keyhold":{},"joybuttonup":{},"joybuttondown":{},"joyhatmotion":{}}
             keybinds["keydown"][pygame.K_ESCAPE] = "toggle_settings"
-            keybinds["keydown"][pygame.K_m] = "toggle_settings"
+            #keybinds["keydown"][pygame.K_m] = "toggle_settings"
             keybinds["keyup"][pygame.K_RETURN] = "enter_up"
             keybinds["joybuttonup"][0] = "enter_up"
             keybinds["keydown"][pygame.K_RETURN] = "enter_down"
