@@ -218,6 +218,8 @@ class Assets(object):
     _music_vol = 100
     sw = sw
     sh = sh
+    last_autosave = 0
+    autosave_interval = 0
     def get_stack(self):
         stack = []
         for s in self.stack:
@@ -676,6 +678,7 @@ set _font_new_resume_size 14""".split("\n"):
         assets.lists = {}
         self.fonts = {}
     def save(self):
+        self.last_autosave = time.time()
         props = {}
         for reg in ["character","_track","_loop","lists"]:
             if hasattr(self,reg):
@@ -696,6 +699,7 @@ set _font_new_resume_size 14""".split("\n"):
         props["variables"] = vars
         return ["Assets",[],props,None]
     def after_load(self):
+        self.last_autosave = time.time()
         self.items = [evidence(x) for x in self.items]
         v = self.variables
         self.variables = Variables()
@@ -836,17 +840,18 @@ set _font_new_resume_size 14""".split("\n"):
         return vtrue(v)
     def start_game(self,game,script="intro",mode="casemenu"):
         print "starting game",game,script,mode
-        assets.clear()
-        assets.game = game
-        assets.stack.append(assets.Script())
+        self.last_autosave = time.time()
+        self.clear()
+        self.game = game
+        self.stack.append(self.Script())
         if mode == "casemenu" and not os.path.exists(game+"/"+script+".txt"):
-            assets.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
-            assets.cur_script.obs[1].pos = [0,192]
+            self.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
+            self.cur_script.obs[1].pos = [0,192]
             return
         #assets.show_load()
         print "set game to",assets.game
-        assets.cur_script.init(script)
-        assets.cur_script.execute_macro("init_defaults")
+        self.cur_script.init(script)
+        self.cur_script.execute_macro("init_defaults")
         self.cur_script.execute_macro("font_defaults")
         self.cur_script.execute_macro("load_defaults")
         self.cur_script.execute_macro("init_court_record_settings")

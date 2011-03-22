@@ -77,6 +77,8 @@
     - game titles on menu have word wrapping
     - some settings screen adjustments
     - fps display moved to lower left corner, toggle it in settings
+    - changed autosave to work based on time rather than scripts, saving evey 20 minutes
+        by default, interval can be changed from settings
     - Command line arguments, could be built into a shortcut:
         Run a game directly with:
             PyWright.exe -run "games/MyGame"

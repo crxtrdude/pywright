@@ -519,6 +519,8 @@ class Script(gui.widget):
                 if o.cur_script==self: return False
         return True
     def update(self):
+        if time.time()-assets.last_autosave>assets.autosave_interval*60:
+            self.autosave()
         try:
             if self.update_objects():
                 self.interpret()
@@ -1280,7 +1282,6 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         self.si = 0
         self.add_object(m,True)
         self.execute_macro("defaults")
-        self.autosave()
         m.init_normal()
     @category([KEYWORD('examine','whether to show the examine button','false'),
     KEYWORD('talk','whether to show the talk button','false'),
@@ -1352,7 +1353,6 @@ resume when the new script exits, otherwise, the current script will vanish."""
         if label:
             self.goto_result(label,backup=None)
         self.execute_macro("defaults")
-        self.autosave()
     @category([],type="logic")
     def _top(self,command):
         """Jumps to the top of the currently running script."""
