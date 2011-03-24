@@ -1966,24 +1966,22 @@ The four types of gui you can create are:
         self.add_object(greyscaleanim(obs=self.obs,**kwargs))
     @category([VALUE("ttl","Time for shake to last in frames","30"),
     VALUE("offset","How many pixels away to move the screen (how violent)","15"),
-    TOKEN("nowait","Continue executing script during shake")],type="effect")
+    TOKEN("nowait","Continue executing script during shake"),
+    TOKEN("both","Shake affects both screens as a whole")],type="effect")
     def _shake(self,command,*args):
         """Shake the screen for effect."""
-        args = list(args)
-        ttl = 30
-        offset = 15
-        wait = True
-        if "nowait" in args:
-            wait = False
-            args.remove("nowait")
-        if len(args)>0:
-            ttl = int(args[0])
-        if len(args)>1:
-            offset = int(args[1])
         sh = shake()
-        sh.ttl = ttl
-        sh.offset = offset
-        sh.wait = wait
+        args = list(args)
+        if "nowait" in args:
+            args.remove("nowait")
+            sh.wait = False
+        if "both" in args:
+            sh.screen_setting = "both"
+            args.remove("both")
+        if len(args)>0:
+            sh.ttl = int(args[0])
+        if len(args)>1:
+            sh.offset = int(args[1])
         self.add_object(sh)
     @category([KEYWORD("mag","How many times to magnify","1 (will magnify 1 time, which is 2x magnification)"),
     KEYWORD("frames","how many frames for the zoom to take","1"),
