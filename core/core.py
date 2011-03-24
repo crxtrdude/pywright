@@ -4166,11 +4166,6 @@ class error_msg(gui.pane):
         self.pri = ulayers.index(self.__class__.__name__)
         self.z = zlayers.index(self.__class__.__name__)
         gui.pane.__init__(self)
-        b = gui.editbox(None,"Runtime error, click to continue")
-        b.textcol = [255,0,0]
-        b.draw_back = False
-        b.draw(assets.Surface([64,64]))
-        self.children.append(b)
         msg+="\nscene:'"+script.scene+"', line '"+str(lineno)+"'"
         msg+="\ncurrent game:"+assets.game
         self.msg = msg
@@ -4181,10 +4176,16 @@ class error_msg(gui.pane):
                 if len(msg_lines[-1])>35:
                     msg_lines[-1]+=" - "
                 msg_lines.append("")
+        msg_lines.append("       Click to continue  ")
         for msg_line in msg_lines:
             msg = gui.editbox(None,msg_line)
             msg.draw(assets.Surface([64,64]))
             msg.draw_back=False
+            def click_down_over(self,*args):
+                pass
+            msg.click_down_over = click_down_over
+            msg.event = click_down_over
+            msg.width = 0
             self.children.append(msg)
         self.lineno = lineno
         self.script = script
