@@ -1482,8 +1482,7 @@ KEYWORD("loops","alter the loops of the object animation"),
 TOKEN("flipx","Mirror the image on the x axis"),
 KEYWORD("name","Gives the object a unique name to be used for other commands","Default name will be the graphic path"),
 KEYWORD("rotz","rotate the object on the z axis",0),
-TOKEN("fade","Object will fade in instead of popping in"),
-TOKEN("wait","Wait until animation is finished to continue")],type="objects")
+TOKEN("fade","Object will fade in instead of popping in")],type="objects")
     def _obj(self,command,*args):
         """Creates a generic graphics object and places it in the scene. It will be drawn on a layer according to it's z value.
 graphics objects may or may not be animated, which is defined in metadata files stored along with the graphics. ball.png will
@@ -1541,7 +1540,13 @@ have a ball.txt describing it's animation qualities, if it has any."""
         if "fade" in args: self._fade("fade","wait","name="+o.id_name,"speed=5")
         if loops is not None:
             o.loops = int(loops)
-        if wait: self.buildmode = False
+        if wait:
+            if len(o.base)<=1:
+                pass
+            elif o.loops == 1:
+                pass
+            else:
+                self.buildmode = False
         return o
     @category("blah")
     def _movie(self,command,file,sound=None):
@@ -1737,7 +1742,7 @@ The four types of gui you can create are:
             if y>=192 and assets.num_screens == 1 and assets.screen_compress:
                 y -= 192
             self.add_object(guiBack(x=x,y=y,z=z,name=name))
-            self.buildmode = False
+            #self.buildmode = False
         if guitype=="Button":
             macroname=args[0]; del args[0]
             graphic = None
