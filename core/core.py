@@ -1335,6 +1335,9 @@ class fadesprite(sprite):
     tint = None
     greyscale = 0
     def setfade(self,val=255):
+        print val
+        if val<0: val = 0
+        if val>255: val = 255
         if getattr(self,"fade",None) is None: self.fade = 255
         self.lastfade = self.fade
         self.fade = val
