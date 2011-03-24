@@ -65,6 +65,8 @@
         screen mode, the button will appear on the top screen. For x and y values, use values
         which would place the button on the bottom screen. When the engine forces the button
         to the top screen, it will subtract 192 from whatever the y value is.
+    - music_fade_in nowait, music_fade_out nowait available, if you want to fade the music 
+        while doing other things
     
     Engine/Updater
     - What used to be called "display.ini" is now called "settings.ini" because it stores
