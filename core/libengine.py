@@ -1482,7 +1482,8 @@ KEYWORD("loops","alter the loops of the object animation"),
 TOKEN("flipx","Mirror the image on the x axis"),
 KEYWORD("name","Gives the object a unique name to be used for other commands","Default name will be the graphic path"),
 KEYWORD("rotz","rotate the object on the z axis",0),
-TOKEN("fade","Object will fade in instead of popping in")],type="objects")
+TOKEN("fade","Object will fade in instead of popping in"),
+TOKEN("wait","Wait until animation is finished to continue")],type="objects")
     def _obj(self,command,*args):
         """Creates a generic graphics object and places it in the scene. It will be drawn on a layer according to it's z value.
 graphics objects may or may not be animated, which is defined in metadata files stored along with the graphics. ball.png will
@@ -1517,6 +1518,8 @@ have a ball.txt describing it's animation qualities, if it has any."""
                 clear = 0
             if a=="nowait":
                 wait = 0
+            if a=="wait":
+                wait = 1
         if y>=192 and assets.num_screens == 1 and assets.screen_compress:
             y -= 192
         more["wait"] = wait
@@ -1538,6 +1541,7 @@ have a ball.txt describing it's animation qualities, if it has any."""
         if "fade" in args: self._fade("fade","wait","name="+o.id_name,"speed=5")
         if loops is not None:
             o.loops = int(loops)
+        if wait: self.buildmode = False
         return o
     @category("blah")
     def _movie(self,command,file,sound=None):
@@ -1554,7 +1558,8 @@ TOKEN("flipx","Mirror the image on the x axis"),
 KEYWORD("name","Gives the bg a unique name to be used for other commands","Default name will be the bg path"),
 KEYWORD("rotz","rotate the object on the z axis",0),
 TOKEN("stack","The scene won't be cleared when the background is loaded"),
-TOKEN("fade","Background will fade in instead of popping in")],type="objects")
+TOKEN("fade","Background will fade in instead of popping in"),
+TOKEN("wait","Wait until animation is finished to continue")],type="objects")
     def _bg(self,command,*args):
         """Creates a background object. If 'stack' is not included, the scene will be cleared before the background is loaded. Backgrounds also
 default to a lower z value than other objects, ensuring that they will be in the background (though this can be modified). Other than that,
