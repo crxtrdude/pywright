@@ -1352,13 +1352,7 @@ class fadesprite(sprite):
             if pygame.use_numpy:
                 self.mockimg = self.img.convert_alpha()
                 self.mockimg_base = [x.convert_alpha() for x in self.base]
-                self.origa = pygame.surfarray.array_alpha(self.mockimg)
                 self.origa_base = [pygame.surfarray.array_alpha(x) for x in self.mockimg_base]
-                self.origc = pygame.surfarray.array3d(self.mockimg)
-                self.origc_base = [pygame.surfarray.array3d(x) for x in self.mockimg_base]
-                self.gs_base = [x[:] for x in self.origc_base]
-                mat = numpy.matrix([[.33,.33,.33],[.33,.33,.33],[.33,.33,.33]])
-                self.gs_base = [[y*mat for y in x] for x in self.gs_base]
                 self.draw_func = self.numpydraw
             else:
                 self.draw_func = self.mockdraw
@@ -1368,31 +1362,9 @@ class fadesprite(sprite):
                 ximg = ximg.convert()
                 ximg.set_colorkey([255,0,255])
                 self.mockimg = ximg
-            #~ else:
-                #~ self.draw_func = self.mockdraw
-                #~ nn = self.name.replace("/","sl")
-                #~ exists = os.path.exists("core/cache/"+nn+".mock.png")
-                #~ if exists and self.real_path:
-                    #~ cache_t = os.stat("core/cache/"+nn+".mock.png").st_mtime
-                    #~ content_t = os.stat(self.real_path).st_mtime
-                    #~ if content_t>cache_t:
-                        #~ exists = False
-                #~ if not exists:
-                    #~ self.mockimg = self.img.convert()
-                    #~ #self.tenpercent = self.img.convert_alpha()
-                    #~ invis = [255,0,255]
-                    #~ for y in range(self.img.get_height()):
-                        #~ for x in range(self.img.get_width()):
-                            #~ rgba = self.img.get_at([x,y])
-                            #~ if rgba[3]==0:
-                                #~ self.mockimg.set_at([x,y],invis)
-                            #~ rgba=rgba[0],rgba[1],rgba[2],int(0.1*rgba[3])
-                    #~ pygame.image.save(self.mockimg,"core/cache/"+nn+".mock.png")
-                    #~ self.mockimg.set_colorkey(invis)
-                #~ else:
-                    #~ self.draw_func = self.mockdraw
-                    #~ self.mockimg = pygame.image.load("core/cache/"+nn+".mock.png").convert()
-                    #~ self.mockimg.set_colorkey([255,0,255])
+        if (getattr(self,"tint",None) or getattr(self,"invert",None)) and not getattr(self,"origc_base",None) and pygame.use_numpy:
+            self.origc_base = [pygame.surfarray.array3d(x) for x in self.mockimg_base]
+            print "set base foo",self.origc_base
         try:
             self.draw_func(dest)
         except Exception:
@@ -1409,11 +1381,8 @@ class fadesprite(sprite):
         px[:] = self.origa_base[self.x][:]*(self.fade/255.0)
         del px
         px = pygame.surfarray.pixels3d(self.mockimg_base[self.x])
-        if 1:
+        if getattr(self,"origc_base",None):
             px[:] = self.origc_base[self.x]
-            #if self.greyscale:
-            #    px[:] = self.gs_base[self.x][:]
-            #self.lgs = self.greyscale
             if self.invert:
                 px[:] = 255-px[:]
             self.linvert = self.invert
@@ -1423,12 +1392,6 @@ class fadesprite(sprite):
         del px
         img = self.img
         self.img = self.mockimg_base[self.x]
-        if 0:#self.greyscale:
-            ximg = img#img.convert_alpha()
-            x = pygame.surfarray.pixels3d(ximg)
-            x[:] = self.gs_base[self.x]
-            self.img = ximg
-            del x
         if self.greyscale:
             self.lgs = self.greyscale
             ximg = pygame.Surface(self.img.get_size())
