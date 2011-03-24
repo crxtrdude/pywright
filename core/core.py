@@ -1274,24 +1274,16 @@ class mesh(sprite):
     def load(self,script=None):
         if not script:
             script = assets.cur_script
-        print "load mesh",self.meshfile,self.surfname
-        print ([x for x in assets.cur_script.world.all if getattr(x,"id_name",None)==self.surfname])
         con = None
         for o in assets.cur_script.world.all:
-            print o
             if getattr(o,"id_name",None)==self.surfname:
-                print "found o",o
                 con = o
                 break
-        print con
         if not con:
             return
         self.con = con
         path = assets.game+"/art/models/"
-        print "load object"
         self.ob = ob = con.context.load_object(self.meshfile,path)
-        print "loaded"
-        print con.context.objects
         ob.trans(z=-100)
         ob.rot(90,0,0)
         ob.changed = 1
@@ -1309,7 +1301,6 @@ class mesh(sprite):
         x,y = pos
         x=int((x-self.con.pos[0])*(self.con.context.s_w/float(self.con.context.r_w)))
         y=int((y-self.con.pos[1])*(self.con.context.s_h/float(self.con.context.r_h)))
-        print x,y
         i = y*self.con.context.s_w+x
         if i>=len(pygame.depth) or i<0:
             return
@@ -2960,9 +2951,6 @@ class case_menu(fadesprite,gui.widget):
             self.tried_case = 1
         for s,p in self.option_imgs:
             if not s: continue
-            #~ for k in s.texture.names:
-                #~ if s.texture.names[k]>1:
-                    #~ print k,s.texture.names[k]
             dest.blit(s,[p[0]-self.x,p[1]])
         if self.x==self.choice*sw:
             if self.choice<len(self.options)-1:
@@ -2975,8 +2963,6 @@ class examine_menu(sprite,gui.widget):
     def move_over(self,pos,rel,buttons):
         if gui.window.focused == self:
             self.mx,self.my = [pos[0],pos[1]-other_screen(0)]
-            #~ if self.mx>sw-81 and self.my>sh-33 and self.selected and self.selected[0] != 'none':
-                #~ self.enter_down()
             self.highlight()
     def click_down_over(self,mp):
         gui.window.focused = self
@@ -3906,6 +3892,7 @@ class fadeanim(effect):
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
+                print "setting fade",self.start
                 o.setfade(int((self.start/100.0)*255.0))
         if self.wait:
             return True

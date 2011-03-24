@@ -721,6 +721,7 @@ char test
         self.instatement = False
         assets.variables["_lastline"] = str(self.si)
         for label,index in self.labels:
+            #print repr(name),repr(label),repr(index)
             if not first and label==name:
                 first = index
                 assets.variables["_currentlabel"] = label
