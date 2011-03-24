@@ -4006,7 +4006,7 @@ class flash(effect):
         return True
     
 class shake(effect):
-    def __init__(self):
+    def __init__(self,screen_setting="top"):
         super(shake,self).__init__()
         self.pri = ulayers.index(self.__class__.__name__)
         self.ttl = 15
@@ -4014,9 +4014,13 @@ class shake(effect):
         if vtrue(assets.variables.get("_shake_sound","false")):
             assets.play_sound("Shock.ogg")
         self.wait = True
+        self.screen_setting = screen_setting
     def draw(self,dest):
         o = int(self.offset)
-        dest.blit(dest.copy(),[random.randint(-o,o),random.randint(-o,o)])
+        if self.screen_setting == "top":
+            dest.subsurface([[0,0],[256,192]]).blit(dest.subsurface([[0,0],[256,192]]).copy(),[random.randint(-o,o),random.randint(-o,o)])
+        elif self.screen_setting == "both":
+            dest.blit(dest.copy(),[random.randint(-o,o),random.randint(-o,o)])
     def update(self):
         self.offset -= abs(self.offset / self.ttl)
         if self.offset < 1: self.offset = 1
