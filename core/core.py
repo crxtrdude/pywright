@@ -3694,12 +3694,12 @@ class timer(sprite):
         self.run = run
         self.script = assets.cur_script
     def update(self):
+        self.ticks-=assets.dt
+        assets.variables["_timer_value_"+self.run] = str(self.ticks)
         if self.ticks<=0:
             self.delete()
             if self.run:
                 ns = self.script.execute_macro(self.run)
-        self.ticks-=assets.dt
-        assets.variables["_timer_value_"+self.run] = str(self.ticks)
         
 class effect(object):
     def __init__(self):
