@@ -12,6 +12,12 @@ class directory(gui.pane):
         self.files.height = 140
         self.children.append(self.files)
         
+        class myb(gui.button):
+            def click_down_over(s,*args):
+                self.populate(dir.rsplit("/",1)[0],variabledest,variablename)
+        if dir.replace(".","").replace("/","").strip():
+            b = myb(None,"<----")
+            self.files.add_child(b)
         for file in os.listdir(dir):
             if os.path.isdir(dir+"/"+file) or file.endswith(".gif"):
                 class myb(gui.button):
@@ -20,6 +26,7 @@ class directory(gui.pane):
                             self.populate(s.path,variabledest,variablename)
                         else:
                             self.chosen_file = s.path
+                            self.children.append(self.choose_b)
                 b = myb(None,file)
                 b.path = dir+"/"+file
                 self.files.add_child(b)
@@ -33,10 +40,8 @@ class directory(gui.pane):
             def click_down_over(s,*args):
                 setattr(variabledest,variablename,self.chosen_file)
                 self.delete()
-        b = myb(None,"Choose")
-        self.children.append(b)
+        self.choose_b = myb(None,"Choose")
     def delete(self):
-        print "kill self"
         self.kill = 1
         super(directory,self).delete()
 
