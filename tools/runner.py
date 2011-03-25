@@ -47,8 +47,8 @@ class ExternalProgramRunner:
 
         #Don't use shell on windows
         self.use_shell = True
-        if "win" in sys.platform:
-            self.use_shell = False
+        #~ if "win" in sys.platform:
+            #~ self.use_shell = False
 
     def run(self, d):
         print d,d["command"],self.commands[d["command"]]
@@ -58,7 +58,7 @@ class ExternalProgramRunner:
         sh = operation%d
         sh.replace("/",os.path.sep)
         print sh
-        proc = subprocess.Popen(sh,stdout=subprocess.PIPE,shell=self.use_shell)
+        proc = subprocess.Popen(sh,stdout=subprocess.PIPE,shell=self.use_shell,bufsize=-1)
         return proc.communicate()
         
     def make_command(self, command):
