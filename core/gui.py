@@ -631,3 +631,59 @@ class scrollpane(pane):
         surf = self.updatescroll()
         self.scbar.draw(surf)
         dest.blit(surf,self.rpos)
+
+class directory(pane):
+    def populate(self,dir,variabledest,variablename,filter,close_on_choose=True):
+        self.children[:] = []
+        self.width=256
+        self.height=192
+        self.files = scrollpane([10,20])
+        self.files.width = 240
+        self.files.height = 140
+        self.children.append(self.files)
+        
+        class myb(button):
+            def click_down_over(s,*args):
+                self.populate(dir.rsplit("/",1)[0],variabledest,variablename,filter,close_on_choose)
+        if dir.replace(".","").replace("/","").strip():
+            b = myb(None,"<----")
+            self.files.add_child(b)
+        for file in os.listdir(dir):
+            if os.path.isdir(dir+"/"+file) or filter(file):
+                class myb(button):
+                    def click_down_over(s,*args):
+                        if os.path.isdir(s.path):
+                            self.populate(s.path,variabledest,variablename,filter,close_on_choose)
+                        else:
+                            self.chosen_file = s.path
+                            self.buttonpane.children.append(self.choose_b)
+                b = myb(None,file)
+                b.path = dir+"/"+file
+                self.files.add_child(b)
+        
+        self.chosen_file = dir
+        self.file = editbox(self,"chosen_file")
+        self.file.force_width = 250
+        self.children.append(self.file)
+        
+        self.buttonpane = pane(size=[256,20])
+        self.buttonpane.align = ""
+        self.buttonpane.border = False
+        self.children.append(self.buttonpane)
+        
+        class myb(button):
+            def click_down_over(s,*args):
+                setattr(variabledest,variablename,self.chosen_file)
+                if close_on_choose:
+                    self.delete()
+        self.choose_b = myb(None,"Choose")
+        
+        class myb(button):
+            def click_down_over(s,*args):
+                self.delete()
+        b = myb(None,"close")
+        b.rpos = [200,0]
+        self.buttonpane.children.append(b)
+    def delete(self):
+        self.kill = 1
+        super(directory,self).delete()

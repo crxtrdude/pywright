@@ -1,49 +1,28 @@
 import pygame,sys,os
 
+import core
+
 import gui
 
-class directory(gui.pane):
-    def populate(self,dir,variabledest,variablename):
-        self.children[:] = []
-        self.width=256
-        self.height=192
-        self.files = gui.scrollpane([10,20])
-        self.files.width = 240
-        self.files.height = 140
-        self.children.append(self.files)
+class msg(gui.pane):
+    def __init__(self,msg,assets):
+        gui.pane.__init__(self)
+        self.width = 256
+        self.height = 100
+        self.pri = -1001
+        self.z = 11001
+        self.rpos = [0,100]
+        self.align = "vert"
         
-        class myb(gui.button):
-            def click_down_over(s,*args):
-                self.populate(dir.rsplit("/",1)[0],variabledest,variablename)
-        if dir.replace(".","").replace("/","").strip():
-            b = myb(None,"<----")
-            self.files.add_child(b)
-        for file in os.listdir(dir):
-            if os.path.isdir(dir+"/"+file) or file.endswith(".gif"):
-                class myb(gui.button):
-                    def click_down_over(s,*args):
-                        if os.path.isdir(s.path):
-                            self.populate(s.path,variabledest,variablename)
-                        else:
-                            self.chosen_file = s.path
-                            self.children.append(self.choose_b)
-                b = myb(None,file)
-                b.path = dir+"/"+file
-                self.files.add_child(b)
-        
-        self.chosen_file = dir
-        self.file = gui.editbox(self,"chosen_file")
-        self.file.force_width = 250
-        self.children.append(self.file)
-        
-        class myb(gui.button):
-            def click_down_over(s,*args):
-                setattr(variabledest,variablename,self.chosen_file)
-                self.delete()
-        self.choose_b = myb(None,"Choose")
+        for line in core.wrap_text([msg],assets.get_image_font("block_arial"),300):
+            print line
+            text = gui.label(line)
+            self.children.append(text)
+    def click_down_over(self,*args):
+        self.delete()
     def delete(self):
         self.kill = 1
-        super(directory,self).delete()
+        super(msg,self).delete()
 
 class tools_menu(gui.pane):
     def __init__(self,*args,**kwargs):
@@ -75,8 +54,8 @@ class tools_menu(gui.pane):
     def gif2strip(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
-        self.files_dir = directory([0,0])
-        self.files_dir.populate(".",self,"giffile")
+        self.files_dir = gui.directory([0,0])
+        self.files_dir.populate(".",self,"giffile",lambda x: x.endswith(".gif"),False)
         self.children.append(self.files_dir)
     def aao2pywright(self):
         assets = self.assets
@@ -144,7 +123,13 @@ class tools_menu(gui.pane):
         if getattr(self,"giffile",""):
             sys.path.append("tools")
             import gif2strip
-            gif2strip.go(self.giffile)
+            try:
+                path = gif2strip.go(self.giffile)
+                self.children.append(msg("Converted "+path.rsplit("/",1)[1]+".png",self.assets))
+            except Exception:
+                import traceback
+                traceback.print_exc()
+                self.children.append(msg("File could not be converted.",self.assets))
             self.giffile = ""
         return True
     def close_tools(self):
