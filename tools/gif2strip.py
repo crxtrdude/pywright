@@ -86,6 +86,7 @@ def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
             if d==0:
                 d=1
             f.write("framedelay %s %s\n"%(i,d))
+    return root
 
 if __name__ == "__main__":
     if len(sys.argv)<2:
