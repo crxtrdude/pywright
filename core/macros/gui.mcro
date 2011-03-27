@@ -11,6 +11,7 @@ isnot _cr_button exit
 {hide_court_record_button}
 {_default_court_record_button}
 label exit
+
 endmacro
 
 macro hide_court_record_button
@@ -30,6 +31,8 @@ macro theme_bigbutton
     set theme $1
     print The theme is $theme
     set _bigbutton_scanlines on
+    set _bigbutton_border on
+    set _bigbutton_border_img general/bigbutton/border
     is theme = default default
     is theme = phoenix phoenix
     is theme = apollo apollo
