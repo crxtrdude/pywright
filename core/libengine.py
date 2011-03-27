@@ -346,6 +346,8 @@ class Script(gui.widget):
         self.lastline = ""  #Remember where we jumped from in a script so we can go back
         self.lastline_value = ""   #Remember last line we executed
         self.held = []
+    def __repr__(self):
+        return "Script object, scene=%s id=%s line_no=%s"%(self.scene,id(self),self.si)
     obs = property(lambda self: self.world.render_order(),lambda self,val: setattr(self,"world",World(val)))
     upobs = property(lambda self: self.world.update_order())
     def _gchildren(self): return self.world.render_order()
@@ -677,6 +679,7 @@ char test
         scriptlines = ["{"+macroname+args+"}"]
         assets.replace_macros(scriptlines,self.macros)
         nscript.init(scriptlines=scriptlines)
+        nscript.scene = self.scene+"/"+macroname
         nscript.macros = self.macros
         assets.stack.append(nscript)
         self.buildmode = False
