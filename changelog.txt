@@ -117,7 +117,7 @@
             mia - mia shadow from phoenix wright series
             edgeworth - edgeworth shadow from phoenix wright series
             apollo - for apollo justice
-            gk - for pink button from Ace Attorney Investigations or GK
+            gk - for pink button from Ace Attorney Investigations/GK
         You can also configure scanlines, the button images, and the background with
         more precision by setting _bigbutton_bg, _bigbutton_img, _bigbutton_cross to the
         respective image path for those elements, and setting _bigbutton_scanlines on or off.
