@@ -1,0 +1,30 @@
+        #add some evidence
+        addev sillyputty
+        addev redherring
+        
+        #show present screen
+        present fail=badpresent
+        
+        #back was pressed
+        "So you don't want to present anything at all?"
+        
+        #silly putty was presented
+        label sillyputty
+        "That's just what I needed."
+        goto next
+        
+        #Something else was presented
+        label badpresent
+        "I don't care about that."
+        
+        label next
+        #show present with no back button
+        present fail=badpresent noback
+        "the code will never get here"
+        label sillyputty
+        "good I needed that"
+        "by the way, I saw you couldn't press the back button"
+        goto next
+        label badpresent
+        "I don't care about that."
+        label next

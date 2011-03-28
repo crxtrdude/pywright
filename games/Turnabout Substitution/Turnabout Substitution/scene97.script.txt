@@ -1,0 +1,340 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+mus
+defense
+emo normal-nobrac name=dc
+"The Mysterious Bust Killer was{n}compared to an animal many{n}times..."
+"{sfx/Ding.ogg}{f}Mrs. Poole, what do certain{n}animals do when they are{n}threatened?"
+
+prosecutor
+"...{p30}Run?"
+
+defense
+"Some do. But others... {sfx/Key.ogg}{f}{c900}attack{c}.{n}{delay2}Mercilessly."
+
+prosecutor
+"If you have some grandiose speech{n}prepared, just {sfx/Smack.ogg}{s 8 8}skip it and get to{n}the point."
+"I'm sure the jurists would like to{n}get home already."
+
+defense
+"What if the murderer killed{n}Chambers because Chambers{n}{sfx/Ding.ogg}{f}threatened him in some way?"
+"Threatened...{p40} because he {f}{s 10 10}saw{n}something he shouldn't have."
+
+prosecutor
+emo serious name=pc
+"Get to the {sfx/Smack.ogg}{s}point, Antennas!{n}What is this {f}'something'{n}you're talking about?"
+
+defense
+"{sfx/Key.ogg}{f}{c900}Attempted murder{c}, of course."
+emo document-nobrac name=dc
+"We know that Erlenmeyer was the{n}intended victim from the biology{n}classroom."
+"We can conclude from that and{n}from Erlenmeyer's and Chambers'{n}presence at the crime scene"
+"that Chambers was murdered{n}because {eobjects-nobrac}{p15}{epointing-nobrac}{sfx/Dunnn.ogg}{f}{s 12 12}{c900}he saw the real killer{n}about to murder Erlenmeyer{c}!"
+
+mus 118 - Apollo Justice - Pursuit Overtaken.ogg
+set _music_loop 118 - Apollo Justice - Pursuit Overtakenloop.ogg
+
+judge
+emo shocked name=jc
+"{sfx/Bwaaah.ogg}{s 10 10}Whaaaaat?!"
+
+fg ObjectionAnimPoole
+sfx pooleobjection.ogg
+pause 5 script
+
+prosecutor
+emo normal name=pc
+"You've gone back to your{n}{sfx/Smack.ogg}{s 10 10}ridiculous 'third person'{n}nonsense!"
+"We've already established there{n}was {s 8 8}no one else at the cemetery!"
+"You have that fanciful narrative,{n}but all it boils down to is the{n}presence of a third person."
+"Are you really going to say that{n}there was a third person at the{n}scene who {s 5 5}killed the victim,"
+"{s 5 5}framed the defendant, and {s 5 5}left,{n}without leaving {f}any trace{n}whatsoever?"
+"I call arguments like that the{n}{esarcastic}{sfx/Key.ogg}{f}'Please believe me!' defense."
+emo serious name=pc
+"I have {sfx/Smack.ogg}{s 10 10}tangible evidence that{n}proves Erlenmeyer is guilty."
+"You have a {s 8 8}fictional story based{n}on absolutely {s 8 8}nothing, without{n}even circumstantial evidence."
+emo sarcastic name=pc
+"I'd believe Erlenmeyer is an{n}{f}alien before I believe your story!"
+
+defense
+"{eheadshakes-nobrac}{p15}{enormal-nobrac}A fictional story with no{n}evidence, eh? {p30}{s 8 8}{f}How many holes are{n}in {sfx/Key.ogg}{f}YOUR story, Poole? What about"
+"the {sfx/Ding.ogg}{f}newest Mysterious Bust crime{n}scene that proves Erlenmeyer was{n}the intended victim?"
+"What about the fact that your{n}{sfx/Ding.ogg}{f}motive has fallen apart?"
+"You said it yourself:{n}{sfx/Table Slam.ogg}{edeskslam-nobrac}{p15}{ehandsondesk-nobrac}there {s 10 10}had to be a reason{n}for this murder!"
+
+prosecutor
+emo normal name=pc
+"{sfx/Ding.ogg}!!{p60}{n}{eserious}You've {s 5 5}got some nerve, rookie."
+"Motive is only necessary when{n}you are trying to {sfx/Smack.ogg}{s 10 10}challenge the{n}established truth!"
+"When you have other, {f}decisive{n}evidence on your side...{p30}{n}it becomes {sfx/Ding.ogg}{f}secondary."
+
+defense
+"I believe {f}you are the one who{n}mentioned before that motive{n}was one essential component"
+"for a guilty verdict."
+
+prosecutor
+"So we {s 8 8}don't know why Erlenmeyer{n}killed Chambers! {p15}So what?"
+"We don't know why he killed a{n}{f}dozen other people, and {s 8 8}that{n}didn't stop a guilty verdict!"
+
+defense
+emo thinking-nobrac name=dc
+"...{p30}Maybe {f}that's been the problem{n}the entire time."
+
+prosecutor
+"Maybe Erlenmeyer thought it was{n}too {f}cold, or didn't like the {f}color{n}of Judge's car, or the {f}model."
+"Maybe he had a sudden {s 5 5}impulse to{n}kill that he didn't have three{n}days ago, for whatever reason."
+"Everyone does {f}strange,{n}{f}inexplicable things."
+"Can you imagine what it would{n}be like for someone as {s 8 8}unstable{n}as Erlenmeyer?!"
+
+judge
+emo normal name=jc
+"So true...{p30} I have to {sfx/Ding.ogg}{f}off-set all{n}plates I see by two degrees, or{n}I can't stand to look at them!"
+
+prosecutor
+"...{p30}Moving on, the point is{n}we can {s 8 8}always find something!{n}{p15}...{p30}{f}Except you."
+"Admit it already: you're stuck.{p20}{n}You're just throwing out{n}wild guesses at this point."
+
+mus
+defense
+"...{p30}"
+
+prosecutor
+emo sarcastic name=pc
+"{sfx/Ding.ogg}{f}Hmm?{p20} Not denying it?"
+
+defense
+emo sheepish-nobrac name=dc
+"{delay2}Uh..."
+
+prosecutor
+emo serious name=pc
+"{sfx/Smack.ogg}{s 10 10}Tell us the identity of this{n}third person! {s 8 8}Give us proof of{n}his presence!"
+"If you {s 8 8}can't do those two things,{n}I {s 10 10}don't see a point in humoring{n}your wild theory any longer!"
+"{f}Do you, Your Honor?"
+
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+judge
+"...{p20}No, I don't. Mr. Justice,{n}you've been continually trying to{n}point out the inconsistencies"
+"in Mrs. Poole's arguments.{n}Successfully, a few times."
+"But that's all {f}meaningless if you{n}can't come up with your own{n}solid argument in the end."
+"It's possible that there was a{n}third person at the scene...{p30} but{n}it's also possible that a {sfx/Ding.ogg}{f}unicorn"
+"appeared and mauled the victim{n}to death. There's no escaping the{n}question this time."
+"{eserious}{f}Tell me who the real murderer is{n}and a good reason to believe you,"
+"or I will {s 8 8}turn this case over to{n}the jury right now."
+
+defense
+"{c089}{sfx/Smack.ogg}{eohshit-nobrac}{p30}{esweats-nobrac}({s 5 5}Gah! I'm {s 5 5}cornered again! I don't{n}have time to think or improvise...{p30}{n}He's {s 5 5}really serious!)"
+emo thinking-nobrac name=dc
+"{c089}(...{p30}I honestly don't have an answer{n}to them now.{p20} I could go with my{n}{f}first hunch, but...)"
+"{c089}(I {s 5 5}don't really have the evidence,{n}and I'm {s 5 5}not sure it's right{n}anymore...{p30} {f}What do I do?)"
+emo normal-nobrac name=dc
+"Y-{p20}{s 5 5}{f}Your Honor, I...{p30} Uh,{p20} {s 5 5}I..."
+
+judge
+emo normal name=jc
+"Please {f}hurry up, Mr. Justice.{p20}{n}I don't mean to be cruel, but{n}even {f}my patience has its limits."
+
+prosecutor
+emo sarcastic name=pc
+"Give it up already. There's{n}no use delaying it any more."
+
+defense
+emo handsondesk-nobrac name=dc
+"B-{p20}{s 5 5}But...{p30} {sfx/Smack.ogg}{s 8 8}Please, Your Honor!{n}It's not that I have {f}nothing{n}to say, it's just...{p30}"
+"it's just that...{p30} I need some{n}{s 8 8}time to fit my idea together..."
+
+judge
+"...{p30}{sfx/Key.ogg}{f}Mr. Justice. I think you've{n}had {s 8 8}plenty of time already."
+
+defense
+emo sweats-nobrac name=dc
+"I-{p15}{s 5 5}I know, but...{p30}"
+"{c089}(But...{p60}{n}{delay2}...{sfx/Ding.ogg}!!{p30}{delay1}{n}{f}{s 10 10}{eohshit-nobrac}AAAAAAAAAAAAAAAAAH!!)"
+
+judge
+"{eshocked}Mr. Justice?!{n}{p30}{f}What's that look on your face?"
+
+defense
+emo sweats-nobrac name=dc
+"{c089}(I-{p15}{s 8 8}I don't believe it, but...{p30})"
+
+prosecutor
+emo serious name=pc
+"{sfx/Bwaaah.ogg}{s 10 10}Spit it out already!"
+
+defense
+"{esweats-nobrac}I... {p30}{sfx/Ding.ogg}{f}{s 10 10}{enormal-nobrac}{c900}I know who did it{c}! And I{n}have {f}{s 8 8}incriminating evidence."
+
+helper
+emo aide name=hc
+"{f}Really, Polly?!"
+
+defense
+"{delay2}...{p30}{f}Yeah."
+
+scrollprosecutor
+emo serious name=pc
+"{sfx/Shock.ogg}{s 10 10}Whaaat?! Impossible!"
+
+judge
+emo normal name=pc
+"You'd better not be bluffing{n}this time, Mr. Justice...{p30}{n}for your {sfx/Key.ogg}{f}client's sake."
+
+scrolldefense
+emo handsondesk-nobrac name=dc
+"{c089}(First I'll give the {f}{s 5 5}name,{n}then the {f}{s 5 5}evidence!{p30}{n}{s 5 5}Here comes Justice!)"
+
+# PRESENT PROFILE OF THE REAL KILLER
+setvar _cr_back_button false
+setvar _allow_present_evidence false
+present
+
+# RHEA
+label rhea$
+script scene98
+
+# APOLLO
+label apollo$
+setvar _cr_back_button true
+mus
+prosecutor
+"{delay2}So you're saying...{n}{sfx/Key.ogg}{f}you committed the crime?"
+defense
+"What? No, I... {sfx/Smack.ogg}{s 10 10}{eohshit-nobrac}{p30}{esweats-nobrac}GAH!"
+prosecutor
+"Clearly Mr. Justice has no idea{n}what he's doing, Your Honor.{n}He said he knew the killer,"
+"and gave us this stupid response.{n}I think it's time we end this{n}trial."
+judge
+"...{p30}{f}Yes, I agree."
+script gameover
+
+# PAUL STRINGS
+label pstrings$
+setvar _cr_back_button true
+mus
+judge
+emo serious name=jc
+"{sfx/Smack.ogg}{s 10 10}Hold on a moment, Mr. Justice!{n}I'm {s 10 10}not letting you accuse{n}my father again!"
+defense
+emo normal-nobrac name=dc
+"Wh-{sfx/Shock.ogg}{s 10 10}What? But he was guilty{n}last time!"
+judge
+"Yes, but last time he wasn't{n}confined in a {sfx/Ding.ogg}{f}prison cell."
+defense
+emo sweats-nobrac name=dc
+"{delay2}...{sfx/oops.wav}{f}Oh."
+judge
+"It seems you truly didn't know{n}who the killer was."
+script gameover
+
+# ERLENMEYER
+label erlenmeyerupdated$
+setvar _cr_back_button true
+mus
+prosecutor
+"So you're {sfx/Ding.ogg}{f}admitting Erlenmeyer{n}is the killer?"
+defense
+emo sweats-nobrac name=dc
+"{delay2}U-Uh..."
+helper
+emo aideserious name=hc
+"{sfx/Smack.ogg}{s 8 8}What were you thinking, Polly?!"
+prosecutor
+"Well, if the defense is saying{n}that, then I don't think there is{n}any point in continuing the trial."
+judge
+"I concur, Mrs. Poole."
+script gameover
+
+# G. STRINGS
+label gstrings$
+mus
+defense
+"{c089}(And the evidence....)"
+setvar _cr_back_button false
+setvar _allow_present_profiles false
+setvar _allow_present_evidence true
+present fail=AreYouKidding
+
+label AreYouKidding
+setvar _cr_back_button true
+judge
+emo shocked name=jc
+"First you accuse my father,{n}and {sfx/Bwaaah.ogg}{s 10 10}now you accuse me?!"
+defense
+emo normal-nobrac name=dc
+"Th-That's right.{n}{sfx/Table Slam.ogg}{ehandsondesk-nobrac}Because you're {f}{s 10 10}both guilty!"
+judge
+"...{p30}{sfx/Key.ogg}{f}I'm just glad your evidence{n}is meaningless."
+defense
+emo sweats-nobrac name=dc
+"{sfX/Shock.ogg}{s 10 10}Wha...?"
+prosecutor
+"That evidence proves nothing,{n}Antennas. I thought you might{n}actually have evidence due to"
+"the gravitas of your accusation...{p30}{n}but you {sfx/Ding.ogg}{f}never cease to amaze me."
+judge
+emo serious name=jc
+"This is the end, Mr. Justice.{n}I will not tolerate such{n}actions in my court."
+script gameover
+
+# POOLE
+label poole$
+mus
+defense
+"{c089}(And the evidence....)"
+setvar _cr_back_button false
+setvar _allow_present_profiles false
+setvar _allow_present_evidence true
+present fail=WrongWrongWrong
+
+label WrongWrongWrong
+setvar _cr_back_button true
+prosecutor
+"...{p30}Are you {sfx/Smack.ogg}{s 10 10}actually going to try{n}to accuse me of murdering one of{n}my friends?"
+"One so close that I changed{n}my {sfx/Shing.ogg}{f}{s 10 10}entire lifestyle for him{n}a year ago?"
+defense
+emo sheepish-nobrac name=dc
+"...Y-{p20}{sfx/Key.ogg}{f}Yeah."
+prosecutor
+"Too bad that evidence doesn't{n}prove anything. I thought you{n}might actually have evidence"
+"due to the gravitas of your{n}accusation...{p30} but you {sfx/Ding.ogg}{f}never{n}cease to amaze me."
+defense
+"{sfx/Smack.ogg}{eohshit-nobrac}{p30}{esweats-nobrac}Wh-What?!"
+judge
+"I also fail to see how that{n}evidence incriminates Mrs. Poole."
+defense
+emo normal-nobrac name=dc
+"B-{p20}{s 5 5}But...{p30} I thought..."
+judge
+"It seems you thought wrong,{n}Mr. Justice. I'm truly sorry,{n}but you didn't know the killer."
+script gameover
+
+# ANYONE ELSE
+label none
+mus
+defense
+"{c089}(And the evidence....)"
+setvar _cr_back_button false
+setvar _allow_present_profiles false
+setvar _allow_present_evidence true
+present fail=NotEvenALittle
+
+label NotEvenALittle
+setvar _cr_back_button true
+judge
+"...{p30}{sfx/Key.ogg}{f}I'll put it bluntly.{p30}{n}There's {f}no way that person{n}is the murderer."
+prosecutor
+"And your evidence is completely{n}unrelated."
+defense
+"{sfx/Smack.ogg}{eohshit-nobrac}{p30}{s 10 10}{sfx/Table Slam.ogg}{ehandsondesk-nobrac}W-Wait!"
+judge
+emo serious name=jc
+"We've waited long enough,{n}Mr. Justice. You said you {s 5 5}knew{n}the killer, and you {s 5 5}didn't."
+"You have wasted our time long{n}enough; this trial is {f}over."
+script gameover

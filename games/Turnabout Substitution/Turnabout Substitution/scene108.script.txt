@@ -1,0 +1,96 @@
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper nothing
+set _witness Rhea
+startcourt
+defense
+"It's {f}right here{n}in the trial data!"
+"It plainly says here you{n}were a {f}witness in{n}Erlenmeyer's trial."
+"But you weren't a witness{n}because Nathan was killed...{p60}{n}it's {sfx/Key.ogg}{f}{c900}the opposite{c}!"
+"Nathan was {s 8 8}killed so that{n}you could be a {s 8 8}witness!"
+"With your brother as a victim, no one{n}would find it suspicious once you{n}got involved in the case."
+"You'd get {f}confidential, {f}inside{n}information that would{n}put"
+"you one step ahead of{n}the authorities."
+"Most of all, you could use this{n}position to {f}{s 10 10}lead the police{n}against a scapegoat!"
+"Testifying against Erlenmeyer,{n}befriending Judge...{p30}{epointing-nobrac}{sfx /Shing.ogg}{f}{s 12 12} you did it for{n}your own benefit!"
+"{enormal-nobrac}Of course, this is also{n}the reason you became{n}{sfx/Key.ogg}{f}my assistant."
+"You {f}joined me to make sure{n}the {s 8 8}truth came out"
+"when you found out Judge{n}had supposedly killed{n}Erlenmeyer, since you thought it"
+"{f}wasn't the whole story."
+witness
+"{emad}...{p30}{sfx /Ding.ogg}{f}Fine, but {s 5 5}this{n}is only the beginning!"
+defense
+"I haven't faltered yet, and{n}I won't falter any{n}time soon."
+witness
+"Let's talk about the{n}killer's {c900}modus operandi{c}."
+emo normal name=wc
+witness
+"The {f}Charles Darwin signature...{n}Erlenmeyer was a {f}{s 8 8}biology teacher."
+"A {f}sheet of music...{p20} Erlenmeyer{n}could {f}{s 8 8}sing the melody even when he{n}couldn't form a coherent sentence!"
+"The {f}naked photographs...{p25} his{n}mental conditions must have made him{n}{f}{s 8 8}sexually frustrated!"
+"All of these things fit in with{n}Erlenmeyer's psychological profile,"
+"but have absolutely{n}{sfx/Dunnn.ogg}{f}{s 10 10}no connection to me!"
+emo thinking-nobrac name=dc
+scrolldefense
+"Yeah, but what about the{n}other aspects of the{n}modus operandi"
+"you {sfx/Key.ogg}{f}{c900}"conveniently"{c}{n}left out?"
+"One in particular caught my{n}attention..."
+"{f}Especially because I have {f}{s 10 10}evidence{n}linking you to it!"
+goto beforecoup
+
+label beforecoup
+emo handsondesk-nobrac name=dc
+defense
+"{c090}Of course, I'm talking about {f}this..!"
+present fail=108fail
+timer 5400 outoftime
+show_timer
+
+label photograph
+script scene109
+
+
+label 108fail
+fg TakeThatAnimApollo
+pause 5 script
+
+emo smiling2 name=wc
+witness
+"{sfx/Smack.ogg}{s 10 10}Ha!{p30} That doesn't relate me to the{n}crimes at all."
+
+emo serious name=jc
+judge
+"I don't see the connection either."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"Do you really have this evidence?"
+
+emo nods-nobrac name=wc
+defense
+pause 60
+"{ehandsondesk}{f}Yes, Your Honor!"
+goto beforecoup
+
+label gameover
+script gameover
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

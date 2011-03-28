@@ -1,0 +1,32 @@
+#-version-1
+label top
+bg aj/wrightanything
+
+list scene11rheatalk1
+li What to do
+li Any ideas?
+showlist
+menu scene11rhea
+
+label What to do
+char rhea
+char Apollo hide
+"Well, what should we do?"
+char Rhea
+"When we're done with the crime{n}scene, I suggest we try{n}interrogating this mystery {c900}witness"
+"they keep talking about."
+char Apollo hide
+"I'd also like to ask Chambers{n}some questions, if you don't mind."
+"We didn't really get the{n}chance to talk this morning..."
+char nothing
+goto top
+
+label Any ideas?
+char rhea
+char Rhea
+"There are still plenty of unanswered{n}questions, such as : how did the{n}criminal dispose of the body?"
+char Apollo hide
+"And if we can come up with our own{n}answers, then hopefully we'll stay{n}one step ahead of the prosecution."
+"{c099}(Think, Apollo, think! There must{n}be some way to{n}turn this case around...)"
+char nothing 
+goto top

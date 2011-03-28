@@ -1,0 +1,46 @@
+char maya
+globaldelay 12 name=maya t
+"{delay2} Slooooooow talking maya"
+set _blinkspeed_next 0 0
+char maya name=maya
+controlanim name=maya noloop t start=4
+"I can only talk once, so nener nener nener nener. And a hidey hidey ho."
+controlanim name=maya noloop b
+"maybe my frames have run out? by the way I no longer blink"
+
+
+
+fg badger/badger nowait name=badger
+controlanim name=badger end=12
+"play only first few frames of badger animaton"
+clear
+fg badger/badger-break nowait name=badger
+controlanim name=badger start=20
+"play only last few frames"
+clear
+fg badger/badger nowait name=badger
+controlanim name=badger noloop
+"don't loop"
+clear
+fg badger/badger-break nowait name=badger
+controlanim name=badger loop
+"loop"
+
+fg badger/badger nowait name=badger
+"Doo de do de do do"
+globaldelay 1 name=badger
+"faster"
+globaldelay 6 name=badger
+"slower"
+clear
+fg fire/flame1 nowait
+fg fire/flame2 nowait
+fg fire/ghostfire nowait
+fg badger/badger-break
+"aw"
+globaldelay 12
+"slowmo!"
+fg ani-gallery nowait
+pause 60
+fg speedlineupclose2 nowait
+pause 60

@@ -1,0 +1,23 @@
+#-version-1
+label top
+mus
+bg aj/detentioncenter fade
+
+flag scene80repeat skipApollo
+
+char Apollo hide
+nt
+"{c090}{center}{type}December 28{n}Detention Center"
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+char Apollo hide
+"{c099}(This is it... It's time to get{n}to the bottom of this enigma of{n}a man!)"
+setflag scene80repeat
+mus 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain So.ogg
+set _music_loop 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain Soloop.ogg
+menu scene80erlenmeyer
+
+label skipApollo
+mus 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain So.ogg
+set _music_loop 144 - Turnabout Substitution - Robert Erlenmeyer - Some Remain Soloop.ogg
+menu scene80erlenmeyer

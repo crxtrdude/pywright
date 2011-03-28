@@ -1,0 +1,47 @@
+#-version-1
+label top
+bg ts/biologyclassroom
+
+examine
+region 142 132 25 13 sheetmusic
+region 186 135 37 57 photos
+region 103 49 41 28 mice
+region 0 87 143 105 tables
+region 55 12 186 39 blackboard
+menu scene72
+
+label sheetmusic
+char Apollo hide
+"I wonder what Charles Darwin{n}has to do with music. The police{n}weren't able to figure out"
+"a connection... Could it be{n}an esoteric, elaborate reference?"
+"{c099}(...This is probably where{n}Rhea would say, 'Or something{n}the killer found cool.'"
+"{c099}I miss her...)"
+goto top
+
+label photos
+char Apollo hide
+"{c099}(With these pictures, the real{n}killer has begun to reveal{n}himself... I feel much better"
+"{c099}knowing Erlenmeyer is innocent!{n}I'll do whatever I can to{n}bring the truth to light!)"
+goto top
+
+label mice
+char Apollo hide
+"{c099}(These mice are really sick...{n}They're lethargic, and all yellow.)"
+goto top
+
+label tables
+char Apollo hide
+"{c099}(It must have been hard to{n}arrange these pictures into{n}the shape of a bust with all"
+"{c099}the tables in the way...{n}Of course, that didn't stop...{n}whoever did this.)"
+goto top
+
+label blackboard
+char Apollo hide
+"{c099}(That blackboard, every student's{n}nightmare... or at least mine.{n}Even when someone else went up"
+"{c099}there I would get nervous!{n}I guess that was the{n}Gramarye blood at work...)"
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+goto top

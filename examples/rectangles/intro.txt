@@ -1,0 +1,82 @@
+label game_start
+#Set up collisions, clear rectangles
+rectangle_init
+
+#Add some collision rectangles
+{add_rectangle 146 0 67 75 collide}
+{add_rectangle 37 0 108 107 collide}
+{add_rectangle 0 0 34 129 collide}
+{add_rectangle 29 0 13 120 collide}
+{add_rectangle 0 129 23 66 collide}
+{add_rectangle 14 146 247 49 collide}
+{add_rectangle 224 0 41 160 collide}
+{add_rectangle 209 0 18 129 collide}
+
+{add_rectangle 20 0 50 50 info}
+
+bg gk2room1
+
+macro place_character
+set nx $1
+set ny $2
+set cx $nx
+set cy $ny
+set new $chardir
+set chardir 0
+set_anim $new
+set stop_loop 1
+endmacro
+
+#Setting collision point to the bottom of his feet
+set cx_off 16
+set cy_off 78
+set chardir walkeast
+{place_character 130 130}
+
+macro set_anim
+is chardir = $1 AND stop_loop = 0 quit_set_anim
+set stop_loop 0
+set chardir $1
+delete name=c
+set nx $cx
+subvar nx $cx_off
+set ny $cy
+subvar ny $cy_off
+obj fg/lilmiles-$1 name=c x=$nx y=$ny nowait
+label quit_set_anim
+endmacro
+
+#Add buttons for movement
+gui Button move_left x=125 y=292 hotkey=k_left hold left
+gui Button move_right x=145 y=292 hotkey=k_right hold right
+gui Button move_up x=132 y=285 hotkey=k_up hold up
+gui Button move_down x=132 y=300 hotkey=k_down hold down
+
+label wait_input
+#pause to let the gui have a chance to continue character movement, before stopping animation
+pause 1
+set stop_loop 1
+getprop frame name=c prop=frame
+controlanim name=c start=$frame end=$frame noloop
+gui Wait
+
+label move_left
+#direction, name= to scroll, times to scroll, speed of scroll
+{set_anim walkwest}
+{walk_left c 1 2}
+goto wait_input
+
+label move_right
+{set_anim walkeast}
+{walk_right c 1 2}
+goto wait_input
+
+label move_up
+{set_anim walknorth}
+{walk_up c 1 2}
+goto wait_input
+
+label move_down
+{set_anim walksouth}
+{walk_down c 1 2}
+goto wait_input

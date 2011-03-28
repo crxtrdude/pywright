@@ -1,0 +1,10 @@
+#-version-1
+label top
+bg aj/detentioncenter
+
+fg detentionfg loops=0 nowait
+char Erlenmeyer
+char Apollo hide
+"{c099}(Talking to him hasn't worked{n}before, and it won't work now!{n}I need to show him what I found"
+"{c099}at Clooney's Asylum...)"
+menu scene80erlenmeyer

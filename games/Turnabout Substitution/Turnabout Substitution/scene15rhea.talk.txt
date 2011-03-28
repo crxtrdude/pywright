@@ -1,0 +1,139 @@
+#-version-1
+label top
+bg ts/1deekayandcooffice
+
+list scene15rheatalk1
+li Rhea Wits, Funeral Director
+flag nathan nathan
+label scene15rheatalk2
+showlist
+menu scene15rhea
+label nathan
+li Nathan Wits
+goto scene15rheatalk2
+
+label Rhea Wits, Funeral Director
+char rhea
+char Apollo hide
+"So... your being a funeral director{n}and all... is it a vocation or{n}just a job? I'm curious."
+char Rhea
+"A vocation? Not really - I actually{n}studied law at the university."
+"If you think about it,{n}I could have been one{n}of Mr.Wright's partners."
+"But then a career{n}opportunity presented itself."
+"I'll be honest with you, Apollo.{n}My Dad pulled some strings{n}to get me the position."
+"Still, I'm a woman in a man's{n}job. I have to work twice{n}as hard to prove myself."
+pause 60 script
+mus
+char Rhea e=sad
+"...{sfx/Key.ogg}You'd think by now I'd be{n}used to seeing dead bodies."
+"But when it's someone close to you,{n}you're always like a virgin -{n}touched for the very first time."
+"And now it's got me thinking.{n}Is your brother's life worth{n}more than their brother's life?"
+pause 60 script
+mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
+set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
+char Rhea
+"Yeah, I know.{n}Way to ruin the mood, huh?"
+char Rhea e=smiling1
+"...{sfx/Ding.ogg}Want some chocolate?{n}Oh, {sfx/Smack.ogg}yes please Rhea!"
+char Apollo hide
+"If you say so.{n}{c099}(Mmmmmmm. Chocolate.)"
+char nothing
+goto top
+
+label Nathan Wits
+mus 142 - Turnabout Substitution - Recollection - Charles Darwin and Music.ogg
+set _music_loop 142 - Turnabout Substitution - Recollection - Charles Darwin and Musicloop.ogg
+char rhea e=sad
+"Nathan was 25 when he was{n}taken from me... from our family."
+"He had everything going for him.{n}He was young, smart and handsome...{n}he was a skilled computer engineer."
+"A bit of a loner, but he needed{n}affection - he deserved affection."
+addev nathan$
+"...It was Tuesday. I went{n}to visit him as usual."
+"I rang, but no one responded.{n}The door was left open, so I{n}decided to wait for him inside."
+pause 60 script
+"...As soon as I saw Charles Darwin{n}on that music sheet... I knew{n}I would never see him again."
+addev nathan$
+pause 60 script
+char Rhea
+"...Nathan hated having his{n}picture taken, you know."
+"I couldn't find any picture{n}of both of us together,{n}so I had to invent one."
+"Still, a false memory is better{n}than no memory at all,{n}wouldn't you agree?"
+char Apollo hide
+"{c099}(Wow, she's good. I could have{n}sworn it was a real photograph...)"
+nt 
+addev photograph
+"{sfx/evidence.wav}{c099}Photo of Rhea and Nathan{n}added to the Court Record."
+mus
+char Phone hide
+"{sfx/ring.wav}{c090}RRRIIINNNGGG!!!{p30}{next}"
+char Apollo hide
+"Excuse me."
+char nothing fade
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+sfx /evidenceshoop.wav
+ev phoenix
+mus 06 - Phoenix Wright - Objection! 2001.ogg
+set _music_loop 06 - Phoenix Wright - Objection! 2001loop.ogg
+char Phoenix hide
+"{sfx/Bwaaah.ogg}{s}Apollo? Is everything alright?"
+"They say your flight landed three{n}hours ago, but we couldn't find{n}you anywhere in the airport!"
+char Apollo hide
+"{c099}(Whoops! I had completely{n}forgotten about them.)"
+addev phoenix$
+"Well, I, er, kinda didn't{n}catch the plane, so{p10}{next}"
+char Phoenix hide
+"{sfx/Shock.ogg}{s}WHAAAAAAAAT?!"
+char Apollo hide
+"{sfx/Smack.ogg}Waitwaitwait! {sfx/Smack.ogg}I can explain!"
+mus
+clear
+char Apollo hide
+"{c099}(I told Mr.Wright everything{n}about our case.)"
+bg ts/1deekayandcooffice fade
+ev phoenix name=phoenix x=185
+char Phoenix hide
+"...I see."
+pause 60 script
+"Well, judging from the facts{n}of the case, the answer{n}should be fairly obvious by now."
+"The identity of the{n}{sfx/Key.ogg}{c900}true criminal{c} is...{p60}{next}"
+mus 143 - Turnabout Substitution - That's the Way I NickRoll.ogg
+set _music_loop 143 - Turnabout Substitution - That's the Way I NickRollloop.ogg
+pause 300
+char Apollo hide
+"{c099}(Oh no, not again.)"
+mus
+char Phoenix hide
+"John. The killer's{n}name is John."
+char Apollo hide
+"{sfx/Ding.ogg}{f}?"
+char Phoenix hide
+"...{p40}Or {sfx/Key.ogg}{f}is it?"
+char Apollo hide
+"{c099}(Oh boy.)"
+char Phoenix hide
+"Anyway, it's lunchtime."
+"Apparently there's a restaurant{n}in town that makes good Borginian{n}sugar, so we're off."
+char Apollo hide
+"{c099}(It's not a dish!)"
+char Phoenix hide
+"You know who to call{n}if you're in trouble."
+char Apollo hide
+"{c099}(I wouldn't quite{n}put it that way.)"
+sfx /evidenceshoop.wav
+delete name=phoenix
+sfx /bip.wav
+char Phone hide
+"{c090}beep{p30}{next}"
+nt 
+addev phone
+"{sfx/evidence.wav}{c099}Phone added to the Court Record."
+pause 60 script
+char rhea
+"{sfx/Ding.ogg}Well, it sounds like{n}a perfect time to resume{n}our investigation, doesn't it?"
+char Apollo hide
+"Yeah..."
+setflag stringsin
+char nothing
+goto top

@@ -1,0 +1,6 @@
+#-version-1
+bg aj/detentioncenter fade
+fg detentionfg loops=0 nowait
+char Strings fade e=normal-detention
+mus 124 - Apollo Justice - Police Cell.ogg
+menu scene56Strings

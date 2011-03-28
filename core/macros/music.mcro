@@ -1,0 +1,31 @@
+macro music_fade_in_add
+addvar _music_fade 4
+is _music_fade >= 100 enddd
+timer 4 music_fade_in_add
+label enddd
+endmacro
+
+macro music_fade_in
+set _music_fade_nowait $1
+set _music_fade 0
+timer 4 music_fade_in_add
+is _music_fade_nowait = nowait endd
+pause 150
+label endd
+endmacro
+
+macro music_fade_out_add
+subvar _music_fade 4
+is _music_fade <= 0 enddd
+timer 4 music_fade_out_add
+label enddd
+endmacro
+
+macro music_fade_out
+set _music_fade_nowait $1
+set _music_fade 100
+timer 4 music_fade_out_add
+is _music_fade_nowait = nowait endd
+pause 150
+label endd
+endmacro

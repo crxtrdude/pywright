@@ -1,0 +1,61 @@
+#-version-1
+mus
+bg policehq fade
+char ??? hide
+"{sfx/Bwaaah.ogg}{s}I'll sue you! {sfx/Bwaaah.ogg}{s}And then I'll sue{n}the prosecutor! {sfx/Bwaaah.ogg}{s}And then the{n}prosecutor's prosecutor!"
+"{sfx/Owned.ogg}{s}You don't know who{n}you're dealing with!"
+"{sfx/Key.ogg}Oh, it's just you."
+char fisher fade
+sfx /Ding.ogg
+pause 120 script
+char Apollo hide
+"...Have we met?"
+char Fisher nametag=???
+"{sfx/oops.wav}No, but you look like my dog."
+char Fisher nametag=???
+"...Not that I'm the kind of guy who{n}has conversations with his dog{n}cause he has no one else to talk to."
+char Fisher nametag=???
+"That's just not true.{n}...At least not on Fridays."
+char Apollo hide
+"{c099}(...Right.)"
+char Fisher nametag=???
+"{sfx/Smack.ogg}Anyway, you anyone important or{n}can I go back to work now?"
+char Apollo hide
+"I...we're Mr.Chambers lawyers."
+char Fisher nametag=???
+"That old {sfx/Smack.ogg}rascal ?{n}I saw him do it, you know."
+char Apollo hide
+"{c099}(Ah! We finally meet...{n}whatever your name is who oh so{n}conviently witnessed the murder!)"
+char Fisher nametage=???
+"Too bad he's not going{n}to the looney bin."
+"He and Budd "Bloodthirsty" First{n}would have been great cellmates!"
+"You his lawyers you say?{n}Then we have nothing to talk about."
+char Apollo hide
+"{sfx/Smack.ogg}Please, give us five minutes!"
+char rhea
+"Give us five minutes and I'll...{p30}{n}{esmiling1}{sfx/Ding.ogg}{f}give you my phone number!"
+char Apollo hide
+"{c099}({s 8 8}Rhea! What the?!)"
+char Fisher nametag=???
+"Easy women, huh?{n}They're all the same."
+"..."
+"...{sfx/Key.ogg}Alright. But it's not like{n}I'm gonna tell you anything."
+char Fisher
+"Name's Shawn O. Fisher,{n}by the way."
+addev fisher$
+"I'm a prison guard, so{n}all I can give you's three{n}minutes and thirty-four seconds."
+"That's when Ossie "I'm An Ostrich"{n}Rich's going to escape, see."
+char Fisher e=complaining
+"I keep telling him ostriches{n}can't fly, but he won't {sfx/Smack.ogg}listen!"
+"So every week I have{n}to save him, that's why I can't{p10}{next}"
+char Apollo hide
+"{sfx/Ding.ogg}Mr.Fisher? I don't like to{n}be the bird of ill omen, but...{n}your time's up."
+"...{sfx/Shock.ogg}WAIT!{n}T-that doesn't mean...{n}H-he's not...{sfx/Key.ogg}in danger, is he?"
+char Fisher
+"{sfx/oops.wav}Nope, his cell's on the first floor."
+char Apollo hide
+"Then I guess we can have{n}ourselves a real conversation now."
+char Fisher e=complaining
+"...S'pose so."
+setflag firstfisher
+script scene14menu

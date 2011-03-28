@@ -1,0 +1,5 @@
+#-version-1
+bg records
+char G.Strings fade e=normal-outofcourt
+mus 123 - Apollo Justice - Search Opening.ogg
+menu scene59
