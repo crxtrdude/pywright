@@ -5,7 +5,7 @@ import core
 import gui
 
 class msg(gui.pane):
-    def __init__(self,msg,assets):
+    def __init__(self,m,assets):
         gui.pane.__init__(self)
         self.width = 256
         self.height = 100
@@ -14,7 +14,7 @@ class msg(gui.pane):
         self.rpos = [0,100]
         self.align = "vert"
         
-        for line in core.wrap_text([msg],assets.get_image_font("block_arial"),300):
+        for line in core.wrap_text([m],assets.get_image_font("block_arial"),300):
             print line
             text = gui.label(line)
             self.children.append(text)
@@ -125,7 +125,12 @@ class tools_menu(gui.pane):
             import gif2strip
             try:
                 path = gif2strip.go(self.giffile)
-                self.children.append(msg("Converted "+path.rsplit("/",1)[1]+".png",self.assets))
+                m = msg("Converted "+path.rsplit("/",1)[1]+".png",self.assets)
+                self.children.append(m)
+                graphic = pygame.transform.rotozoom(pygame.image.load(path+".png"),0,0.25)
+                m.children.append(gui.button(None,"x"))
+                m.children[-1].graphic = graphic
+                setattr(m.children[-1],"x",m.click_down_over)
             except Exception:
                 import traceback
                 traceback.print_exc()
