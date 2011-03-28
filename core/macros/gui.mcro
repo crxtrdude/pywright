@@ -33,13 +33,7 @@ macro theme_bigbutton
     set _screen2_scanlines on
     set _screen2_letterbox on
     set _screen2_letterbox_img general/bigbutton/border
-    is theme = default default
-    is theme = phoenix phoenix
-    is theme = apollo apollo
-    is theme = mia mia
-    is theme = edgeworth edgeworth
-    is theme = gk gk
-    is theme = empty empty
+    goto $theme
     "ERROR, NO BIGBUTTON THEME {$theme}"
     label default
         set _bigbutton_bg bg/main
