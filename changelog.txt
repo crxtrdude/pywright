@@ -120,9 +120,11 @@
             gk - for pink button from Ace Attorney Investigations/GK
         You can also configure scanlines, the button images, and the background with
         more precision by setting _bigbutton_bg, _bigbutton_img, _bigbutton_cross to the
-        respective image path for those elements, and setting _bigbutton_scanlines on or off.
-        Default is to use the old button with scanlines off, since the old button has scanlines
-        in the image already.
+        respective image path for those elements, and setting _screen2_scanlines on or off.
+        Default is to use the old button and backgroundwith scanlines off, since those images
+        have scanlines in the image already.
+        You can turn the 2nd screen letterbox (white lines on top and bottom) on and off
+        with _screen2_letterbox (this one defaults to "on")
         macro found in core/macros/gui.mcro/theme_bigbutton
         Check examples/bigbutton_changes for example
 
