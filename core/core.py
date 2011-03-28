@@ -2331,8 +2331,8 @@ class uglyarrow(fadesprite):
         self.load(assets.variables.get("_bigbutton_bg","bg/main"))
         self.arrow = sprite(0,0).load("general/arrow_big.png")
         self.scanlines = fadesprite(0,0).load("fg/scanlines")
-        self.border_top = fadesprite(0,0).load(assets.variables.get("_bigbutton_border_img","general/bigbutton/border"))
-        self.border_bottom = fadesprite(0,0).load(assets.variables.get("_bigbutton_border_img","general/bigbutton/border"))
+        self.border_top = fadesprite(0,0).load(assets.variables.get("_screen2_letterbox_img","general/bigbutton/border"))
+        self.border_bottom = fadesprite(0,0).load(assets.variables.get("_screen2_letterbox_img","general/bigbutton/border"))
         self.scanlines.fade = 50
         self.button = None
         self.double = None
@@ -2399,7 +2399,7 @@ class uglyarrow(fadesprite):
         if vtrue(assets.variables.get("_screen2_scanlines","off")):
             self.scanlines.pos = self.pos
             self.scanlines.draw(dest)
-        if vtrue(assets.variables.get("_bigbutton_border","on")):
+        if vtrue(assets.variables.get("_screen2_letterbox","on")):
             self.border_top.pos = self.pos
             self.border_top.draw(dest)
             self.border_bottom.pos[0] = self.pos[0]

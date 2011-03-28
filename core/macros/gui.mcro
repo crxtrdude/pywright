@@ -31,8 +31,8 @@ macro theme_bigbutton
     set theme $1
     print The theme is $theme
     set _screen2_scanlines on
-    set _bigbutton_border on
-    set _bigbutton_border_img general/bigbutton/border
+    set _screen2_letterbox on
+    set _screen2_letterbox_img general/bigbutton/border
     is theme = default default
     is theme = phoenix phoenix
     is theme = apollo apollo
