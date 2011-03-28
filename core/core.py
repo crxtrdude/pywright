@@ -2396,7 +2396,7 @@ class uglyarrow(fadesprite):
                 self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
                 self.arrow.img = pygame.transform.flip(self.arrow.img,1,0)
                 self.arrow.draw(dest)
-        if vtrue(assets.variables.get("_bigbutton_scanlines","off")):
+        if vtrue(assets.variables.get("_screen2_scanlines","off")):
             self.scanlines.pos = self.pos
             self.scanlines.draw(dest)
         if vtrue(assets.variables.get("_bigbutton_border","on")):

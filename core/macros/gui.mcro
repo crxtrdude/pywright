@@ -30,7 +30,7 @@ endmacro
 macro theme_bigbutton
     set theme $1
     print The theme is $theme
-    set _bigbutton_scanlines on
+    set _screen2_scanlines on
     set _bigbutton_border on
     set _bigbutton_border_img general/bigbutton/border
     is theme = default default
@@ -45,7 +45,7 @@ macro theme_bigbutton
         set _bigbutton_bg bg/main
         set _bigbutton_img general/buttonpress
         set _bigbutton_cross general/cross_exam_buttons
-        set _bigbutton_scanlines off
+        set _screen2_scanlines off
         exit
     label phoenix
         print label phoenix
