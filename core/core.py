@@ -190,7 +190,7 @@ class Variables(dict):
         if key=="_speaking":
             dict.__setitem__(self,key,value,*args)
             try:
-                self["_speaking_name"] = assets.gportrait().nametag.strip(" \n")
+                self["_speaking_name"] = assets.gportrait().nametag.split("\n")
             except:
                 pass
         if key=="_music_fade":
@@ -1918,6 +1918,7 @@ class textbox(gui.widget):
                 except TypeError:
                     pass
         text = u"{".join(nt)
+        print text
         lines = text.split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
