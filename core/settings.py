@@ -21,10 +21,12 @@ music_volume=%s
 screen_compress=%s
 autosave=%s
 autosave_interval=%s
-autosave_keep=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,assets.num_screens,
+autosave_keep=%s
+tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,assets.num_screens,
 int(assets.show_fps),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
-int(assets.screen_compress),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep)))
+int(assets.screen_compress),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
+assets.tool_path))
     f.close()
     
 def load(assets):
@@ -56,6 +58,7 @@ def load(assets):
                 "sound_buffer":"sound_buffer","show_fps":"show_fps"}
         fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
                 }
+        s_val = {"tool_path":"tool_path"}
 
         for line in f.readlines():
             spl = line.split("=")
@@ -64,6 +67,8 @@ def load(assets):
                 setattr(assets,i_fl_val[spl[0]],int(float(spl[1])))
             elif spl[0] in fl_val:
                 setattr(assets,fl_val[spl[0]],float(spl[1]))
+            elif spl[0] in s_val:
+                setattr(assets,s_val[spl[0]],spl[1].strip())
 
 def get_screen_mode(assets):
     mode="two_screens"

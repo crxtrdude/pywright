@@ -55,7 +55,7 @@ class tools_menu(gui.pane):
         assets = self.assets
         sw,sh = self.sw,self.sh
         self.files_dir = gui.directory([0,0])
-        self.files_dir.populate(".",self,"giffile",lambda x: x.endswith(".gif"),False)
+        self.files_dir.populate(core.assets.tool_path,self,"giffile",lambda x: x.endswith(".gif"),False)
         self.children.append(self.files_dir)
     def aao2pywright(self):
         assets = self.assets

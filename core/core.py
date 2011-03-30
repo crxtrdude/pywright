@@ -222,6 +222,8 @@ class Assets(object):
     sh = sh
     last_autosave = 0
     autosave_interval = 0
+    path = ""
+    tool_path = ""
     def get_stack(self):
         stack = []
         for s in self.stack:
