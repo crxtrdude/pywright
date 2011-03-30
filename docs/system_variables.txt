@@ -1,0 +1,40 @@
+Special variables:
+
+
+Music
+-----
+Related commands: mus
+
+'_music_loop'
+    Music can be made to play an intro track and then loop a different
+track. When music is played with the 'mus' command, the looping variable
+is set to the track that was played. If you then set the looping variable
+to a different track, once the current track finishes it will loop the one that
+was set. 
+
+'_music_fade'
+    The volume level of music can be adjusted by changing this variable.
+Valid levels are from '0' which means music can't be heard, to 100 which
+is full volume. The variable has an effect even if changed while music is
+playing. Note that the volume a player hears is also affected by their
+music volume setting.
+
+
+Saved Games
+-------------
+Related commands: savegame, loadgame
+
+    You can disallow the player from saving or loading the game with
+'set _allow_saveload off'. The menus will no longer come up when the
+player hits the hotkeys. If your wrightscript calls the savegame or
+loadgame functions which fire off a direct save or load action, the
+value of _allow_saveload will not be referenced (savegame will
+always work).
+
+    You can also 'set _allow_autosave off' to turn the autosave function
+off during the game. If you have a section in your game where you
+do not want the player to save, you should turn both of these
+variables off.
+
+    Be VERY careful to remember to turn them back on again, or
+players will no longer be able to save!

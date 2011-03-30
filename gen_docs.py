@@ -172,7 +172,7 @@ def find_variables():
         lines = f.read().split("\n")
         f.close()
         tab_level = 0
-        for l in lines:
+        for si,l in enumerate(lines):
             if l.strip().startswith("#"):
                 continue
             tab_level = l.rsplit(" ",1)[0].count(" ")
@@ -196,10 +196,10 @@ def find_variables():
                     continue
                 variable = variable[0]
                 li = variables.get(variable,[])
-                li.append((cur_class,cur_func))
+                li.append((cur_class,cur_func,fn,si))
                 variables[variable] = li
                 li = classes.get(cur_class,[])
-                li.append((variable,cur_func))
+                li.append((variable,cur_func,fn,si))
                 classes[cur_class] = li
     return variables,classes
 
@@ -209,12 +209,12 @@ f = open("docs/variables.txt","w")
 for c in classes.items():
     f.write("%s:\n"%c[0])
     for var in c[1]:
-        f.write("   %s - %s\n"%var)
+        f.write("   %s - %s (%s %s)\n"%var)
 f.close()
 
 f = open("docs/variables2.txt","w")
 for c in variables.items():
     f.write("%s:\n"%c[0])
     for var in c[1]:
-        f.write("   %s - %s\n"%var)
+        f.write("   %s - %s (%s %s)\n"%var)
 f.close()
