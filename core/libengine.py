@@ -2893,7 +2893,8 @@ def make_start_script(logo=True):
     item.rpos = [190,90]
     item.z = 999
     item.pri = -1001
-    bottomscript.obs.append(item)
+    if os.path.isdir("tools"):
+        bottomscript.obs.append(item)
 
 assets.make_start_script = make_start_script
             
