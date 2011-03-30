@@ -68,6 +68,7 @@
     - music_fade_in nowait, music_fade_out nowait available, if you want to fade the music 
         while doing other things
     - fix bug where fg objects with wait would execute the next line of code before pausing
+    - the _num_screens variable will be set to 1 if there is only 1 screen, and 2 if there are 2
     
     Engine/Updater
     - What used to be called "display.ini" is now called "settings.ini" because it stores
@@ -111,7 +112,7 @@
         the macros you can control how it works too, such as where it is positioned
         on the screen.
     - More built-in options for second screen interface:
-        'theme_bigbutton {theme}' is a macro to set how the big button on the second screen looks
+        'theme_screen2 {theme}' is a macro to set how the interface on the second screen looks
         replace {theme} with one of:
             phoenix - from pheonix wright, or GS1-3
             mia - mia shadow from phoenix wright series

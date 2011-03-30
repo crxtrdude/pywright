@@ -183,6 +183,8 @@ class Variables(dict):
                 return str(layer)
         if key=="_version":
             return __version__
+        if key=="_num_screens":
+            return assets.num_screens
         return dict.get(self,key,*args)
     def __setitem__(self,key,value,*args):
         if key=="_speaking":
