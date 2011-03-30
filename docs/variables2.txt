@@ -1,0 +1,321 @@
+_examine_showbars:
+   class examine_menu - draw (core/core.py 3052)
+_examine_offsetx:
+   class examine_menu - draw (core/core.py 3057)
+   class examine_menu - add (core/core.py 3093)
+   class examine_menu -  (core/core.py 3097)
+_font_%s:
+   class Assets - get_image_font (core/core.py 418)
+_testimony_blinker:
+   class testimony_blink - draw (core/core.py 1803)
+_font_%s_size:
+   class Assets - get_image_font (core/core.py 419)
+ev_z_text_col:
+   class evidence_menu - draw_ev_zoom (core/core.py 3593)
+_last_written_text:
+   class textbox - forward (core/core.py 2029)
+_screen2_scanlines:
+   class uglyarrow - draw (core/core.py 2400)
+_lastline:
+    - goto_result (core/libengine.py 724)
+_debug:
+   class examine_menu - draw (core/core.py 3056)
+   class scroll - control_last (core/core.py 3747)
+   class scroll - control (core/core.py 3755)
+   class zoomanim - control_last (core/core.py 3785)
+   class zoomanim - control (core/core.py 3793)
+   class rotateanim - __init__ (core/core.py 3808)
+   class fadeanim - __init__ (core/core.py 3848)
+   class tintanim - __init__ (core/core.py 3893)
+   class invertanim - __init__ (core/core.py 3936)
+   class greyscaleanim - __init__ (core/core.py 3974)
+    - update (core/libengine.py 535)
+    - draw (core/libengine.py 560)
+    -  (core/libengine.py 622)
+    - call_func (core/libengine.py 669)
+    - _debug (core/libengine.py 775)
+    - _debug (core/libengine.py 777)
+    - _globaldelay (core/libengine.py 1389)
+    - _controlanim (core/libengine.py 1468)
+    - _emo (core/libengine.py 1693)
+    - _emo (core/libengine.py 1700)
+    - _delete (core/libengine.py 2226)
+   class DebugScript - init (core/libengine.py 2580)
+    -  (core/libengine.py 3322)
+ev_z_icon_x:
+   class evidence_menu - draw_ev_zoom (core/core.py 3578)
+ev_z_icon_y:
+   class evidence_menu - draw_ev_zoom (core/core.py 3579)
+ev_larrow_y:
+   class evidence_menu - draw (core/core.py 3543)
+ev_mode_x:
+   class evidence_menu - draw (core/core.py 3500)
+_penalty_script:
+   class penalty - die (core/core.py 1764)
+color_:
+    - color_str (core/core.py 888)
+_examine_offsety:
+   class examine_menu - draw (core/core.py 3058)
+   class examine_menu - add (core/core.py 3094)
+   class examine_menu -  (core/core.py 3098)
+ev_zlarrow_x:
+   class evidence_menu - draw (core/core.py 3556)
+ev_zlarrow_y:
+   class evidence_menu - draw (core/core.py 3557)
+_currentlabel:
+    - goto_result (core/libengine.py 729)
+    - goto_result (core/libengine.py 732)
+    - goto_result (core/libengine.py 736)
+_evidence_enabled:
+   class evidence_menu - draw (core/core.py 3507)
+_textbox_y:
+   class textbox - draw (core/core.py 2048)
+ev_z_bg:
+   class evidence_menu -  (core/core.py 3229)
+press :
+   class textbox - update (core/core.py 2121)
+_double_screen_list_fade:
+   class listmenu - __init__ (core/core.py 2637)
+_list_checked_img:
+   class listmenu - draw (core/core.py 2712)
+ev_items_y:
+   class evidence_menu - draw (core/core.py 3519)
+ev_items_x:
+   class evidence_menu - draw (core/core.py 3518)
+ev_arrow_img:
+   class evidence_menu - draw (core/core.py 3538)
+_default_fg_frame_delay:
+   class fg - __init__ (core/core.py 1787)
+_screen2_letterbox:
+   class uglyarrow - draw (core/core.py 2403)
+_blinkspeed_global:
+   class sprite - load_extra (core/core.py 1122)
+   class sprite - load_extra (core/core.py 1123)
+_examine_scrolling:
+   class examine_menu - update (core/core.py 3086)
+_speaking_name:
+    -  (core/libengine.py 1674)
+    - _nt (core/libengine.py 2100)
+   class DebugScript - call_func (core/libengine.py 2564)
+_textbox_lines:
+   class textbox -  (core/core.py 2287)
+_examine_cursor_col:
+   class examine_menu - draw (core/core.py 3046)
+_allow_present_:
+   class evidence_menu - can_present (core/core.py 3444)
+_textbox_wrap:
+   class textbox - set_text (core/core.py 1919)
+_order_cases:
+   class case_menu - __init__ (core/core.py 2788)
+_shake_sound:
+   class shake - __init__ (core/core.py 4023)
+ev_spacing_x:
+   class evidence_menu - draw (core/core.py 3521)
+ev_spacing_y:
+   class evidence_menu - draw (core/core.py 3522)
+_court_fail_label:
+   class textbox - update (core/core.py 2129)
+    -  (core/libengine.py 2368)
+    -  (core/libengine.py 2374)
+_screen2_letterbox_img:
+   class uglyarrow - __init__ (core/core.py 2335)
+   class uglyarrow - __init__ (core/core.py 2336)
+ev_zrarrow_x:
+   class evidence_menu - draw (core/core.py 3553)
+ev_zrarrow_y:
+   class evidence_menu - draw (core/core.py 3554)
+_blinkspeed_next:
+   class sprite - load_extra (core/core.py 1119)
+   class sprite - load_extra (core/core.py 1120)
+   class sprite - load_extra (core/core.py 1121)
+_examine_skipupdate:
+   class examine_menu - __init__ (core/core.py 2980)
+_:
+   class evidence_menu - can_present (core/core.py 3432)
+_nt_text_color:
+   class textbox -  (core/core.py 2301)
+_lastlabel:
+    - _label (core/libengine.py 782)
+_speaking:
+    - gportrait (core/core.py 639)
+    - add_portrait (core/core.py 659)
+    - add_portrait (core/core.py 669)
+    - _emo (core/libengine.py 1685)
+    - _nt (core/libengine.py 2099)
+   class DebugScript - call_func (core/libengine.py 2565)
+_list_bg_image:
+   class listmenu - __init__ (core/core.py 2634)
+ev_cursor_img:
+   class evidence_menu - __init__ (core/core.py 3208)
+_nt_image:
+   class textbox - __init__ (core/core.py 1939)
+ev_mode_bg_evidence:
+   class evidence_menu - __init__ (core/core.py 3207)
+   class evidence_menu - choose (core/core.py 3388)
+_cr_back_button:
+   class evidence_menu - canback (core/core.py 3488)
+ev_z_textbox_x:
+   class evidence_menu - draw_ev_zoom (core/core.py 3580)
+ev_z_textbox_y:
+   class evidence_menu - draw_ev_zoom (core/core.py 3581)
+render:
+    -  (core/libengine.py 3158)
+_list_outline_color:
+   class listmenu - draw (core/core.py 2729)
+overview:
+   class evidence_menu - k_space (core/core.py 3483)
+ev_z_textbox_w:
+   class evidence_menu - draw_ev_zoom (core/core.py 3582)
+_ev_pages:
+   class evidence - __init__ (core/core.py 1667)
+   class evidence_menu -  (core/core.py 3236)
+ev_z_textbox_h:
+   class evidence_menu - draw_ev_zoom (core/core.py 3583)
+ev_z_bg_x:
+   class evidence_menu - draw_ev_zoom (core/core.py 3588)
+_default_port_frame_delay:
+    -  (core/core.py 1580)
+    -  (core/core.py 1581)
+_textbox_show_button:
+    - refresh_arrows (core/libengine.py 577)
+ev_larrow_x:
+   class evidence_menu - draw (core/core.py 3542)
+_bigbutton_cross:
+   class uglyarrow - show_cross (core/core.py 2360)
+_examine_clickx3d:
+   class mesh - goto (core/core.py 1319)
+_menu_fade_level:
+   class menu - __init__ (core/core.py 2477)
+   class listmenu - __init__ (core/core.py 2635)
+_flash_sound:
+   class flash - __init__ (core/core.py 4007)
+char_defsound:
+   class portrait - init_sounds (core/core.py 1469)
+_examine_clicky3d:
+   class mesh - goto (core/core.py 1320)
+_production:
+   class error_msg -  (core/core.py 4170)
+_examine_clickx:
+   class examine_menu - enter_down (core/core.py 3129)
+_examine_clicky:
+   class examine_menu - enter_down (core/core.py 3130)
+_textbox_wrap_avoid_controlled:
+   class textbox - set_text (core/core.py 1920)
+_currentline:
+    - interpret (core/libengine.py 600)
+_examine_showcursor:
+   class examine_menu - draw (core/core.py 3038)
+_list_checked_y:
+   class listmenu - draw (core/core.py 2743)
+_list_checked_x:
+   class listmenu - draw (core/core.py 2742)
+currentcross:
+    -  (core/libengine.py 2380)
+    - _cross_restart (core/libengine.py 2393)
+    - _cross_restart (core/libengine.py 2394)
+_textbox_x:
+   class textbox - draw (core/core.py 2047)
+_bigbutton_img:
+   class uglyarrow - show_unclicked (core/core.py 2348)
+   class uglyarrow - show_clicked (core/core.py 2353)
+_layer_gui:
+    -  (core/libengine.py 1779)
+    -  (core/libengine.py 1825)
+_return:
+   class textbox - update (core/core.py 2177)
+   class textbox - back (core/core.py 2185)
+_layering_method:
+   class World - render_order (core/libengine.py 137)
+_bigbutton_bg:
+   class uglyarrow - __init__ (core/core.py 2332)
+ev_check_img:
+   class evidence_menu - draw (core/core.py 3567)
+ev_z_bg_y:
+   class evidence_menu - draw_ev_zoom (core/core.py 3589)
+_examine_use:
+   class examine_menu - __init__ (core/core.py 2969)
+   class examine_menu - draw (core/core.py 3035)
+_punctuation:
+   class textbox -  (core/core.py 2258)
+_textbox_skipupdate:
+   class textbox - __init__ (core/core.py 1974)
+_textbox_bg:
+   class textbox - __init__ (core/core.py 1938)
+OVERAGE:
+   class textbox -  (core/core.py 2317)
+something:
+    -  (core/libengine.py 319)
+    -  (core/libengine.py 321)
+ev_mode_bg_:
+   class evidence_menu - k_left (core/core.py 3288)
+   class evidence_menu - k_right (core/core.py 3318)
+   class evidence_menu - k_up (core/core.py 3354)
+   class evidence_menu - choose (core/core.py 3386)
+_%s_enabled:
+   class evidence_menu -  (core/core.py 3238)
+ev_rarrow_y:
+   class evidence_menu - draw (core/core.py 3540)
+ev_rarrow_x:
+   class evidence_menu - draw (core/core.py 3539)
+_nt_y:
+   class textbox - draw (core/core.py 2067)
+_nt_x:
+   class textbox - draw (core/core.py 2066)
+_textbox_allow_skip:
+    -  (core/libengine.py 624)
+ev_modebutton_x:
+   class evidence_menu - draw (core/core.py 3510)
+ev_zarrow_img:
+   class evidence_menu - draw (core/core.py 3552)
+_examine_cursor_img:
+   class examine_menu - draw (core/core.py 3039)
+   class examine_menu - draw (core/core.py 3041)
+id_name:
+   class examine_menu - __init__ (core/core.py 2972)
+_nt_text_x:
+   class textbox - draw (core/core.py 2076)
+   class textbox - draw (core/core.py 2077)
+   class textbox - draw (core/core.py 2091)
+   class textbox - draw (core/core.py 2092)
+_nt_text_y:
+   class textbox - draw (core/core.py 2078)
+   class textbox - draw (core/core.py 2079)
+   class textbox - draw (core/core.py 2093)
+   class textbox - draw (core/core.py 2094)
+ev_present_x:
+   class evidence_menu -  (core/core.py 3234)
+ev_present_y:
+   class evidence_menu -  (core/core.py 3235)
+_statements:
+    - refresh_arrows (core/libengine.py 581)
+    - refresh_arrows (core/libengine.py 582)
+    - next_statement (core/libengine.py 687)
+    - next_statement (core/libengine.py 690)
+    - prev_statement (core/libengine.py 700)
+    - prev_statement (core/libengine.py 703)
+    -  (core/libengine.py 2381)
+    -  (core/libengine.py 2385)
+    -  (core/libengine.py 2388)
+    - _resume (core/libengine.py 2455)
+    - _resume (core/libengine.py 2457)
+_xscroll_:
+   class examine_menu - __init__ (core/core.py 2977)
+   class examine_menu -  (core/core.py 3125)
+_selected:
+   class listmenu - k_space (core/core.py 2670)
+   class listmenu - enter_down (core/core.py 2696)
+   class listmenu - enter_down (core/core.py 2699)
+   class evidence_menu - k_space (core/core.py 3220)
+   class evidence_menu - do_check (core/core.py 3427)
+   class evidence_menu - k_x (core/core.py 3453)
+ev_show_mode_text:
+   class evidence_menu - draw (core/core.py 3498)
+_timer_value_:
+   class timer - update (core/core.py 3670)
+char_:
+   class portrait - init_sounds (core/core.py 1475)
+   class portrait - init (core/core.py 1486)
+bck:
+   class listmenu - update (core/core.py 2663)
+ev_currentname_x:
+   class evidence_menu - draw (core/core.py 3506)
