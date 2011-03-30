@@ -27,7 +27,7 @@ macro enable_court_record_button
 set _cr_button true
 endmacro
 
-macro theme_bigbutton
+macro theme_screen2
     set theme $1
     print The theme is $theme
     set _screen2_scanlines on

@@ -1,5 +1,5 @@
 #Setting with macro
-theme_bigbutton phoenix
+theme_screen2 phoenix
 "Hello I am phoenix."
 cross
 statement 1
@@ -8,7 +8,7 @@ endcross
 label none
 "next"
 
-theme_bigbutton mia
+theme_screen2 mia
 "Hello I am mia."
 cross
 statement 1
@@ -17,7 +17,7 @@ endcross
 label none
 "next"
 
-theme_bigbutton edgeworth
+theme_screen2 edgeworth
 "Hello I am edgeworth."
 cross
 statement 1
@@ -26,7 +26,7 @@ endcross
 label none
 "next"
 
-theme_bigbutton apollo
+theme_screen2 apollo
 "Hello I am apollo(blank)."
 cross
 statement 1
@@ -35,7 +35,7 @@ endcross
 label none
 "next"
 
-theme_bigbutton gk
+theme_screen2 gk
 "Hello I am gk(pink)."
 cross
 statement 1
@@ -45,7 +45,7 @@ label none
 "next"
 
 #Setting individually
-theme_bigbutton default
+theme_screen2 default
 set _bigbutton_img general/bigbutton/empty
 "No scanlines on bigbutton"
 set _bigbutton_scanlines on
