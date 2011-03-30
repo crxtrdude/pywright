@@ -158,3 +158,63 @@ for group in funcs:
         f.write(make_func_block(func))
 f.write("</div>")
 f.write("</body></html>")
+
+
+def find_variables():
+    variables = {}
+    classes = {}
+    for fn in ["core/core.py","core/libengine.py"]:
+        cur_class = ""
+        class_tab_level = 0
+        cur_func = ""
+        func_tab_level = 0
+        f = open(fn)
+        lines = f.read().split("\n")
+        f.close()
+        tab_level = 0
+        for l in lines:
+            if l.strip().startswith("#"):
+                continue
+            tab_level = l.rsplit(" ",1)[0].count(" ")
+            if l.strip().startswith("class "):
+                cur_class = re.findall("class \w*",l)[0]
+                print cur_class
+                class_tab_level = tab_level
+            else:
+                if cur_class and tab_level <= class_tab_level:
+                    cur_class = ""
+            if l.strip().startswith("def "):
+                cur_func = l.strip().split(" ",1)[1].split("(",1)[0]
+                func_tab_level = tab_level
+            else:
+                if cur_func and tab_level <= func_tab_level:
+                    cur_func = ""
+            if 'variables.get("' in l or 'variables["' in l:
+                variable = l.strip()
+                variable = re.findall('\"(.*?)\"',l)
+                if not variable:
+                    continue
+                variable = variable[0]
+                li = variables.get(variable,[])
+                li.append((cur_class,cur_func))
+                variables[variable] = li
+                li = classes.get(cur_class,[])
+                li.append((variable,cur_func))
+                classes[cur_class] = li
+    return variables,classes
+
+variables,classes = find_variables()
+
+f = open("docs/variables.txt","w")
+for c in classes.items():
+    f.write("%s:\n"%c[0])
+    for var in c[1]:
+        f.write("   %s - %s\n"%var)
+f.close()
+
+f = open("docs/variables2.txt","w")
+for c in variables.items():
+    f.write("%s:\n"%c[0])
+    for var in c[1]:
+        f.write("   %s - %s\n"%var)
+f.close()
