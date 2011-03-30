@@ -1672,13 +1672,13 @@ throughout the game."""
         if "fade" in args: 
             self._fade("fade","wait","name="+p.id_name,"speed=5")
             p.extrastr = " fade"
-        assets.variables["_speaking_name"] = p.nametag
+        assets.variables["_speaking_name"] = p.nametag.split("\n")[0]
         if be:
             p.set_blink_emotion(be)
         if "noauto" in args:
             p.set_single()
         return p
-    @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
+    @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking)")],type="objects")
     def _emo(self,command,emotion,name=None,mode="talk"):
         """Sets a current char object to a specific emotion animation."""
         char = None
@@ -1700,7 +1700,7 @@ throughout the game."""
                 char.set_blink_emotion(emotion)
         elif vtrue(assets.variables.get("_debug","false")):
             raise missing_object(command+": No character found to set emotion!")
-    @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking_name)")],type="objects")
+    @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking)")],type="objects")
     def _bemo(self,command,emotion,name=None):
         """Sets a current char object to a specific blinking emotion animation."""
         self._emo("bemo",emotion,name,"blink")
@@ -2098,7 +2098,7 @@ the speed would divide evenly over the distance)."""
         nametag may conflict with this command."""
         nametag = " ".join(name)+"\n"
         assets.variables["_speaking"] = ""
-        assets.variables["_speaking_name"] = nametag
+        assets.variables["_speaking_name"] = nametag.split("\n")[0]
     @category([VALUE("tag","Name of evidence to add to the court record"),VALUE("page","Which page to add evidence to","Default is to add to the evidence page, unless the tag ends with a '$' in which case it will add to profiles")],type="evidence")
     def _addev(self,command,ev,page=None):
         """Adds evidence to the court record based on an evidence 'tag'. The various properties of the evidence should be stored in variables based on this tag:
@@ -2562,7 +2562,7 @@ class DebugScript(Script):
                 self.obs.append(c)
             else:
                 c = self._char(*args)
-            assets.variables["_speaking_name"] = c.nametag
+            assets.variables["_speaking_name"] = c.nametag.split("\n")[0]
             assets.variables["_speaking"] = c.id_name
             self.char_cache[tuple(args)] = c
         if command == "textbox":

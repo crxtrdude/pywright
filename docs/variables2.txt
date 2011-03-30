@@ -93,10 +93,6 @@ _blinkspeed_global:
    class sprite - load_extra (core/core.py 1123)
 _examine_scrolling:
    class examine_menu - update (core/core.py 3086)
-_speaking_name:
-    -  (core/libengine.py 1674)
-    - _nt (core/libengine.py 2100)
-   class DebugScript - call_func (core/libengine.py 2564)
 _textbox_lines:
    class textbox -  (core/core.py 2287)
 _examine_cursor_col:
@@ -136,13 +132,7 @@ _nt_text_color:
    class textbox -  (core/core.py 2301)
 _lastlabel:
     - _label (core/libengine.py 782)
-_speaking:
-    - gportrait (core/core.py 639)
-    - add_portrait (core/core.py 659)
-    - add_portrait (core/core.py 669)
-    - _emo (core/libengine.py 1685)
-    - _nt (core/libengine.py 2099)
-   class DebugScript - call_func (core/libengine.py 2565)
+
 _list_bg_image:
    class listmenu - __init__ (core/core.py 2634)
 ev_cursor_img:

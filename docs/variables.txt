@@ -1,8 +1,4 @@
 :
-
-   _speaking - gportrait (core/core.py 639)
-   _speaking - add_portrait (core/core.py 659)
-   _speaking - add_portrait (core/core.py 669)
    color_ - color_str (core/core.py 888)
    _default_port_frame_delay -  (core/core.py 1580)
    _default_port_frame_delay -  (core/core.py 1581)
@@ -31,14 +27,10 @@
 
    _debug - _globaldelay (core/libengine.py 1389)
    _debug - _controlanim (core/libengine.py 1468)
-   _speaking_name -  (core/libengine.py 1674)
-   _speaking - _emo (core/libengine.py 1685)
    _debug - _emo (core/libengine.py 1693)
    _debug - _emo (core/libengine.py 1700)
    _layer_gui -  (core/libengine.py 1779)
    _layer_gui -  (core/libengine.py 1825)
-   _speaking - _nt (core/libengine.py 2099)
-   _speaking_name - _nt (core/libengine.py 2100)
    _debug - _delete (core/libengine.py 2226)
    _court_fail_label -  (core/libengine.py 2368)
    _court_fail_label -  (core/libengine.py 2374)
@@ -57,8 +49,6 @@
 class timer:
    _timer_value_ - update (core/core.py 3670)
 class DebugScript:
-   _speaking_name - call_func (core/libengine.py 2564)
-   _speaking - call_func (core/libengine.py 2565)
    _debug - init (core/libengine.py 2580)
 class case_menu:
    _order_cases - __init__ (core/core.py 2788)

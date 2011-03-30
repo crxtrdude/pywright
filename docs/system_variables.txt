@@ -38,3 +38,78 @@ variables off.
 
     Be VERY careful to remember to turn them back on again, or
 players will no longer be able to save!
+
+
+Characters
+----------
+Related commands: char, textbox (""), nt, emo
+
+_speaking:
+    - gportrait (core/core.py 639)
+    - add_portrait (core/core.py 659)
+    - add_portrait (core/core.py 669)
+    - _emo (core/libengine.py 1685)
+    - _nt (core/libengine.py 2099)
+   class DebugScript - call_func (core/libengine.py 2565)
+   
+_speaking_name:
+    -  (core/libengine.py 1674)
+    - _nt (core/libengine.py 2100)
+   class DebugScript - call_func (core/libengine.py 2564)
+
+    The variables '_speaking', and '_speaking name' determine which onscreen character
+will animate when a textbox is printing characters, and what the textbox considers
+that characters name. When the char command adds a character to the screen,
+such as 'char mia nametag=Sarah', these variables are automatically set, so most
+of the time you don't have to deal with them. 
+
+    The '_speaking' variable will contain wrightscript identifier of the sprite, in this case 
+it will be 'mia'. If you had a line like 'char mia name=char1' then the 'speaking' variable
+would be char1. The '_speaking_name' variable, on the other hand, will be set to
+the nametag, the name which is displayed to the player. In the first example, then,
+_speaking_name would be set to "Sarah".
+
+    These variables can be useful if you want to create a command which affects the
+currently speaking character. Let's say your game has this contrived effect, which
+happens often enough that you want to simplify the process. The effect is, the currently
+speaking character will shift to the left side of the screen, and a little bio image with
+some stats comes in from the right. Sort of a character introduction card, with some
+stats about them.
+
+    To achieve this effect, and make it repeatable, you want to create a macro. To
+shift the currently speaking character to the left, you would use this command:
+'scroll name=$_speaking x=-50'. The '$_speaking' for the name argument of the scroll,
+will be replaced by the wrightscript name of the currently speaking character, so no
+matter where your macro is used, it will always have the same effect.
+
+    Another use of _speaking, is in the situation where you have more than one
+character on screen at a time. You can have the two (or more!) characters talk
+back and forth to each other by changing the value of _speaking after each line:
+
+char phoenix x=-50
+char mia x=100 stack
+set _speaking phoenix
+"Mia, we really need to figure out why the security card was dropped."
+set _speaking mia
+"Yes, that is true. I am inclined to agree that it was no accident that we found it."
+
+    The '_speaking_name' variable has NO in game effect, but you can use it 
+in certain cases if you (as the programmer) need to know what their nametag is
+set to. Let's say you make a simple function to repeat a cliche line that you
+want to reuse at many places in your case. You want the character to say
+this: "Or my name isn't Bob!" Here is a macro that uses _speaking_name to
+accomplish this:
+
+macro cliche
+"Or my name isn't {$_speaking_name}!"
+endmacro
+
+And here is how it might be used:
+
+char mia
+"Well, they had better fall at my feet when I wag my finger."
+cliche
+
+char phoenix
+"Mia! Please let me try this case! I am ready!"
+cliche
