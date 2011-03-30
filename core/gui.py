@@ -648,17 +648,25 @@ class directory(pane):
         if dir.replace(".","").replace("/","").strip():
             b = myb(None,"<----")
             self.files.add_child(b)
-        for file in os.listdir(dir):
-            if os.path.isdir(dir+"/"+file) or filter(file):
+        if not dir:
+            ld = "./"
+        else:
+            ld = dir+"/"
+        print "listing",ld
+        for file in os.listdir(ld):
+            if os.path.isdir(ld+file) or filter(file):
                 class myb(button):
                     def click_down_over(s,*args):
                         if os.path.isdir(s.path):
+                            import settings
+                            core.assets.tool_path = s.path
+                            settings.wini(core.assets)
                             self.populate(s.path,variabledest,variablename,filter,close_on_choose)
                         else:
                             self.chosen_file = s.path
                             self.buttonpane.children.append(self.choose_b)
                 b = myb(None,file)
-                b.path = dir+"/"+file
+                b.path = ld+file
                 self.files.add_child(b)
         
         self.chosen_file = dir
