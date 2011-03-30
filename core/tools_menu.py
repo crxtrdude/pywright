@@ -48,8 +48,8 @@ class tools_menu(gui.pane):
         sw,sh = self.sw,self.sh
         sh = assets.sh*assets.num_screens
         self.children[:] = []
-        self.make_button("gif2strip",[0,0])
-        self.make_button("aao2pywright",[0,20])
+        self.make_button("gif2strip",[0,10])
+        #self.make_button("aao2pywright",[0,30])
         self.make_button("close tools",[0,40])
     def gif2strip(self):
         assets = self.assets
