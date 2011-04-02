@@ -1,9 +1,5 @@
 (Note: file not intended for word wrapping)
 
-*PyWright 0.986
-    - key support for gui Buttons with 'hotkey=key' keyword argument. Current key list:
-        toggle_settings, enter_down, k_up, k_left, k_right, k_down, k_cancel, k_switch, press, present
-
 *PyWright 0.985
 
     Wrightscript

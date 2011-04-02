@@ -1,4 +1,6 @@
 Special variables:
+(This file is VERY incomplete, but there is some good info here. It
+will be wrapped into better docs as they are written.)
 
 
 Music
