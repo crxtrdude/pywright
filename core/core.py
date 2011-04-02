@@ -264,7 +264,7 @@ class Assets(object):
         try:
             file = open(start+name+ext,"rU")
         except IOError:
-            raise file_error("File named "+start+name+ext+" could not be read.")
+            raise file_error("File named "+start+name+ext+" could not be read. Make sure you spelled it properly and check case.")
         text = file.read()
         if use_unicode:
             text = text.decode("utf8","ignore")
@@ -3484,7 +3484,7 @@ class evidence_menu(fadesprite,gui.widget):
         if self.mode=="zoomed":
             if assets.gbamode: self.delete()
             else: self.mode = "overview"
-        elif self.mode=="overview" and vtrue(assets.variables.get("_cr_back_button", "true")):
+        elif self.canback():
             self.delete()
         #assets.cur_script.cross = ""
         #assets.cur_script.instatement = False
