@@ -268,6 +268,22 @@ class settings_menu(gui.pane):
                 wini(assets)
         self.autosave_keep = str(assets.autosave_keep)
         line.children.append(mye(self,"autosave_keep"))
+        
+        line = gui.pane([0,90],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        if not assets.variables.get("_allow_saveload","true"):
+            line.children.append(gui.label("Save/Load currently disabled by game"))
+        else:
+            line.children.append(gui.label("Save/Load"))
+            line.children.append(gui.button(self,"save_game"))
+            line.children.append(gui.button(self,"load_game"))
+    def load_game(self):
+        self.assets.load_game_menu()
+        self.delete()
+    def save_game(self):
+        self.assets.save_game()
+        self.delete()
     def sound(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
