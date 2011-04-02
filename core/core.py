@@ -1339,7 +1339,6 @@ class fadesprite(sprite):
     tint = None
     greyscale = 0
     def setfade(self,val=255):
-        print val
         if val<0: val = 0
         if val>255: val = 255
         if getattr(self,"fade",None) is None: self.fade = 255
@@ -3871,7 +3870,6 @@ class fadeanim(effect):
         for o in self.obs:
             if getattr(o,"kill",0): continue
             if hasattr(o,"setfade"):
-                print "setting fade",self.start
                 o.setfade(int((self.start/100.0)*255.0))
         if self.wait:
             return True
