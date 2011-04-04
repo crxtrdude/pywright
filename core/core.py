@@ -1978,13 +1978,13 @@ class textbox(gui.widget):
     def init_cross(self):
         pass
     def init_normal(self):
-        assets.cur_script.execute_macro("show_court_record_button")
+        assets.cur_script.next_command = "show_court_record_button"
     def delete(self):
         self.pressb.delete()
         self.presentb.delete()
         self.kill = 1
         assets.cur_script.refresh_arrows(self)
-        assets.cur_script.execute_macro("hide_court_record_button")
+        assets.cur_script.next_command = "hide_court_record_button"
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
         if assets.portrait:
@@ -2513,10 +2513,10 @@ class menu(fadesprite,gui.widget):
         self.oimgshigh = {"examine":imgs[0],"move":imgs[1],"talk":imgs[2],"present":imgs[3]}
         self.open_script = True
     def init_normal(self):
-        assets.cur_script.execute_macro("show_court_record_button")
+        assets.cur_script.next_command = "show_court_record_button"
     def delete(self):
         super(menu,self).delete()
-        assets.cur_script.execute_macro("hide_court_record_button")
+        assets.cur_script.next_command = "hide_court_record_button"
     def update(self):
         if not self.options:
             self.delete()
@@ -2651,9 +2651,9 @@ class listmenu(fadesprite,gui.widget):
         self.hidden = True
         self.tag = tag
     def init_normal(self):
-        assets.cur_script.execute_macro("show_court_record_button")
+        assets.cur_script.next_command = "show_court_record_button"
     def delete(self):
-        assets.cur_script.execute_macro("hide_court_record_button")
+        assets.cur_script.next_command = "hide_court_record_button"
         self.kill = 1
         if hasattr(self,"bck"):
             self.bck.kill = 1
@@ -2982,14 +2982,14 @@ class examine_menu(sprite,gui.widget):
             assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
     def init_normal(self):
-        assets.cur_script.execute_macro("show_court_record_button")
+        assets.cur_script.next_command = "show_court_record_button"
     def delete(self):
         self.kill = 1
         if hasattr(self,"bck"):
             self.bck.delete()
         if hasattr(self,"scrollbut"):
             self.scrollbut.delete()
-        assets.cur_script.execute_macro("hide_court_record_button")
+        assets.cur_script.next_command = "hide_court_record_button"
     def getoffset(self):
         x = [o.pos[0] for o in self.bg]
         if not x:
@@ -4066,7 +4066,8 @@ class guiBack(sprite,gui.widget):
         self.load(self.image+assets.appendgba)
     def k_space(self):
         self.delete()
-        print "only kill back button"
+    def update(self):
+        return True
         
 class guiScroll(sprite,gui.widget):
     def click_down_over(self,mp):
