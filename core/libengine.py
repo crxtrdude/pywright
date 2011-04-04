@@ -346,6 +346,7 @@ class Script(gui.widget):
         self.lastline = ""  #Remember where we jumped from in a script so we can go back
         self.lastline_value = ""   #Remember last line we executed
         self.held = []
+        self.next_command = None
     def __repr__(self):
         return "Script object, scene=%s id=%s line_no=%s"%(self.scene,id(self),self.si)
     obs = property(lambda self: self.world.render_order(),lambda self,val: setattr(self,"world",World(val)))
@@ -522,6 +523,9 @@ class Script(gui.widget):
                 if o.cur_script==self: return False
         return True
     def update(self):
+        if self.next_command:
+            self.execute_macro(self.next_command)
+            self.next_command = None
         if time.time()-assets.last_autosave>assets.autosave_interval*60:
             self.autosave()
         try:
@@ -1745,7 +1749,7 @@ The four types of gui you can create are:
             if y>=192 and assets.num_screens == 1 and assets.screen_compress:
                 y -= 192
             self.add_object(guiBack(x=x,y=y,z=z,name=name))
-            #self.buildmode = False
+            self.buildmode = False
         if guitype=="Button":
             macroname=args[0]; del args[0]
             graphic = None
