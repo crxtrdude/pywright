@@ -1917,7 +1917,7 @@ class textbox(gui.widget):
                 except TypeError:
                     pass
         text = u"{".join(nt)
-        print text
+        print repr(text)
         lines = text.split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
