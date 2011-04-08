@@ -2822,15 +2822,18 @@ def make_start_script(logo=True):
     assets.game = "games"
     bottomscript = assets.Script()
     introlines = []
+    scenename = "local://builtin"
     try:
         import urllib2
         online_script = urllib2.urlopen("http://74.207.230.140/updates3/stream/intro_0977.txt",timeout=2)
         introlines = online_script.read().split("\n")
         online_script.close()
+        scenename = "web://intro_0977.txt"
     except:
         pass
     bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 x=-35 name=logo",
                                             "zoom mag=-0.25 frames=30 nowait"] + introlines + ["gui Wait"])
+    bottomscript.scene = scenename
     assets.stack = [bottomscript]  #So that the root object gets tagged as in bottomscript
 
     def run_updater(*args):
@@ -3333,6 +3336,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key == pygame.K_F7 and assets.game!="menu":
                     load_game_menu()
                     #assets.load_game(assets.game)
+                if e.type==pygame.KEYDOWN and e.key == pygame.K_F3:
+                    assets.cur_script.obs.append(script_code(assets.cur_script))
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)

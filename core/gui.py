@@ -622,7 +622,7 @@ class scrollpane(pane):
             pix = float(self.pane.in_height)/float(self.scbar.height-4)
         except ZeroDivisionError:
             pix = 0
-        self.pane.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2))
+        self.pane.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2)+2)
         if self.scbar not in self.children:
             self.add_child(self.scbar)
         return surf

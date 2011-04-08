@@ -4177,6 +4177,37 @@ class error_msg(gui.pane):
             self.delete()
     def update(self):
         return True
+
+class script_code(gui.pane):
+    def __repr__(self):
+        return self.msg
+    def delete(self):
+        self.kill = 1
+    def __init__(self,script):
+        gui.pane.__init__(self)
+        self.rpos = [0,0]
+        self.width = 256
+        self.height = 192
+        self.pri = -10000
+        self.z = 10000
+        self.children.append(gui.label(script.scene))
+        self.lines = gui.scrollpane([10,20])
+        self.lines.rpos = [0,40]
+        self.lines.width = 240
+        self.lines.height = 140
+        self.children.append(self.lines)
+        for i,line in enumerate(script.scriptlines+["END OF SCRIPT"]):
+            color = [0,0,0]
+            text = line
+            if i==script.si:
+                color = [255,0,0]
+                text = "> "+line
+            line = gui.label(text)
+            line.textcol = color
+            self.lines.pane.children.append(line)
+        self.children.append(gui.button(self,"delete"))
+    def update(self):
+        return True
         
 class movie:
     def __init__(self,name,sound=None):
