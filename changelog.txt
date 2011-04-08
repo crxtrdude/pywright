@@ -1,5 +1,8 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.986
+    - Fixed setting blipsound from character animation files.
+
 *PyWright 0.985
 
     Wrightscript
