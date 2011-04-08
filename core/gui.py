@@ -593,15 +593,20 @@ class scrollpane(pane):
         self.pane.background = False
         self.add_child(self.pane,"root")
         self.pix = 0
+        self.last_scbar_pos = None
     def add_child(self,ob,which="pane"):
         if which == "pane":
             return self.pane.add_child(ob)
         return super(scrollpane,self).add_child(ob)
     def scroll_up_over(self,mp):
-        self.scbar.scbut.scroll([0,-6])
-        self.updatescroll()
+        self.set_offset(self.pane.offset[1]+20)
     def scroll_down_over(self,mp):
-        self.scbar.scbut.scroll([0,6])
+        self.set_offset(self.pane.offset[1]-20)
+    def set_offset(self,offset):
+        self.updatescroll()
+        self.pane.offset[1] = offset
+        self.scbar.scbut.rpos[1] = -(self.pane.offset[1]-2)/float(self.pix)+2
+        self.last_scbar_pos = self.scbar.scbut.rpos[1]
         self.updatescroll()
     def updatescroll(self):
         self.pane.width = self.width-15
@@ -622,7 +627,10 @@ class scrollpane(pane):
             pix = float(self.pane.in_height)/float(self.scbar.height-4)
         except ZeroDivisionError:
             pix = 0
-        self.pane.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2)+2)
+        self.pix = pix
+        if self.scbar.scbut.rpos[1] != self.last_scbar_pos:
+            self.pane.offset[1]=-int(pix*(self.scbar.scbut.rpos[1]-2)+2)
+            self.last_scbar_pos = self.scbar.scbut.rpos[1]
         if self.scbar not in self.children:
             self.add_child(self.scbar)
         return surf
