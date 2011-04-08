@@ -4196,20 +4196,21 @@ class script_code(gui.pane):
         self.lines.width = 240
         self.lines.height = 140
         self.children.append(self.lines)
-        scroll_i = 0
+        scroll_i = None
         for i,line in enumerate(script.scriptlines+["END OF SCRIPT"]):
             color = [0,0,0]
             text = line
             if i==script.si:
                 color = [255,0,0]
                 text = "> "+line
-                scroll_i = i
             line = gui.label(text)
             line.textcol = color
+            if i==script.si:
+                scroll_i = line
             self.lines.pane.children.append(line)
-        self.lines.updatescroll()
-        self.lines.set_offset(-int(scroll_i*(self.lines.pane.children[0].height+1)))
-        self.lines.scroll_down_over([0,0])
+        if scroll_i:
+            self.lines.updatescroll()
+            self.lines.scroll_to_object(scroll_i)
         self.children.append(gui.button(self,"delete"))
     def update(self):
         return True
