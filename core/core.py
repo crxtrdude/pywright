@@ -1975,6 +1975,8 @@ class textbox(gui.widget):
         self.presenting = 0
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
+        
+        self.id_name = "_textbox_"
     def init_cross(self):
         pass
     def init_normal(self):
@@ -2347,6 +2349,7 @@ class uglyarrow(fadesprite):
         self.high = False
         self.showleft = True
         self.last = None
+        self.id_name = "_uglyarrow_"
     def show_unclicked(self):
         p = assets.variables.get("_bigbutton_img","general/buttonpress")
         if self.last != p:
