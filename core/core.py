@@ -1473,6 +1473,8 @@ class portrait(object):
             self.clicksound = "blipfemale.ogg"
         if self.charname in self.male:
             self.clicksound = "blipmale.ogg"
+        if getattr(self.talk_sprite,"blipsound",None):
+            self.clicksound = self.talk_sprite.blipsound
         if "char_"+self.charname+"_defsound" in assets.variables:
             self.clicksound = assets.variables["char_"+self.charname+"_defsound"]
     def init(self,name=None,hide=False,blinkname=None,init_basic=True):
@@ -1577,8 +1579,6 @@ class portrait(object):
             #self.talk_sprite.load(self.blink_sprite.base[:])
             #self.talk_sprite.base = [self.talk_sprite.base[0]]
         self.blink_sprite.loopmode = self.blink_sprite.blinkmode
-        if getattr(self.talk_sprite,"blipsound",None):
-            self.clicksound = self.talk_sprite.blipsound
         self.blink_sprite.spd = int(assets.variables.get("_default_port_frame_delay",self.talk_sprite.spd))
         self.talk_sprite.spd = int(assets.variables.get("_default_port_frame_delay",self.talk_sprite.spd))
         if hasattr(self.talk_sprite,"img") and hasattr(self.blink_sprite,"img"):
@@ -1587,8 +1587,8 @@ class portrait(object):
         else:
             raise art_error("Can't load character "+charname+"/"+emo+"("+mode+")")
         self.blinkspeed = self.blink_sprite.blinkspeed
-        if init_basic:
-            self.init_sounds()
+        #if init_basic:
+        self.init_sounds()
     def setprop(self,p,v):
         if p in "xy":
             self.pos["xy".index(p)] = float(v)
