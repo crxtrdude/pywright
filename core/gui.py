@@ -608,6 +608,8 @@ class scrollpane(pane):
         self.scbar.scbut.rpos[1] = -(self.pane.offset[1]-2)/float(self.pix)+2
         self.last_scbar_pos = self.scbar.scbut.rpos[1]
         self.updatescroll()
+    def scroll_to_object(self,object):
+        self.set_offset(-object.rpos[1])
     def updatescroll(self):
         self.pane.width = self.width-15
         self.pane.height = self.height
