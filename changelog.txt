@@ -1,7 +1,20 @@
 (Note: file not intended for word wrapping)
 
 *PyWright 0.986
-    - Fixed setting blipsound from character animation files.
+    - Fixed setting blipsound from character animation files. You can't set the blipsound this
+        way for "hide" characters. Prefered method is to 'set char_[folder name]_defsound blipfemale.ogg',
+        as you only have to set this once and it works for all animation files in the folder, and lasts
+        for the entire game. If your character goes through a sex change you can also change it easier :)
+    - Back button blocks script again so it will work properly from check scripts
+    - fixed some debugging info that broke unicode, multi character sets work again
+    - slightly better gui scrollbars, was cutting off lower pixels
+    - changed method of running the court_record button macros to fix some order of operation bugs
+    - bugs fixed in wide examine scenes related to court record button, and correct scroll position
+    - in rare cases save could crash
+    - some timing issues with text reverted to old code, still need to work harder to make things
+        framerate independant
+    - press F3 while a game is running in debug mode ('set _debug true') to see a dialog showing
+        the currently running script code with the current line highlighted in red
 
 *PyWright 0.985
 

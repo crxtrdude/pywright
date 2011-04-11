@@ -3349,7 +3349,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 e.key == pygame.K_F7 and assets.game!="menu":
                     load_game_menu()
                     #assets.load_game(assets.game)
-                if e.type==pygame.KEYDOWN and e.key == pygame.K_F3:
+                if e.type==pygame.KEYDOWN and e.key == pygame.K_F3 and vtrue(assets.variables.get("_debug","false")):
                     assets.cur_script.obs.append(script_code(assets.cur_script))
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:

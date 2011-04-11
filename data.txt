@@ -1,6 +1,6 @@
-version 0.985
-version_date 03/19/2011
-version_notes bugs, customize
+version 0.986
+version_date 04/11/2011
+version_notes many showstopping bugs
 author saluk
 website http://pywright.dawnsoft.org/
 title PyWright Game Engine
