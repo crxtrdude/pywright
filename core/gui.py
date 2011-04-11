@@ -96,6 +96,8 @@ class widget(object):
                 c.draw(dest)
                 c.rpos = rp
     def event(self,name,pos,*args):
+        if getattr(self,"kill",0) or getattr(self,"hidden",0):
+            return False
         if pos[0]>=self.rpos[0] and pos[0]<=self.rpos[0]+self.width and pos[1]>=self.rpos[1] and pos[1]<=self.rpos[1]+self.height:
             p2 = [pos[0]-self.rpos[0],pos[1]-self.rpos[1]]
             for w in reversed(self.children):
