@@ -874,6 +874,7 @@ def subscript(macro):
     print "start subscript",script.scene
     while script in assets.stack:
         script.update()
+    print "end subscript",script.scene
     
 
 class SoundEvent(object):
@@ -1054,8 +1055,9 @@ class ws_button(gui.button):
     def event(self,name,pos,*args):
         orpos = self.rpos[:]
         self.rpos = self.getrpos()
-        super(ws_button,self).event(name,pos,*args)
+        ret = super(ws_button,self).event(name,pos,*args)
         self.rpos = orpos
+        return ret
     def draw(self,dest):
         orpos = self.rpos[:]
         self.rpos = self.getrpos()
@@ -2969,6 +2971,8 @@ class examine_menu(sprite,gui.widget):
         sprite.__init__(self)
         self.pos = [0,other_screen(0)]
         self.z = zlayers.index(self.__class__.__name__)
+        print "examine z",self.z
+        print "examine pri",self.pri
         self.width = sw
         self.height = sh
         gui.widget.__init__(self,[0,other_screen(0)],[sw,sh])
@@ -3081,7 +3085,7 @@ class examine_menu(sprite,gui.widget):
             if hasattr(self,"scrollbut"):
                 self.scrollbut.delete()
                 del self.scrollbut
-            return
+            return self.blocking
         keys = pygame.key.get_pressed()
         spd = 3*assets.dt
         d = [0,0]
@@ -3120,10 +3124,9 @@ class examine_menu(sprite,gui.widget):
             self.bck.pos = [0,other_screen(sh-self.bck.img.get_height())]
             self.bck.pri = 1000
             def k_space(b=self.bck):
-                b.delete()
                 self.delete()
-                if hasattr(self,"scrollbut"): self.scrollbut.delete()
             self.bck.k_space = k_space
+            self.bck.update = lambda *x: False
             assets.cur_script.obs.append(self.bck)
         scrn = (-self.getoffset()//sw)+1
         self.xscroll = None
@@ -3148,6 +3151,7 @@ class examine_menu(sprite,gui.widget):
         go = self.selected[-1]
         if go == None:
             go = self.fail
+        print assets.cur_script,"goto",go
         assets.cur_script.goto_result(go,backup=self.fail)
         self.delete()
     def k_space(self):
@@ -3217,6 +3221,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,192
         self.z = zlayers.index(self.__class__.__name__)
+        print "evidence z",self.z
         fadesprite.__init__(self,x=x,y=y)
         gui.widget.__init__(self,[x,y],[sw,sh])
         self.items = items
