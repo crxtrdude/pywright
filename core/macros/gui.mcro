@@ -7,7 +7,6 @@ gui Button {_crbut} name=_crbut_ graphic=general/record x=177 y=192 hotkey=k_tab
 endmacro
 
 macro show_court_record_button
-step
 isnot _cr_button exit
 {hide_court_record_button}
 {_default_court_record_button}
