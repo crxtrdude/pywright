@@ -604,6 +604,9 @@ class Script(gui.widget):
             self.si += 1
             assets.variables["_currentline"] = str(self.si)
             exit = self.execute_line(line)
+            if assets.debugging == "step":
+                self.obs.append(script_code(self))
+                return True
     @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
     def _textbox(self,command,line):
         """Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
@@ -754,6 +757,12 @@ char test
     def _print(self,*args):
         """Prints some text to the logfile. Only useful for debugging purposes."""
         print " ".join(args[1:])
+    @category([],type="debug")
+    def _step(self,*args):
+        """Begins stepping each line of code. Only works in debug mode."""
+        print "STEP MODE BEGINS"
+        if assets.debugging != 'step':
+            assets.debugging = "step"
     @category([],type="gameflow")
     def _endscript(self,*args):
         """Ends the currently running script and pops it off the stack. Multiple scripts

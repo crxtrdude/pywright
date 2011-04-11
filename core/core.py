@@ -224,6 +224,7 @@ class Assets(object):
     autosave_interval = 0
     path = ""
     tool_path = ""
+    debugging = "SEARCH"  #debugging mode. SEARCH for stop, STEP each line, or blank
     def get_stack(self):
         stack = []
         for s in self.stack:
