@@ -2163,7 +2163,7 @@ class textbox(gui.widget):
             raise script_error("Text macro brackets don't match:%s"%repr(self.text))
         num_chars = 0
         if self.next_char==0:
-            num_chars = max(int(self.speed*assets.dt),1)
+            num_chars = max(int(self.speed),1)
         if self.skipping:
             num_chars = self.skipping
         cnum = num_chars
