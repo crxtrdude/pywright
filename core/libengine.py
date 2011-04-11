@@ -516,7 +516,7 @@ class Script(gui.widget):
             return
     def update_objects(self):
         for o in self.world.update_order():
-            if o.update():
+            if not getattr(o,"kill",None) and o.update():
                 if o.cur_script not in assets.stack:
                     o.cur_script = assets.cur_script
                 if o.cur_script==self: return False
@@ -525,7 +525,8 @@ class Script(gui.widget):
         if time.time()-assets.last_autosave>assets.autosave_interval*60:
             self.autosave()
         try:
-            if self.update_objects():
+            interp = self.update_objects()
+            if interp:
                 self.interpret()
         except script_error,e:
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
@@ -2644,6 +2645,7 @@ class DebugScript(Script):
 assets.DebugScript = DebugScript
         
 class choose_game(gui.widget):
+    id_name = "_choose_game_"
     def __init__(self,*args,**kwargs):
         gui.widget.__init__(self,*args,**kwargs)
         self.rpos[1] = other_screen(0)
@@ -2669,7 +2671,7 @@ class choose_game(gui.widget):
             assets.cur_script.goto_result("close")
     def close_button(self,jump=False):
         self.has_close = True
-        self.cb = gui.button(self,"close")
+        self.cb = ws_button(self,"close")
         self.cb.rpos[0]=224
         self.cb.z = 1005
         self.cb.pri = -1005
@@ -2678,13 +2680,13 @@ class choose_game(gui.widget):
         self.list.scbar_y=self.cb.height-7
         self.list.scbar_height=-self.cb.height
 
-        self.sort_played_btn = gui.button(self,"played")
+        self.sort_played_btn = ws_button(self,"played")
         self.sort_played_btn.rpos[0]=2
         self.sort_played_btn.z = 1005
         self.sort_played_btn.pri = -1005
         self.children.append(self.sort_played_btn)
 
-        self.sort_az_btn = gui.button(self,"A to Z")
+        self.sort_az_btn = ws_button(self,"A to Z")
         self.sort_az_btn.rpos[0]=40
         self.sort_az_btn.z = 1005
         self.sort_az_btn.pri = -1005
@@ -2720,7 +2722,7 @@ class choose_game(gui.widget):
                     games.remove(i)
                     games.insert(0,i)
         for f in games:
-            item = gui.button(self,f)
+            item = ws_button(self,f)
             d = get_data_from_folder(self.path+"/"+f)
             if d.get("icon",""):
                 graphic = pygame.image.load(self.path+"/"+f+"/"+d["icon"])
@@ -2782,7 +2784,7 @@ def load_game_menu():
     title = gui.editbox(None,"Choose save to load")
     title.draw_back = False
     list.add_child(title)
-    list.add_child(gui.button(root,"cancel",pos=[200,0]))
+    list.add_child(ws_button(root,"cancel",pos=[200,0]))
     cb = list.children[-1]
     def cancel(*args):
         print "canceling"
@@ -2811,7 +2813,7 @@ def load_game_menu():
         fn = s[0].rsplit("/",1)[1].split(".",1)[0]
         t = str(i)+") "+fn+" %s/%s/%s %s:%s"%(lt.tm_mon,lt.tm_mday,lt.tm_year,lt.tm_hour,lt.tm_min)
         i -= 1
-        item = gui.button(root,t)
+        item = ws_button(root,t)
         list.add_child(item)
         filename=s[0].replace(assets.game,"")[1:]
         fullpath=s[0]
@@ -2848,7 +2850,7 @@ def make_start_script(logo=True):
         make_screen()
         assets.make_start_script()
     setattr(make_start_script,"UPDATES",run_updater)
-    item = gui.button(make_start_script,"UPDATES")
+    item = ws_button(make_start_script,"UPDATES")
     item.bordercolor = [255,255,255]
     item.rpos = [190,10]
     item.z = 999
@@ -2862,7 +2864,7 @@ def make_start_script(logo=True):
         cg.close_button()
         bottomscript.obs.append(cg)
     setattr(make_start_script,"GAMES",pl)
-    item = gui.button(make_start_script,"GAMES")
+    item = ws_button(make_start_script,"GAMES")
     item.bordercolor = [255,255,255]
     item.rpos = [190,30]
     item.z = 999
@@ -2878,7 +2880,7 @@ def make_start_script(logo=True):
         #~ cg.close_button()
         #~ bottomscript.obs.append(cg)
     setattr(make_start_script,"EXAMPLES",pl)
-    item = gui.button(make_start_script,"EXAMPLES")
+    item = ws_button(make_start_script,"EXAMPLES")
     item.bordercolor = [255,255,255]
     item.rpos = [190,50]
     item.z = 999
@@ -2889,7 +2891,7 @@ def make_start_script(logo=True):
         [x.close() for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
         assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
     setattr(make_start_script,"SETTINGS",pl)
-    item = gui.button(make_start_script,"SETTINGS")
+    item = ws_button(make_start_script,"SETTINGS")
     item.bordercolor = [255,255,255]
     item.rpos = [190,70]
     item.z = 999
@@ -2900,7 +2902,7 @@ def make_start_script(logo=True):
         [x.close() for x in assets.cur_script.obs if isinstance(x,tools_menu.tools_menu)]
         assets.cur_script.obs.append(tools_menu.tools_menu(sw=sw,sh=sh,assets=assets))
     setattr(make_start_script,"TOOLS",pl)
-    item = gui.button(make_start_script,"TOOLS")
+    item = ws_button(make_start_script,"TOOLS")
     item.bordercolor = [255,255,255]
     item.rpos = [190,90]
     item.z = 999

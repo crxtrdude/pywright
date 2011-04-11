@@ -871,9 +871,9 @@ assets = Assets()
 def subscript(macro):
     """Runs a macro all the way through"""
     script = assets.cur_script.execute_macro(macro)
+    print "start subscript",script.scene
     while script in assets.stack:
         script.update()
-        print script.si,script.scriptlines
     
 
 class SoundEvent(object):
@@ -1042,6 +1042,7 @@ def trans_y(y):
 class ws_button(gui.button):
     """A button created from wrightscript"""
     screen_setting = ""
+    id_name = "_ws_button_"
     def delete(self):
         print "deleting ws_button"
         self.kill = 1
@@ -1904,7 +1905,7 @@ class textbox(gui.widget):
     pri = 30
     def click_down_over(self,pos):
         if not hasattr(self,"rpos1"): return
-        if getattr(self,"kill",0) or getattr(self,"hidden",0): return
+        if getattr(self,"hidden",0): return
         if self.statement:
             if pos[1]>=self.rpos[1] and pos[1]<=self.rpos1[1]+self.height1:
                 if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width/2:
@@ -2671,8 +2672,6 @@ class listmenu(fadesprite,gui.widget):
         if hasattr(self,"bck"):
             self.bck.kill = 1
     def update(self):
-        if getattr(self,"kill",0):
-            return False
         fadesprite.update(self)
         if self.hidden:
             return False
@@ -3002,6 +3001,7 @@ class examine_menu(sprite,gui.widget):
             self.bck.delete()
         if hasattr(self,"scrollbut"):
             self.scrollbut.delete()
+        print "delete",self
         subscript("hide_court_record_button")
     def getoffset(self):
         x = [o.pos[0] for o in self.bg]
@@ -3260,7 +3260,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.screen_setting = "try_bottom"
     def update(self):
         self.choose()
-        if not getattr(self,"kill",None) and not getattr(self,"hidden",None):
+        if not getattr(self,"hidden",None):
             return True #Don't update anything else
     def layout(self):
         self.pages = []
@@ -3690,6 +3690,7 @@ class timer(sprite):
                 ns = self.script.execute_macro(self.run)
         
 class effect(object):
+    id_name = "_effect_"
     def __init__(self):
         self.z = zlayers.index(self.__class__.__name__)
     def delete(self):
@@ -4101,6 +4102,7 @@ class guiScroll(sprite,gui.widget):
         return True
         
 class guiWait(sprite):
+    id_name = "_guiWait_"
     def __init__(self,run=None, mute=False):
         sprite.__init__(self)
         gui.widget.__init__(self)
@@ -4127,6 +4129,7 @@ class guiWait(sprite):
 class saved(fadesprite):
     def __init__(self,ticks=150,text="Saving...",block=True):
         super(saved,self).__init__()
+        self.id_name = "_saved_"
         self.text = text
         self.ticks = abs(ticks)
         self.start = self.ticks
@@ -4155,6 +4158,7 @@ class error_msg(gui.pane):
     def click_down_over(self,mp):
         self.delete()
     def __init__(self,msg,line,lineno,script):
+        self.id_name = "_error_msg_"
         self.pri = ulayers.index(self.__class__.__name__)
         self.z = zlayers.index(self.__class__.__name__)
         gui.pane.__init__(self)
