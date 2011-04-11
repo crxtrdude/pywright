@@ -468,8 +468,12 @@ class Script(gui.widget):
                 rn = line.split(" ",1)[1].strip().replace(" ","_")
                 if rn:
                     self.labels.append([rn,i])
-            if line.startswith("list ") or line.startswith("cross ") or line.startswith("statement "):
+            if line.startswith("list ") or line.startswith("statement "):
                 rn = line.split(" ",1)[1].strip().replace(" ","_")
+                if rn:
+                    self.labels.append([rn,i-1])
+            if line.startswith("cross "):
+                rn = "_".join([x for x in line.split(" ")[1:] if not x.startswith("fail=")]).strip()
                 if rn:
                     self.labels.append([rn,i-1])
 
