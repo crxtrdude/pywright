@@ -2994,8 +2994,12 @@ class examine_menu(sprite,gui.widget):
         self.xscroll = 0
         self.xscrolling = 0
         scroll_amt = assets.variables.get("_xscroll_"+self.name,0)
+        print "scroll amt:",scroll_amt
         if scroll_amt==-1:
-            assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
+            self.xscroll = -1
+            print "self.offset before scroll",self.getoffset()
+            if self.getoffset()!=-256:
+                assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
     def init_normal(self):
         subscript("show_court_record_button")
@@ -3038,6 +3042,7 @@ class examine_menu(sprite,gui.widget):
             if x>=sw*2 and screens<3:
                 screens = 3
         self.width = screens*sw
+        print "examine screens:",screens
         return screens
     def addregion(self,x,y,width,height,label):
         reg = [int(x),int(y),int(width),int(height),label]
@@ -3080,6 +3085,7 @@ class examine_menu(sprite,gui.widget):
             tb.draw(dest)
     def update(self,*args):
         if self.xscrolling:
+            print "xscrolling:",self.xscrolling
             assets.cur_script.obs.append(scroll(-self.xscrolling,0,speed=16))
             self.xscrolling = 0
             if hasattr(self,"scrollbut"):
@@ -3128,6 +3134,7 @@ class examine_menu(sprite,gui.widget):
             self.bck.k_space = k_space
             self.bck.update = lambda *x: False
             assets.cur_script.obs.append(self.bck)
+        print -self.getoffset()/sw
         scrn = (-self.getoffset()//sw)+1
         self.xscroll = None
         if scrn<self.screens():
@@ -3736,13 +3743,13 @@ class scroll(effect):
         self.wait = wait
     def draw(self,dest): pass
     def update(self):
-        if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
-            self.delete()
-            return False
-        ndx,ndy,ndz = self.dx*assets.dt,self.dy*assets.dt,self.dz*assets.dt
+        ndx,ndy,ndz = self.dx,self.dy,self.dz
+        print "before - ndx:",ndx,"self.amtx:",self.amtx
         self.amtx-=abs(ndx)
+        print "after self.amtx:",self.amtx
         if self.amtx<0:
             ndx+=self.amtx*(self.dx/abs(self.dx))
+            print "self.amtx<0 ndx:",ndx
             self.amtx=0
         self.amty-=abs(ndy)
         if self.amty<0:
@@ -3759,6 +3766,9 @@ class scroll(effect):
                 o.pos[1]+=ndy
             if isinstance(o,mesh):
                 o.trans(z=ndz)
+        if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
+            self.delete()
+            return False
         if self.wait:
             return True
     def control_last(self):
