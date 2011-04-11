@@ -378,7 +378,7 @@ class Script(gui.widget):
     def save(self):
         props = {}
         save.cp(["scene","si","cross","statement","instatement","lastline","pri","viewed"],self,props)
-        if self.parent:
+        if self.parent and self.parent in assets.stack:
             props["_parent_index"] = assets.stack.index(self.parent)
         obs = []
         for ob in self.world.all:
@@ -1792,6 +1792,7 @@ The four types of gui you can create are:
             btn.pri = 0
             btn.s_macroname = macroname
             def func(*args):
+                print "exec",macroname
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
             btn.hold_func = None
@@ -3304,6 +3305,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 def k_switch():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_tab") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
+                            print "tab on",o
                             o.k_tab()
                             break
                 def press():
