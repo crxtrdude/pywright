@@ -20,8 +20,13 @@ set _textbox_allow_skip false
 set _preload off
 
 #Sets global animation speed when it is not controlled via art text files or in-game
+
+#characters
 set _default_port_frame_delay 6
+#foreground
 set _default_fg_frame_delay 6
+#everything else
+set _default_frame_delay 6
 
 #Images to use for interface items
 set _list_checked_img general/checkmark
