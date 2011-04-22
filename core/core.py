@@ -1160,6 +1160,7 @@ class sprite(gui.button):
         self.next = self.delays.get(0,self.spd)
         return self
     def __init__(self,x=0,y=0,flipx=0,**kwargs):
+        self.spd = int(assets.variables.get("_default_frame_delay",self.spd))
         self.loopmode = ""
         self.next = self.spd
         self.pos = [x,y]
