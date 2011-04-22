@@ -1,7 +1,4 @@
 :
-   color_ - color_str (core/core.py 888)
-   _default_port_frame_delay -  (core/core.py 1580)
-   _default_port_frame_delay -  (core/core.py 1581)
    something -  (core/libengine.py 319)
    something -  (core/libengine.py 321)
    _debug - update (core/libengine.py 535)
