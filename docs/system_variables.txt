@@ -46,6 +46,8 @@ Characters
 ----------
 Related commands: char, textbox (""), nt, emo
 
+=controlling who is speaking=
+
 _speaking:
     - gportrait (core/core.py 639)
     - add_portrait (core/core.py 659)
@@ -115,3 +117,27 @@ cliche
 char phoenix
 "Mia! Please let me try this case! I am ready!"
 cliche
+
+
+Animations
+----------
+
+'_default_port_frame_delay'
+'_default_fg_frame_delay'
+'_default_frame_delay'
+    Initially set at core/macros/defaults.mcro in 'init_defaults' to 6 for all three variables.
+    
+    The value of these variables control how many game ticks to wait between frames of character animations,
+fg animations, and all other animations. Animations themselves can set a specific frame delay with 
+the 'framedelay' animation control command, and set a delay value for all frames with the 'globaldelay' 
+animation control command. This variable defaults to 6, and probably should not be changed.
+
+Text
+----
+Related commands: textbox (""), textblock
+
+You can predefine colors by setting any variable named color_[name]
+to a 3 digit number, or a 6 digit hexadecimal number. 
+
+set color_red ff0000
+"{c red}This text will be red"
