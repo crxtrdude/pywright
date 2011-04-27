@@ -608,6 +608,8 @@ class Script(gui.widget):
             if assets.debugging == "step":
                 self.obs.append(script_code(self))
                 return True
+    def _framerate(self,command,fr):
+        assets.framerate = int(fr)
     @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
     def _textbox(self,command,line):
         """Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
@@ -3139,7 +3141,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        assets.dt = clock.tick(60)
+        assets.dt = clock.tick(getattr(assets,"framerate",60))
         assets.dt = min(assets.dt*.001*60,10.0)
         #assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
