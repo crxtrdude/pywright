@@ -141,3 +141,18 @@ to a 3 digit number, or a 6 digit hexadecimal number.
 
 set color_red ff0000
 "{c red}This text will be red"
+
+
+Buttons
+-------
+Related commands: textbox(""), 
+
+'_textbox_show_button'
+    Every time a textbox appears, it will show a continue button on the
+second screen, as long as this variable is true, which is the default behavior.
+When a textbox continues, the continue button will also be erased. If you
+want to prevent the continue button from being created when a textbox is,
+'set _textbox_show_button false'. 
+
+Important: Remember to set it to true again before returning to normal gameplay,
+otherwise it could be invisible for the rest of the game!

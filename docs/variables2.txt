@@ -161,8 +161,6 @@ ev_z_textbox_h:
    class evidence_menu - draw_ev_zoom (core/core.py 3583)
 ev_z_bg_x:
    class evidence_menu - draw_ev_zoom (core/core.py 3588)
-_textbox_show_button:
-    - refresh_arrows (core/libengine.py 577)
 ev_larrow_x:
    class evidence_menu - draw (core/core.py 3542)
 _bigbutton_cross:
