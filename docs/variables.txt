@@ -3,7 +3,6 @@
    something -  (core/libengine.py 321)
    _debug - update (core/libengine.py 535)
    _debug - draw (core/libengine.py 560)
-   _textbox_show_button - refresh_arrows (core/libengine.py 577)
    _statements - refresh_arrows (core/libengine.py 581)
    _statements - refresh_arrows (core/libengine.py 582)
    _currentline - interpret (core/libengine.py 600)
