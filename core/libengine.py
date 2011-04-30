@@ -2837,14 +2837,23 @@ def make_start_script(logo=True):
     bottomscript = assets.Script()
     introlines = []
     scenename = "local://builtin"
+    assets.dt = 1
+    assets.variables["_allow_saveload"] = "false"
+    bottomscript.init(scriptlines=['print test','textblock 0 0 256 192 Loading menu...','gui Wait'])
+    bottomscript.scene = scenename
+    assets.stack = [bottomscript]
+    assets.cur_script.update()
+    assets.cur_script.draw(pygame.screen)
+    draw_screen(False)
     try:
         import urllib2
-        online_script = urllib2.urlopen("http://74.207.230.140/updates3/stream/intro_0977.txt",timeout=2)
+        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro_0977.txt",timeout=2)
         introlines = online_script.read().split("\n")
         online_script.close()
         scenename = "web://intro_0977.txt"
     except:
         pass
+    bottomscript = assets.Script()
     bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 x=-35 name=logo",
                                             "zoom mag=-0.25 frames=30 nowait"] + introlines + ["gui Wait"])
     bottomscript.scene = scenename
