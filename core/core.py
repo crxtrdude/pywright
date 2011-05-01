@@ -10,6 +10,8 @@ import pygame
 pygame.font.init()
 import random
 import pickle
+import re
+import textutil
 try:
     import pygame.movie as pymovie
 except:
@@ -948,77 +950,53 @@ class ImgFont(object):
         right = [""]
         which = left
         width = 0
-        parse = True
         wb = 0
         for i,c in enumerate(text):
             
             if c not in self.width:
                 self.get_char(c)
                 
-            if c == "{":
-                parse = False
-            if parse:
-                if which == left and width+self.width[c]>max_width:
-                    r = which.pop(-1)
-                    which = right
-                    right.insert(0,r[1:])
-                elif c == " ":
-                    if not which[-1] or which[-1][-1]!=" ":
-                        which.append("")
-                width+=self.width[c]
-            if c== "}":
-                parse = True
+            if which == left and width+self.width[c]>max_width:
+                r = which.pop(-1)
+                which = right
+                right.insert(0,r[1:])
+            elif c == " ":
+                if not which[-1] or which[-1][-1]!=" ":
+                    which.append("")
+            width+=self.width[c]
             which[-1]+=c
         return "".join(left),"".join(right)
     def render(self,text,color=[255,255,255],return_size=False):
         """return a surface with rendered text
         color = the starting color"""
+        if not isinstance(text,textutil.markup_text):
+            text = textutil.markup_text(text)
         self.quote = 0
         chars = []
         width = 0
         parse = True
-        for c in text:
-            char = self.get_char(c,color)
-            chars.append([c,char])
-            if c == "{":
-                parse = False
-            if parse:
+        for c in text.chars():
+            if isinstance(c,textutil.markup):
+                chars.append([c,None])
+            else:
+                char = self.get_char(c,color)
+                chars.append([c,char])
                 width+=self.width.get(c,8)
-            if c == "}":
-                parse = True
         if return_size:
             return width
         surf = pygame.Surface([width,20])
         x = 0
-        mode = "std"
-        command = ""
         for c,img in chars:
-            if mode == "std":
-                if c == "{":
-                    mode = "find"
-                else:
-                    surf.blit(self.get_char(c,color),[x,0])
-                    x += self.width.get(c,8)
-            elif mode == "find":
-                if c == "}":
-                    mode = "std"
-                else:
-                    command+=c
-            if command and mode == "std":
-                try:
-                    if command[0]=="c" and (len(command)==1 or command[1].isdigit() or command[1]==" "):
-                        if len(command)==1:
-                            ImgFont.prevcolor,color = color,ImgFont.prevcolor
-                        else:
-                            newcolor = color_str(command[1:])
-                            if newcolor != color:
-                                ImgFont.prevcolor = color
-                                color = newcolor
-                except:
-                    import traceback
-                    traceback.print_exc()
-                    raise markup_error(command+" is invalid text markup")
-                command = ""
+            if not img:
+                if isinstance(c,textutil.markup_color):
+                    if c.revert:
+                        ImgFont.prevcolor,color = color,ImgFont.prevcolor
+                    elif c.color != color:
+                        ImgFont.prevcolor = color
+                        color = c.color
+            else:
+                surf.blit(self.get_char(c,color),[x,0])
+                x += self.width.get(c,8)
             ImgFont.lastcolor = color
         surf.set_colorkey([0,0,0])
         return surf
@@ -1903,7 +1881,7 @@ def wrap_text(lines,font,width,wrap=True):
             lines[0]=right+u" "+lines[0]
     print page
     return page
-        
+
 class textbox(gui.widget):
     pri = 30
     def click_down_over(self,pos):
@@ -2153,15 +2131,6 @@ class textbox(gui.widget):
         if self.text:
             while "\n" not in self.written and len(self.written)<len(self.text):
                 self.written+=self.text[len(self.written)]
-        bracketmatch = self.written.count("{")-self.written.count("}")
-        if bracketmatch!=0:
-            while bracketmatch>0:
-                self.written = self.written + "}"
-                bracketmatch-=1
-            while bracketmatch<0:
-                self.written = "{"+self.written
-                bracketmatch+=1
-            raise script_error("Text macro brackets don't match:%s"%repr(self.text))
         num_chars = 0
         if self.next_char==0:
             num_chars = max(int(self.speed),1)
