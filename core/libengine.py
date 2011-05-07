@@ -2738,7 +2738,7 @@ class choose_game(gui.widget):
             title = d.get("title",f)
             if d.get("author",""):
                 title += " by "+d["author"]
-            lines = wrap_text([title],assets.get_image_font("nt"),190)
+            lines = textutil.wrap_text([title],assets.get_image_font("nt"),190)
             req = d.get("min_pywright_version","0")
             reqs = cver_s(req)
             if __version__ < req:
