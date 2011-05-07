@@ -12,6 +12,7 @@ import random
 import pickle
 import re
 import textutil
+ImgFont = textutil.ImgFont
 try:
     import pygame.movie as pymovie
 except:
@@ -908,109 +909,6 @@ def color_str(rgbstring):
     elif len(rgbstring)==6:
         v = [int(rgbstring[:2],16),int(rgbstring[2:4],16),int(rgbstring[4:6],16)]
         return v
-class ImgFont(object):
-    lastcolor = [255,255,255]
-    prevcolor = [255,255,255]
-    def __init__(self,img,pwfont=None):
-        self.img = pygame.image.load(img)
-        self.img.set_colorkey([255,255,255])
-        self.colors = {}
-        self.chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ "+\
-         "abcdefghijklmnopqrstuvwxyz"+\
-         "!?.;[](){}\"\"@#:+,/*'_\t\r%\b~<>&`^-"
-        self.width = {"":0}
-        self.start = {}
-        self.quote = 0
-        if pwfont:
-            self.fnt = pwfont
-        else:
-            self.fnt = assets.get_font("tb")
-    def get_char(self,t,color=[255,255,255]):
-        if not self.colors.get(tuple(color),None):
-            self.colors[tuple(color)] = pygame.Surface(self.img.get_size())
-            self.colors[tuple(color)].fill(color)
-            self.colors[tuple(color)].blit(self.img,[0,0])
-        if (t,tuple(color)) in self.colors:
-            return self.colors[(t,tuple(color))]
-        surf = self.fnt.render(t,0,color)
-        metrics = self.fnt.metrics(t)[0]
-        start = metrics[0]
-        starty = max(metrics[2],0)
-        edge = min(metrics[4],surf.get_width())
-        self.width[t] = edge#edge+1-start
-        #FIXME: hack for shorter spaces with pwinternational font, better is to fix the actual font
-        if t==" ":
-            self.width[t] = 3
-        self.start[t] = start
-        self.colors[t,tuple(color)] = surf
-        return surf
-    def split_line(self,text,max_width):
-        """Returns the line split at the point to equal a desired width"""
-        left = [""]
-        right = [""]
-        which = left
-        width = 0
-        wb = 0
-        for i,c in enumerate(text):
-            
-            if c not in self.width:
-                self.get_char(c)
-                
-            if which == left and width+self.width[c]>max_width:
-                r = which.pop(-1)
-                which = right
-                right.insert(0,r[1:])
-            elif c == " ":
-                if not which[-1] or which[-1][-1]!=" ":
-                    which.append("")
-            width+=self.width[c]
-            which[-1]+=c
-        return "".join(left),"".join(right)
-    def render(self,text,color=[255,255,255],return_size=False):
-        """return a surface with rendered text
-        color = the starting color"""
-        if not isinstance(text,textutil.markup_text):
-            text = textutil.markup_text(text)
-        self.quote = 0
-        chars = []
-        width = 0
-        parse = True
-        for c in text.chars():
-            if isinstance(c,textutil.markup):
-                chars.append([c,None])
-            else:
-                char = self.get_char(c,color)
-                chars.append([c,char])
-                width+=self.width.get(c,8)
-        if return_size:
-            return width
-        surf = pygame.Surface([width,20])
-        x = 0
-        for c,img in chars:
-            if not img:
-                if isinstance(c,textutil.markup_color):
-                    if c.revert:
-                        ImgFont.prevcolor,color = color,ImgFont.prevcolor
-                    elif c.color != color:
-                        ImgFont.prevcolor = color
-                        color = c.color
-            else:
-                surf.blit(self.get_char(c,color),[x,0])
-                x += self.width.get(c,8)
-            ImgFont.lastcolor = color
-        surf.set_colorkey([0,0,0])
-        return surf
-    def size(self,text):
-        """return the size of the text if it were rendered"""
-        return self.render(text,[0,0,0],return_size=True)
-    def get_linesize(self):
-        """return hieght in pixels for a line of text"""
-    def get_height(self):
-        """return height in pixels of rendered text - average for each glyph"""
-    def get_ascent(self):
-        """return hieght in pixels from font baseline to top"""
-    def get_descent(self):
-        """return number of pixels from font baseline to bottom"""
         
 def trans_y(y):
     """Alter y value to place us in the proper screen"""
@@ -1866,21 +1764,6 @@ class present_button(fadesprite,gui.widget):
         #~ if not vtrue(assets.variables.get("_cr_button","on")):
             #~ return
         #~ assets.addevmenu()
-        
-def wrap_text(lines,font,width,wrap=True):
-    page = []
-    while lines:
-        line = lines.pop(0)
-        if wrap:
-            left,right = font.split_line(line,width)
-        else:
-            left,right = line,""
-        page.append(left)
-        if right.strip():
-            if not lines: lines.append("")
-            lines[0]=right+u" "+lines[0]
-    print page
-    return page
 
 class textbox(gui.widget):
     pri = 30
@@ -1915,7 +1798,7 @@ class textbox(gui.widget):
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
                 wrap = False
-        page = wrap_text(lines,assets.get_image_font("tb"),250,wrap)
+        page = textutil.wrap_text(lines,assets.get_image_font("tb"),250,wrap)
         pages = [self.nametag+u"\n".join(page[i:i+3]) for i in xrange(0, len(page), 3)]
         self._text = u"\n".join(pages)
     text = property(lambda self: self._text,set_text)
