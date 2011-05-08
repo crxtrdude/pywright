@@ -60,6 +60,8 @@ def to_markup(text):
 class markup_text:
     """Some text that has annotations"""
     def __init__(self,text,commands=True):
+        if isinstance(text,markup_text):
+            return text
         self._text = []
         if commands:
             markupre = re.compile("{.*?}")
@@ -99,6 +101,8 @@ class markup_text:
         return self._text[i]
     def __repr__(self):
         return self.fulltext()
+    def __len__(self):
+        return len(self._text)
 
 def markup_text_list(list):
     t = markup_text("")
@@ -169,7 +173,7 @@ class ImgFont(object):
                     which.append(markup_text(""))
             width+=cwidth
             which[-1]._text.append(c)
-        return markup_text_list(left).fulltext(),markup_text_list(right).fulltext()
+        return markup_text_list(left),markup_text_list(right)
     def render(self,text,color=[255,255,255],return_size=False):
         """return a surface with rendered text
         color = the starting color"""
@@ -217,17 +221,18 @@ class ImgFont(object):
         """return number of pixels from font baseline to bottom"""
 
 def wrap_text(lines,font,width,wrap=True):
+    lines = [markup_text(l) for l in lines]
     page = []
     while lines:
         line = lines.pop(0)
         if wrap:
             left,right = font.split_line(line,width)
         else:
-            left,right = line,""
+            left,right = line,markup_text("")
         page.append(left)
         if right.strip():
-            if not lines: lines.append("")
-            lines[0]=right+u" "+lines[0]
+            if not lines: lines.append(markup_text(""))
+            lines[0] = markup_text_list([right,markup_text(u" "),lines[0]])
     return page
 
 markup_text("This is a test")
