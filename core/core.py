@@ -1779,28 +1779,23 @@ class textbox(gui.widget):
         if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width1 and pos[1]>=self.rpos1[1] and pos[1]<=self.rpos1[1]+self.height1:
             self.enter_down()
     def set_text(self,text):
-        nt = text.split("{")
-        for i,x in enumerate(nt[1:]):
-            if x.startswith("$"):
-                if not "}" in x:
-                    raise "markup error"
-                varname = x[:x.find("}")][1:]
-                try:
-                    t = u"}"+assets.variables.get(varname,"")#.replace("{","(").replace("}",")")
-                    t = t+x[x.find("}")+1:]
-                    nt[i+1]=t
-                except TypeError:
-                    pass
-        text = u"{".join(nt)
-        print repr(text)
+        print "SETTING TEXT:",text
         lines = text.split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
                 wrap = False
-        page = [l.fulltext() for l in textutil.wrap_text(lines,assets.get_image_font("tb"),250,wrap)]
-        pages = [self.nametag+u"\n".join(page[i:i+3]) for i in xrange(0, len(page), 3)]
-        self._text = u"\n".join(pages)
+        lines = textutil.wrap_text(lines,assets.get_image_font("tb"),250,wrap)
+        self.pages = [lines[i:i+3] for i in xrange(0, len(lines), 3)]
+        self._text = u"\n"
+        self._markup = textutil.markup_text("")
+        for page in self.pages:
+            for line in page:
+                self._text += line.fulltext()
+                self._text+="\n"
+                self._markup._text.extend(line.chars())
+                self._markup._text.append("\n")
+        print self.pages
     text = property(lambda self: self._text,set_text)
     def __init__(self,text="",color=[255,255,255],delay=2,speed=1,rightp=True,leftp=False,nametag="\n"):
         self.nametag = nametag
