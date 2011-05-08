@@ -32,7 +32,10 @@ class markup_command(markup):
     def __repr__(self):
         return "command: %s %s"%(self.command,self.args)
     def __str__(self):
-        return "{%s %s}"%(self.command,self.args)
+        if self.args:
+            return "{%s %s}"%(self.command,self.args)
+        else:
+            return "{%s}"%(self.command,)
         
 class plain_text:
     def __init__(self,text):
