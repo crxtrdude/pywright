@@ -1798,7 +1798,7 @@ class textbox(gui.widget):
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
                 wrap = False
-        page = textutil.wrap_text(lines,assets.get_image_font("tb"),250,wrap)
+        page = [l.fulltext() for l in textutil.wrap_text(lines,assets.get_image_font("tb"),250,wrap)]
         pages = [self.nametag+u"\n".join(page[i:i+3]) for i in xrange(0, len(page), 3)]
         self._text = u"\n".join(pages)
     text = property(lambda self: self._text,set_text)
