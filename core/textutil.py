@@ -2,14 +2,13 @@ import re
 import pygame
 
 class markup:
-    pass
-class markup_color(markup):
-    def __init__(self,color=None,revert=False):
-        self.color = color
-        self.revert = revert
-        self._color = None
     def addcharsto(self,list):
         list.append(self)
+class markup_color(markup):
+    def __init__(self,color=None,revert=False):
+        self.color = color.strip()
+        self.revert = revert
+        self._color = None
     def __repr__(self):
         return "color: %s %s"%(self.color,self.revert)
     def __str__(self):
@@ -27,8 +26,6 @@ class markup_command(markup):
     def __init__(self,command,args):
         self.command = command
         self.args = args
-    def addcharsto(self,list):
-        list.append(self)
     def __repr__(self):
         return "command: %s %s"%(self.command,self.args)
     def __str__(self):
@@ -36,6 +33,14 @@ class markup_command(markup):
             return "{%s %s}"%(self.command,self.args)
         else:
             return "{%s}"%(self.command,)
+            
+class markup_variable(markup):
+    def __init__(self,var):
+        self.variable = var
+    def __str__(self):
+        return "{$%s}"%(self.variable,)
+    def __repr__(self):
+        return "variable: %s"%self.variable
         
 class plain_text:
     def __init__(self,text):
@@ -57,6 +62,8 @@ def to_markup(text):
         if len(text)==1:
             return markup_color(revert=True)
         return markup_color(text[1:])
+    if text.startswith("$"):
+        return markup_variable(text[1:])
     macro_args = text.split(" ",1)+[""]
     return markup_command(macro_args[0],macro_args[1])
 
@@ -94,9 +101,9 @@ class markup_text:
         l = self._text[:]
         if not l:
             return t
-        while l[0]==" ":
+        while l and l[0]==" ":
             l = l[1:]
-        while l[-1]==" ":
+        while l and l[-1]==" ":
             l = l[:-1]
         t._text = l
         return t
@@ -106,6 +113,18 @@ class markup_text:
         return self.fulltext()
     def __len__(self):
         return len(self._text)
+    def m_replace(self,pattern,func):
+        nt = []
+        for c in self._text:
+            if pattern(c):
+                nt.append(func(c))
+            else:
+                nt.append(c)
+        self._text = nt
+
+line = markup_text("This is a variable: {$varX}")
+line.m_replace(lambda c:hasattr(c,"variable"),lambda c:"VAR:"+c.variable)
+assert str(line)=="This is a variable: VAR:varX"
 
 def markup_text_list(list):
     t = markup_text("")
