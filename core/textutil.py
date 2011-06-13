@@ -70,6 +70,7 @@ def to_markup(text):
 class markup_text:
     """Some text that has annotations"""
     def __init__(self,text,commands=True):
+        self.commands = commands
         if isinstance(text,markup_text):
             return text
         self._text = []
@@ -113,7 +114,12 @@ class markup_text:
         return self.fulltext()
     def __len__(self):
         return len(self._text)
+    def replace(self,*args):
+        self.__init__(self.fulltext().replace(*args),self.commands)
     def m_replace(self,pattern,func):
+        """pattern is a function run on each character, func is how to
+        replace that character. Generally used to replace macros with text
+        in some way"""
         nt = []
         for c in self._text:
             if pattern(c):
@@ -209,6 +215,7 @@ class ImgFont(object):
             if isinstance(c,markup):
                 chars.append([c,None])
             else:
+                print "COLOR1:",color
                 char = self.get_char(c,color)
                 chars.append([c,char])
                 width+=self.width.get(c,8)
@@ -221,10 +228,12 @@ class ImgFont(object):
                 if isinstance(c,markup_color):
                     if c.revert:
                         ImgFont.prevcolor,color = color,ImgFont.prevcolor
-                    elif c.getcolor() != color:
+                    elif c.getcolor() and c.getcolor() != color:
                         ImgFont.prevcolor = color
                         color = c.getcolor()
+                        print "COLOR3:",color
             else:
+                print "COLOR2:",color
                 surf.blit(self.get_char(c,color),[x,0])
                 x += self.width.get(c,8)
             ImgFont.lastcolor = color
