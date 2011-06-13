@@ -1,6 +1,7 @@
 import pygame,sys,os
 
 import core
+import textutil
 
 import gui
 
@@ -14,9 +15,8 @@ class msg(gui.pane):
         self.rpos = [0,100]
         self.align = "vert"
         
-        for line in core.wrap_text([m],assets.get_image_font("block_arial"),300):
-            print line
-            text = gui.label(line)
+        for line in textutil.wrap_text([m],assets.get_image_font("block_arial"),300):
+            text = gui.label(line.fulltext())
             self.children.append(text)
     def click_down_over(self,*args):
         self.delete()
