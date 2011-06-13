@@ -462,6 +462,8 @@ class Script(gui.widget):
                 return True
             self.macros = assets.macros
         self.labels = []
+        
+        state = "none"
         for i,line in enumerate(self.scriptlines):
             line = line.lstrip()
             if line.startswith("label ") or line.startswith("result "):
@@ -472,11 +474,17 @@ class Script(gui.widget):
                 rn = line.split(" ",1)[1].strip().replace(" ","_")
                 if rn:
                     self.labels.append([rn,i-1])
-            if line.startswith("cross "):
+            if line.startswith("cross ") or line=="cross":
+                state = "cross"
                 rn = "_".join([x for x in line.split(" ")[1:] if not x.startswith("fail=")]).strip()
                 if rn:
                     self.labels.append([rn,i-1])
-
+            if line.startswith("endcross"):
+                state = "none"
+            if line.startswith("statement") and state!="cross":
+                print "append",line
+                self.obs.append(error_msg("'statement' command may only be used between 'cross' and 'endcross'.",line,i,self))
+        
         return True
     def preload(self):
         old = self.obs[:]
