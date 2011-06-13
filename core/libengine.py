@@ -852,7 +852,11 @@ char test
             mode = 1-mode
         if not eval(sentance)==value: return self.fail(label,fail)
         self.succeed(label)
-    @category(flag_logic.cat)
+    @category([COMBINED("flag_expression","list of flag names joined with AND or OR"),
+                    CHOICE([
+                    TOKEN("?"),VALUE("label","label to jump to if the evaluation is true")
+                    ]),
+                    KEYWORD("fail","label to jump to if evaluation is false","none")],type="logic")
     def _noflag(self,command,*args):
         """Evaluates an expression with flag names. If the expression
         is not true, jumps to the listed label. Otherwise, will
@@ -860,7 +864,11 @@ char test
         with a '?', it will execute the next line and the next line only
         when the flag expression is false."""
         self.flag_logic(False,*args)
-    @category(flag_logic.cat)
+    @category([COMBINED("flag_expression","list of flag names joined with AND or OR"),
+                    CHOICE([
+                    TOKEN("?"),VALUE("label","label to jump to if the evaluation is true")
+                    ]),
+                    KEYWORD("fail","label to jump to if evaluation is false","none")],type="logic")
     def _flag(self,command,*args):
         """Evaluates an expression with flag names. If the expression
         is true, jumps to the listed label. Otherwise, will
@@ -2528,7 +2536,7 @@ class TextScript(Script):
             #tb.skipping = len(txt)
             tb.enter_down()
             tb.update()
-            print tb.written.encode("utf8")
+            print tb.text.encode("utf8")
             x = self.get_input(self.enter_text)
         elif command == "showlist":
             super(TextScript,self).call_func(command,args)
