@@ -6,7 +6,9 @@ class markup:
         list.append(self)
 class markup_color(markup):
     def __init__(self,color=None,revert=False):
-        self.color = color.strip()
+        self.color = "999"
+        if color:
+            self.color = color.strip()
         self.revert = revert
         self._color = None
     def __repr__(self):
