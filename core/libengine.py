@@ -1711,16 +1711,29 @@ throughout the game."""
             p.set_single()
         return p
     @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking)")],type="objects")
-    def _emo(self,command,emotion,name=None,mode="talk"):
+    def _emo(self,command,*args):
         """Sets a current char object to a specific emotion animation."""
+        name = None
+        mode = "talk"
+        emotion = None
+        for a in args:
+            if "=" in a:
+                k,v = a.split("=")
+                if k=="name":
+                    name=v
+                if k=="mode":
+                    mode=v
+            else:
+                emotion = a
         char = None
         if not name:
             char = assets.variables.get("_speaking", None)
             if not isinstance(char,portrait):
                 name = char
+                char = None
         if name:
             for c in self.obs:
-                if isinstance(c,portrait) and getattr(c,"id_name",None)==name.split("=",1)[1]:
+                if isinstance(c,portrait) and getattr(c,"id_name",None)==name:
                     char = c
                     break
             if not char and vtrue(assets.variables.get("_debug","false")):
@@ -1733,9 +1746,10 @@ throughout the game."""
         elif vtrue(assets.variables.get("_debug","false")):
             raise missing_object(command+": No character found to set emotion!")
     @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking)")],type="objects")
-    def _bemo(self,command,emotion,name=None):
+    def _bemo(self,command,*args):
         """Sets a current char object to a specific blinking emotion animation."""
-        self._emo("bemo",emotion,name,"blink")
+        args.append("mode=blink")
+        self._emo("bemo",*args)
     @category([VALUE('type','type of gui to create. (Back, Button, Input, or Wait)'),
 VALUE('macro','First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)'),
 VALUE('var_name','Variable name to save input text into, valid for (Input)'),
