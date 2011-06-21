@@ -1797,9 +1797,6 @@ class textbox(gui.widget):
                 self._text+="\n"
                 self._markup._text.extend(line.chars())
                 self._markup._text.append("\n")
-        self.mcpage = 0
-        self.mcchar = 0
-        print self.pages
     text = property(lambda self: self._text,set_text)
     def __init__(self,text="",color=[255,255,255],delay=2,speed=1,rightp=True,leftp=False,nametag="\n"):
         self.nametag = nametag
@@ -1839,14 +1836,11 @@ class textbox(gui.widget):
         self.leftp = leftp
         self.rpi = fg("pointer")
         self.kill = False
-        self.skipping = 0
         self.statement = None
         self.wait = "auto"
         
         self.pressb = press_button(self)
         self.presentb = present_button(self)
-        self.pressing = 0
-        self.presenting = 0
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
         
@@ -1870,24 +1864,19 @@ class textbox(gui.widget):
         self._clicksound = v
     clicksound = property(gsound,ssound)
     def can_continue(self):
+        """If not blocking, player cannot make text continue
+        If skip mode is on (_debug mode) we can just skip the text
+        Otherwise, check to see if all the text has been written out"""
         if not self.blocking: 
             return
-        if not self.can_skip:
-            if not self.nextline:
-                return
-        return True
+        if self.can_skip or self.nextline:
+            return True
     def enter_down(self):
         if not self.can_continue(): return
         if not self.nextline:
             self.written = self.text
         else:
             self.forward()
-    #~ def enter_hold(self):
-        #~ if self.can_skip:
-            #~ self.skipping = 1
-        #~ self.enter_down()
-    def enter_up(self):
-        self.skipping = 0
     def k_left(self):
         if self.statement:
             assets.cur_script.prev_statement()
@@ -1896,14 +1885,20 @@ class textbox(gui.widget):
         if self.statement:
             self.forward()
     def k_z(self):
-        if self.statement and not self.pressing:
-            self.pressb.highlight = True
-            self.pressing = 15
+        if self.statement:
+            assets.cur_script.cross = "pressed"
+            assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
+            self.delete()
     def k_x(self):
-        if self.statement and not self.presenting:
-            self.presentb.highlight = True
-            self.presenting = 15
+        if self.statement:
+            em = assets.addevmenu()
+            em.fail = assets.variables.get("_court_fail_label",None)
     def forward(self,sound=True):
+        """Set last written text to the contents of the textbox
+        turn off testimony blinking
+        scroll to next 3 lines of text if they exist
+        if there is no more text, delete textbox
+        play the bloop sound"""
         spl = self.written.split("\n",1)
         if spl[1:]:
             assets.variables["_last_written_text"] = spl[1]
@@ -2107,21 +2102,6 @@ class textbox(gui.widget):
                 self._lc = char
     def update(self):
         #assets.play_sound(self.clicksound)
-        if self.statement:
-            if self.pressing:
-                self.pressing -= 1
-                if self.pressing == 0:
-                    self.pressb.highlight = False
-                    assets.cur_script.cross = "pressed"
-                    assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
-                    #self.forward()
-                    self.delete()
-            if self.presenting:
-                self.presenting -= 1
-                if self.presenting == 0:
-                    self.presentb.highlight = False
-                    em = assets.addevmenu()
-                    em.fail = assets.variables.get("_court_fail_label",None)
         self.rpi.update()
         self.nextline = 0
         if self.kill: return
@@ -2132,8 +2112,6 @@ class textbox(gui.widget):
         num_chars = 0
         if self.next_char==0:
             num_chars = max(int(self.speed),1)
-        if self.skipping:
-            num_chars = self.skipping
         cnum = num_chars
         while (not self.speed) or cnum>0:
             cnum -= 1
