@@ -217,7 +217,7 @@ class ImgFont(object):
             if isinstance(c,markup):
                 chars.append([c,None])
             else:
-                print "COLOR1:",color
+                #print "COLOR1:",color
                 char = self.get_char(c,color)
                 chars.append([c,char])
                 width+=self.width.get(c,8)
@@ -233,9 +233,9 @@ class ImgFont(object):
                     elif c.getcolor() and c.getcolor() != color:
                         ImgFont.prevcolor = color
                         color = c.getcolor()
-                        print "COLOR3:",color
+                        #print "COLOR3:",color
             else:
-                print "COLOR2:",color
+                #print "COLOR2:",color
                 surf.blit(self.get_char(c,color),[x,0])
                 x += self.width.get(c,8)
             ImgFont.lastcolor = color
