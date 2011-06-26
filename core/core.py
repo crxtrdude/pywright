@@ -1781,6 +1781,7 @@ class textbox(gui.widget):
     def set_text(self,text):
         print "SETTING TEXT:",text
         text = textutil.markup_text(text)
+        print "marked up text:",text
         text.m_replace(lambda c:hasattr(c,"variable"),lambda c:assets.variables[c.variable])
         lines = text.fulltext().split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
@@ -1906,8 +1907,12 @@ class textbox(gui.widget):
         assets.cur_script.tboff()
         lines = self.text.split("\n")
         lines = lines[4:]
-        self._text = "\n".join(lines)
+        print lines
+        self.set_text("\n".join(lines))
+        print repr(self._text)
+        #self._text = "\n".join(lines)
         self.written = ""
+        self.mwritten = []
         self.wlen = 0
         self.next = self.num_lines
         self.img = self.base.copy()
@@ -1989,9 +1994,7 @@ class textbox(gui.widget):
     def add_character(self):
         command = None
         self.next_char = 1
-        print len(self._markup._text),len(self.mwritten)
         char = self._markup._text[len(self.mwritten)]
-        #char = self.text[len(self.written)]
         self.written+=str(char)
         self.mwritten.append(char)
         if isinstance(char,textutil.markup_command):
@@ -2112,7 +2115,8 @@ class textbox(gui.widget):
                 self.add_character()
         if not addchar:
             self.nextline = 1
-        self.next_char -= 1
+        if self.next_char:
+            self.next_char -= 1
         if assets.portrait:
             if self.next_char>10 or self.nextline:
                 assets.portrait.set_blinking()
