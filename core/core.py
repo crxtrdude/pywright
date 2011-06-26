@@ -1822,6 +1822,7 @@ class textbox(gui.widget):
         self.go = 0
         self.text = text
         self.written = ""
+        self.mwritten = []
         self.wlen = 0  #text actually written to textbox
         self.num_lines = 4
         self.next = self.num_lines
@@ -1988,118 +1989,107 @@ class textbox(gui.widget):
     def add_character(self):
         command = None
         self.next_char = 1
-        addchar = True
-        while addchar:
-            try:
-                char = self.text[len(self.written)]
-            except IndexError:
-                raise script_error("Problem with text formatting:%s"%repr(self.text))
-            self.written+=char
-            if char == "{":
-                addchar = "getcolor"
-                command = ""
-            elif char == "}":
-                if command:
-                    macroargs = command.split(" ",1)
-                    if len(macroargs)==1: macroargs+=[""]
-                    macro,args = macroargs
-                    if assets.cur_script.macros.get(macro,None):
-                        assets.variables["_return"] = ""
-                        this = assets.cur_script
-                        ns = assets.cur_script.execute_macro(macro,args)
-                        old = ns._endscript
-                        def back():
-                            old()
-                            s = len(self.written)
-                            #self.written+=assets.variables.get("_return","")
-                            self._text = self.text[:s]+assets.variables.get("_return","")+self.text[s:]
-                        ns._endscript = back
-                    elif command.startswith("sfx"):
-                        assets.play_sound(command[3:].strip())
-                    elif command.startswith("sound"):
-                        self.clicksound = command[5:].strip()
-                    elif command.startswith("delay"):
-                        self.delay = int(command[5:].strip())
-                        self.wait = "manual"
-                    elif command.startswith("spd"):
-                        self.speed = int(command[3:].strip())
-                    elif command.startswith("wait"):
-                        self.wait = command[4:].strip()
-                    elif command == "center":
-                        pass
-                    elif command == "type":
-                        self.clicksound = "typewriter.ogg"
-                        self.delay = 2
-                        self.wait = "manual"
-                    elif command == "next":
-                        if assets.portrait:
-                            assets.portrait.set_blinking()
-                        self.written = self.written.split("{next}",1)[0]
-                        self.forward(False)
-                    elif command[0]=="e":
-                        try:
-                            assets.set_emotion(command[1:].strip())
-                        except:
-                            import traceback
-                            traceback.print_exc()
-                            raise markup_error("No character to apply emotion to")
-                    elif command[0]=="f":
-                        assets.flash = 3
-                        assets.flashcolor = [255,255,255]
-                        command = command.split(" ")
-                        if len(command)>1:
-                            assets.flash = int(command[1])
-                        if len(command)>2:
-                            assets.flashcolor = color_str(command[2])
-                    elif command[0]=="s":
-                        assets.shakeargs = command.split(" ")
-                    elif command[0]=="p":
-                        self.next_char = int(command[1:].strip())
-                    elif command[0]=="c":
-                        pass
-                    elif command=="tbon":
-                        assets.cur_script.tbon()
-                    elif command=="tboff":
-                        assets.cur_script.tboff()
-                    else:
-                        raise markup_error("No macro or markup command valid for:"+command)
-                addchar = False
-            elif command != None:
-                command += char
-            elif addchar == True:
-                if not hasattr(self,"_lc"):
-                    self._lc = ""
-                self.go = 1
-                if self._lc in ".?" and char == " ":
-                    self.next_char = 6
-                if self._lc in "!" and char == " ":
-                    self.next_char = 8
-                if self._lc in "," and char == " ":
-                    self.next_char = 4
-                if self._lc in "-" and (char.isalpha() or char.isdigit()):
-                    self.next_char = 4
-                #if char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-                #    self.next_char = 1
-                if char in "(":
-                    self.in_paren = 1
-                if char in ")":
-                    self.in_paren = 0
+        print len(self._markup._text),len(self.mwritten)
+        char = self._markup._text[len(self.mwritten)]
+        #char = self.text[len(self.written)]
+        self.written+=str(char)
+        self.mwritten.append(char)
+        if isinstance(char,textutil.markup_command):
+            command,args = char.command,char.args
+            print command,args
+            if assets.cur_script.macros.get(command,None):
+                assets.variables["_return"] = ""
+                this = assets.cur_script
+                ns = assets.cur_script.execute_macro(command,args)
+                old = ns._endscript
+                def back():
+                    old()
+                    s = len(self.written)
+                    #self.written+=assets.variables.get("_return","")
+                    self._text = self.text[:s]+assets.variables.get("_return","")+self.text[s:]
+                ns._endscript = back
+            elif command == "sfx":
+                assets.play_sound(args)
+            elif command == "sound":
+                self.clicksound = args
+            elif command == "delay":
+                self.delay = int(args)
+                self.wait = "manual"
+            elif command == "spd":
+                self.speed = int(args)
+            elif command == "wait":
+                self.wait = args
+            elif command == "center":
+                pass
+            elif command == "type":
+                self.clicksound = "typewriter.ogg"
+                self.delay = 2
+                self.wait = "manual"
+            elif command == "next":
                 if assets.portrait:
-                    punctuation = [x for x in assets.variables.get("_punctuation",u".,?!")]
-                    if not self.in_paren and not char in punctuation:
-                        assets.portrait.set_talking()
-                    if self.in_paren:
-                        assets.portrait.set_blinking()
-                if not android and char.strip():
-                    assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
-                addchar = False
-                self.next_char = int(self.next_char*self.delay)
-                if self.wait=="manual":
-                    if char.strip():
-                        self.next_char = 5*self.delay
-                    else:
-                        self.next_char = 2
-                self._lc = char
+                    assets.portrait.set_blinking()
+                self.written = self.written.split("{next}",1)[0]
+                self.forward(False)
+            elif command[0]=="e":
+                try:
+                    assets.set_emotion(args.strip())
+                except:
+                    import traceback
+                    traceback.print_exc()
+                    raise markup_error("No character to apply emotion to")
+            elif command[0]=="f":
+                assets.flash = 3
+                assets.flashcolor = [255,255,255]
+                command = args.split(" ")
+                if len(command)>0:
+                    assets.flash = int(command[0])
+                if len(command)>2:
+                    assets.flashcolor = color_str(command[1])
+            elif command[0]=="s":
+                assets.shakeargs = command.split(" ")
+            elif command[0]=="p":
+                self.next_char = int(command[1:].strip())
+            elif command[0]=="c":
+                pass
+            elif command=="tbon":
+                assets.cur_script.tbon()
+            elif command=="tboff":
+                assets.cur_script.tboff()
+            else:
+                raise markup_error("No macro or markup command valid for:"+command)
+        else:
+            if not hasattr(self,"_lc"):
+                self._lc = ""
+            self.go = 1
+            if self._lc in [".?"] and char == " ":
+                self.next_char = 6
+            if self._lc in ["!"] and char == " ":
+                self.next_char = 8
+            if self._lc in [","] and char == " ":
+                self.next_char = 4
+            if self._lc in ["-"] and (char.isalpha() or char.isdigit()):
+                self.next_char = 4
+            #if char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            #    self.next_char = 1
+            if char in ["("]:
+                self.in_paren = 1
+            if char in [")"]:
+                self.in_paren = 0
+            if assets.portrait:
+                punctuation = [x for x in assets.variables.get("_punctuation",u".,?!")]
+                if not self.in_paren and not char in punctuation:
+                    assets.portrait.set_talking()
+                if self.in_paren:
+                    assets.portrait.set_blinking()
+            if not android and str(char).strip():
+                assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
+            self.next_char = int(self.next_char*self.delay)
+            if self.wait=="manual":
+                if char.strip():
+                    self.next_char = 5*self.delay
+                else:
+                    self.next_char = 2
+            self._lc = char
     def update(self):
         #assets.play_sound(self.clicksound)
         self.rpi.update()
@@ -2115,7 +2105,7 @@ class textbox(gui.widget):
         cnum = num_chars
         while (not self.speed) or cnum>0:
             cnum -= 1
-            if (len(self.written)<len(self.text) and 
+            if (len(self.mwritten)<len(self._markup._text) and 
                     len(self.written.replace("\r\n","\n").split("\n"))<\
                     self.num_lines+1):
                 addchar = True
