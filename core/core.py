@@ -1827,7 +1827,6 @@ class textbox(gui.widget):
         self.wlen = 0  #text actually written to textbox
         self.num_lines = 4
         self.next = self.num_lines
-        self.nextline = 0
         self.color = color
         self.delay = delay
         self.speed = speed
@@ -1871,12 +1870,13 @@ class textbox(gui.widget):
         Otherwise, check to see if all the text has been written out"""
         if not self.blocking: 
             return
-        if self.can_skip or self.nextline:
+        if self.can_skip or self.nextline():
             return True
     def enter_down(self):
         if not self.can_continue(): return
-        if not self.nextline:
+        if not self.nextline():
             self.written = self.text
+            self.mwritten = self._markup._text
         else:
             self.forward()
     def k_left(self):
@@ -1934,10 +1934,10 @@ class textbox(gui.widget):
         self.height1 = self.img.get_height()
         dest.blit(self.img,
             self.rpos1)
-        if self.rightp and self.nextline:
+        if self.rightp and self.nextline():
             dest.blit(self.rpi.img,[self.rpos1[0]+self.width1-16,
                 self.rpos1[1]+self.height1-16])
-        if getattr(self,"showleft",False) and self.nextline:
+        if getattr(self,"showleft",False) and self.nextline():
             dest.blit(pygame.transform.flip(self.rpi.img,1,0),[self.rpos1[0],
                 self.rpos1[1]+self.height1-16])
         #End
@@ -2090,12 +2090,15 @@ class textbox(gui.widget):
                 else:
                     self.next_char = 2
             self._lc = char
+    def nextline(self):
+        """Returns true if all the text waiting to be written into the textbox has been written"""
+        return not (len(self.mwritten)<len(self._markup._text) and 
+                    len(self.written.replace("\r\n","\n").split("\n"))<\
+                    self.num_lines+1)
     def update(self):
         #assets.play_sound(self.clicksound)
         self.rpi.update()
-        self.nextline = 0
         if self.kill: return
-        addchar = False
         if self.text:
             while "\n" not in self.written and len(self.written)<len(self.text):
                 self.written+=self.text[len(self.written)]
@@ -2105,17 +2108,12 @@ class textbox(gui.widget):
         cnum = num_chars
         while (not self.speed) or cnum>0:
             cnum -= 1
-            if (len(self.mwritten)<len(self._markup._text) and 
-                    len(self.written.replace("\r\n","\n").split("\n"))<\
-                    self.num_lines+1):
-                addchar = True
+            if not self.nextline():
                 self.add_character()
-        if not addchar:
-            self.nextline = 1
         if self.next_char:
             self.next_char -= 1
         if assets.portrait:
-            if self.next_char>10 or self.nextline:
+            if self.next_char>10 or self.nextline():
                 assets.portrait.set_blinking()
         title = True
         self.next = 0
@@ -2164,8 +2162,6 @@ class textbox(gui.widget):
                     y+=inc
                     x = stx
             self.next = self.num_lines
-        if self.nextline:
-            pass
         if self.blocking: return True
         return
         
