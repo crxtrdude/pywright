@@ -1907,10 +1907,7 @@ class textbox(gui.widget):
         assets.cur_script.tboff()
         lines = self.text.split("\n")
         lines = lines[4:]
-        print lines
         self.set_text("\n".join(lines))
-        print repr(self._text)
-        #self._text = "\n".join(lines)
         self.written = ""
         self.mwritten = []
         self.wlen = 0
