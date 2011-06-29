@@ -71,12 +71,12 @@ def to_markup(text):
 
 class markup_text:
     """Some text that has annotations"""
-    def __init__(self,text,commands=True):
+    def __init__(self,text="",commands=True):
         self.commands = commands
         if isinstance(text,markup_text):
             return text
         self._text = []
-        if commands:
+        if commands and text:
             markupre = re.compile("{.*?}")
             text_segments = markupre.split(text)
             markup_segments = markupre.findall(text)
