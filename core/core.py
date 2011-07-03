@@ -1779,9 +1779,9 @@ class textbox(gui.widget):
         if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width1 and pos[1]>=self.rpos1[1] and pos[1]<=self.rpos1[1]+self.height1:
             self.enter_down()
     def set_text(self,text):
-        print "SETTING TEXT:",text
+        print "SETTING TEXT:",repr(text)
         text = textutil.markup_text(text)
-        print "marked up text:",text
+        print "marked up text:",repr(text)
         text.m_replace(lambda c:hasattr(c,"variable"),lambda c:assets.variables[c.variable])
         lines = text.fulltext().split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
@@ -1822,9 +1822,7 @@ class textbox(gui.widget):
         self.img = self.base.copy()
         self.go = 0
         self.text = text
-        self.written = ""
         self.mwritten = []
-        self.wlen = 0  #text actually written to textbox
         self.num_lines = 4
         self.next = self.num_lines
         self.color = color
@@ -1875,7 +1873,6 @@ class textbox(gui.widget):
     def enter_down(self):
         if not self.can_continue(): return
         if not self.nextline():
-            self.written = self.text
             self.mwritten = self._markup._text
         else:
             self.forward()
@@ -1901,16 +1898,14 @@ class textbox(gui.widget):
         scroll to next 3 lines of text if they exist
         if there is no more text, delete textbox
         play the bloop sound"""
-        spl = self.written.split("\n",1)
-        if spl[1:]:
-            assets.variables["_last_written_text"] = spl[1]
+        t = textutil.markup_text()
+        t._text = self.mwritten
+        assets.variables["_last_written_text"] = t.fulltext()
         assets.cur_script.tboff()
         lines = self.text.split("\n")
         lines = lines[4:]
         self.set_text("\n".join(lines))
-        self.written = ""
         self.mwritten = []
-        self.wlen = 0
         self.next = self.num_lines
         self.img = self.base.copy()
         if not self.text.strip():
@@ -1992,7 +1987,6 @@ class textbox(gui.widget):
         command = None
         self.next_char = 1
         char = self._markup._text[len(self.mwritten)]
-        self.written+=str(char)
         self.mwritten.append(char)
         if isinstance(char,textutil.markup_command):
             command,args = char.command,char.args
@@ -2004,9 +1998,23 @@ class textbox(gui.widget):
                 old = ns._endscript
                 def back():
                     old()
-                    s = len(self.written)
-                    #self.written+=assets.variables.get("_return","")
-                    self._text = self.text[:s]+assets.variables.get("_return","")+self.text[s:]
+                    s = len(self.mwritten)-1
+                    t0=[]
+                    t1=[]
+                    for i,c in enumerate(self._markup._text):
+                        if i<s:
+                            t0.append(c)
+                        if i>s:
+                            t1.append(c)
+                    t2 = t0+list(assets.variables["_return"])+t1[:-1]
+                    print "t0","".join([str(x) for x in t0])
+                    print "t1","".join([str(x) for x in t1])
+                    t = textutil.markup_text()
+                    t._text = t2
+                    print repr(t.fulltext())
+                    self.set_text(t.fulltext())
+                    self.mwritten = []
+                    #self.next_char = 0
                 ns._endscript = back
             elif command == "sfx":
                 assets.play_sound(args)
@@ -2015,7 +2023,9 @@ class textbox(gui.widget):
             elif command == "delay":
                 self.delay = int(args)
                 self.wait = "manual"
-            elif command == "spd":
+            elif command.startswith("spd"):
+                if not args:
+                    args = command[3:]
                 self.speed = int(args)
             elif command == "wait":
                 self.wait = args
@@ -2028,8 +2038,9 @@ class textbox(gui.widget):
             elif command == "next":
                 if assets.portrait:
                     assets.portrait.set_blinking()
-                self.written = self.written.split("{next}",1)[0]
+                del self.mwritten[-1]
                 self.forward(False)
+                return
             elif command[0]=="e":
                 try:
                     assets.set_emotion(args.strip())
@@ -2069,8 +2080,6 @@ class textbox(gui.widget):
                 self.next_char = 4
             if self._lc in ["-"] and (char.isalpha() or char.isdigit()):
                 self.next_char = 4
-            #if char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-            #    self.next_char = 1
             if char in ["("]:
                 self.in_paren = 1
             if char in [")"]:
@@ -2092,39 +2101,35 @@ class textbox(gui.widget):
             self._lc = char
     def nextline(self):
         """Returns true if all the text waiting to be written into the textbox has been written"""
-        return not (len(self.mwritten)<len(self._markup._text) and 
-                    len(self.written.replace("\r\n","\n").split("\n"))<\
-                    self.num_lines+1)
+        t = textutil.markup_text()
+        t._text = self.mwritten
+        return not len(self.mwritten)<len(self._markup._text) or len(t.fulltext().split("\n"))>=self.num_lines
     def update(self):
         #assets.play_sound(self.clicksound)
         self.rpi.update()
         if self.kill: return
-        if self.text:
-            while "\n" not in self.written and len(self.written)<len(self.text):
-                self.written+=self.text[len(self.written)]
-        num_chars = 0
-        if self.next_char==0:
+        self.next_char -= assets.dt
+        while (not self.nextline()) and self.next_char<=0:
+            self.next_char += 1
             num_chars = max(int(self.speed),1)
-        cnum = num_chars
-        while (not self.speed) or cnum>0:
-            cnum -= 1
-            if not self.nextline():
+            cnum = num_chars
+            while (not self.nextline()) and ((not self.speed) or cnum>0):
+                cnum -= 1
                 self.add_character()
-        if self.next_char:
-            self.next_char -= 1
         if assets.portrait:
             if self.next_char>10 or self.nextline():
                 assets.portrait.set_blinking()
         title = True
         self.next = 0
-        if self.next==0 and len(self.written)>self.wlen:
-            self.wlen = len(self.written)
+        if self.next==0:
             self.img = self.base.copy()
             y, stx, inc = 6, 6, 18
             x = stx
             color = self.color
             center = False
-            lines = self.written.split("\n")
+            t = textutil.markup_text()
+            t._text = self.mwritten
+            lines = [self.nametag]+t.fulltext().split("\n")
             nlines = assets.variables["_textbox_lines"]
             if nlines == "auto":
                 if len(lines)==4:

@@ -3180,9 +3180,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        assets.dt = clock.tick(getattr(assets,"framerate",60))
+        assets.dt = clock.tick(getattr(assets,"framerate",600))
         assets.dt = min(assets.dt*.001*60,10.0)
-        #assets.dt = 1
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
         #~ if vtrue(assets.variables.get("_debug","false")):
