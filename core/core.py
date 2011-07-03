@@ -1985,7 +1985,7 @@ class textbox(gui.widget):
                 assets.cur_script.obs.append(self.presentb)
     def add_character(self):
         command = None
-        self.next_char = 1
+        next_char = 1
         char = self._markup._text[len(self.mwritten)]
         self.mwritten.append(char)
         if isinstance(char,textutil.markup_command):
@@ -1996,9 +1996,10 @@ class textbox(gui.widget):
                 this = assets.cur_script
                 ns = assets.cur_script.execute_macro(command,args)
                 old = ns._endscript
+                s = len(self.mwritten)-1
                 def back():
                     old()
-                    s = len(self.mwritten)-1
+                    print "MWRIT",s,self.mwritten
                     t0=[]
                     t1=[]
                     for i,c in enumerate(self._markup._text):
@@ -2059,7 +2060,7 @@ class textbox(gui.widget):
             elif command[0]=="s":
                 assets.shakeargs = command.split(" ")
             elif command[0]=="p":
-                self.next_char = int(command[1:].strip())
+                next_char = int(command[1:].strip())
             elif command[0]=="c":
                 pass
             elif command=="tbon":
@@ -2073,13 +2074,13 @@ class textbox(gui.widget):
                 self._lc = ""
             self.go = 1
             if self._lc in [".?"] and char == " ":
-                self.next_char = 6
+                next_char = 6
             if self._lc in ["!"] and char == " ":
-                self.next_char = 8
+                next_char = 8
             if self._lc in [","] and char == " ":
-                self.next_char = 4
+                next_char = 4
             if self._lc in ["-"] and (char.isalpha() or char.isdigit()):
-                self.next_char = 4
+                next_char = 4
             if char in ["("]:
                 self.in_paren = 1
             if char in [")"]:
@@ -2092,13 +2093,14 @@ class textbox(gui.widget):
                     assets.portrait.set_blinking()
             if not android and str(char).strip():
                 assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
-            self.next_char = int(self.next_char*self.delay)
+            next_char = int(next_char*self.delay)
             if self.wait=="manual":
                 if char.strip():
-                    self.next_char = 5*self.delay
+                    next_char = 5*self.delay
                 else:
-                    self.next_char = 2
+                    next_char = 2
             self._lc = char
+            self.next_char += next_char
     def nextline(self):
         """Returns true if all the text waiting to be written into the textbox has been written"""
         t = textutil.markup_text()
@@ -2109,13 +2111,16 @@ class textbox(gui.widget):
         self.rpi.update()
         if self.kill: return
         self.next_char -= assets.dt
+        char_per_frame = 0
         while (not self.nextline()) and self.next_char<=0:
-            self.next_char += 1
+            #self.next_char += 1
             num_chars = max(int(self.speed),1)
             cnum = num_chars
             while (not self.nextline()) and ((not self.speed) or cnum>0):
                 cnum -= 1
                 self.add_character()
+                char_per_frame += 1
+        #print char_per_frame
         if assets.portrait:
             if self.next_char>10 or self.nextline():
                 assets.portrait.set_blinking()
