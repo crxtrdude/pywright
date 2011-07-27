@@ -1,9 +1,13 @@
 import sys,os,traceback
+android = None
 try:
     import android
 except:
     #This is really only for py2exe anyway, which I'm not using right now
     import urllib2,webbrowser,__future__,pygame,pygame.font,zipfile,traceback
+
+if android:
+    android.init()
 
 if "PyWright.exe" in sys.argv:
     from ctypes import c_int, WINFUNCTYPE, windll

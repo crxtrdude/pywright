@@ -573,7 +573,7 @@ set _font_new_resume_size 14""".split("\n"):
         return os.listdir(self.game)
     def play_sound(self,name,wait=False,volume=1.0,offset=0,frequency=1,layer=0):
         #self.init_sound()
-        if self.sound_init == -1: return
+        if self.sound_init == -1 or not self.sound_volume: return
         path = self.get_path(name,"sound","sfx")
         if self.snds.get(path,None):
             snd = self.snds[path]
