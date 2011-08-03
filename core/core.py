@@ -1998,17 +1998,21 @@ class textbox(gui.widget):
                 ns = assets.cur_script.execute_macro(command,args)
                 old = ns._endscript
                 s = len(self.mwritten)-1
+                mt = self._markup._text
+                self._markup._text = self.mwritten
                 def back():
                     old()
                     print "MWRIT",s,self.mwritten
                     t0=[]
                     t1=[]
-                    for i,c in enumerate(self._markup._text):
+                    for i,c in enumerate(mt):
+                        if isinstance(c,textutil.markup_command):
+                            continue
                         if i<s:
                             t0.append(c)
                         if i>s:
                             t1.append(c)
-                    t2 = t0+list(assets.variables["_return"])+t1[:-1]
+                    t2 = [textutil.markup_command("_fullspeed","")]+t0+[textutil.markup_command("_endfullspeed","")]+list(assets.variables["_return"])+t1[:-1]
                     print "t0","".join([str(x) for x in t0])
                     print "t1","".join([str(x) for x in t1])
                     t = textutil.markup_text()
@@ -2016,7 +2020,7 @@ class textbox(gui.widget):
                     print repr(t.fulltext())
                     self.set_text(t.fulltext())
                     self.mwritten = []
-                    #self.next_char = 0
+                    self.next_char = 0
                 ns._endscript = back
             elif command == "sfx":
                 assets.play_sound(args)
@@ -2029,6 +2033,11 @@ class textbox(gui.widget):
                 if not args:
                     args = command[3:]
                 self.speed = int(args)
+            elif command.startswith("_fullspeed"):
+                self.last_speed = self.speed
+                self.speed = 0
+            elif command.startswith("_endfullspeed"):
+                self.speed = self.last_speed
             elif command == "wait":
                 self.wait = args
             elif command == "center":
