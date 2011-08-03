@@ -167,7 +167,11 @@ class World:
         self.all.remove(ob)
 assets.World = World
 
-
+def INT(n):
+    try:
+        return int(n)
+    except:
+        return float(n)
 def EVAL(stuff):
     stuff = stuff.split(" ",2)
     if len(stuff)==1:
@@ -181,8 +185,8 @@ def EVAL(stuff):
     current = assets.variables.get(current)
     if op=="=":op="=="
     if op!="==":
-        current = int(current)
-        check = int(check)
+        current = INT(current)
+        check = INT(check)
     if op == ">":
         return current > check
     elif op == "<":
@@ -976,40 +980,40 @@ will output "3:15"
         """Adds an amount to a variable. If the variable 'x' were set to 4, the script:
 {{{addvar x 1}}}
 would set 'x' to 5."""
-        oldvalue = int(assets.variables.get(variable,0))
-        oldvalue += int(value)
+        oldvalue = INT(assets.variables.get(variable,0))
+        oldvalue += INT(value)
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to subtract from and save to"),VALUE("amount","amount to subtract from the variable")],type="logic")
     def _subvar(self,command,variable,value):
         """Subtract an amount from a variable. If the variable 'x' were set to 33, the script:
 {{{subvar x 3}}}
 would set 'x' to 30."""
-        oldvalue = int(assets.variables[variable])
-        oldvalue -= int(value)
+        oldvalue = INT(assets.variables[variable])
+        oldvalue -= INT(value)
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to"),VALUE("amount","amount to multiply the variable by")],type="logic")
     def _mulvar(self,command,variable,value):
         """Multiply a variable by a number. If the variable 'x' were set to 5, the script:
 {{{mulvar x 3}}}
 would set 'x' to 15."""
-        oldvalue = int(assets.variables[variable])
-        oldvalue *= int(value)
-        assets.variables[variable] = str(int(oldvalue))
+        oldvalue = INT(assets.variables[variable])
+        oldvalue *= INT(value)
+        assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to"),VALUE("amount","amount to divide the variable by")],type="logic")
     def _divvar(self,command,variable,value):
         """Divide a variable by a number. If the variable 'x' were set to 10, the script:
 {{{divvar x 2}}}
 would set 'x' to 5."""
-        oldvalue = int(assets.variables[variable])
+        oldvalue = INT(assets.variables[variable])
         oldvalue /= float(value)
-        assets.variables[variable] = str(int(oldvalue))
+        assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to")])
     def _absvar(self,command,variable):
         """Force a variable to be positive. If the variable 'x' were set to -12, the script:
 {{{absvar x}}}
 would set 'x' to 12."""
-        oldvalue = int(assets.variables.get(variable,0))
-        oldvalue = abs(int(oldvalue))
+        oldvalue = INT(assets.variables.get(variable,0))
+        oldvalue = abs(INT(oldvalue))
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("filename","file to export variables into, relative to the case folder"),
             ETC("variable_names",

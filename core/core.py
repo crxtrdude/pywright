@@ -2173,7 +2173,8 @@ class textbox(gui.widget):
                     y+=inc
                     x = stx
             self.next = self.num_lines
-        if self.blocking: return True
+        if self.blocking: 
+            return True
         return
         
 class uglyarrow(fadesprite):
@@ -2910,14 +2911,13 @@ class examine_menu(sprite,gui.widget):
             dest.blit(self.fg,[0,other_screen(0)])
         if self.selected != [None] and not self.hide:
             dest.blit(self.check,[sw-self.check.get_width()+3,other_screen(sh-self.check.get_height())])
-        if vtrue(assets.variables.get("_debug","false")):
-            x = int(assets.variables.get("_examine_offsetx",0))
-            y = int(assets.variables.get("_examine_offsety",0))
-            tb = textblock("offsetx:%s offsety%s"%(x,y),[0,192],[256,20],[255,255,255])
-            tb.draw(dest)
+        #~ if vtrue(assets.variables.get("_debug","false")):
+            #~ x = int(assets.variables.get("_examine_offsetx",0))
+            #~ y = int(assets.variables.get("_examine_offsety",0))
+            #~ tb = textblock("offsetx:%s offsety%s"%(x,y),[0,192],[256,20],[255,255,255])
+            #~ tb.draw(dest)
     def update(self,*args):
         if self.xscrolling:
-            print "xscrolling:",self.xscrolling
             assets.cur_script.obs.append(scroll(-self.xscrolling,0,speed=16))
             self.xscrolling = 0
             if hasattr(self,"scrollbut"):
@@ -2942,14 +2942,12 @@ class examine_menu(sprite,gui.widget):
         if self.my-5<0: self.my=5
         if self.my+5>sh: self.my=sh-5
         if assets.variables.get("_examine_scrolling",None)=="perceive":
-            print "moving",d
             def add(x):
-                print "moving",x
                 x.pos[0]-=d[0]
                 x.pos[1]-=d[1]
             [add(x) for x in self.bg]
-            x = int(assets.variables.get("_examine_offsetx",0))
-            y = int(assets.variables.get("_examine_offsety",0))
+            x = float(assets.variables.get("_examine_offsetx",0))
+            y = float(assets.variables.get("_examine_offsety",0))
             x-=d[0]
             y-=d[1]
             assets.variables["_examine_offsetx"] = str(x)
