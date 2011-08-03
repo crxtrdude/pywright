@@ -23,8 +23,8 @@
 20	portrait
 25	case_menu
 30	textbox
-31 guiWait
 50	penalty menu listmenu
 80      examine_menu
+81 guiWait
 1000	notguilty guilty
 10000	delay
