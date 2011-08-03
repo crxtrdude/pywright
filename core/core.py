@@ -1992,6 +1992,7 @@ class textbox(gui.widget):
             command,args = char.command,char.args
             print command,args
             if assets.cur_script.macros.get(command,None):
+                print "RUNNING A MACRO"
                 assets.variables["_return"] = ""
                 this = assets.cur_script
                 ns = assets.cur_script.execute_macro(command,args)
@@ -3573,7 +3574,7 @@ class scroll(effect):
         self.wait = wait
     def draw(self,dest): pass
     def update(self):
-        ndx,ndy,ndz = self.dx,self.dy,self.dz
+        ndx,ndy,ndz = self.dx*assets.dt,self.dy*assets.dt,self.dz*assets.dt
         print "before - ndx:",ndx,"self.amtx:",self.amtx
         self.amtx-=abs(ndx)
         print "after self.amtx:",self.amtx

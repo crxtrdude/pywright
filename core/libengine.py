@@ -2103,7 +2103,7 @@ the speed would divide evenly over the distance)."""
             if a.startswith("z="):
                 z=int(a[2:])
             if a.startswith("speed="):
-                speed=int(a[6:])
+                speed=INT(a[6:])
             if a.startswith("last"):
                 last = 1
             if a.startswith("nowait"):
