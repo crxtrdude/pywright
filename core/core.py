@@ -2006,9 +2006,7 @@ class textbox(gui.widget):
                     t0=[]
                     t1=[]
                     for i,c in enumerate(mt):
-                        if isinstance(c,textutil.markup_command):
-                            continue
-                        if i<s:
+                        if i<s and not isinstance(c,textutil.markup_command):
                             t0.append(c)
                         if i>s:
                             t1.append(c)
