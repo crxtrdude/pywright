@@ -179,12 +179,12 @@ def EVAL(stuff):
     if len(stuff)==2:
         stuff = stuff[0],"=",stuff[1]
     current,op,check = stuff
-    if op not in ["<",">","=","<=",">="]:
+    if op not in ["<",">","=","!=","<=",">="]:
         check = op+" "+check
         op = "="
     current = assets.variables.get(current)
     if op=="=":op="=="
-    if op!="==":
+    if op not in ["==","!="]:
         current = INT(current)
         check = INT(check)
     if op == ">":
@@ -193,6 +193,8 @@ def EVAL(stuff):
         return current < check
     elif op == "==":
         return current == check
+    elif op == "!=":
+        return current != check
     elif op == "<=":
         return current <= check
     elif op == ">=":
