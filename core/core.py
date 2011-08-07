@@ -3582,9 +3582,9 @@ class scroll(effect):
     def draw(self,dest): pass
     def update(self):
         ndx,ndy,ndz = self.dx*assets.dt,self.dy*assets.dt,self.dz*assets.dt
-        print "before - ndx:",ndx,"self.amtx:",self.amtx
+        #print "before - ndx:",ndx,"self.amtx:",self.amtx
         self.amtx-=abs(ndx)
-        print "after self.amtx:",self.amtx
+        #print "after self.amtx:",self.amtx
         if self.amtx<0:
             ndx+=self.amtx*(self.dx/abs(self.dx))
             print "self.amtx<0 ndx:",ndx
