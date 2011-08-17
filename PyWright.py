@@ -8,8 +8,11 @@ except:
 
 if android:
     android.init()
+    
+def is_exe():
+    return sys.argv and sys.argv[0].endswith(".exe")
 
-if "PyWright.exe" in sys.argv:
+if is_exe():
     from ctypes import c_int, WINFUNCTYPE, windll
     from ctypes.wintypes import HWND, LPCSTR, UINT
     prototype = WINFUNCTYPE(c_int, HWND, LPCSTR, LPCSTR, UINT)
@@ -42,7 +45,7 @@ try:
     from core import libengine
     libengine.run()
 except:
-    if "PyWright.exe" not in sys.argv:
+    if not is_exe():
         raise
     type, value, sys.last_traceback = sys.exc_info()
     lines = traceback.format_exception(type, value,sys.last_traceback)
