@@ -2042,7 +2042,7 @@ class textbox(gui.widget):
             elif command[0]=="f":
                 assets.flash = 3
                 assets.flashcolor = [255,255,255]
-                command = args.split(" ")
+                command = args.split(" ")[1:]
                 if len(command)>0:
                     assets.flash = int(command[0])
                 if len(command)>2:
@@ -2530,6 +2530,8 @@ class listmenu(fadesprite,gui.widget):
     def enter_down(self):
         if getattr(self,"kill",0):
             return False
+        if not self.selected:
+            return
         if self.tag:
             assets.lists[self.tag][self.selected[0]] = 1
         if self.selected[1] != "Back":
