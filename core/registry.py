@@ -17,6 +17,9 @@ class File:
         self.priority = 12
         if self.ext in priority:
             self.priority = priority.index(self.ext)
+        
+        self.filetag = self.filetag.lower()
+        self.pathtag = self.pathtag.lower()
             
 def testfile():
     a = File("../art/port/kristoph2/normal(talk).txt")
@@ -31,16 +34,26 @@ def testfile():
     assert a.pathtag==b.pathtag!=c.pathtag
     assert b.priority<c.priority,"bpri:%s cpri:%s"%(b.priority,c.priority)
     assert c.priority<d.priority
-testfile()
 
 class Registry:
     def __init__(self):
         self.map = {}
     def build(self,root):
-        self.root = root
-        for sub in filepaths:
-            if os.path.isdir(root+"/"+sub):
-                self.index(root+"/"+sub)
+        spl = root.split("/")
+        last = ""
+        order = []
+        for x in spl:
+            if last:
+                last+="/"+x
+            else:
+                last=x
+            order.append(last)
+        for root in order:
+            print root
+            self.root = root
+            for sub in filepaths:
+                if os.path.isdir(root+"/"+sub):
+                    self.index(root+"/"+sub)
     def index(self,path):
         subdirs = []
         for sub in os.listdir(path):
@@ -54,11 +67,25 @@ class Registry:
             self.index(sub)
     def mapfile(self,path):
         file = File(path)
-        if file.pathtag in self.map:
-            if file.priority<self.map[file.pathtag].priority:
-                self.map[file.pathtag] = file
+        tag = file.pathtag.split(self.root.lower()+"/",1)[1]
+        if tag in self.map:
+            if file.priority<=self.map[tag].priority:
+                self.map[tag] = file
         else:
-            self.map[file.pathtag] = file
+            self.map[tag] = file
+    def lookup(self,thingie):
+        thingie = thingie.lower()
+        if thingie in self.map:
+            return self.map[thingie].path.split("./",1)[1]
 
-reg = Registry()
-reg.build("..")
+def test():
+    os.chdir("..")
+    reg = Registry()
+    reg.build("./games/Turnabout Substitution")
+    #print reg.map
+    assert reg.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png"
+    assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png"
+    
+if __name__=="__main__":
+    testfile()
+    test()
