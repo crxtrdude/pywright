@@ -2,7 +2,7 @@ import os
 
 filepaths = ["art","music","sfx","movies"]
 ignore = ".hg"
-priority = ["png","jpg","bmp","mp3","ogg"]
+priority = ["gif","png","jpg","bmp","mp3","ogg"]
 
 class File:
     def __init__(self,path):
@@ -21,6 +21,8 @@ class File:
         self.filetag = self.filetag.lower()
         self.pathtag = self.pathtag.lower()
         self.pathtagext = self.pathtag+"."+self.ext
+    def __repr__(self):
+        return self.path
             
 def testfile():
     a = File("../art/port/kristoph2/normal(talk).txt")
@@ -81,9 +83,13 @@ class Registry:
             map = self.ext_map
             tag = f.pathtagext
         if tag in map:
-            return map[tag].path.split("./",1)[1]
+            path = map[tag].path
+            if "./" in path:
+                path = path.split("./",1)[1]
+            return path
     def override(self,other_reg):
         self.map.update(other_reg.map)
+        self.ext_map.update(other_reg.ext_map)
             
 def combine_registries(root):
     spl = root.split("/")
@@ -104,22 +110,27 @@ def combine_registries(root):
 
 def test():
     os.chdir("..")
-    reg = Registry()
-    reg.build("./games/Turnabout Substitution")
+    reg = Registry("./games/Turnabout Substitution")
     assert not reg.lookup("art/port/kristoph2/normal(talk)")
     assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
     
-    base = Registry()
-    base.build(".")
+    base = Registry(".")
     assert base.lookup("art/port/kristoph2/normal(talk).txt",True)=="art/port/kristoph2/normal(talk).txt",base.lookup("art/port/kristoph2/normal(talk).txt",True)
     assert base.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png",base.lookup("art/port/kristoph2/normal(talk)")
     assert base.lookup("art/port/apollo/normal(talk)")=="art/port/apollo/normal(talk).png",base.lookup("art/port/apollo/normal(talk)")
-    
+    assert base.lookup("art/fg/../general/logosmall")=="art/general/logosmall.png"
+
     base.override(reg)
     assert base.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png",base.lookup("art/port/kristoph2/normal(talk)")
     assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
-    print base.lookup("art/fg/../general/logosmall")
-    assert base.lookup("art/fg/../general/logosmall")=="art/general/logosmall.png"
+
+    
+    rec = Registry("examples/rectangles")
+    assert rec.lookup("art/fg/lilmiles-walkeast.txt")=="examples/rectangles/art/fg/lilmiles-walkeast.png"
+    assert rec.lookup("art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/art/fg/lilmiles-walkeast.txt"
+    base.override(rec)
+    assert rec.lookup("art/fg/lilmiles-walkeast.txt")=="examples/rectangles/art/fg/lilmiles-walkeast.png"
+    assert rec.lookup("art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/art/fg/lilmiles-walkeast.txt"
     
 if __name__=="__main__":
     testfile()
