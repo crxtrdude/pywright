@@ -684,6 +684,7 @@ char test
         except KeyError:
             self.obs.append(error_msg("Variable not defined:",line,self.si,self))
             return True
+        #print repr(args)
         if self.execute_macro(args[0]," ".join(args[1:])):
             return True
         self.call_func(args[0],args)
@@ -2333,7 +2334,7 @@ exit}}}
                 ob.noback = True
         self.add_object(ob,True)
         self.buildmode = False
-    @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
+    @category([TOKEN("hide","Hides the labels for the examine regions from the player"),KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _examine(self,command,*args):
         """Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
         based on the spot. Immediately following the examine command, you must use region commands to define where the
