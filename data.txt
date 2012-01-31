@@ -1,6 +1,6 @@
-version 0.986
-version_date 04/11/2011
-version_notes many showstopping bugs
+version 0.987
+version_date 02/06/2012
+version_notes variable framerate
 author saluk
 website http://pywright.dawnsoft.org/
 title PyWright Game Engine
