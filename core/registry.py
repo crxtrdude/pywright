@@ -39,21 +39,10 @@ class Registry:
     def __init__(self):
         self.map = {}
     def build(self,root):
-        spl = root.split("/")
-        last = ""
-        order = []
-        for x in spl:
-            if last:
-                last+="/"+x
-            else:
-                last=x
-            order.append(last)
-        for root in order:
-            print root
-            self.root = root
-            for sub in filepaths:
-                if os.path.isdir(root+"/"+sub):
-                    self.index(root+"/"+sub)
+        self.root = root
+        for sub in filepaths:
+            if os.path.isdir(root+"/"+sub):
+                self.index(root+"/"+sub)
     def index(self,path):
         subdirs = []
         for sub in os.listdir(path):
@@ -77,14 +66,41 @@ class Registry:
         thingie = thingie.lower()
         if thingie in self.map:
             return self.map[thingie].path.split("./",1)[1]
+    def override(self,other_reg):
+        self.map.update(other_reg.map)
+            
+def combine_registries(root):
+    spl = root.split("/")
+    last = ""
+    order = []
+    for x in spl:
+        if last:
+            last+="/"+x
+        else:
+            last=x
+        order.append(last)
+    cur_reg = Registry()
+    for root in order:
+        reg = Registry()
+        reg.build(root)
+        cur_reg.override(reg)
+        
 
 def test():
     os.chdir("..")
     reg = Registry()
     reg.build("./games/Turnabout Substitution")
-    #print reg.map
-    assert reg.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png"
-    assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png"
+    assert not reg.lookup("art/port/kristoph2/normal(talk)")
+    assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
+    
+    base = Registry()
+    base.build(".")
+    assert base.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png",reg.lookup("art/port/kristoph2/normal(talk)")
+    assert base.lookup("art/port/apollo/normal(talk)")=="art/port/apollo/normal(talk).png",base.lookup("art/port/apollo/normal(talk)")
+    
+    base.override(reg)
+    assert base.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png",reg.lookup("art/port/kristoph2/normal(talk)")
+    assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
     
 if __name__=="__main__":
     testfile()
