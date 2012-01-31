@@ -12,6 +12,7 @@ import random
 import pickle
 import re
 import textutil
+import registry
 ImgFont = textutil.ImgFont
 try:
     import pygame.movie as pymovie
