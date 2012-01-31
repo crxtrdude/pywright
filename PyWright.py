@@ -20,7 +20,7 @@ if is_exe():
     MessageBox = prototype(("MessageBoxA", windll.user32), paramflags)
 
     def show_popup(text):
-        MessageBox(text=text, caption="PyWright Error")
+        MessageBox(text=text, caption="Program Error")
 
 abspath = os.path.abspath(os.curdir)
 class Logger(object):
@@ -50,4 +50,4 @@ except:
     type, value, sys.last_traceback = sys.exc_info()
     lines = traceback.format_exception(type, value,sys.last_traceback)
     print "".join(lines)
-    show_popup("Oh no, there's been an error:\nplease post lastlog.txt to pywright.dawnsoft.org or http://forums.court-records.net/games/pywright-beta10-rls-website-growing-faq-started-t9544.html\n\n"+"".join(lines))
+    show_popup("Oh no, there's been an error:\nMore detailed info available in lastlog.txt."+"".join(lines))
