@@ -325,24 +325,6 @@ class Assets(object):
                     for l in reversed(newlines):
                         lines.insert(i+1,l)
             i += 1
-    def get_char_list(self,pth=None):
-        if pth is None: pth = self.game
-        def getscripts(pth):
-            s = [(pth+"/"+o) for o in os.listdir(pth) if o.endswith(".txt")]
-            for o in os.listdir(pth):
-                if os.path.isdir(pth+"/"+o) and not o==".svn":
-                    s+=getscripts(pth+"/"+o)
-            return s
-        scripts = getscripts(pth.replace("\\","/"))
-        chars = set()
-        def getchars(pth):
-            f = open(pth)
-            for l in f:
-                if l.startswith("char "):
-                    cname = l.strip().split(" ")[1]
-                    chars.add(cname)
-        [getchars(pth) for pth in scripts]
-        return chars
     def open_script(self,name,macros=True,ext=".txt"):
         lines = self.raw_lines(name,ext,use_unicode=True)
         reallines = []
