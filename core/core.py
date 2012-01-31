@@ -229,6 +229,7 @@ class Assets(object):
     path = ""
     tool_path = ""
     debugging = "SEARCH"  #debugging mode. SEARCH for stop, STEP each line, or blank
+    registry = registry.Registry(".")
     def get_stack(self):
         stack = []
         for s in self.stack:
@@ -438,23 +439,20 @@ set _font_new_resume_size 14""".split("\n"):
             return img
         self.meta = meta()
         pre = "art/"
-        self.game = self.game.replace("\\","/")
-        case = self.game
-        game = self.game.rsplit("/",1)[0]
-        if os.path.exists(game+"/art/"+name):
-            pre = game+"/art/"
-        if os.path.exists(case+"/art/"+name):
-            pre = case+"/art/"
-        if os.path.exists(pre+name[:-4]+".txt"):
+        print pre,name
+        textpath = self.registry.lookup(pre+name+".txt",True)
+        artpath = self.registry.lookup(pre+name)
+        print pre+name+".txt",artpath,textpath
+        if textpath:
             try:
-                f = open(pre+name[:-4]+".txt")
+                f = open(textpath)
                 self.meta.load_from(f)
             except:
                 import traceback
                 traceback.print_exc()
                 raise art_error("Art textfile corrupt:"+pre+name[:-4]+".txt")
-        texture = pygame.image.load(pre+name)
-        if texture.get_flags()&pygame.SRCALPHA: 
+        texture = pygame.image.load(artpath)
+        if texture.get_flags()&pygame.SRCALPHA:
             texture = texture.convert_alpha()
         else:
             texture = texture.convert()
@@ -474,7 +472,7 @@ set _font_new_resume_size 14""".split("\n"):
                 y+=incy
         img = ImgFrames(img)
         img._meta = self.meta
-        img.real_path = self.real_path = pre+name
+        img.real_path = self.real_path = artpath
         if self.cur_script:
             self.cur_script.imgcache[name] = img
         return img
@@ -831,6 +829,8 @@ set _font_new_resume_size 14""".split("\n"):
         return vtrue(v)
     def start_game(self,game,script="intro",mode="casemenu"):
         print "starting game",game,script,mode
+        game = os.path.normpath(game).replace("\\","/")
+        self.registry.override(registry.Registry(game))
         self.last_autosave = time.time()
         self.clear()
         self.game = game
@@ -1398,17 +1398,19 @@ class portrait(object):
         def loadfrom(path):
             if not path.endswith("/"):path+="/"
 
-            available = [x for x in os.listdir(path) if (noext(x)==blinkemo+"(blink)")]
-            if available and not hasattr(self.blink_sprite,"img"):
-                self.blink_sprite.load(shrink(path+available[0]))
+            print ">",blinkemo
+            print path+blinkemo+"(blink)"
+            blink = assets.registry.lookup(path+blinkemo+"(blink)")
+            if blink and not hasattr(self.blink_sprite,"img"):
+                self.blink_sprite.load(blink.rsplit("art/",1)[1][:-4])
                 
-            available = [x for x in os.listdir(path) if (noext(x)==emo+"(talk)")]
-            if available and not hasattr(self.talk_sprite,"img"):
-                self.talk_sprite.load(shrink(path+available[0]))
+            talk = assets.registry.lookup(path+emo+"(talk)")
+            if talk and not hasattr(self.talk_sprite,"img"):
+                self.talk_sprite.load(talk.rsplit("art/",1)[1][:-4])
                 
-            available = [x for x in os.listdir(path) if (noext(x)==emo+"(combined)")]
-            if available and not hasattr(self.combined,"img"):
-                self.combined.load(shrink(path+available[0]))
+            combined = assets.registry.lookup(path+emo+"(combined)")
+            if combined and not hasattr(self.combined,"img"):
+                self.combined.load(combined.rsplit("art/",1)[1][:-4])
                 if not self.combined.split:
                     self.combined.split = len(self.combined.base)//2
                 self.talk_sprite.load(self.combined.base[:self.combined.split])
@@ -1425,21 +1427,18 @@ class portrait(object):
                 self.talk_sprite.offsety = self.combined.offsety
                 self.blink_sprite.offsetx = self.combined.offsetx
                 self.blink_sprite.offsety = self.combined.offsety
-            available = [x for x in os.listdir(path) if (emo+"." in x)]
+            
+            available = assets.registry.lookup(path+emo)
             if available and not hasattr(self.blink_sprite,"img"):
-                self.blink_sprite.load(shrink(path+available[0]))
+                self.blink_sprite.load(available.rsplit("art/",1)[1][:-4])
                 if self.blink_sprite.blinkmode=="blinknoset": self.blink_sprite.blinkmode = "stop"
-
-        game = assets.game.replace("\\","/").rsplit("/",1)[0]
-        if os.path.exists(assets.game+"/art/port/"+charname):
-            loadfrom(assets.game+"/art/port/"+charname)
-        elif os.path.exists(game+"/art/port/"+charname):
-            loadfrom(game+"/art/port/"+charname)
-        elif os.path.exists("art/port/"+charname):
-            loadfrom("art/port/"+charname)
-        else:
+            
+            print blink,talk,combined,available
+            if blink or talk or combined or available:
+                return True
             raise art_error("Character folder %s not found"%charname)
-        
+
+        loadfrom("art/port/"+charname)
         if hasattr(self.talk_sprite,"img") and not hasattr(self.blink_sprite,"img"):
             self.blink_sprite.img = i = self.talk_sprite.img
             self.blink_sprite.base = [i]
