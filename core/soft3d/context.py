@@ -77,7 +77,7 @@ class SoftContext:
         pygame.backface = 0
         for m in meshes:
             for q in sorted(m.quads,key=lambda q: q.points[2]):
-                draw_quad(q,self)
+                draw_quad(q,self,m.scale)
         surf = pygame.transform.scale(self.surf,[self.r_w,self.r_h])
         surf.set_colorkey([255,0,255])
         return surf
@@ -251,7 +251,7 @@ def draw_tri_point_down(a,b,c,texture):
         eu+=du2
         ev+=dv2
         
-def draw_quad(q,c):
+def draw_quad(q,c,scale=[1,1,1]):
     """Draws a quad sample in screen space"""
     #~ n = q.normal
     #~ co = [q.points[0][0],q.points[0][1],q.points[0][2]-100]
@@ -259,7 +259,7 @@ def draw_quad(q,c):
     #~ if dp<0:
         #~ pygame.backface += 1
         #~ return
-    q.calc_corners(c)
+    q.calc_corners(c,scale)
     inside = False
     for c in q.corners:
         if c[0]>=0 and c[0]<pygame.s_w and c[1]>=0 and c[1]<pygame.s_h and c[2]>0 and c[2]*30<50:

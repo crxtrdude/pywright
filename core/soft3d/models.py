@@ -34,10 +34,10 @@ class Quad:
         return
         mag = math.sqrt(self.normal[0]**2+self.normal[1]**2+self.normal[2]**2)
         self.normal = [nn/mag for nn in self.normal]
-    def calc_corners(self,c):
+    def calc_corners(self,c,scale=[1,1,1]):
         self.corners = []
         for p in self.points:
-            p = rot(p[0],p[1],p[2],self.ori[0],self.ori[1],self.ori[2],self.mesh.center) + p[3:]
+            p = rot(p[0]*scale[0],p[1]*scale[1],p[2]*scale[2],self.ori[0],self.ori[1],self.ori[2],self.mesh.center) + p[3:]
             p = c.trans(p)
             self.corners.append(p)
     def rot(self,rx=0,ry=0,rz=0,center=None):
@@ -57,6 +57,7 @@ class Mesh:
         self.quads = quads
         [setattr(q,"mesh",self) for q in self.quads]
         self.center = [0,0,0]#get_center(quads)
+        self.scale = [1,1,1]
     def trans(self,x=0,y=0,z=0):
         [trans(q,x,y,z) for q in self.quads]
         self.center[0]+=x
