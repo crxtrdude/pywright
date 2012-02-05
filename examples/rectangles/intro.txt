@@ -63,12 +63,12 @@ gui Wait
 label move_left
 #direction, name= to scroll, times to scroll, speed of scroll
 {set_anim walkwest}
-{walk_left c 1 2}
+{walk_left c 1 3}
 goto wait_input
 
 label move_right
 {set_anim walkeast}
-{walk_right c 1 2}
+{walk_right c 1 3}
 goto wait_input
 
 label move_up
