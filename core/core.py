@@ -2171,7 +2171,7 @@ class uglyarrow(fadesprite):
     def __init__(self):
         fadesprite.__init__(self,x=0,y=sh)
         self.load(assets.variables.get("_bigbutton_bg","bg/main"))
-        self.arrow = sprite(0,0).load("general/arrow_big.png")
+        self.arrow = sprite(0,0).load("general/arrow_big")
         self.scanlines = fadesprite(0,0).load("fg/scanlines")
         self.border_top = fadesprite(0,0).load(assets.variables.get("_screen2_letterbox_img","general/bigbutton/border"))
         self.border_bottom = fadesprite(0,0).load(assets.variables.get("_screen2_letterbox_img","general/bigbutton/border"))
@@ -2199,7 +2199,7 @@ class uglyarrow(fadesprite):
             self.button = sprite(0,0).load(high)
     def show_cross(self):
         if not self.double:
-            self.double = sprite(0,0).load(assets.variables.get("_bigbutton_cross","general/cross_exam_buttons.png"))
+            self.double = sprite(0,0).load(assets.variables.get("_bigbutton_cross","general/cross_exam_buttons"))
         self.button = None
     def update(self):
         self.pos[1] = sh
