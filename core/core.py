@@ -439,8 +439,9 @@ set _font_new_resume_size 14""".split("\n"):
             return img
         self.meta = meta()
         pre = "art/"
-        print pre,name
         textpath = self.registry.lookup(pre+name+".txt",True)
+        if not textpath:
+            textpath = self.registry.lookup(pre+name.rsplit(".",1)[0]+".txt",True)
         artpath = self.registry.lookup(pre+name)
         print pre+name+".txt",artpath,textpath
         if textpath:
