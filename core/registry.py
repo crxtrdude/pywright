@@ -2,7 +2,7 @@ import os
 
 filepaths = ["art","music","sfx","movies"]
 ignore = ".hg"
-priority = ["gif","png","jpg","bmp","mp3","ogg"]
+priority = ["png","jpg","gif","bmp","mp3","ogg"]
 
 class File:
     def __init__(self,path):
