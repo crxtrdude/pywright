@@ -666,6 +666,8 @@ char test
         if not line:
             return
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
+            if not line.endswith('"'):
+                line = line+'"'
             self.call_func("textbox",["textbox",line[1:-1]])
             return True
         def repvar(x):
