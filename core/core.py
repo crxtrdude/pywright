@@ -2125,7 +2125,7 @@ class textbox(gui.widget):
             center = False
             t = textutil.markup_text()
             t._text = self.mwritten
-            lines = [self.nametag]+t.fulltext().split("\n")
+            lines = [self.nametag.replace("\n","")]+t.fulltext().split("\n")
             nlines = assets.variables["_textbox_lines"]
             if nlines == "auto":
                 if len(lines)==4:
