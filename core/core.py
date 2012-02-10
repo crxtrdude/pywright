@@ -3407,7 +3407,9 @@ class evidence_menu(fadesprite,gui.widget):
                     pos[1]+int(assets.variables["ev_zlarrow_y"])])
             if getattr(self,"chosen_icon",None) and getattr(self,"chosen",None):
                 if self.scroll:
-                    self.scroll -= 16
+                    self.scroll -= 16*assets.dt
+                    if self.scroll<0:
+                        self.scroll=0
                     self.draw_ev_zoom(self.lastchoose,[(256-self.scroll+pos[0])*self.scroll_dir,pos[1]],dest)
                     self.draw_ev_zoom(self.chosen_icon,[256*(-self.scroll_dir)+(256-self.scroll+pos[0])*self.scroll_dir,pos[1]],dest)
                 else:
