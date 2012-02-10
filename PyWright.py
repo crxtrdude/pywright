@@ -39,7 +39,8 @@ class Logger(object):
 #~ gc.enable()
 #~ gc.set_debug(gc.DEBUG_LEAK)
 
-sys.stderr = sys.stdout = Logger()
+if not android:
+    sys.stderr = sys.stdout = Logger()
 sys.path.insert(0,"")
 try:
     from core import libengine
