@@ -3082,7 +3082,7 @@ class evidence_menu(fadesprite,gui.widget):
         
         self.present_button = present_button(self)
         self.present_button.pos = [int(assets.variables["ev_present_x"]),
-                    other_screen(int(assets.variables["ev_present_y"]))]
+                    int(assets.variables["ev_present_y"])+192]
         self.pages_set = assets.variables.get("_ev_pages","evidence profiles").split(" ")
         for p in self.pages_set[:]:
             if not vtrue(assets.variables.get("_%s_enabled"%p,"true")):
