@@ -3040,7 +3040,8 @@ class evidence_menu(fadesprite,gui.widget):
             mp[1]+=other_screen(0)
             self.present_button.draw(assets.Surface([64,64]))
             sb = self.present_button
-            if mp[0]>=sb.pos[0] and mp[0]<=sb.pos[0]+sb.width and mp[1]>=sb.pos[1] and mp[1]<=sb.pos[1]+sb.height:
+            sbpos = sb.getpos()
+            if mp[0]>=sbpos[0] and mp[0]<=sbpos[0]+sb.width and mp[1]>=sbpos[1] and mp[1]<=sbpos[1]+sb.height:
                 self.k_x()
         #~ self.enter_down()
         #~ gui.window.over = None
