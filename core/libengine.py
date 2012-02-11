@@ -3047,7 +3047,7 @@ def translate_click(pos):
             return r
     return [-100000,-100000]
 def fit(surf,size):
-    surf = pygame.transform.scale(surf,size)
+    surf = pygame.transform.scale(surf,[int(x) for x in size])
     return surf
 def draw_screen(showfps):
     scale = 0
