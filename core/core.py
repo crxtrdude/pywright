@@ -2060,6 +2060,8 @@ class textbox(gui.widget):
                 assets.cur_script.tboff()
             else:
                 raise markup_error("No macro or markup command valid for:"+command)
+        elif isinstance(char,textutil.markup):
+            pass
         else:
             if not hasattr(self,"_lc"):
                 self._lc = ""
