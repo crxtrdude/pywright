@@ -2093,8 +2093,8 @@ class textbox(gui.widget):
                 else:
                     next_char = 2
             self._lc = char
-            if self.speed:
-                self.next_char += next_char
+        if self.speed:
+            self.next_char += next_char
     def nextline(self):
         """Returns true if all the text waiting to be written into the textbox has been written"""
         t = textutil.markup_text()
