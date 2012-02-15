@@ -590,14 +590,12 @@ set _font_new_resume_size 14""".split("\n"):
             track = self.open_music(track,pre)
         if track:
             try:
-                mixer.music.play(loop)
+                mixer.music.play()
             except:
                 import traceback
                 traceback.print_exc()
         else:
             self.stop_music()
-        if not android:
-            mixer.music.set_endevent(150)
     def stop_music(self):
         if self.sound_init == -1: return
         self._track = None
@@ -606,6 +604,10 @@ set _font_new_resume_size 14""".split("\n"):
             mixer.music.stop()
         except:
             pass
+    def music_update(self):
+        if not mixer.music.get_busy():
+            if assets.variables.get("_music_loop",None):
+                self.play_music(assets.variables["_music_loop"],self._loop)
     def set_emotion(self,e):
         """Sets the emotion of the current portrait"""
         if not self.portrait:
