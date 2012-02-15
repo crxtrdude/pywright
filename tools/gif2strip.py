@@ -1,4 +1,4 @@
-import os,sys,pygame,math,urllib2
+import os,sys,pygame,math,urllib2,urllib
 sys.path.append("tools")
 import runner
 external = runner.runner
@@ -15,10 +15,11 @@ MAX_SURFACE_WIDTH=1024
 
 def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     if path_to_gif.startswith("http://"):
-        f = urllib2.urlopen(path_to_gif)
+        f = urllib2.urlopen("http://"+urllib.quote(path_to_gif.split("http://",1)[1]))
         path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
         out = open(path_to_gif,"wb")
         out.write(f.read())
+        print "writ"
         f.close()
         out.close()
     if not saveto:
