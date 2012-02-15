@@ -437,12 +437,22 @@ examine hide fail=%(fail)s
 """%{"image":img,"fail":"line_"+fail,"regions":regions}
 #Click position in an image
 
+def expr(txt):
+    txt = txt.replace("xpr=","")
+    code = "setvar_ex expr_result "+txt+"\n"
+    return code
 
 #Add and subtract to penalty
 def ReglerVie(vals,elements):
     """Set penalty to amount"""
-    value = int(int(textify(elements[0]))/120.0*100)
-    code = "set _diff %s\n"%value
+    code = ""
+    value = textify(elements[0]).strip()
+    if value.startswith("xpr="):
+        code += expr(value)
+        code += "set _diff $expr_result\n"
+    else:
+        value = int(int(value)/120.0*100)
+        code += "set _diff %s\n"%value
     code += "subvar _diff $penalty\n"
     code += "penalty $_diff\n"
     vals["postcode"] = code
@@ -505,7 +515,10 @@ def TesterVar(vals,elements):
     vals["postcode"] += code
 def DefinirVar(vals,elements):
     """Define variable"""
-    vals["postcode"] += "\nsetvar %s %s"%(elements[0],elements[1])
+    if elements[1].startswith("xpr="):
+        vals["postcode"] += "\n"+expr(elements[1])+"setvar %s $expr_result\n"%(elements[0],)
+    else:
+        vals["postcode"] += "\nsetvar %s %s"%(elements[0],elements[1])
 def EvaluerCondition(vals,elements):
     """Evalute condition (condition,jump_if_success,jump_if_fail)"""
     condition,succeed,fail = [x[0] for x in elements]
