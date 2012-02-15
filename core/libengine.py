@@ -3240,6 +3240,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 android.wait_for_resume()
         pygame.event.pump()
         try:
+            assets.music_update()
             assets.cur_script.handle_events(pygame.event.get([pygame.MOUSEMOTION,pygame.MOUSEBUTTONUP,pygame.MOUSEBUTTONDOWN]))
             if "enter" in assets.cur_script.held:
                 for o in assets.cur_script.upobs:
@@ -3276,9 +3277,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                         if hasattr(o,evt):
                             getattr(o,evt)()
             for e in pygame.event.get():
-                if e.type==150:
-                    if assets.variables.get("_music_loop",None):
-                        assets.play_music(assets.variables["_music_loop"])
                 if e.type==pygame.ACTIVEEVENT:
                     if e.gain==0 and (e.state==6 or e.state==2 or e.state==4):
                         print "minimize"
