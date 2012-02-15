@@ -10,6 +10,7 @@ def wini(assets):
 width=%s
 height=%s
 scale2x=%s
+smoothscale=%s
 fullscreen=%s
 screens=%s
 show_fps=%s
@@ -22,7 +23,8 @@ screen_compress=%s
 autosave=%s
 autosave_interval=%s
 autosave_keep=%s
-tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.fullscreen,assets.num_screens,
+tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.smoothscale,
+assets.fullscreen,assets.num_screens,
 int(assets.show_fps),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
 int(assets.screen_compress),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
@@ -40,6 +42,7 @@ def load(assets):
     assets.autosave_interval = 5 #minutes between autosaves
     assets.autosave_keep = 2 #how many saves to keep
     assets.show_fps = 0
+    assets.smoothscale = 0
     if os.path.exists("display.ini"):
         f = open("display.ini")
         t = f.read()
@@ -55,7 +58,8 @@ def load(assets):
                 "screen_compress":"screen_compress","autosave":"autosave",
                 "autosave_keep":"autosave_keep", 
                 "sound_format":"sound_format","sound_bits":"sound_bits",
-                "sound_buffer":"sound_buffer","show_fps":"show_fps"}
+                "sound_buffer":"sound_buffer","show_fps":"show_fps",
+                "smoothscale":"smoothscale"}
         fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
                 }
         s_val = {"tool_path":"tool_path"}
@@ -407,6 +411,15 @@ class settings_menu(gui.pane):
         self.res_box = res_box
         self.children.append(res_box)
         
+        res_box.add_child(gui.button(self,"Change resolution (%sx%s)"%(assets.swidth,assets.sheight)))
+        res = res_box.pane.children[-1]
+
+        res.checked = True
+        res.click_down_over = self.popup_resolution
+        
+        res_box.add_child(gui.checkbox("smoothscale"))
+        self.smoothscale = res_box.pane.children[-1]
+        
         res_box.add_child(gui.checkbox("fullscreen"))
         self.fs = res_box.pane.children[-1]
         res_box.add_child(gui.checkbox("dualscreen"))
@@ -424,12 +437,6 @@ class settings_menu(gui.pane):
             assets.show_fps = val
             wini(assets)
         self.show_fps.set_checked = set_checked
-        
-        res_box.add_child(gui.button(self,"Change resolution (%sx%s)"%(assets.swidth,assets.sheight)))
-        res = res_box.pane.children[-1]
-
-        res.checked = True
-        res.click_down_over = self.popup_resolution
 
         #self.reses = gui.radiobutton.groups["resopt"]
         if assets.fullscreen:
@@ -440,6 +447,8 @@ class settings_menu(gui.pane):
             self.vds.checked = True
         if assets.show_fps:
             self.show_fps.checked = True
+        if assets.smoothscale:
+            self.smoothscale.checked = True
                 
         self.children.append(gui.button(self,"apply",[10,140]))
     def popup_resolution(self,mp):
@@ -498,6 +507,9 @@ class settings_menu(gui.pane):
         assets.screen_compress = 1
         if self.vds.checked:
             assets.screen_compress = 0
+        assets.smoothscale = 0
+        if self.smoothscale.checked:
+            assets.smoothscale = 1
         assets.make_screen()
         self.display()
         wini(assets)
