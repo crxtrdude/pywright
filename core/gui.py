@@ -208,10 +208,10 @@ class widget(object):
         for k in self.repeat:
             self.handle_repeat(k)
         return False
-    def carat_left(m):
+    def carat_left_caller(m):
         if window.focused and hasattr(window.focused,"carat_left"):
             window.focused.carat_left()
-    def carat_right(m):
+    def carat_right_caller(m):
         if window.focused and hasattr(window.focused,"carat_right"):
             window.focused.carat_right()
     def delete(m):
@@ -220,8 +220,8 @@ class widget(object):
     def backspace(m):
         if hasattr(window.focused,"backspace"):
             window.focused.backspace()
-    repeat = {pygame.K_LEFT:{"func":carat_left,"val":0},
-                pygame.K_RIGHT:{"func":carat_right,"val":0},
+    repeat = {pygame.K_LEFT:{"func":carat_left_caller,"val":0},
+                pygame.K_RIGHT:{"func":carat_right_caller,"val":0},
                 pygame.K_DELETE:{"func":delete,"val":0},
                 pygame.K_BACKSPACE:{"func":backspace,"val":0}}
 
