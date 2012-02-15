@@ -31,6 +31,9 @@ import os
 from BeautifulSoup import BeautifulSoup
 import urllib
 import urllib2
+import socket
+socket.setdefaulttimeout(5)
+import time
 import re
 import sys
 sys.path.append("../../tools")
@@ -243,7 +246,14 @@ def wget(url,saveto):
         if not os.path.exists(saveto):
             def progress(a,b,c):
                 print int(a)*int(b)/float(c)
-            urllib.urlretrieve(url.replace(" ","%20"),"input.mp3",reporthook=progress)
+            for t in range(5):
+                try:
+                    urllib.urlretrieve(url.replace(" ","%20"),"input.mp3",reporthook=progress)
+                except socket.error,urllib.ContentTooShortError:
+                    print "retrying"
+                    time.sleep(2)
+                    continue
+                break
             external.run({"command":"mpg123","operation":"towav","input":"input.mp3","output":"output.wav"})
             external.run({"command":"oggenc2","operation":"toogg","input":"output.wav","output":"output.ogg"})
             f = open("output.ogg","rb")
