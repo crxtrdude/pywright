@@ -49,6 +49,7 @@ import threading
 #game_id="19583" #TAP Case2 Prelude
 #game_id="21329" #TAP Case2 Day1 Investigation
 game_id="21884" #TAP Case2 Day2 Trial
+game_id="18079"
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
@@ -198,7 +199,7 @@ assert cent_to_frame("300")==180
 def textify(contentlist,colorize=False,replace_line_end=None):
     t = ""
     for c in contentlist:
-        if isinstance(c,unicode):
+        if isinstance(c,unicode) or isinstance(c,str):
             t += c
         elif c.name == "em":
             t += textify(c.contents,colorize)
