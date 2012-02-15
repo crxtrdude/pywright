@@ -1,8 +1,19 @@
-import os,sys,pygame,math,urllib2,urllib
+import os,sys,pygame,math,urllib2,urllib,socket,time
 sys.path.append("tools")
 import runner
 external = runner.runner
 import re
+
+def recog(file):
+    f = open(file)
+    beg = f.read(15)
+    f.close()
+    if "PNG" in beg:
+        return "png"
+    if "GIF" in beg:
+        return "gif"
+    if "JFIF" in beg:
+        return "jpg"
 
 if __name__=="__main__":
     try:
@@ -15,13 +26,29 @@ MAX_SURFACE_WIDTH=1024
 
 def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     if path_to_gif.startswith("http://"):
-        f = urllib2.urlopen("http://"+urllib.quote(path_to_gif.split("http://",1)[1]))
-        path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
-        out = open(path_to_gif,"wb")
-        out.write(f.read())
-        print "writ"
-        f.close()
-        out.close()
+        for t in range(5):
+            try:
+                print "open"
+                f = urllib2.urlopen("http://"+urllib.quote(path_to_gif.split("http://",1)[1]),timeout=5)
+                path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
+            except socket.timeout:
+                print "need sleep"
+                time.sleep(2)
+                continue
+            try:
+                print "ready to write"
+                out = open(path_to_gif,"wb")
+                out.write(f.read())
+            except socket.timeout:
+                print "need sleep"
+                time.sleep(2)
+                f.close()
+                out.close()
+                continue
+            print "writ"
+            f.close()
+            out.close()
+            break
     if not saveto:
         root = path_to_gif.rsplit(".",1)[0]
     else:
@@ -29,6 +56,14 @@ def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     strip_name = root+".png"
     txt_name = root+".txt"
 
+    if recog(path_to_gif) in ["png","jpg"]:
+        out = open(strip_name,"wb")
+        out.write(open(path_to_gif,"rb").read())
+        out.close()
+        out = open(txt_name,"w")
+        out.write("")
+        out.close()
+        return root
     stdout,stderr = external.run({"command":"gifsicle","operation":"info","path":path_to_gif})
     loop = "loop forever" in stdout
     delays = []
