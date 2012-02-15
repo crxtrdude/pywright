@@ -33,7 +33,7 @@ def get_registry():
     return reg
 
 operations = {
-"gifsicle_explode": '%(command)s --no-background -U -e "%(path)s" -o "%(path)s"',
+"gifsicle_explode": '%(command)s --colors=255 --no-background -U -e "%(path)s" -o "%(path)s"',
 "gifsicle_info": '%(command)s -I "%(path)s"',
 "mpg123_towav": '%(command)s -w "%(output)s" "%(input)s"',
 "oggenc2_toogg": '%(command)s "%(input)s" -o "%(output)s" --resample=44100'

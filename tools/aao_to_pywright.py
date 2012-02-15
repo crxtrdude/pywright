@@ -40,6 +40,11 @@ import gif2strip
 
 import threading
 
+if __name__=="__main__":
+    import pygame
+    os.environ["SDL_VIDEODRIVER"] = "dummy"
+    pygame.display.set_mode([1,1])
+
 #game_id = 14571 #JM shot dunk
 #game_id = "10711" #My dialogue test case
 #game_id = "21671" #investigation test 1, moving, talking, presenting, examining, and hide/reveal dialog and frames
