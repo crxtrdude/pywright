@@ -121,7 +121,7 @@ class Resources:
             print x.conversions
         
 
-res = Resources("games/aao_%s"%game_id,temppath="tmp")
+res = Resources("../games/aao_%s"%game_id,temppath="tmp")
 
 if os.path.exists(res.rootpath+"/%s.html"%game_id):
     f = open(res.rootpath+"/%s.html"%game_id)
