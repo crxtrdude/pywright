@@ -98,7 +98,7 @@ class markup_text:
         return u"".join([x for x in self._text if not hasattr(x,"addcharsto")])
     def fulltext(self):
         """Return full text markup included"""
-        return u"".join([str(x) for x in self._text])
+        return u"".join([unicode(x) for x in self._text])
     def strip(self):
         t = markup_text("")
         l = self._text[:]
