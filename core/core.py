@@ -230,6 +230,8 @@ class Assets(object):
     tool_path = ""
     debugging = "SEARCH"  #debugging mode. SEARCH for stop, STEP each line, or blank
     registry = registry.Registry(".")
+    def init(self):
+        self.registry = registry.Registry(".")
     def get_stack(self):
         stack = []
         for s in self.stack:
@@ -691,6 +693,7 @@ set _font_new_resume_size 14""".split("\n"):
         props["variables"] = vars
         return ["Assets",[],props,None]
     def after_load(self):
+        self.registry = registry.combine_registries("./"+self.game)
         self.last_autosave = time.time()
         self.items = [evidence(x) for x in self.items]
         v = self.variables
@@ -833,10 +836,10 @@ set _font_new_resume_size 14""".split("\n"):
     def start_game(self,game,script="intro",mode="casemenu"):
         print "starting game",game,script,mode
         game = os.path.normpath(game).replace("\\","/")
-        self.registry.override(registry.Registry(game))
         self.last_autosave = time.time()
         self.clear()
         self.game = game
+        self.registry = registry.combine_registries("./"+self.game)
         self.stack.append(self.Script())
         if mode == "casemenu" and not os.path.exists(game+"/"+script+".txt"):
             self.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
