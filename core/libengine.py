@@ -2872,6 +2872,7 @@ def load_game_menu():
 assets.load_game_menu = load_game_menu
         
 def make_start_script(logo=True):
+    assets.init()
     assets.game = "games"
     bottomscript = assets.Script()
     introlines = []

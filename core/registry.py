@@ -103,9 +103,11 @@ def combine_registries(root):
         order.append(last)
     cur_reg = Registry()
     for root in order:
+        print "building registry for",root
         reg = Registry()
         reg.build(root)
         cur_reg.override(reg)
+    return cur_reg
         
 
 def test():
