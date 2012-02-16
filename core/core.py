@@ -1764,9 +1764,9 @@ class textbox(gui.widget):
         if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width1 and pos[1]>=self.rpos1[1] and pos[1]<=self.rpos1[1]+self.height1:
             self.enter_down()
     def set_text(self,text):
-        print "SETTING TEXT:",repr(text)
+        #print "SETTING TEXT:",repr(text)
         text = textutil.markup_text(text)
-        print "marked up text:",repr(text)
+        #print "marked up text:",repr(text)
         text.m_replace(lambda c:hasattr(c,"variable"),lambda c:assets.variables[c.variable])
         lines = text.fulltext().split(u"\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
@@ -2086,7 +2086,7 @@ class textbox(gui.widget):
                     assets.portrait.set_talking()
                 if self.in_paren:
                     assets.portrait.set_blinking()
-            if not android and str(char).strip():
+            if not android and char.strip():
                 assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
             next_char = int(next_char*self.delay)
             if self.wait=="manual":
