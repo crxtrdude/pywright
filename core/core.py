@@ -1980,7 +1980,6 @@ class textbox(gui.widget):
         self.mwritten.append(char)
         if isinstance(char,textutil.markup_command):
             command,args = char.command,char.args
-            print command,args
             if assets.cur_script.macros.get(command,None):
                 print "RUNNING A MACRO"
                 assets.variables["_return"] = ""
@@ -2010,63 +2009,76 @@ class textbox(gui.widget):
                     self.mwritten = []
                     self.next_char = 0
                 ns._endscript = back
-            elif command == "sfx":
-                assets.play_sound(args)
-            elif command == "sound":
-                self.clicksound = args
-            elif command == "delay":
-                self.delay = int(args)
-                self.wait = "manual"
-            elif command.startswith("spd"):
-                if not args:
-                    args = command[3:]
-                self.speed = int(args)
-            elif command.startswith("_fullspeed"):
-                self.last_speed = self.speed
-                self.speed = 0
-            elif command.startswith("_endfullspeed"):
-                self.speed = self.last_speed
-            elif command == "wait":
-                self.wait = args
-            elif command == "center":
-                pass
-            elif command == "type":
-                self.clicksound = "typewriter.ogg"
-                self.delay = 2
-                self.wait = "manual"
-            elif command == "next":
-                if assets.portrait:
-                    assets.portrait.set_blinking()
-                del self.mwritten[-1]
-                self.forward(False)
-                return
-            elif command[0]=="e":
-                try:
-                    assets.set_emotion(args.strip())
-                except:
-                    import traceback
-                    traceback.print_exc()
-                    raise markup_error("No character to apply emotion to")
-            elif command[0]=="f":
-                assets.flash = 3
-                assets.flashcolor = [255,255,255]
-                command = args.split(" ")[1:]
-                if len(command)>0:
-                    assets.flash = int(command[0])
-                if len(command)>2:
-                    assets.flashcolor = color_str(command[1])
-            elif command[0]=="s":
-                assets.shakeargs = command.split(" ")
-            elif command[0]=="p":
-                next_char = int(command[1:].strip())
-            elif command[0]=="c":
-                pass
-            elif command=="tbon":
-                assets.cur_script.tbon()
-            elif command=="tboff":
-                assets.cur_script.tboff()
             else:
-                raise markup_error("No macro or markup command valid for:"+command)
+                print "no macro for",command
+                commands = ["sfx","sound","delay","spd","_fullspeed","_endfullspeed",
+                "wait","center","type","next",
+                "tbon","tboff",
+                "e","f","s","p","c"]
+                commands.sort(key=lambda o:len(o))
+                commands.reverse()
+                for cm in commands:
+                    if command.startswith(cm):
+                        nargs = command.split(cm,1)[1]
+                        if nargs and not nargs.startswith(" "):
+                            command,args = cm,nargs
+                        break
+                print "new command:",command
+                if command == "sfx":
+                    assets.play_sound(args)
+                elif command == "sound":
+                    self.clicksound = args
+                elif command == "delay":
+                    self.delay = int(args)
+                    self.wait = "manual"
+                elif command == "spd":
+                    self.speed = int(args)
+                elif command == "_fullspeed":
+                    self.last_speed = self.speed
+                    self.speed = 0
+                elif command == "_endfullspeed":
+                    self.speed = self.last_speed
+                elif command == "wait":
+                    self.wait = args
+                elif command == "center":
+                    pass
+                elif command == "type":
+                    self.clicksound = "typewriter.ogg"
+                    self.delay = 2
+                    self.wait = "manual"
+                elif command == "next":
+                    if assets.portrait:
+                        assets.portrait.set_blinking()
+                    del self.mwritten[-1]
+                    self.forward(False)
+                    return
+                elif command=="e":
+                    try:
+                        assets.set_emotion(args.strip())
+                    except:
+                        import traceback
+                        traceback.print_exc()
+                        raise markup_error("No character to apply emotion to")
+                elif command=="f":
+                    assets.flash = 3
+                    assets.flashcolor = [255,255,255]
+                    command = args.split(" ")[1:]
+                    if len(command)>0:
+                        assets.flash = int(command[0])
+                    if len(command)>2:
+                        assets.flashcolor = color_str(command[1])
+                elif command=="s":
+                    assets.shakeargs = args.split(" ")
+                elif command=="p":
+                    next_char = int(args.strip())
+                elif command=="c":
+                    pass
+                elif command=="tbon":
+                    assets.cur_script.tbon()
+                elif command=="tboff":
+                    assets.cur_script.tboff()
+                else:
+                    raise markup_error("No macro or markup command valid for:"+command)
         elif isinstance(char,textutil.markup):
             pass
         else:
