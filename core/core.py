@@ -1863,7 +1863,9 @@ class textbox(gui.widget):
     def enter_down(self):
         if not self.can_continue(): return
         if not self.nextline():
-            self.mwritten = self._markup._text
+            while not self.nextline():
+                self.add_character()
+            #self.mwritten = self._markup._text
         else:
             self.forward()
     def k_left(self):
