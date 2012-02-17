@@ -2254,9 +2254,10 @@ exit}}}
     @category([VALUE("tag","list to forget item from"),COMBINED("option","option from list to forget state of")],type="gameflow")
     def _forgetlistitem(self,command,tag,*item):
         """Forget checkmark status of a specific option from a specific list."""
+        item = " ".join(item)
         if tag in assets.lists:
             if item in assets.lists[tag]:
-                del assets.lists[tag][" ".join(item)]
+                del assets.lists[tag][item]
     @category([],type="objects")
     def _clear(self,command):
         """Clears all objects from the scene."""
