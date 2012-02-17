@@ -550,23 +550,23 @@ class Script(gui.widget):
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-            return
+            return e
         except art_error,e:
             if vtrue(assets.variables.get("_debug","false")):
                 self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
-                return
+                return e
         except markup_error,e:
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-            return
+            return e
         except Exception,e:
             self.obs.append(error_msg("Undefined:"+e.message,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-            return
+            return e
     def add_object(self,ob,single=False):
         if single:
             for o2 in self.obs[:]:

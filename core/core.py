@@ -865,7 +865,9 @@ def subscript(macro):
     script = assets.cur_script.execute_macro(macro)
     print "start subscript",script.scene
     while script in assets.stack:
-        script.update()
+        e = script.update()
+        if e:
+            break
     print "end subscript",script.scene
     
 
