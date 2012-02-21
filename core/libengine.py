@@ -3049,7 +3049,7 @@ def translate_click(pos):
             return r
     return [-100000,-100000]
 def fit(surf,size):
-    if assets.smoothscale:
+    if assets.smoothscale and surf.get_bitsize() in [24,32]:
         surf = pygame.transform.smoothscale(surf,[int(x) for x in size])
     else:
         surf = pygame.transform.scale(surf,[int(x) for x in size])
