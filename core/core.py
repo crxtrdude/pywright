@@ -607,7 +607,10 @@ set _font_new_resume_size 14""".split("\n"):
         except:
             pass
     def music_update(self):
-        if not mixer.music.get_busy():
+        mcb = mixer.music.get_busy
+        if android:
+            mcb = mixer.music_channel.get_busy
+        if getattr(self,"_track",None) and not mcb():
             if assets.variables.get("_music_loop",None):
                 self.play_music(assets.variables["_music_loop"],self._loop)
     def set_emotion(self,e):
