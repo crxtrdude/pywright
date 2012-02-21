@@ -539,13 +539,9 @@ class Script(gui.widget):
                     o.cur_script = assets.cur_script
                 if o.cur_script==self: return False
         return True
-    def update(self):
-        if time.time()-assets.last_autosave>assets.autosave_interval*60:
-            self.autosave()
+    def safe_exec(self,method,*args):
         try:
-            interp = self.update_objects()
-            if interp:
-                self.interpret()
+            return method(*args)
         except script_error,e:
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
@@ -567,6 +563,12 @@ class Script(gui.widget):
             import traceback
             traceback.print_exc()
             return e
+    def update(self):
+        if time.time()-assets.last_autosave>assets.autosave_interval*60:
+            self.autosave()
+        interp = self.safe_exec(self.update_objects)
+        if interp==True:
+            return self.safe_exec(self.interpret)
     def add_object(self,ob,single=False):
         if single:
             for o2 in self.obs[:]:
