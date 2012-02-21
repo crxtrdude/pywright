@@ -180,7 +180,7 @@ class settings_menu(gui.pane):
         line.children.append(gui.editbox(self,"go_script"))
         class myb(gui.button):
             def click_down_over(s,*args):
-                assets.cur_script.execute_line(self.go_script)
+                assets.cur_script.safe_exec(assets.cur_script.execute_line,self.go_script)
                 self.close()
         line.children.append(myb(None,"execute"))
         
