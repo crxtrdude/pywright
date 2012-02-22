@@ -668,8 +668,8 @@ char test
         if not line:
             return
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
-            if not line.endswith('"'):
-                line = line+'"'
+            if not (line.endswith('"') or line.endswith(u'\u201C')):
+                line = line+u'"'
             self.call_func("textbox",["textbox",line[1:-1]])
             return True
         def repvar(x):
@@ -3196,7 +3196,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             #~ ticks += time.time()-lt
             #~ lt = time.time()
         #~ dt = ticks*1000.0
-        assets.dt = clock.tick(getattr(assets,"framerate",15))
+        assets.dt = clock.tick(getattr(assets,"framerate",60))
         assets.dt = min(assets.dt*.001*60,10.0)
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
