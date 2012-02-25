@@ -38,17 +38,25 @@ def testfile():
     assert b.priority<c.priority,"bpri:%s cpri:%s"%(b.priority,c.priority)
     assert c.priority<d.priority
 
+global_registry_cache = {}
 class Registry:
-    def __init__(self,root=None):
+    def __init__(self,root=None,use_cache=True):
         self.map = {}
         self.ext_map = {}
+        self.use_cache = use_cache
         if root:
             self.build(root)
+    def clear_cache(self):
+        global_registry_cache.clear()
     def build(self,root):
+        if self.use_cache and root in global_registry_cache:
+            self.map,self.ext_map = global_registry_cache[root]
+            return
         self.root = root
         for sub in filepaths:
             if os.path.isdir(root+"/"+sub):
                 self.index(root+"/"+sub)
+        global_registry_cache[root] = [self.map,self.ext_map]
     def index(self,path):
         subdirs = []
         for sub in os.listdir(path):
