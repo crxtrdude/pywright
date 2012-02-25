@@ -2779,6 +2779,7 @@ class case_menu(fadesprite,gui.widget):
             scr.parent = assets.cur_script
             assets.stack.append(scr)
             assets.game=self.curgame+"/"+self.options[self.choice]
+            assets.registry = registry.combine_registries("./"+assets.game)
             print "init: g:%s choice:%s"%(assets.game,self.options[self.choice])
             assets.cur_script.init("case_screen")
             assets.cur_script.world = scr.parent.world
