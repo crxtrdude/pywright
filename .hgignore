@@ -13,3 +13,11 @@ glob:build/*
 glob:core/cache/*
 glob:scriptdist/*
 glob:tools/tools.ini
+syntax: glob
+dist/*
+downloads/*
+games/*
+tools/tmp/*
+PyWright - 0.981/*
+PyWright - 0986update/*
+tools/roomedit/*
