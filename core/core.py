@@ -2807,11 +2807,11 @@ class examine_menu(sprite,gui.widget):
     fail = "none"
     def move_over(self,pos,rel,buttons):
         if gui.window.focused == self:
-            self.mx,self.my = [pos[0],pos[1]-other_screen(0)]
+            self.mx,self.my = [pos[0],pos[1]-self.getpos()[1]]
             self.highlight()
     def click_down_over(self,mp):
         gui.window.focused = self
-        if self.hide or self.selected == ["none"] or mp[0]<175 or mp[1]-other_screen(0)<159:
+        if self.hide or self.selected == ["none"] or mp[0]<175 or mp[1]<159+self.getpos()[1]:
             self.move_over(mp,None,None)
     def click_up(self,mp):
         if gui.window.focused == self:
@@ -2822,13 +2822,11 @@ class examine_menu(sprite,gui.widget):
         self.name = name
         self.pri = ulayers.index(self.__class__.__name__)
         sprite.__init__(self)
-        self.pos = [0,other_screen(0)]
+        self.pos = [0,192]
         self.z = zlayers.index(self.__class__.__name__)
-        print "examine z",self.z
-        print "examine pri",self.pri
         self.width = sw
         self.height = sh
-        gui.widget.__init__(self,[0,other_screen(0)],[sw,sh])
+        gui.widget.__init__(self,self.pos,[sw,sh])
         self.img = assets.Surface([64,64])
         self.regions = []
         self.mouse = pygame.Surface([10,10])
@@ -2842,18 +2840,16 @@ class examine_menu(sprite,gui.widget):
             self.bg = [x for x in assets.cur_script.obs if isinstance(x,bg)]
         else:
             self.bg = [x for x in assets.cur_script.obs if getattr(x,"id_name",None) == assets.variables["_examine_use"]]
-            print self.bg
         self.fg = assets.open_art("general/examinefg")[0]
         self.xscroll = 0
         self.xscrolling = 0
         scroll_amt = assets.variables.get("_xscroll_"+self.name,0)
-        print "scroll amt:",scroll_amt
         if scroll_amt==-1:
             self.xscroll = -1
-            print "self.offset before scroll",self.getoffset()
             if self.getoffset()!=-256:
                 assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
+        self.screen_setting = "try_bottom"
     def init_normal(self):
         subscript("show_court_record_button")
     def delete(self):
@@ -2862,7 +2858,6 @@ class examine_menu(sprite,gui.widget):
             self.bck.delete()
         if hasattr(self,"scrollbut"):
             self.scrollbut.delete()
-        print "delete",self
         subscript("hide_court_record_button")
     def getoffset(self):
         x = [o.pos[0] for o in self.bg]
@@ -2895,7 +2890,6 @@ class examine_menu(sprite,gui.widget):
             if x>=sw*2 and screens<3:
                 screens = 3
         self.width = screens*sw
-        print "examine screens:",screens
         return screens
     def addregion(self,x,y,width,height,label):
         reg = [int(x),int(y),int(width),int(height),label]
@@ -2911,8 +2905,8 @@ class examine_menu(sprite,gui.widget):
     def draw(self,dest):
         self.highlight()
         if not assets.variables.get("_examine_use",None):
-            [dest.blit(o.img,[o.pos[0],other_screen(o.pos[1])]) for o in self.bg]
-        my = other_screen(self.my)
+            [dest.blit(o.img,[o.pos[0],o.pos[1]+self.getpos()[1]]) for o in self.bg]
+        my = self.my+self.getpos()[1]
         if vtrue(assets.variables.get("_examine_showcursor", "true")):
             if assets.variables.get("_examine_cursor_img","").strip():
                 spr = sprite(0,0)
@@ -2984,7 +2978,6 @@ class examine_menu(sprite,gui.widget):
             self.bck.k_space = k_space
             self.bck.update = lambda *x: False
             assets.cur_script.obs.append(self.bck)
-        print -self.getoffset()/sw
         scrn = (-self.getoffset()//sw)+1
         self.xscroll = None
         if scrn<self.screens():
