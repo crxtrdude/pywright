@@ -3405,6 +3405,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     #assets.load_game(assets.game)
                 if e.type==pygame.KEYDOWN and e.key == pygame.K_F3 and vtrue(assets.variables.get("_debug","false")):
                     assets.cur_script.obs.append(script_code(assets.cur_script))
+                if e.type==pygame.KEYDOWN and e.key == pygame.K_F4:
+                    assets.cur_screen = 1-assets.cur_screen
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
