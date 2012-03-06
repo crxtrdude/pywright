@@ -2529,7 +2529,6 @@ class listmenu(fadesprite,gui.widget):
             return False
         if not hasattr(self,"bck") and vtrue(assets.variables.get("_list_back_button","true")) and not getattr(self,"noback",False):
             self.bck = guiBack()
-            self.bck.pos[1] = other_screen(self.bck.pos[1])
             self.bck.pri = 1000
             def k_space(b=self.bck):
                 self.delete()
@@ -2971,7 +2970,6 @@ class examine_menu(sprite,gui.widget):
         self.highlight()
         if not hasattr(self,"bck") and not self.hide:
             self.bck = guiBack()
-            self.bck.pos = [0,other_screen(sh-self.bck.img.get_height())]
             self.bck.pri = 1000
             def k_space(b=self.bck):
                 self.delete()
@@ -3084,7 +3082,6 @@ class evidence_menu(fadesprite,gui.widget):
         self.present = None
         
         self.back_button = guiBack()
-        self.back_button.pos[1] = other_screen(self.back_button.pos[1])
         self.back_button.pri = 1000
         def k_space(b=self.back_button):
             b.delete()
@@ -3925,7 +3922,7 @@ class guiBack(sprite,gui.widget):
             image = "general/back"
         self.image = image
         self.unhighlight()
-        self.pos = [0,sh-self.img.get_height()]
+        self.pos = [0,192+sh-self.img.get_height()]
         if x is not None:
             self.pos[0] = x
         if y is not None:
@@ -3935,6 +3932,7 @@ class guiBack(sprite,gui.widget):
         if name is not None:
             self.id_name = name
         gui.widget.__init__(self,self.pos,self.img.get_size())
+        self.screen_setting = "try_bottom"
     def highlight(self):
         self.load(self.image+"_high"+assets.appendgba)
     def unhighlight(self):
