@@ -28,7 +28,7 @@ try:
 except:
     android = None
 if android:
-    import android_mixer as mixer
+    import android.mixer as mixer
 else:
     import pygame.mixer as mixer
     
