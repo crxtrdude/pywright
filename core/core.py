@@ -3025,6 +3025,10 @@ class evidence_menu(fadesprite,gui.widget):
         #~ self.highlight()
     def click_down_over(self,mp):
         gui.window.focused = self
+    def hold_down_over(self,mp):
+        pass
+    def move_over(self,mp,rel,buttons):
+        pass
     def click_up(self,mp):
         mp[1]-=other_screen(0)
         if self.mode == "overview" and mp[0]>=36 and mp[1]>=62 and mp[0]<=218 and mp[1]<=145:
