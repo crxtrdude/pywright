@@ -2870,6 +2870,7 @@ def load_game_menu():
             root.delete()
             print "loading",filename,fullpath
             assets.clear()
+            assets.show_load()
             assets.load_game_from_string(open(fullpath).read())
         setattr(root,t.replace(" ","_"),do_load)
 assets.load_game_menu = load_game_menu
