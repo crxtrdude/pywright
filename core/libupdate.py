@@ -99,25 +99,8 @@ def names(url):
         files[x["zipname"]]=x
     return files
 
-screen = pygame.display.set_mode([400,50])
-root = widget()
-root.width,root.height = [640,480]
-
-Label = label
-label = editbox(None,"Select content type to download:")
-label.draw_back=False
-root.add_child(label)
-label.draw(screen)
-
-list = scrollpane([0,0])
-list.rpos[1]=100
-list.width,list.height = [400,300]
-list.status_box = editbox(None,"")
-list.status_box.draw_back = False
-list.status_box.draw(screen)
-root.add_child(list)
-
-def build_list(dir="art/port",url="zip_port_info",check_folder=None):
+def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
+    list = e.list
     list.pane.children = [list.status_box]
     fnd = 0
     list.status_box.text="Scanning local files..."
@@ -166,11 +149,11 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
         sline = status 
         if an[n].get("author",""):
             sline += "                    "+"by "+an[n]["author"]
-        stats.add_child(Label(sline))
+        stats.add_child(label(sline))
         stats.date = 0
         if an[n].get("version_date",""):
             stats.date = an[n]["version"]
-            stats.add_child(Label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"])))
+            stats.add_child(label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"])))
         if an[n].get("website",""):
             url = an[n]["website"]
             urlb = button(None,url)
@@ -198,31 +181,45 @@ def build_list(dir="art/port",url="zip_port_info",check_folder=None):
 import libengine
 get_url = "updates3/games.cgi?content_type=%s&ver_type=tuple&fullurl=true&version="+str(libengine.__version__)
 print get_url
-class Engine:
+class Engine(pane):
     mode = "port"
     quit_threads = 0
-    root = root
     num_threads = 0
+    def __init__(self,screen):
+        super(Engine,self).__init__()
+        self.align = None
+        self.root = self
+        self.z = 2000000
+        self.pri = -2000000
+        self.root.width,self.root.height = [256,192]
+
+        self.list = scrollpane([0,0])
+        self.list.rpos[1]=15
+        self.list.width,self.list.height = [256,140]
+        self.list.status_box = editbox(None,"")
+        self.list.status_box.draw_back = False
+        self.list.status_box.draw(screen)
+        self.root.add_child(self.list)
     def Download_X(self,mode,path,url,check_folder=None):
         def t():
             self.mode = mode
             self.path = path
             self.url = url
             print "try download",self.url
-            build_list(path,url,check_folder)
-            rpos = root.children[root.start_index].rpos
-            root.children[root.start_index] = button(self,"download")
-            root.children[root.start_index].rpos = rpos
+            build_list(self,path,url,check_folder)
+            rpos = self.root.children[self.root.start_index].rpos
+            self.root.children[self.root.start_index] = button(self,"download")
+            self.root.children[self.root.start_index].rpos = rpos
         threading.Thread(target=t).start()
-    def Download_Characters(self):
+    def Characters(self):
         self.Download_X("port","art/port",get_url%("port",))
-    def Download_Backgrounds(self):
+    def Backgrounds(self):
         self.Download_X("bg","art/bg",get_url%("bg",))
-    def Download_Foreground(self):
+    def Foreground(self):
         self.Download_X("fg","art/fg",get_url%("fg",))
-    def Download_Games(self):
+    def Games(self):
         self.Download_X("games","games",get_url%("games",))
-    def Download_Music(self):
+    def Music(self):
         self.Download_X("music","music",get_url%("music",))
     def Update_PyWright(self,thread=True):
         self.path = "."
@@ -238,7 +235,7 @@ class Engine:
         return path,filename,url,seek
     def do_downloads(self,checkfolder=True,output=None):
         print "doing downloads"
-        for x in list.pane.children[1:]:
+        for x in self.list.pane.children[1:]:
             check = x.children[1].children[0]
             if check.checked:
                 path,filename,url,seek = self.get_download_in_progress(check)
@@ -251,10 +248,10 @@ class Engine:
         self.make_download_folders()
         if not hasattr(self,"progress"):
             self.progress = progress()
-            root.add_child(self.progress)
+            self.root.add_child(self.progress)
         self.progress.height = 20
         self.progress.width = 400
-        self.progress.rpos[1] = list.rpos[1]+list.height+20
+        self.progress.rpos[1] = self.list.rpos[1]+self.list.height+20
         self.progress.progress = 0
         headers = {"User-Agent":"pywright downloader"}
         size = None
@@ -340,7 +337,7 @@ class Engine:
         del self.progress
         print "switch modes"
         if self.mode == "games":
-            self.Download_Games()
+            self.Games()
         self.num_threads -= 1
     def extract_zip(self,todir,filename):
         try:
@@ -395,58 +392,60 @@ class Engine:
     def download(self):
         t = threading.Thread(target=self.do_downloads)
         t.start()
-    def End_updater(self,*args):
+    def Cancel(self,*args):
         Engine.quit_threads = True
         self.running = False
+        self.kill = 1
                 
-def run():
-    screen = pygame.display.set_mode([400,480])
-    e = Engine()
+def run(screen):
+    e = Engine(screen)
     e.running = True
     start = button(e,"download")
-    start.rpos[1] = list.rpos[1]+list.height
-    end = button(e,"End updater")
-    end.rpos[1] = start.rpos[1]+50
-    root.add_child(start)
-    root.add_child(end)
-    root.start_index = root.children.index(start)
+    start.rpos[1] = e.list.rpos[1]+e.list.height
+    end = button(e,"Cancel")
+    end.draw(screen)
+    end.rpos = [256-end.width,0]
+    e.root.add_child(start)
+    e.root.add_child(end)
+    e.root.start_index = e.root.children.index(start)
 
-    char_b = button(e,"Download Characters")
-    #char_b.rpos[0]=label.rpos[0]+label.width
-    char_b.rpos[1]=20
-    char_b.draw(screen)
-    root.add_child(char_b)
-    bg_b = button(e,"Download Backgrounds")
-    bg_b.rpos[0]=char_b.rpos[0]+char_b.width+5
-    bg_b.rpos[1]=20
-    bg_b.draw(screen)
-    root.add_child(bg_b)
-    fg_b = button(e,"Download Foreground")
-    fg_b.rpos[0]=bg_b.rpos[0]+bg_b.width+5
-    fg_b.rpos[1]=20
-    fg_b.draw(screen)
-    root.add_child(fg_b)
-    game_b = button(e,"Download Games")
+    #~ char_b = button(e,"Characters")
+    #~ #char_b.rpos[0]=label.rpos[0]+label.width
+    #~ char_b.rpos[1]=20
+    #~ char_b.draw(screen)
+    #~ e.root.add_child(char_b)
+    #~ bg_b = button(e,"Backgrounds")
+    #~ bg_b.rpos[0]=char_b.rpos[0]+char_b.width+5
+    #~ bg_b.rpos[1]=20
+    #~ bg_b.draw(screen)
+    #~ e.root.add_child(bg_b)
+    #~ fg_b = button(e,"Foreground")
+    #~ fg_b.rpos[0]=bg_b.rpos[0]+bg_b.width+5
+    #~ fg_b.rpos[1]=20
+    #~ fg_b.draw(screen)
+    #~ e.root.add_child(fg_b)
+    game_b = button(e,"Games")
     game_b.rpos[0]=0
-    game_b.rpos[1]=40
+    game_b.rpos[1]=0
     game_b.draw(screen)
-    root.add_child(game_b)
-    music_b = button(e,"Download Music")
-    music_b.rpos[0]=game_b.rpos[0]+game_b.width+5
-    music_b.rpos[1]=40
-    music_b.draw(screen)
-    root.add_child(music_b)
-    info_label = editbox(None, "Hold shift to select multiple items in a category")
-    root.add_child(info_label)
-    info_label.draw_back = False
-    info_label.rpos[0]=0
-    info_label.rpos[1]=60
+    e.root.add_child(game_b)
+    music_b = button(e,"Music")
+    #~ music_b.rpos[0]=game_b.rpos[0]+game_b.width+5
+    #~ music_b.rpos[1]=40
+    #~ music_b.draw(screen)
+    #~ e.root.add_child(music_b)
+
+    #~ info_label = editbox(None, "Hold shift to select multiple items in a category")
+    #~ e.root.add_child(info_label)
+    #~ info_label.draw_back = False
+    #~ info_label.rpos[0]=0
+    #~ info_label.rpos[1]=60
     
     pwup_b = button(e,"Update PyWright")
-    pwup_b.rpos[1]=80
-    pwup_b.rpos[0]=300
+    pwup_b.rpos[0]=game_b.rpos[1]+game_b.width+1
+    pwup_b.rpos[1]=0
     pwup_b.draw(screen)
-    root.add_child(pwup_b)
+    e.root.add_child(pwup_b)
     
     if os.path.exists("downloads/last"):
         try:
@@ -454,23 +453,23 @@ def run():
             e.extract_zip(last_path,last_dl)
         except:
             os.remove("downloads/last")
+            
+    return e
 
-    clock = pygame.time.Clock()
-    while e.running:
-        mp = pygame.mouse.get_pos()
-        clock.tick(60)
-        screen.fill([225,225,225])
-        root.draw(screen)
-        pygame.display.flip()
-        pygame.event.pump()
-        quit = root.handle_events(pygame.event.get())
-        if quit:
-            Engine.quit_threads = True
-            e.running = False
-            if getattr(e,"need_restart",False):
-                sys.exit()
-    while Engine.num_threads:
-        print Engine.num_threads
-        pass
-if __name__=="__main__":
-    run()
+    #~ clock = pygame.time.Clock()
+    #~ while e.running:
+        #~ mp = pygame.mouse.get_pos()
+        #~ clock.tick(60)
+        #~ screen.fill([225,225,225])
+        #~ e.root.draw(screen)
+        #~ pygame.display.flip()
+        #~ pygame.event.pump()
+        #~ quit = e.root.handle_events(pygame.event.get())
+        #~ if quit:
+            #~ Engine.quit_threads = True
+            #~ e.running = False
+            #~ if getattr(e,"need_restart",False):
+                #~ sys.exit()
+    #~ while Engine.num_threads:
+        #~ print Engine.num_threads
+        #~ pass
