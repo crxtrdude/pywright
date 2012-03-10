@@ -710,6 +710,7 @@ set _font_new_resume_size 14""".split("\n"):
         txt = assets.get_font("loading").render("LOADING",1,[200,100,100])
         pygame.screen.blit(txt,[50,50])
         self.draw_screen(0)
+        time.sleep(0.5)
     def load_game_new(self,path=None,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
