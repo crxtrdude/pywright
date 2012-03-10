@@ -2905,9 +2905,8 @@ def make_start_script(logo=True):
     def run_updater(*args):
         import libupdate
         reload(libupdate)
-        libupdate.run()
-        make_screen()
-        assets.make_start_script()
+        assets.cur_script.world.all.append(libupdate.run(pygame.screen))
+        #assets.make_start_script()
     setattr(make_start_script,"UPDATES",run_updater)
     item = ws_button(make_start_script,"UPDATES")
     item.bordercolor = [255,255,255]
