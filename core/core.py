@@ -4008,6 +4008,8 @@ class saved(fadesprite):
         self.pos[0]=0
         self.pos[1]=0
         self.block = block
+        self.width=0
+        self.height=0
     def draw(self,dest):
         txt1 = assets.get_font("itemset_big").render(self.text,1,[230,230,230])
         txt2 = assets.get_font("itemset_big").render(self.text,1,[30,30,30])
