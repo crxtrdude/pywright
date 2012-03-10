@@ -2331,11 +2331,11 @@ class menu(fadesprite,gui.widget):
     fail = "none"
     id_name = "invest_menu"
     def over(self,mp):
-        oy = other_screen(0)
+        oy = self.getpos()[1]
         for o in self.options:
             p2 = self.opos[o]
             w,h = self.opt.get_width()//2,self.opt.get_height()//2
-            if mp[0]>=p2[0] and mp[0]<=p2[0]+w and mp[1]>=p2[1] and mp[1]<=p2[1]+h:
+            if mp[0]>=p2[0] and mp[0]<=p2[0]+w and mp[1]>=p2[1]+oy and mp[1]<=p2[1]+h+oy:
                 return o
     def move_over(self,pos,rel,buttons):
         if buttons[0]:
@@ -2351,7 +2351,7 @@ class menu(fadesprite,gui.widget):
             self.enter_down()
     def __init__(self):
         self.bg = None
-        oy = other_screen(0)
+        oy = 192
         fadesprite.__init__(self,x=0,y=oy)
         gui.widget.__init__(self,[0,oy],[sw,sh])
         self.load("general/black")
@@ -2368,8 +2368,8 @@ class menu(fadesprite,gui.widget):
         self.opos_c = {"examine":[0,0],"move":[1,0],
             "talk":[0,1],"present":[1,1]}
         self.opos_l = [["examine","move"],["talk","present"]]
-        self.opos = {"examine":[stx,sty+oy],"move":[stx+self.opt.get_width()/2,sty+oy],
-            "talk":[stx,sty+self.opt.get_height()/2+oy],"present":[stx+self.opt.get_width()/2,sty+self.opt.get_height()/2+oy]}
+        self.opos = {"examine":[stx,sty],"move":[stx+self.opt.get_width()/2,sty],
+            "talk":[stx,sty+self.opt.get_height()/2],"present":[stx+self.opt.get_width()/2,sty+self.opt.get_height()/2]}
         imgs = []
         x=y=0
         while y<self.opt.get_height():
@@ -2399,6 +2399,7 @@ class menu(fadesprite,gui.widget):
         if not self.options:
             self.delete()
         fadesprite.update(self)
+        self.screen_setting = "try_bottom"
         return True
     def get_coord(self):
         try:
@@ -2461,16 +2462,15 @@ class menu(fadesprite,gui.widget):
                 if isinstance(o,bg):
                     self.bg = o.img.copy()
                     break
+        self.screen_setting = "try_bottom"
         if self.bg:
-            dest.blit(self.bg,self.pos)
-        self.pos = [0,other_screen(0)]
-        fadesprite.draw(self,dest)
+            dest.blit(self.bg,self.getpos())
         if not hasattr(self,"fade") or self.fade>=self.max_fade:
             for o in self.options:
                 if self.selected == o:
-                    dest.blit(self.oimgshigh[o],self.opos[o])
+                    dest.blit(self.oimgshigh[o],[self.opos[o][0],self.opos[o][1]+self.getpos()[1]])
                 else:
-                    dest.blit(self.oimgs[o],self.opos[o])
+                    dest.blit(self.oimgs[o],[self.opos[o][0],self.opos[o][1]+self.getpos()[1]])
 
 class listmenu(fadesprite,gui.widget):
     fail = "none"
