@@ -3020,9 +3020,6 @@ class examine_menu(sprite,gui.widget):
 
 class evidence_menu(fadesprite,gui.widget):
     fail = "none"
-    #~ def move_over(self,pos,rel,buttons):
-        #~ self.mx,self.my = pos
-        #~ self.highlight()
     def click_down_over(self,mp):
         gui.window.focused = self
     def hold_down_over(self,mp):
