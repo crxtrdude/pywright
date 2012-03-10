@@ -13,6 +13,7 @@ import pickle
 import re
 import textutil
 import registry
+import json
 ImgFont = textutil.ImgFont
 try:
     import pygame.movie as pymovie
@@ -726,9 +727,20 @@ set _font_new_resume_size 14""".split("\n"):
         save_text = f.read()
         f.close()
         self.load_game_from_string(save_text)
+    def convert_save_string_to_ob(self,text):
+        def read_oldsave(s):
+            return eval(s)
+        def read_newsave(s):
+            return json.loads(s)
+        def read_save(s):
+            try:
+                return read_newsave(s)
+            except:
+                return read_oldsave(s)
+        return read_save(text)
     def load_game_from_string(self,save_text):
         self.loading_cache = {}
-        things = eval(save_text)
+        things = self.convert_save_string_to_ob(save_text)
         assets.clear()
         stack = {}
         loaded = []
@@ -800,7 +812,7 @@ set _font_new_resume_size 14""".split("\n"):
                 stuff.append(script.save())
         self.backup(self.game,filename)
         f = open(self.game+"/"+filename,"w")
-        f.write(repr(stuff))
+        f.write(json.dumps(stuff,indent=4))
         f.close()
         if not hide:
             self.cur_script.obs.append(saved(block=False))
