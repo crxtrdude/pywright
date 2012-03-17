@@ -1,4 +1,4 @@
-import os
+import os,zipfile,StringIO
 
 filepaths = ["art","music","sfx","movies"]
 ignore = ".hg"
@@ -46,6 +46,12 @@ class Registry:
         self.use_cache = use_cache
         if root:
             self.build(root)
+    def open(self,path,mode="rb"):
+        if ".zip/" in path:
+            normal,zip = path.split(".zip/",1)
+            zf = zipfile.ZipFile(normal+".zip")
+            return StringIO.StringIO(zf.open(zip,"r").read())
+        return open(path,mode)
     def clear_cache(self):
         global_registry_cache.clear()
     def build(self,root):
@@ -57,20 +63,30 @@ class Registry:
             if os.path.isdir(root+"/"+sub):
                 self.index(root+"/"+sub)
         global_registry_cache[root] = [self.map,self.ext_map]
+    def list_files(self,path):
+        if os.path.isdir(path):
+            return os.listdir(path)
+        if zipfile.is_zipfile(path):
+            return zipfile.ZipFile(path,"r").namelist()
     def index(self,path):
+        in_zip = zipfile.is_zipfile(path)
         subdirs = []
-        for sub in os.listdir(path):
+        for sub in self.list_files(path):
             if sub==".hg":
                 continue
-            elif os.path.isdir(path+"/"+sub):
+            elif os.path.isdir(path+"/"+sub) or zipfile.is_zipfile(path+"/"+sub):
                 subdirs.append(path+"/"+sub)
             else:
-                self.mapfile(path+"/"+sub)
+                self.mapfile(path+"/"+sub,in_zip)
         for sub in subdirs:
             self.index(sub)
-    def mapfile(self,path):
+    def mapfile(self,path,in_zip=False):
         file = File(path)
         tag = file.pathtag.split(self.root.lower()+"/",1)[1]
+        if in_zip:
+            spl = tag.split("/")
+            spl[-2] = spl[-2].rsplit(".",1)[0]
+            tag = "/".join(spl)
         if tag in self.map:
             if file.priority<=self.map[tag].priority:
                 self.map[tag] = file
@@ -120,6 +136,11 @@ def combine_registries(root):
 
 def test():
     os.chdir("..")
+    rec = Registry("./games/PW - The Contempt of Court/The Haunted Turnabout")
+    assert rec.lookup("art/port/Maplethorpe/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maplethorpe/angry(blink).png"
+    assert rec.lookup("art/port/Maris/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maris.zip/angry(blink).png"
+    assert rec.lookup("art/port/Maris/hand1(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maris.zip/hand1(blink).png"
+    
     reg = Registry("./games/Turnabout Substitution")
     assert not reg.lookup("art/port/kristoph2/normal(talk)")
     assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
@@ -141,7 +162,7 @@ def test():
     base.override(rec)
     assert rec.lookup("art/fg/lilmiles-walkeast.txt")=="examples/rectangles/art/fg/lilmiles-walkeast.png"
     assert rec.lookup("art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/art/fg/lilmiles-walkeast.txt"
-    
+
 if __name__=="__main__":
     testfile()
     test()
