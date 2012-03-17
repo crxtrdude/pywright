@@ -19,7 +19,8 @@
 -10000	error_msg
 -5000 saved
 -1000	waitenter scroll rotateanim fadeanim guiScroll timer zoomanim uglyarrow flash shake
-0	fg evidence_menu movie sprite fadesprite
+0	evidence_menu
+1	fg movie sprite fadesprite
 20	portrait
 25	case_menu
 30	textbox
