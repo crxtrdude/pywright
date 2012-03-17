@@ -204,6 +204,8 @@ def cent_to_frame(t):
     return int(frames)
 assert cent_to_frame("300")==180
 
+def tencode(t):
+    return t.replace("&nbsp;"," ").replace("&quot;","'")
 def textify(contentlist,colorize=False,replace_line_end=None):
     t = ""
     for c in contentlist:
@@ -226,6 +228,7 @@ def textify(contentlist,colorize=False,replace_line_end=None):
             pass
     if replace_line_end is not None:
         t = t.replace("\n",replace_line_end)
+    t = tencode(t)
     return t
 
 def wget(url,saveto):
@@ -693,22 +696,36 @@ def end_cross_exam(vals):
         t+=u"\ngoto line_%s\n"%id_num
         del label_none[id_num]
     return t
-            
+
 def make_textbox(t):
     print "make textbox of",repr(t)
     #pauses, flashes, shakes, and spaces
     t = textify(BeautifulSoup(t),True)
     t = t.replace("\n","{n}")
-    t = t.replace("[#]","{p60}").replace("[#f]","{f}").replace("[#s]","{s}").replace("&nbsp;"," ")
     while 1:
-        match = re.search("\[#\d*\]",t)
+        match = re.search("\[#.*?\]",t)
         if not match:
             break
         found = t[match.start():match.end()]
-        t = t[:match.start()]+"{p"+found[2:-1]+"}"+t[match.end():]
+        print "found",found
+        if found == "[#]":
+            repl = "{p60}"
+        elif found == "[#f]":
+            repl = "{f}"
+        elif found == "[#s]":
+            repl = "{s}"
+        elif re.match("\[#p\d*\]",found):
+            repl = "{"+found[2:-1]+"}"
+        elif re.match("\[#\d*\]",found):
+            repl = "{p"+found[2:-1]+"}"
+        t = t[:match.start()]+repl+t[match.end():]
     return t
 st = u'Those two years...[#30] <span style="color: red;">that trial</span>they\nwere the happiest moments\nof my life but also the saddest.'
 en = u'Those two years...{p30} {c900}that trial{c}they{n}were the happiest moments{n}of my life but also the saddest.'
+tr = make_textbox(st)
+assert tr==en,repr(tr)
+st = u' [#] January 20, [#p10]8:40 AM[#p5]\nDistrict Court[#p5]\nDefendant Lobby No. 6'
+en = u' {p60} January 20, {p10}8:40 AM{p5}{n}District Court{p5}{n}Defendant Lobby No. 6'
 tr = make_textbox(st)
 assert tr==en,repr(tr)
     
