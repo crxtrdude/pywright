@@ -1747,40 +1747,6 @@ class present_button(fadesprite,gui.widget):
     def click_down_over(self,mp):
         self.parent.k_x()
 
-#~ class record_button(fadesprite,gui.widget):
-    #~ z = 7
-    #~ def __init__(self,parent):
-        #~ self.normal = assets.open_art("general/record")[0]
-        #~ self.high = assets.open_art("general/record_high")[0]
-        #~ self.highlight = False
-        #~ self.pos = [sw-self.normal.get_width(),other_screen(0)]
-        #~ gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
-        #~ #self.width = 40
-        #~ self.height = 17
-    #~ def draw(self,dest):
-        #~ if not vtrue(assets.variables.get("_cr_button","on")):
-            #~ return
-        #~ surf = {False:self.normal,True:self.high}[self.highlight is True]
-        #~ dest.blit(surf,self.pos)
-    #~ def click_down_over(self,mp):
-        #~ if not vtrue(assets.variables.get("_cr_button","on")):
-            #~ return
-        #~ if mp[0]>=self.pos[0] and mp[0]<=self.pos[0]+self.normal.get_width() and\
-            #~ mp[1]>=self.pos[1] and mp[1]<=self.pos[1]+self.height:
-            #~ if mp[0]>self.pos[0]+38 or not vtrue(assets.variables.get("_cr_button_loadsave","on")):
-                #~ self.showmenu()
-                #~ return True
-            #~ elif mp[0]>self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_save","true")):
-                #~ assets.save_game()
-                #~ return True
-            #~ elif mp[0]<=self.pos[0]+21 and vtrue(assets.variables.get("_allow_click_load","true")):
-                #~ assets.load_game_menu()
-                #~ return True
-    #~ def showmenu(self):
-        #~ if not vtrue(assets.variables.get("_cr_button","on")):
-            #~ return
-        #~ assets.addevmenu()
-
 class textbox(gui.widget):
     pri = 30
     def click_down_over(self,pos):
@@ -2490,7 +2456,7 @@ class listmenu(fadesprite,gui.widget):
         if getattr(self,"kill",0):
             return False
         x = (sw-self.choice.img.get_width())/2
-        y = other_screen(30)
+        y = self.getpos()[1]+30
         si = None
         i = 0
         for c in self.options:
@@ -2597,7 +2563,7 @@ class listmenu(fadesprite,gui.widget):
             self.selected = self.options[self.si]
         fadesprite.draw(self,dest)
         x = (sw-self.choice.img.get_width())/2
-        y = other_screen(30)
+        y = self.getpos()[1]+30
         #self.choice.setfade(200)
         #self.choice_high.setfade(200)
         try:
@@ -2941,13 +2907,13 @@ class examine_menu(sprite,gui.widget):
                 col = color_str(assets.variables.get("_examine_cursor_col","FFFFFF"))
                 pygame.draw.line(dest,col,[0,my],[self.mx-5,my])
                 pygame.draw.line(dest,col,[self.mx+5,my],[sw,my])
-                pygame.draw.line(dest,col,[self.mx,other_screen(0)],[self.mx,my-5])
-                pygame.draw.line(dest,col,[self.mx,my+5],[self.mx,other_screen(sh)])
+                pygame.draw.line(dest,col,[self.mx,self.getpos()[1]],[self.mx,my-5])
+                pygame.draw.line(dest,col,[self.mx,my+5],[self.mx,self.getpos()[1]+sh])
                 pygame.draw.rect(dest,col,[[self.mx-5,my-5],[10,10]],1)
         if vtrue(assets.variables.get("_examine_showbars", "true")):
-            dest.blit(self.fg,[0,other_screen(0)])
+            dest.blit(self.fg,[0,self.getpos()[1]])
         if self.selected != [None] and not self.hide:
-            dest.blit(self.check,[sw-self.check.get_width()+3,other_screen(sh-self.check.get_height())])
+            dest.blit(self.check,[sw-self.check.get_width()+3,self.getpos()[1]+sh-self.check.get_height()])
         #~ if vtrue(assets.variables.get("_debug","false")):
             #~ x = int(assets.variables.get("_examine_offsetx",0))
             #~ y = int(assets.variables.get("_examine_offsety",0))
@@ -3039,7 +3005,7 @@ class evidence_menu(fadesprite,gui.widget):
     def move_over(self,mp,rel,buttons):
         pass
     def click_up(self,mp):
-        mp[1]-=other_screen(0)
+        mp[1]-=self.getpos()[1]
         if self.mode == "overview" and mp[0]>=36 and mp[1]>=62 and mp[0]<=218 and mp[1]<=145:
             rx = (218-36)//4
             ry = (145-62)//2
@@ -3080,7 +3046,7 @@ class evidence_menu(fadesprite,gui.widget):
         if mp[0]>=chk[0] and mp[1]>=chk[1]:
             self.do_check()
         if self.can_present():
-            mp[1]+=other_screen(0)
+            mp[1]+=self.getpos()[1]
             self.present_button.draw(assets.Surface([64,64]))
             sb = self.present_button
             sbpos = sb.getpos()
@@ -3975,9 +3941,10 @@ class guiScroll(sprite,gui.widget):
         gui.widget.__init__(self)
         self.pri = ulayers.index(self.__class__.__name__)
         self.load("general/examine_scroll")
-        self.pos = [sw//2-self.img.get_width()//2,other_screen(sh-self.img.get_height())]
+        self.pos = [sw//2-self.img.get_width()//2,sh*2-self.img.get_height()]
         gui.widget.__init__(self,self.pos,self.img.get_size())
         self.direction = direction
+        self.screen_setting = "try_bottom"
     def k_z(self):
         self.delete()
         self.parent.xscrolling = self.direction*sw
