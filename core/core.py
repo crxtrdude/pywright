@@ -497,6 +497,10 @@ set _font_new_resume_size 14""".split("\n"):
         traceback.print_exc()
         raise art_error("Art file corrupt or missing:"+name)
     def init_sound(self,reset=False):
+        self.sound_repeat_timer = {}
+        self.min_sound_time = 0.01
+        if android:
+            self.min_sound_time = 0.1
         if reset or not self.sound_init:
             self.snds = {}
             try:
@@ -559,6 +563,10 @@ set _font_new_resume_size 14""".split("\n"):
     def play_sound(self,name,wait=False,volume=1.0,offset=0,frequency=1,layer=0):
         #self.init_sound()
         if self.sound_init == -1 or not self.sound_volume: return
+        if name in self.sound_repeat_timer:
+            if time.time()-self.sound_repeat_timer[name]<self.min_sound_time:
+                return
+        self.sound_repeat_timer[name] = time.time()
         path = self.get_path(name,"sound","sfx")
         if self.snds.get(path,None):
             snd = self.snds[path]
@@ -2121,7 +2129,7 @@ class textbox(gui.widget):
                     assets.portrait.set_talking()
                 if self.in_paren:
                     assets.portrait.set_blinking()
-            if not android and char.strip():
+            if char.strip():
                 assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
             next_char = int(next_char*self.delay)
             if self.wait=="manual":
