@@ -485,6 +485,7 @@ class button(widget):
         self.textcolor = defcol["buttext"]
         self.highlightcolor = defcol["buthigh"]
         self.graphic = None
+        self.graphichigh = None
     def click_down_over(self,mp):
         f = self.target_func.replace(" ","_")
         tob = getattr(self,"target_ob",self)
@@ -494,6 +495,8 @@ class button(widget):
         if not self.visible: return
         pos = self.rpos
         bg = self.graphic
+        if self.graphichigh and window.over == self:
+            bg = self.graphichigh
         if not bg:
             txt = self.font.render(self.text,1,self.textcolor)
             ts = txt.get_size()

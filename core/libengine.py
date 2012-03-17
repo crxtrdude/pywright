@@ -1770,6 +1770,7 @@ KEYWORD('z', 'z position of created item, valid for (Back, Button, Input)'),
 KEYWORD('width','pixel width of input box, valid for (Input)'),
 KEYWORD('name','id to give object for later reference, valid for (Back, Button, Input)'),
 KEYWORD('graphic','path to graphic file, valid for (Button)','default for buttons is to have an outline with the text of the button label'),
+KEYWORD('graphichigh','path to graphic file, what to display on mouseover, valid for (Button)','default is no mouseover behavior'),
 TOKEN('hold','hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)','default is that it only executes with each distinct click'),
 TOKEN('password','typed text will be displayed with stars *****, valid for (Input)','default is to show text'),
 TOKEN('try_bottom','Try to keep object in bottom screen, but if no bottom screen exists move it up, valid for (Button)'),
@@ -1806,6 +1807,7 @@ The four types of gui you can create are:
         if guitype=="Button":
             macroname=args[0]; del args[0]
             graphic = None
+            graphichigh = None
             hold = None
             hotkey = None
             try_bottom = None
@@ -1816,6 +1818,7 @@ The four types of gui you can create are:
                 elif a.startswith("z="): z=int(a[2:])
                 elif a.startswith("name="): name=a[5:]
                 elif a.startswith("graphic="): graphic = a[8:]
+                elif a.startswith("graphichigh="): graphichigh = a[12:]
                 elif a == "hold": hold = True
                 elif a.startswith("hotkey="): hotkey = a.split("=",1)[1]
                 elif a=="try_bottom": try_bottom = True
@@ -1833,6 +1836,9 @@ The four types of gui you can create are:
                 btn.s_graphic = graphic
                 graphic = assets.open_art(graphic)[0]
             btn.graphic = graphic
+            btn.s_graphichigh = graphichigh
+            if graphichigh:
+                btn.graphichigh = assets.open_art(graphichigh)[0]
             btn.rpos = [x,y]
             btn.z = int(assets.variables["_layer_gui"])
             if z is not None: btn.z = z
