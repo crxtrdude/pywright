@@ -2520,7 +2520,7 @@ class listmenu(fadesprite,gui.widget):
             self.enter_down()
     def __init__(self,tag=None):
         self.pri = ulayers.index(self.__class__.__name__)
-        x,y = 0,other_screen(0)
+        x,y = 0,192
         gui.widget.__init__(self,[x,y],[sw,sh])
         fadesprite.__init__(self,x=x,y=y)
         self.load(assets.variables.get("_list_bg_image","general/black"))
@@ -2548,6 +2548,7 @@ class listmenu(fadesprite,gui.widget):
             self.bck.kill = 1
     def update(self):
         fadesprite.update(self)
+        self.screen_setting = "try_bottom"
         if self.hidden:
             return False
         if not hasattr(self,"bck") and vtrue(assets.variables.get("_list_back_button","true")) and not getattr(self,"noback",False):
