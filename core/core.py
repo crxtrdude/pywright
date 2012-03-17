@@ -1338,7 +1338,7 @@ class graphic(fadesprite):
         fadesprite.__init__(self,*args,**kwargs)
         self.load(name)
 
-class portrait(object):
+class portrait(sprite):
     autoclear = True
     def get_self_image(self):
         if hasattr(self,"img"):
@@ -1372,6 +1372,10 @@ class portrait(object):
     male  = bliplines[1].strip().split(" ")
     female = bliplines[4].strip().split(" ")
     def __init__(self,name=None,hide=False):
+        self.talk_sprite = fadesprite()
+        self.blink_sprite = fadesprite()
+        self.combined = fadesprite()
+        super(portrait,self).__init__()
         self.init(name,hide)
     def init_sounds(self):
         self.clicksound = assets.variables.get("char_defsound","blipmale.ogg")
@@ -1395,7 +1399,7 @@ class portrait(object):
             self.name = name
             self.id_name = charname
             self.nametag = assets.variables.get("char_"+charname+"_name",charname.capitalize())+"\n"
-        super(portrait,self).__init__()
+        #super(portrait,self).__init__()
         
         emo = rest
         mode = ""
