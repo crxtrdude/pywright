@@ -660,8 +660,7 @@ char test
             if self.cross == "proceed":
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
-                tbox._text = nt+"\n{c283}"+t
-                #tbox.color = (20,200,40)
+                tbox.set_text("{c283}"+t)
         else:
             tbox.init_normal()
     def execute_line(self,line):

@@ -74,7 +74,7 @@ def load(script,olist):
                 if getattr(o2,"id_name",None) in props["ob_ids"]:
                     o.obs.append(o2)
     if cls == "textbox":
-        o = textbox()
+        o = textbox(*args)
     if cls == "textblock":
         o = textblock(*args)
     if cls == "uglyarrow":
