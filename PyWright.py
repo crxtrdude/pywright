@@ -50,5 +50,5 @@ except:
         raise
     type, value, sys.last_traceback = sys.exc_info()
     lines = traceback.format_exception(type, value,sys.last_traceback)
-    print "".join(lines)
+    print("".join(lines))
     show_popup("Oh no, there's been an error:\nMore detailed info available in lastlog.txt."+"".join(lines))
