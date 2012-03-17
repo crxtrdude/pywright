@@ -2773,10 +2773,12 @@ class choose_game(gui.widget):
         for f in games:
             item = ws_button(self,f)
             d = get_data_from_folder(self.path+"/"+f)
+            graphic = pygame.Surface([1,1])
             if d.get("icon",""):
-                graphic = pygame.image.load(self.path+"/"+f+"/"+d["icon"])
-            else:
-                graphic = pygame.Surface([1,1])
+                try:
+                    graphic = pygame.image.load(self.path+"/"+f+"/"+d["icon"])
+                except:
+                    pass
             title = d.get("title",f)
             if d.get("author",""):
                 title += " by "+d["author"]
