@@ -4,7 +4,6 @@ sys.path.append("core/include")
 sys.path.append("include")
 import time
 import gui
-import zlib
 import os
 import pygame
 pygame.font.init()
@@ -13,7 +12,8 @@ import pickle
 import re
 import textutil
 import registry
-import json
+import zipfile
+import simplejson as json
 ImgFont = textutil.ImgFont
 try:
     import pygame.movie as pymovie
@@ -445,17 +445,19 @@ set _font_new_resume_size 14""".split("\n"):
         textpath = self.registry.lookup(pre+name+".txt",True)
         if not textpath:
             textpath = self.registry.lookup(pre+name.rsplit(".",1)[0]+".txt",True)
-        artpath = self.registry.lookup(pre+name)
+        print "lookup",pre+name
+        artpath = self.registry.lookup((pre+name).replace(".zip/","/"))
         print pre+name+".txt",artpath,textpath
         if textpath:
             try:
-                f = open(textpath)
+                f = self.registry.open(textpath)
                 self.meta.load_from(f)
             except:
                 import traceback
                 traceback.print_exc()
                 raise art_error("Art textfile corrupt:"+pre+name[:-4]+".txt")
-        texture = pygame.image.load(artpath)
+        print self.registry.open(artpath)
+        texture = pygame.image.load(self.registry.open(artpath),artpath)
         if texture.get_flags()&pygame.SRCALPHA:
             texture = texture.convert_alpha()
         else:
@@ -491,7 +493,7 @@ set _font_new_resume_size 14""".split("\n"):
         for t in tries:
             try:
                 return self._open_art_(t,key)
-            except (IOError,ImportError,pygame.error):
+            except (IOError,ImportError,pygame.error,TypeError):
                 pass
         import traceback
         traceback.print_exc()
