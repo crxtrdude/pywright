@@ -956,6 +956,30 @@ class ws_button(gui.button):
         self.rpos = self.getrpos()
         super(ws_button,self).draw(dest)
         self.rpos = orpos
+        
+class ws_editbox(gui.editbox):
+    """An editbox created from wrightscript"""
+    screen_setting = ""
+    id_name = "_ws_button_"
+    def delete(self):
+        print "deleting ws_button"
+        self.kill = 1
+    def getrpos(self):
+        rpos = self.rpos[:]
+        if self.screen_setting == "try_bottom":
+            rpos[1] = trans_y(rpos[1])
+        return rpos
+    def event(self,name,pos,*args):
+        orpos = self.rpos[:]
+        self.rpos = self.getrpos()
+        ret = super(ws_editbox,self).event(name,pos,*args)
+        self.rpos = orpos
+        return ret
+    def draw(self,dest):
+        orpos = self.rpos[:]
+        self.rpos = self.getrpos()
+        super(ws_editbox,self).draw(dest)
+        self.rpos = orpos
 
 class sprite(gui.button):
     blinkspeed = [100,200]
