@@ -7,6 +7,7 @@ gui Input txt2 x=0 y=20 name=inp2 width=200
 gui Input txt3 x=0 y=40 name=inp3 width=200
 
 gui Button {Preview} x=0 y=60 Preview
+gui Button Clear x=0 y=90 Clear
 
 gui Wait
 
@@ -18,3 +19,7 @@ joinvar txt $txt1 {n} $txt2 {n} $txt3
 textbox $txt
 gui Wait
 endmacro
+
+label Clear
+clear
+"now it has been cleared"
