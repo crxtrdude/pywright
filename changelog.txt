@@ -1,5 +1,12 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.987
+    - Framerate independance turned on again, games run at the same speed on
+        all computers, dropping frames if the rendering can't keep up. At 10fps or less,
+        the game will start to slow down to stay playable
+    - 'gui Input' objects could not be deleted
+    - paths to content files cached on game start to make loading files faster
+
 *PyWright 0.986
     - Fixed setting blipsound from character animation files. You can't set the blipsound this
         way for "hide" characters. Prefered method is to 'set char_[folder name]_defsound blipfemale.ogg',
