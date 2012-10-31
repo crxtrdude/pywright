@@ -240,6 +240,7 @@ class editbox(widget):
         self.draw_back = True
         self.carat = 0
         self.force_width = None
+	self.password=False
     def click_up(self,pos):
         pass
     def click_down_over(self,mp):
@@ -320,6 +321,8 @@ class editbox(widget):
         if not self.visible: return
         pos = self.rpos
         val = self.val()
+	if self.password:
+	    val = "*"*len(val)
         textcol = self.textcol
         bgcol = self.bgcol
         bgcol2 = self.bgcol2
