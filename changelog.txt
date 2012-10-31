@@ -4,7 +4,9 @@
     - Framerate independance turned on again, games run at the same speed on
         all computers, dropping frames if the rendering can't keep up. At 10fps or less,
         the game will start to slow down to stay playable
+    - Scrolling speed can now include decimals for more control
     - 'gui Input' objects could not be deleted
+    - 'gui Input variable password x=0 y=0' will actually hide the text with **** as mentioned in docs
     - paths to content files cached on game start to make loading files faster
     - 'setprop [object] screen_setting' to change whether the object is "try_bottom"
 
