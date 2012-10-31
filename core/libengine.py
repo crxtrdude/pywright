@@ -817,9 +817,9 @@ char test
         assets.variables["_lastlabel"] = " ".join(name)
     @category([VALUE("game","Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase"),
                     VALUE("script","Script to look for in the game folder to run first","intro")],type="gameflow")
-    def _game(self,command,game,script="intro"):
+    def _game(self,command,game,script=None):
         """Can be used to start a new game or case."""
-        assets.start_game(game,script,"nomenu")
+        assets.start_game(game,script=script,mode="nomenu")
     @category([COMBINED("destination","The destination label to move to"),
                     KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
     @category([VALUE("folder","List all games in this folder, relative to current game directory")],type="gameflow")
@@ -2818,10 +2818,7 @@ class choose_game(gui.widget):
                 sf.write(repr(assets.played))
                 sf.close()
                 gamedir = self.path+"/"+func
-                if os.path.exists(gamedir+"/"+func+".txt"):
-                    assets.start_game(gamedir,func)
-                else:
-                    assets.start_game(gamedir,"intro")
+		assets.start_game(gamedir)
             if __version__ >= req:
                 setattr(self,f.replace(" ","_"),_play_game)
             else:
@@ -2939,7 +2936,7 @@ def make_start_script(logo=True):
     
     def pl(*args):
         gamedir = "examples"
-        assets.start_game(gamedir,"intro")
+        assets.start_game(gamedir)
         #~ [x.delete() for x in bottomscript.obs if isinstance(x,choose_game)]
         #~ cg = choose_game()
         #~ cg.list_games("examples")
@@ -3179,7 +3176,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             sys.exit()
         assets.make_start_script = ms
         assets.stack = []
-        assets.start_game(sys.argv[sys.argv.index("-run")+1],"intro")
+        assets.start_game(sys.argv[sys.argv.index("-run")+1])
 
     import time
     lt = time.time()

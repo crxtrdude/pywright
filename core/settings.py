@@ -162,6 +162,7 @@ class settings_menu(gui.pane):
         self.children[:] = []
         self.make_button("close",[225,0])
         self.make_button("quit game",[0,sh-17])
+        self.make_button("reset game",[74,sh-17])
         self.make_button("quit pywright",[sw-74,sh-17])
         self.make_button("saves",[0,0])
         self.make_button("display",[35,0])
@@ -550,6 +551,14 @@ class settings_menu(gui.pane):
         assets.stop_music()
         assets.stack[:] = []
         assets.make_start_script(False)
+    def reset_game(self):
+        assets = self.assets
+        game = assets.game
+        assets = self.assets
+        assets.variables.clear()
+        assets.stop_music()
+        assets.stack[:] = []
+        assets.start_game(game)
     def quit_pywright(self):
         sys.exit()
     def close(self):
