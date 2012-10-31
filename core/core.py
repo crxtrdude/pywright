@@ -1014,6 +1014,8 @@ class sprite(gui.button):
             return self.pos["xy".index(p)]
         if p == "frame":
             return self.x
+	if p == "screen_setting":
+	    return self.screen_setting
         return getattr(self,p,"")
     def setprop(self,p,v):
         if p in "xy":
@@ -1022,6 +1024,8 @@ class sprite(gui.button):
             self.z = int(v)
         if p == "frame":
             self.x = int(v)
+	if p == "screen_setting":
+	    self.screen_setting = v
     def delete(self):
         self.kill = 1
     def makestr(self):
