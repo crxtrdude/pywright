@@ -30,6 +30,7 @@ def save(ob):
         return ["fg",[],oprops]
     elif isinstance(ob,evidence):
         oprops["id"] = ob.id
+	oprops["page"] = ob.page
         return ["evidence",[],oprops]
     elif isinstance(ob,portrait):
         cp(["clicksound","nametag","charname","emoname","modename","blinkemo","supermode"],ob,oprops)
@@ -50,7 +51,7 @@ def save(ob):
         return ["surf3d",[ob.pos,ob.sw,ob.sh,ob.width,ob.height],oprops]
     elif isinstance(ob,evidence_menu):
         cp(["page","sx","sy","mode","pri","z","item_set"],ob,oprops)
-        oprops["items"] = [x.id for x in ob.items]
+        oprops["items"] = [{"id":x.id,"page":x.page} for x in ob.items]
         return ["ev_menu",[],oprops]
     elif isinstance(ob,scroll):
         cp(["dx","dy","dz","amtx","amty","speed","wait","filter","kill"],ob,oprops)

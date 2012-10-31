@@ -491,7 +491,6 @@ set _font_new_resume_size 14""".split("\n"):
         for ext in ext_for(["image"]):
             tries.append(name+ext)
         for t in tries:
-            print "trying to open art path"
             try:
                 return self._open_art_(t,key)
             except (IOError,ImportError,pygame.error,TypeError):
@@ -697,7 +696,7 @@ set _font_new_resume_size 14""".split("\n"):
         #save items
         items = []
         for x in self.items:
-            items.append(x.id)
+            items.append({"id":x.id,"page":x.page})
         props["items"] = items
         #save variables
         vars = {}
@@ -712,7 +711,13 @@ set _font_new_resume_size 14""".split("\n"):
     def after_load(self):
         self.registry = registry.combine_registries("./"+self.game)
         self.last_autosave = time.time()
-        self.items = [evidence(x) for x in self.items]
+        itemobs = []
+	for x in self.items:
+	    if isinstance(x,dict):
+	        itemobs.append(evidence(x["id"],page=x["page"]))
+	    else:
+	        itemobs.append(evidence(x))
+	self.items = itemobs
         v = self.variables
         self.variables = Variables()
         self.variables.update(v)
@@ -3186,9 +3191,13 @@ class evidence_menu(fadesprite,gui.widget):
         page = self.pages[self.page]
         if self.sy>len(page)-1:
             self.sy = 0
+    def set_bg(self):
+        defbg = assets.variables["ev_mode_bg_evidence"]
+	bg = assets.variables.get("ev_mode_bg_"+self.item_set,defbg)
+        self.load(bg+assets.appendgba)
     def k_left(self):
         if self.page>=len(self.pages): return
-        self.load(assets.variables["ev_mode_bg_"+self.item_set]+assets.appendgba)
+	self.set_bg()
         self.back = False
         self.back_button.unhighlight()
         self.sx-=1
@@ -3218,7 +3227,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.choose()
     def k_right(self):
         if self.page>=len(self.pages): return
-        self.load(assets.variables["ev_mode_bg_"+self.item_set]+assets.appendgba)
+	self.set_bg()
         self.back = False
         self.back_button.unhighlight()
         self.sx+=1
@@ -3254,7 +3263,7 @@ class evidence_menu(fadesprite,gui.widget):
                 self.scroll_dir = -1
         self.choose()
     def k_up(self):
-        self.load(assets.variables["ev_mode_bg_"+self.item_set]+assets.appendgba)
+        self.set_bg()
         if self.mode == "overview":
             if self.sy == 0:
                 self.switch = True
@@ -3270,6 +3279,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.back_button.unhighlight()
         self.choose()
     def k_down(self):
+        self.set_bg()
         if self.mode == "overview":
             self.back = False
             self.back_button.unhighlight()
