@@ -3586,11 +3586,12 @@ class effect(object):
         self.kill = 1
                 
 class scroll(effect):
-    def __init__(self,amtx=1,amty=1,amtz=1,speed=1,wait=1,filter="top"):
+    def __init__(self,amtx=1,amty=1,amtz=1,speed=1,wait=1,filter="top",ramp=-.005):
         super(scroll,self).__init__()
         self.amtx = abs(amtx)
         self.amty = abs(amty)
         self.amtz = abs(amtz)
+	self.ramp = ramp
         self.dx=self.dy=self.dz=0
         if amtx==0 and amty: 
             self.dy=amty/abs(amty)
@@ -3643,6 +3644,10 @@ class scroll(effect):
                 o.pos[1]+=ndy
             if isinstance(o,mesh):
                 o.trans(z=ndz)
+        #Ramp not really working here
+	#self.dx+=self.ramp*ndx
+	#self.dy+=self.ramp*ndy
+	#self.dz+=self.ramp*ndz
         if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
             self.delete()
             return False
