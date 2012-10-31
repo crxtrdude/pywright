@@ -15,7 +15,7 @@ def load(script,olist):
             setattr(o,p,props[p])
         o.load(o.name)
     if cls == "evidence":
-        o = evidence(props["id"])
+        o = evidence(props["id"],page=props["page"])
     if cls == "char":
         o = portrait(*args)
         if "blinkspeed" in props:
@@ -38,7 +38,12 @@ def load(script,olist):
         print "load surf3d"
         o = surf3d(*args)
     if cls == "ev_menu":
-        items = [evidence(x) for x in props["items"]]
+        items = []
+	for x in props["items"]:
+	    if isinstance(x,dict):
+	        items.append(evidence(x["id"],page=x["page"]))
+	    else:
+	        items.append(evidence(x))
         del props["items"]
         o = evidence_menu(items)
         for p in props:
