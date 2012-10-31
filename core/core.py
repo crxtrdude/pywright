@@ -491,12 +491,15 @@ set _font_new_resume_size 14""".split("\n"):
         for ext in ext_for(["image"]):
             tries.append(name+ext)
         for t in tries:
+            print "trying to open art path"
             try:
                 return self._open_art_(t,key)
             except (IOError,ImportError,pygame.error,TypeError):
+                print "there was a typeerror"
                 pass
         import traceback
         traceback.print_exc()
+        print "raising corrupt or missing art file"
         raise art_error("Art file corrupt or missing:"+name)
     def init_sound(self,reset=False):
         self.sound_repeat_timer = {}
@@ -859,7 +862,15 @@ set _font_new_resume_size 14""".split("\n"):
     def vtrue(self,var,default="_NOT_GIVEN_"):
         v = self.v(var,default)
         return vtrue(v)
-    def start_game(self,game,script="intro",mode="casemenu"):
+    def start_game(self,game,script=None,mode="casemenu"):
+        gamename = game.rsplit("/",1)[1]
+        print "starting game",game,gamename,script,mode
+        if not script:
+	    print "not script",game+"/"+gamename+".txt"
+            if os.path.exists(game+"/"+gamename+".txt"):
+	        script = gamename
+            else:
+	        script = "intro"
         print "starting game",game,script,mode
         game = os.path.normpath(game).replace("\\","/")
         self.last_autosave = time.time()
@@ -2804,7 +2815,7 @@ class case_menu(fadesprite,gui.widget):
         f = open(os.path.join(self.path,"last"),"w")
         f.write(str(self.choice))
         f.close()
-        assets.start_game(self.path+"/"+self.options[self.choice],"intro","nomenu")
+        assets.start_game(self.path+"/"+self.options[self.choice],mode="nomenu")
     def draw(self,dest):
         if self.reload:
             return
