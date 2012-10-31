@@ -1877,6 +1877,8 @@ The four types of gui you can create are:
                 elif a == "password":
                     type = "password"
             eb = ws_editbox(assets.variables,varname,is_dict=True)
+	    if type=="password":
+	        eb.password = 1
             #~ if graphic:
                 #~ btn.s_graphic = graphic
                 #~ graphic = assets.open_art(graphic)[0]
