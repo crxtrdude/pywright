@@ -2065,7 +2065,7 @@ class textbox(gui.widget):
                         if nargs and not nargs.startswith(" "):
                             command,args = cm,nargs
                         break
-                print "new command:",command
+                print "new command:",command,args
                 if command == "sfx":
                     assets.play_sound(args)
                 elif command == "sound":
@@ -2104,10 +2104,10 @@ class textbox(gui.widget):
                 elif command=="f":
                     assets.flash = 3
                     assets.flashcolor = [255,255,255]
-                    command = args.split(" ")[1:]
+                    command = args.split(" ")
                     if len(command)>0:
                         assets.flash = int(command[0])
-                    if len(command)>2:
+                    if len(command)>1:
                         assets.flashcolor = color_str(command[1])
                 elif command=="s":
                     assets.shakeargs = args.split(" ")
