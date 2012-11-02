@@ -7,10 +7,14 @@
     - Scrolling speed can now include decimals for more control
     - 'gui Input' objects could not be deleted
     - 'gui Input variable password x=0 y=0' will actually hide the text with **** as mentioned in docs
+    - 'gui Button next x=0 y=0 graphic=general/back graphichigh=general/back_high' - will highlight the button
+	   when the player mouses over it with the graphichigh option
     - 'fade in name=background' and 'fade out name=background' to fade things in and out
            easily without having to set the start and end alpha values of the fade
+    - green text bug in cross exams
+    - some better behavior when playing double screen oriented games in single screen mode
     - paths to content files cached on game start to make loading files faster
-    - 'setprop [object] screen_setting' to change whether the object is "try_bottom"
+    - can use a zip file instead of a directory for some art to make a game take less space on disk
 
 *PyWright 0.986
     - Fixed setting blipsound from character animation files. You can't set the blipsound this
