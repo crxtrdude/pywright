@@ -122,11 +122,12 @@ def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
             status = "INSTALLED"
         fnd = 1
         cb = checkbox(an[n].get("title",an[n]["zipname"]))
+	cb.editbox.font = core.assets.get_font("update")
         cb.name = n
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
         p = pane([0,0])
-        p.width,p.height = [380,95]
+        p.width,p.height = [246,95]
         p.align = "horiz"
         image_b = button(None,"")
         image_b.background = False
@@ -134,30 +135,35 @@ def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
         image_b.click_down_over = cb.click_down_over
         def load_icon_this(url=an[n]["iconurl"],but=image_b):
             try:
-                image = load_image(url)
+                image = pygame.transform.smoothscale(load_image(url),[32,32])
             except:
                 image = None
             but.graphic = image
         threading.Thread(target=load_icon_this).start()
         p.add_child(image_b)
         stats = pane([0,0])
-        stats.width,stats.height = [340,93]
+        stats.width,stats.height = [180,93]
         stats.align = "vert"
         stats.background = False
         stats.border = False
         stats.add_child(cb)
         sline = status 
         if an[n].get("author",""):
-            sline += "                    "+"by "+an[n]["author"]
-        stats.add_child(label(sline))
+            sline += "       "+"by "+an[n]["author"]
+	l = label(sline)
+	l.font = core.assets.get_font("update")
+        stats.add_child(l)
         stats.date = 0
         if an[n].get("version_date",""):
             stats.date = an[n]["version"]
-            stats.add_child(label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"])))
+	    l = label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"]))
+	    l.font = core.assets.get_font("update")
+            stats.add_child(l)
         if an[n].get("website",""):
             url = an[n]["website"]
             urlb = button(None,url)
             urlb.textcolor = [0,0,255]
+	    urlb.font = core.assets.get_font("update")
             try:
                 import webbrowser
                 setattr(urlb,url,lambda *args: webbrowser.open(url))
@@ -250,7 +256,7 @@ class Engine(pane):
             self.progress = progress()
             self.root.add_child(self.progress)
         self.progress.height = 20
-        self.progress.width = 400
+        self.progress.width = 250
         self.progress.rpos[1] = self.list.rpos[1]+self.list.height+20
         self.progress.progress = 0
         headers = {"User-Agent":"pywright downloader"}
@@ -318,7 +324,7 @@ class Engine(pane):
                 bps = bytes/(time.time()-s)
                 s = time.time()
                 bytes = 0
-            self.progress.text = "%sKB/%sKB - %s KB/s"%(read/1000.0,size/1000.0,bps/1000.0)
+            self.progress.text = "%.2fMB/%.2fMB - %.2f KB/s"%(read/1000000.0,size/1000000.0,bps/1000.0)
             if output:
                 self.progress.rpos = [0,0]
                 self.progress.width = 256
