@@ -375,6 +375,8 @@ class Assets(object):
     fonts = {}
     deffonts = {}
     for line in """set _font_tb pwinternational.ttf
+set _font_update Vera.ttf
+set _font_update_size 8
 set _font_tb_size 10
 set _font_block arial.ttf
 set _font_block_size 10
@@ -868,7 +870,9 @@ set _font_new_resume_size 14""".split("\n"):
         v = self.v(var,default)
         return vtrue(v)
     def start_game(self,game,script=None,mode="casemenu"):
-        gamename = game.rsplit("/",1)[1]
+        gamename = game
+	if "/" in game:
+            gamename = game.rsplit("/",1)[1]
         print "starting game",game,gamename,script,mode
         if not script:
 	    print "not script",game+"/"+gamename+".txt"
