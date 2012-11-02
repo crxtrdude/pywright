@@ -1,5 +1,5 @@
 version 0.987
-version_date 02/06/2012
+version_date 11/02/2012
 version_notes variable framerate
 author saluk
 website http://pywright.dawnsoft.org/
