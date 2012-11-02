@@ -1997,7 +1997,15 @@ The four types of gui you can create are:
         """Fade an object or objects in or out"""
         kwargs,args = parseargs(args,intvals=["start","end","speed","wait"],
                                                 defaults={"start":0,"end":100,"speed":1,"wait":1},
-                                                setzero={"nowait":"wait"})
+                                                setzero={"nowait":"wait","in":"in","out":"out"})
+	if "in" in kwargs:
+	    kwargs['start']=0
+	    kwargs['end']=100
+	    del kwargs["in"]
+	if "out" in kwargs:
+	    kwargs['start']=100
+	    kwargs['end']=0
+	    del kwargs["out"]
         self.add_object(fadeanim(obs=self.obs,**kwargs))
         if kwargs['wait']: self.buildmode = False
     @category([KEYWORD("start","Color tint to start at","'ffffff' or no tint (full color)"),
