@@ -15,6 +15,14 @@
     - some better behavior when playing double screen oriented games in single screen mode
     - paths to content files cached on game start to make loading files faster
     - can use a zip file instead of a directory for some art to make a game take less space on disk
+    - cleaner save file format
+    - in single screen mode, can press F4 to switch which screen is viewed. Kind of a crutch for when
+	   a game doesn't work properly in single screen mode
+    - all text macros can include spaces between the command and the arguments, i.e. {e mad} etc
+    - forgetlistitem command was not working
+    - some unicode fixes
+    - smoothscale view
+    - other changes and bugfixes
 
 *PyWright 0.986
     - Fixed setting blipsound from character animation files. You can't set the blipsound this
