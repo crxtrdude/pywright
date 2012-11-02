@@ -2109,7 +2109,7 @@ class textbox(gui.widget):
                     assets.flash = 3
                     assets.flashcolor = [255,255,255]
                     command = args.split(" ")
-                    if len(command)>0:
+                    if len(command)>0 and command[0]:
                         assets.flash = int(command[0])
                     if len(command)>1:
                         assets.flashcolor = color_str(command[1])
