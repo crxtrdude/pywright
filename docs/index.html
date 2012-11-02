@@ -11,7 +11,7 @@ font-size: 12px;
 th
 {
 background-color:#88ff88;
-}</style><body style='width:640px;background-color:#cccccc'><div style=''><h2>Command Categories</h2><a href=#crossexam>crossexam</a><br><a href=#files>files</a><br><a href=#objects>objects</a><br><a href=#text>text</a><br><a href=#interface/case_menu>interface/case_menu</a><br><a href=#evidence>evidence</a><br><a href=#interface>interface</a><br><a href=#gameflow>gameflow</a><br><a href=#animation>animation</a><br><a href=#music>music</a><br><a href=#logic>logic</a><br><a href=#debug>debug</a><br><a href=#effect>effect</a><br><a href=#sounds>sounds</a><br></div><br><br><br><br><br><hr><h3>Commands</h3><div style=''><a name='crossexam'><h2>Category: crossexam</h2><div style='background-color:#eeeeee;padding:10px'><a name="clearcross"><p>
+}</style><body style='width:640px;background-color:#cccccc'><div style=''><h2>Command Categories</h2><a href=#crossexam>crossexam</a><br><a href=#files>files</a><br><a href=#objects>objects</a><br><a href=#text>text</a><br><a href=#interface/case_menu>interface/case_menu</a><br><a href=#evidence>evidence</a><br><a href=#interface>interface</a><br><a href=#gameflow>gameflow</a><br><a href=#animation>animation</a><br><a href=#music>music</a><br><a href=#logic>logic</a><br><a href=#debug>debug</a><br><a href=#effect>effect</a><br><a href=#sounds>sounds</a><br><a href=#text/commands>text/commands</a><br></div><br><br><br><br><br><hr><h3>Commands</h3><div style=''><a name='crossexam'><h2>Category: crossexam</h2><div style='background-color:#eeeeee;padding:10px'><a name="clearcross"><p>
     <b>clearcross</b> 
     </p><p>Clears all cross exam related variables. A good idea to call this after a testimony
         is officially over, to ensure that 'resumes' don't mistakenly go back to the cross exam, 
@@ -166,14 +166,14 @@ folder be the same, and not show a case menu at all.</p></div><br><br><div style
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Name of evidence to add to the court record</td><tr><td>page</td><td>Which page to add evidence to</td><td>Default is to add to the evidence page, unless the tag ends with a '$' in which case it will add to profiles</td></tr></table><p>Adds evidence to the court record based on an evidence 'tag'. The various properties of the evidence should be stored in variables based on this tag:<br><br>set [tag]_name: the name displayed to the player on court record screen for this item, defaults to the tag itself<br><br>set [tag]_pic: the image to use, should be in game/case/art/ev, or game/art/ev, defaults to the tag ([tag].png in art/ev)<br><br>set [tag]_desc: the long description of the evidence, shown on zoomed court record view, defaults to blank<br><br>set [tag]_check: name of a script to run if item is checked by player</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delev"><p>
     <b>delev</b> tag 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>name of evidence to delete from court record</td></table><p>Delete an item from the court record.</p></div><br><br><a name='interface'><h2>Category: interface</h2><div style='background-color:#eeeeee;padding:10px'><a name="examine"><p>
-    <b>examine</b> fail=VALUE 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
+    <b>examine</b> <i>hide</i> fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>hide</td><td>Hides the labels for the examine regions from the player</td><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
         based on the spot. Immediately following the examine command, you must use region commands to define where the
         player can click.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="examine3d"><p>
     <b>examine3d</b> 
     </p><p>Turn 3d examinations on</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gui"><p>
-    <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE <i>hold</i> <i>password</i> <i>try_bottom</i> run=VALUE [text] 
-    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>try_bottom</td><td>Try to keep object in bottom screen, but if no bottom screen exists move it up, valid for (Button)</td><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
+    <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE graphichigh=VALUE <i>hold</i> <i>password</i> <i>try_bottom</i> run=VALUE [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>graphichigh</td><td>path to graphic file, what to display on mouseover, valid for (Button)</td><td>default is no mouseover behavior</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>try_bottom</td><td>Try to keep object in bottom screen, but if no bottom screen exists move it up, valid for (Button)</td><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
 don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
 The four types of gui you can create are:<br><br>* Button - This creates a button that can be clicked. When clicked a macro will run.
 * Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
@@ -435,4 +435,48 @@ zoom mag=-0.5 frames=10
         This will subtract half magnification from an object over 10 frames: 1x - 0.5x = 0.5x.</p></div><br><br><a name='sounds'><h2>Category: sounds</h2><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>
     <b>sfx</b> [filename] after=VALUE 
     </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>Filename of sound file, searches game/case/sfx, game/sfx, and PyWright/sfx</td><tr><td>after</td><td>Delay sound for this many frames</td></table><p>Play a sound effect. If 'after' will play the sound after a certain number of frames (useful to time an effect with a specific
-        frame of an animation).<br><br>        Sound files can be .ogg or uncompressed .wav</p></div><br><br></div></body></html>
+        frame of an animation).<br><br>        Sound files can be .ogg or uncompressed .wav</p></div><br><br><a name='text/commands'><h2>Category: text/commands</h2><div style='background-color:#eeeeee;padding:10px'><a name="blink"><p>
+    <b>blink</b> 
+    </p><p>Makes current speaking character use its blinking animation, meant to run inside text: "Now I am {blink} blinking"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="talk"><p>
+    <b>talk</b> 
+    </p><p>makes current speaking character use its talking animation, meant to run inside text: "Now I am {talk} talking"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="lipsync"><p>
+    <b>lipsync</b> 
+    </p><p>makes current speaking character determine speaking or talking based on text. Meant to run inside text: "{blink}Im not talking{lipsync} Now I am talking (now I am blinking)"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="loop"><p>
+    <b>loop</b> 
+    </p><p>makes current speaking character loop its current animation rather than using the random blinking code</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="linked"><p>
+    <b>linked</b> 
+    </p><p>Adds contents of previous textbox into this one. Ex: "Wait I dont want to{next}" [insert some crazy code here]  "{linked} do that!"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>
+    <b>sfx</b> 
+    </p><p>play a sound effect</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="sound"><p>
+    <b>sound</b> 
+    </p><p>set the clicking noise for each text character printed</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delay"><p>
+    <b>delay</b> 
+    </p><p>set delay between letters</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="spd"><p>
+    <b>spd</b> 
+    </p><p>set how fast letters are added</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="_fullspeed"><p>
+    <b>_fullspeed</b> 
+    </p><p>add all characters after that in a single frame</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="_endfullspeed"><p>
+    <b>_endfullspeed</b> 
+    </p><p>return to animated printing",</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="wait"><p>
+    <b>wait</b> 
+    </p><p>set to 'manual' to print letters at a consistent speed, set to 'auto' to alter the delay based on punctuation</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="center"><p>
+    <b>center</b> 
+    </p><p>center all text</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="type"><p>
+    <b>type</b> 
+    </p><p>set color to green, style to center, and clicking sound to typewritter</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="next"><p>
+    <b>next</b> 
+    </p><p>erase textbox instantly</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tbon"><p>
+    <b>tbon</b> 
+    </p><p>turn on testimony blinking graphic</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tboff"><p>
+    <b>tboff</b> 
+    </p><p>turn off testimony blinking graphic</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="e"><p>
+    <b>e</b> 
+    </p><p>set emotion of speaking character</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="f"><p>
+    <b>f</b> 
+    </p><p>white flash on the screen. {f}={f 3}. {f 10} - longer flash.  {f 3 ff0000} - flash the screen red (html colorcode)</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="s"><p>
+    <b>s</b> 
+    </p><p>shake the screen</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="p"><p>
+    <b>p</b> 
+    </p><p>pause</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="c"><p>
+    <b>c</b> 
+    </p><p>sets the color</p></div><br><br></div></body></html>

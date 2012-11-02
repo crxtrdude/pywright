@@ -128,6 +128,31 @@ for macro in os.listdir("core/macros/"):
         if line.startswith("#@sig"):
             d = desig(line)
 
+
+textmacros = """sfx play a sound effect
+sound set the clicking noise for each text character printed
+delay set delay between letters
+spd set how fast letters are added
+_fullspeed add all characters after that in a single frame
+_endfullspeed return to animated printing",
+wait set to 'manual' to print letters at a consistent speed, set to 'auto' to alter the delay based on punctuation
+center center all text
+type set color to green, style to center, and clicking sound to typewritter
+next erase textbox instantly
+tbon turn on testimony blinking graphic
+tboff turn off testimony blinking graphic
+e set emotion of speaking character
+f white flash on the screen. {f}={f 3}. {f 10} - longer flash.  {f 3 ff0000} - flash the screen red (html colorcode)
+s shake the screen
+p pause
+c sets the color"""
+for line in textmacros.split("\n"):
+    if not line.strip(): continue
+    print line.strip()
+    command,desc = line.strip().split(" ",1)
+    d = {"type":"text/commands","args":[],"desc":desc,"name":command}
+    addmfunc(d)
+
 f = open("docs/index.html","w")
 f.write("<html>")
 f.write("""<style type='text/css'>
