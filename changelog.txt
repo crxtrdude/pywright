@@ -7,6 +7,8 @@
     - Scrolling speed can now include decimals for more control
     - 'gui Input' objects could not be deleted
     - 'gui Input variable password x=0 y=0' will actually hide the text with **** as mentioned in docs
+    - 'fade in name=background' and 'fade out name=background' to fade things in and out
+           easily without having to set the start and end alpha values of the fade
     - paths to content files cached on game start to make loading files faster
     - 'setprop [object] screen_setting' to change whether the object is "try_bottom"
 
