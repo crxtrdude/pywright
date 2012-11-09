@@ -115,7 +115,7 @@ class Registry:
         self.map.update(other_reg.map)
         self.ext_map.update(other_reg.ext_map)
             
-def combine_registries(root):
+def combine_registries(root,progress_function=lambda:1):
     spl = root.split("/")
     last = ""
     order = []
@@ -129,7 +129,9 @@ def combine_registries(root):
     for root in order:
         print "building registry for",root
         reg = Registry()
+	progress_function()
         reg.build(root)
+	progress_function()
         cur_reg.override(reg)
     return cur_reg
         

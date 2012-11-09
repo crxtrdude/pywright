@@ -727,7 +727,8 @@ set _font_new_resume_size 14""".split("\n"):
             self.play_music(self._track,self._loop,reset_track=False)
     def show_load(self):
         self.make_screen()
-        txt = assets.get_font("loading").render("LOADING",1,[200,100,100])
+        txt = "LOADING " + random.choice(["/","\\","-","|"])
+        txt = assets.get_font("loading").render(txt,1,[200,100,100])
         pygame.screen.blit(txt,[50,50])
         self.draw_screen(0)
         time.sleep(0.5)
@@ -870,6 +871,7 @@ set _font_new_resume_size 14""".split("\n"):
         v = self.v(var,default)
         return vtrue(v)
     def start_game(self,game,script=None,mode="casemenu"):
+        assets.show_load()
         gamename = game
 	if "/" in game:
             gamename = game.rsplit("/",1)[1]
@@ -885,13 +887,12 @@ set _font_new_resume_size 14""".split("\n"):
         self.last_autosave = time.time()
         self.clear()
         self.game = game
-        self.registry = registry.combine_registries("./"+self.game)
+        self.registry = registry.combine_registries("./"+self.game,self.show_load)
         self.stack.append(self.Script())
         if mode == "casemenu" and not os.path.exists(game+"/"+script+".txt"):
             self.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
             self.cur_script.obs[1].pos = [0,192]
             return
-        #assets.show_load()
         print "set game to",assets.game
         self.cur_script.init(script)
         self.cur_script.execute_macro("init_defaults")
