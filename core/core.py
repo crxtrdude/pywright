@@ -2115,8 +2115,7 @@ class textbox(gui.widget):
                     if len(command)>1:
                         assets.flashcolor = color_str(command[1])
                 elif command=="s":
-		    print "SHAKE SCREEN",args.split(" ")
-                    assets.shakeargs = args.split(" ")
+                    assets.shakeargs = [x for x in args.split(" ") if x.strip()]
                 elif command=="p":
                     next_char = int(args.strip())
                 elif command=="c":

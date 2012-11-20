@@ -2048,7 +2048,6 @@ The four types of gui you can create are:
         """Shake the screen for effect."""
         sh = shake()
         args = list(args)
-	print "args:",args
         if "nowait" in args:
             args.remove("nowait")
             sh.wait = False
@@ -2059,7 +2058,6 @@ The four types of gui you can create are:
             sh.ttl = int(args[0])
         if len(args)>1:
             sh.offset = int(args[1])
-	print sh.ttl,sh.offset,sh.wait
         self.add_object(sh)
     @category([KEYWORD("mag","How many times to magnify","1 (will magnify 1 time, which is 2x magnification)"),
     KEYWORD("frames","how many frames for the zoom to take","1"),
@@ -3245,7 +3243,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     fl.color = assets.flashcolor
                     assets.flashcolor = [255,255,255]
                 assets.flash = 0
-            if assets.shakeargs:
+            if assets.shakeargs != 0:
                 assets.cur_script._shake("shake",*assets.shakeargs)
                 assets.shakeargs = 0
             if assets.variables.get("render",1):
