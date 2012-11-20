@@ -2079,7 +2079,7 @@ class textbox(gui.widget):
                     self.delay = int(args)
                     self.wait = "manual"
                 elif command == "spd":
-                    self.speed = int(args)
+                    self.speed = float(args)
                 elif command == "_fullspeed":
                     self.last_speed = self.speed
                     self.speed = 0
@@ -2098,7 +2098,7 @@ class textbox(gui.widget):
                         assets.portrait.set_blinking()
                     del self.mwritten[-1]
                     self.forward(False)
-                    return
+                    return 0
                 elif command=="e":
                     try:
                         assets.set_emotion(args.strip())
@@ -2159,8 +2159,7 @@ class textbox(gui.widget):
                 else:
                     next_char = 2
             self._lc = char
-        if self.speed:
-            self.next_char += next_char
+	return next_char
     def nextline(self):
         """Returns true if all the text waiting to be written into the textbox has been written"""
         t = textutil.markup_text()
@@ -2171,16 +2170,17 @@ class textbox(gui.widget):
         self.rpi.update()
         if self.kill: return
         self.next_char -= assets.dt
-        char_per_frame = 0
         while (not self.nextline()) and self.next_char<=0:
             #self.next_char += 1
             num_chars = max(int(self.speed),1)
+	    print "num characters to print",num_chars
+	    next_char = 0
             cnum = num_chars
             while (not self.nextline()) and ((not self.speed) or cnum>0):
                 cnum -= 1
-                self.add_character()
-                char_per_frame += 1
-        #print char_per_frame
+                next_char += self.add_character()
+	    if self.speed:
+	        self.next_char += (next_char/float(self.speed))
         if assets.portrait:
             if self.next_char>10 or self.nextline():
                 assets.portrait.set_blinking()
