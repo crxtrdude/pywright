@@ -711,7 +711,7 @@ set _font_new_resume_size 14""".split("\n"):
         props["variables"] = vars
         return ["Assets",[],props,None]
     def after_load(self):
-        self.registry = registry.combine_registries("./"+self.game)
+        self.registry = registry.combine_registries("./"+self.game,self.show_load)
         self.last_autosave = time.time()
         itemobs = []
 	for x in self.items:
@@ -731,7 +731,7 @@ set _font_new_resume_size 14""".split("\n"):
         txt = assets.get_font("loading").render(txt,1,[200,100,100])
         pygame.screen.blit(txt,[50,50])
         self.draw_screen(0)
-        time.sleep(0.5)
+        time.sleep(0.1)
     def load_game_new(self,path=None,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
@@ -2821,7 +2821,7 @@ class case_menu(fadesprite,gui.widget):
             scr.parent = assets.cur_script
             assets.stack.append(scr)
             assets.game=self.curgame+"/"+self.options[self.choice]
-            assets.registry = registry.combine_registries("./"+assets.game)
+            assets.registry = registry.combine_registries("./"+assets.game,self.show_load)
             print "init: g:%s choice:%s"%(assets.game,self.options[self.choice])
             assets.cur_script.init("case_screen")
             assets.cur_script.world = scr.parent.world
