@@ -731,7 +731,7 @@ set _font_new_resume_size 14""".split("\n"):
         txt = assets.get_font("loading").render(txt,1,[200,100,100])
         pygame.screen.blit(txt,[50,50])
         self.draw_screen(0)
-        time.sleep(0.1)
+        time.sleep(0.05)
     def load_game_new(self,path=None,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")):
             return
@@ -2173,7 +2173,6 @@ class textbox(gui.widget):
         while (not self.nextline()) and self.next_char<=0:
             #self.next_char += 1
             num_chars = max(int(self.speed),1)
-	    print "num characters to print",num_chars
 	    next_char = 0
             cnum = num_chars
             while (not self.nextline()) and ((not self.speed) or cnum>0):

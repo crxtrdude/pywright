@@ -54,7 +54,7 @@ class Registry:
         return open(path,mode)
     def clear_cache(self):
         global_registry_cache.clear()
-    def build(self,root):
+    def build(self,root,progress_function=lambda:1):
         if self.use_cache and root in global_registry_cache:
             self.map,self.ext_map = global_registry_cache[root]
             return
@@ -62,6 +62,7 @@ class Registry:
         for sub in filepaths:
             if os.path.isdir(root+"/"+sub):
                 self.index(root+"/"+sub)
+		progress_function()
         global_registry_cache[root] = [self.map,self.ext_map]
     def list_files(self,path):
         if os.path.isdir(path):
@@ -129,9 +130,7 @@ def combine_registries(root,progress_function=lambda:1):
     for root in order:
         print "building registry for",root
         reg = Registry()
-	progress_function()
-        reg.build(root)
-	progress_function()
+        reg.build(root,progress_function)
         cur_reg.override(reg)
     return cur_reg
         
