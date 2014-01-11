@@ -402,6 +402,8 @@ class Engine(pane):
         Engine.quit_threads = True
         self.running = False
         self.kill = 1
+    def k_space(self):
+        self.Cancel()
                 
 def run(screen):
     e = Engine(screen)
