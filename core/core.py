@@ -870,6 +870,17 @@ set _font_new_resume_size 14""".split("\n"):
     def vtrue(self,var,default="_NOT_GIVEN_"):
         v = self.v(var,default)
         return vtrue(v)
+    def reset_state(self):
+        self.variables.clear()
+        self.stop_music()
+        self.stack[:] = []
+    def quit_game(self):
+        self.reset_state()
+        self.make_start_script(False)
+    def reset_game(self):
+        game = self.game
+        self.reset_state()
+        self.start_game(game)
     def start_game(self,game,script=None,mode="casemenu"):
         assets.show_load()
         gamename = game

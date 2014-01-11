@@ -90,8 +90,8 @@ def get_screen_dim(assets,mode,aspect=True):
         bottom_pos = [0,0.5]
         bottom_size = [1,0.5]
         if aspect:
-            top_size[0]*=aspect/raspect
-            bottom_size[0]*=aspect/raspect
+            top_size[0]*=min(aspect/raspect,1)
+            bottom_size[0]=top_size[0]
             top_pos[0]=(1-top_size[0])/2.0
             bottom_pos[0]=(1-bottom_size[0])/2.0
     if mode == "horizontal":
@@ -546,22 +546,14 @@ class settings_menu(gui.pane):
             x.update()
         return True
     def quit_game(self):
-        assets = self.assets
-        assets.variables.clear()
-        assets.stop_music()
-        assets.stack[:] = []
-        assets.make_start_script(False)
+        self.assets.quit_game()
     def reset_game(self):
-        assets = self.assets
-        game = assets.game
-        assets = self.assets
-        assets.variables.clear()
-        assets.stop_music()
-        assets.stack[:] = []
-        assets.start_game(game)
+        self.assets.reset_game()
     def quit_pywright(self):
         sys.exit()
     def close(self):
         self.delete()
+    def k_space(self):
+        self.close()
     def delete(self):
         self.kill = 1

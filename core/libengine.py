@@ -381,6 +381,10 @@ class Script(gui.widget):
             n.append(e)
         gui.widget.mouse_pos = dp(pygame.mouse.get_pos())
         gui.widget.handle_events(self,n)
+    def quit(self):
+        if android:
+            assets.save_game("android_pause",True)
+            assets.quit_game()
     def save(self):
         props = {}
         save.cp(["scene","si","cross","statement","instatement","lastline","pri","viewed"],self,props)
@@ -2733,6 +2737,8 @@ class choose_game(gui.widget):
         self.delete()
         if self.jump_when_close:
             assets.cur_script.goto_result("close")
+    def k_space(self):
+        self.close()
     def close_button(self,jump=False):
         self.has_close = True
         self.cb = ws_button(self,"close")
@@ -2910,7 +2916,8 @@ def make_start_script(logo=True):
         online_script.close()
         scenename = "web://intro_0977.txt"
     except:
-        pass
+        import traceback
+        traceback.print_exc()
     bottomscript = assets.Script()
     bottomscript.init(scriptlines=["fg ../general/logosmall y=-15 x=-35 name=logo",
                                             "zoom mag=-0.25 frames=30 nowait"] + introlines + ["gui Wait"])
@@ -2971,17 +2978,18 @@ def make_start_script(logo=True):
     item.pri = -1001
     bottomscript.obs.append(item)
     
-    def pl(*args):
-        [x.close() for x in assets.cur_script.obs if isinstance(x,tools_menu.tools_menu)]
-        assets.cur_script.obs.append(tools_menu.tools_menu(sw=sw,sh=sh,assets=assets))
-    setattr(make_start_script,"TOOLS",pl)
-    item = ws_button(make_start_script,"TOOLS")
-    item.bordercolor = [255,255,255]
-    item.rpos = [190,90]
-    item.z = 999
-    item.pri = -1001
-    if os.path.isdir("tools"):
-        bottomscript.obs.append(item)
+    if not android:
+        def pl(*args):
+            [x.close() for x in assets.cur_script.obs if isinstance(x,tools_menu.tools_menu)]
+            assets.cur_script.obs.append(tools_menu.tools_menu(sw=sw,sh=sh,assets=assets))
+        setattr(make_start_script,"TOOLS",pl)
+        item = ws_button(make_start_script,"TOOLS")
+        item.bordercolor = [255,255,255]
+        item.rpos = [190,90]
+        item.z = 999
+        item.pri = -1001
+        if os.path.isdir("tools"):
+            bottomscript.obs.append(item)
 
 assets.make_start_script = make_start_script
             
@@ -2993,7 +3001,10 @@ def make_screen():
         assets.sheight = 192*assets.num_screens
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
-    flags = pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen
+    if android:
+        flags = pygame.FULLSCREEN
+    else:
+        flags = pygame.RESIZABLE|pygame.FULLSCREEN*assets.fullscreen
     SCREEN=pygame.real_screen = pygame.display.set_mode([assets.swidth,assets.sheight],flags)
     ns = assets.num_screens
     if assets.cur_screen:
@@ -3001,14 +3012,7 @@ def make_screen():
     pygame.screen = pygame.Surface([sw,sh*2]).convert()
     pygame.blank = pygame.screen.convert()
     pygame.blank.fill([0,0,0])
-    pygame.display.set_icon(pygame.image.load("art/general/bb.png"))
-    if pygame.joystick.get_init():
-        pygame.joystick.quit()
-    pygame.joystick.init()
     pygame.js1 = None
-    if pygame.joystick.get_count():
-        pygame.js1 = pygame.joystick.Joystick(0)
-        pygame.js1.init()
     def gl():
         return pygame.js1 and pygame.js1.get_numhats() and pygame.js1.get_hat(0)[0]<0
     def gr():
@@ -3021,10 +3025,18 @@ def make_screen():
     pygame.jsright = gr
     pygame.jsup = gu
     pygame.jsdown = gd
-    if os.environ.get("SDL_VIDEODRIVER",0)=="dummy":
-        pygame.screen = pygame.Surface([sw,sh*2],0,32)
-        pygame.blank = pygame.Surface([sw,sh*2],0,32)
-        pygame.blank.fill([0,0,0])
+    if not android:
+        pygame.display.set_icon(pygame.image.load("art/general/bb.png"))
+        if pygame.joystick.get_init():
+            pygame.joystick.quit()
+        pygame.joystick.init()
+        if pygame.joystick.get_count():
+            pygame.js1 = pygame.joystick.Joystick(0)
+            pygame.js1.init()
+        if os.environ.get("SDL_VIDEODRIVER",0)=="dummy":
+            pygame.screen = pygame.Surface([sw,sh*2],0,32)
+            pygame.blank = pygame.Surface([sw,sh*2],0,32)
+            pygame.blank.fill([0,0,0])
 
 def scale_relative_click(pos,rel):
     mode,dim = settings.screen_format(assets)
@@ -3201,8 +3213,19 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
     assets.screen_refresh = 1
     if android:
         assets.screen_refresh = 3 #limit fps on android to make it faster
+        android.map_key(android.KEYCODE_MENU, pygame.K_ESCAPE)
+        android.map_key(android.KEYCODE_BACK, pygame.K_SPACE)
+    def androidpause():
+        if android:
+            print "checking for pause..."
+            if android.check_pause():
+                print "WOAH WE PAUSED"
+                #assets.save_game("android_pause",True)
+                android.wait_for_resume()
+                print "after resume"
     assets.next_screen = assets.screen_refresh
     while running:
+        androidpause()
         #~ ticks = time.time()-lt
         #~ lt = time.time()
         #~ while ticks<(1/(float(assets.variables.get("_framerate",60))+20.0)):
@@ -3251,11 +3274,6 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             assets.next_screen = assets.screen_refresh
         #pygame.image.save(pygame.real_screen,"capture/img%.04d.jpg"%fr)
         #fr+=1
-        if android:
-            android.map_key(android.KEYCODE_MENU, pygame.K_ESCAPE)
-            if android.check_pause():
-                assets.save_game("android_pause",True)
-                android.wait_for_resume()
         pygame.event.pump()
         try:
             assets.music_update()
@@ -3373,7 +3391,11 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_space") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
                             o.k_space()
-                            break
+                            return
+                    game = assets.game
+                    assets.cur_script.quit()
+                    if game == 'games':
+                        sys.exit()
                 def k_switch():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_tab") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
