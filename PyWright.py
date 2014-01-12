@@ -26,8 +26,9 @@ abspath = os.path.abspath(os.curdir)
 class Logger(object):
     def __init__(self):
         self.terminal = sys.stdout
-        self.log = open("loghistory.txt", "a")
-        self.log.write("This log contains debugging and error messages from all runs.\n")
+        if not android:
+            self.log = open("loghistory.txt", "a")
+            self.log.write("This log contains debugging and error messages from all runs.\n")
         self.now = open("lastlog.txt","w")
         self.now.write("This log contains debugging and error messages from the last run.\n")
 
@@ -39,8 +40,7 @@ class Logger(object):
 #~ gc.enable()
 #~ gc.set_debug(gc.DEBUG_LEAK)
 
-if not android:
-    sys.stderr = sys.stdout = Logger()
+sys.stderr = sys.stdout = Logger()
 sys.path.insert(0,"")
 try:
     from core import libengine
