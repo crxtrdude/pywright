@@ -714,12 +714,12 @@ set _font_new_resume_size 14""".split("\n"):
         self.registry = registry.combine_registries("./"+self.game,self.show_load)
         self.last_autosave = time.time()
         itemobs = []
-	for x in self.items:
-	    if isinstance(x,dict):
-	        itemobs.append(evidence(x["id"],page=x["page"]))
-	    else:
-	        itemobs.append(evidence(x))
-	self.items = itemobs
+        for x in self.items:
+            if isinstance(x,dict):
+                itemobs.append(evidence(x["id"],page=x["page"]))
+            else:
+                itemobs.append(evidence(x))
+        self.items = itemobs
         v = self.variables
         self.variables = Variables()
         self.variables.update(v)
@@ -884,15 +884,15 @@ set _font_new_resume_size 14""".split("\n"):
     def start_game(self,game,script=None,mode="casemenu"):
         assets.show_load()
         gamename = game
-	if "/" in game:
+        if "/" in game:
             gamename = game.rsplit("/",1)[1]
         print "starting game",game,gamename,script,mode
         if not script:
-	    print "not script",game+"/"+gamename+".txt"
+            print "not script",game+"/"+gamename+".txt"
             if os.path.exists(game+"/"+gamename+".txt"):
-	        script = gamename
+                script = gamename
             else:
-	        script = "intro"
+                script = "intro"
         print "starting game",game,script,mode
         game = os.path.normpath(game).replace("\\","/")
         self.last_autosave = time.time()
@@ -2831,7 +2831,7 @@ class case_menu(fadesprite,gui.widget):
             scr.parent = assets.cur_script
             assets.stack.append(scr)
             assets.game=self.curgame+"/"+self.options[self.choice]
-            assets.registry = registry.combine_registries("./"+assets.game,self.show_load)
+            assets.registry = registry.combine_registries("./"+assets.game,assets.show_load)
             print "init: g:%s choice:%s"%(assets.game,self.options[self.choice])
             assets.cur_script.init("case_screen")
             assets.cur_script.world = scr.parent.world
