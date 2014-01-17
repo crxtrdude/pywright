@@ -127,7 +127,7 @@ def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
         p = pane([0,0])
-        p.width,p.height = [246,95]
+        p.width,p.height = [246,45]
         p.align = "horiz"
         image_b = button(None,"")
         image_b.background = False
@@ -142,7 +142,7 @@ def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
         threading.Thread(target=load_icon_this).start()
         p.add_child(image_b)
         stats = pane([0,0])
-        stats.width,stats.height = [180,93]
+        stats.width,stats.height = [180,43]
         stats.align = "vert"
         stats.background = False
         stats.border = False
@@ -150,20 +150,24 @@ def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
         sline = status 
         if an[n].get("author",""):
             sline += "       "+"by "+an[n]["author"]
-	l = label(sline)
-	l.font = core.assets.get_font("update")
+        l = label(sline)
+        l.font = core.assets.get_font("update")
         stats.add_child(l)
         stats.date = 0
         if an[n].get("version_date",""):
+            stats.height+=20
+            p.height+=20
             stats.date = an[n]["version"]
-	    l = label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"]))
-	    l.font = core.assets.get_font("update")
+            l = label("ver %s updated on %s"%(cver_s(an[n]["version"]),an[n]["version_date"]))
+            l.font = core.assets.get_font("update")
             stats.add_child(l)
         if an[n].get("website",""):
+            stats.height+=20
+            p.height+=20
             url = an[n]["website"]
             urlb = button(None,url)
             urlb.textcolor = [0,0,255]
-	    urlb.font = core.assets.get_font("update")
+            urlb.font = core.assets.get_font("update")
             try:
                 import webbrowser
                 setattr(urlb,url,lambda *args: webbrowser.open(url))
@@ -370,7 +374,7 @@ class Engine(pane):
             block = None
         for name in z.namelist():
             if hasattr(self,"progress"):
-                self.progress.text = "extracting:"+name
+                self.progress.text = "extracting:"+name[-30:]
             print "extract:",name
             try:
                 txt = z.read(name)
