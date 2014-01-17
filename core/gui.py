@@ -2,13 +2,28 @@ import pygame
 import sys,os
 import core
 
+try:
+    import android
+except:
+    android = None
+
 pygame.font.init()
 ft = pygame.font.Font(os.path.join("fonts","Vera.ttf"),10)
 
 class Window(object):
     _focused = None
+    _keyboard = False
     def sf(self,v):
         self._focused = v
+        if android:
+            if isinstance(v,editbox):
+                if not self._keyboard:
+                    self._keyboard = True
+                    android.show_keyboard()
+            else:
+                if self._keyboard:
+                    self._keyboard = False
+                    android.hide_keyboard()
     focused = property(lambda s: s._focused,sf)
     move = []
     over = None
