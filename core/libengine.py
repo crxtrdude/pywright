@@ -537,11 +537,23 @@ class Script(gui.widget):
         except IndexError:
             return
     def update_objects(self):
+        exceptions = []
+        def add_exceptions():
+            for e in exceptions:
+                self.obs.append(e)
         for o in self.world.update_order():
-            if not getattr(o,"kill",None) and o.update():
-                if o.cur_script not in assets.stack:
-                    o.cur_script = assets.cur_script
-                if o.cur_script==self: return False
+            try:
+                if not getattr(o,"kill",None) and o.update():
+                    if o.cur_script not in assets.stack:
+                        o.cur_script = assets.cur_script
+                    if o.cur_script==self: 
+                        add_exceptions()
+                        return False
+            except Exception,e:
+                exceptions.append(error_msg(e.value,self.lastline_value,self.si,self))
+                import traceback
+                traceback.print_exc()
+        add_exceptions()
         return True
     def safe_exec(self,method,*args):
         try:
