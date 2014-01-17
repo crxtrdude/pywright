@@ -20,6 +20,7 @@ sound_buffer=%s
 sound_volume=%s
 music_volume=%s
 screen_compress=%s
+screen_refresh=%s
 autosave=%s
 autosave_interval=%s
 autosave_keep=%s
@@ -27,7 +28,7 @@ tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.smoothscale,
 assets.fullscreen,assets.num_screens,
 int(assets.show_fps),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
-int(assets.screen_compress),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
+int(assets.screen_compress),int(assets.screen_refresh),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
 assets.tool_path))
     f.close()
     
@@ -59,7 +60,7 @@ def load(assets):
                 "autosave_keep":"autosave_keep", 
                 "sound_format":"sound_format","sound_bits":"sound_bits",
                 "sound_buffer":"sound_buffer","show_fps":"show_fps",
-                "smoothscale":"smoothscale"}
+                "smoothscale":"smoothscale","screen_refresh":"screen_refresh"}
         fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
                 }
         s_val = {"tool_path":"tool_path"}
@@ -455,6 +456,18 @@ class settings_menu(gui.pane):
             assets.show_fps = val
             wini(assets)
         self.show_fps.set_checked = set_checked
+        
+        self.frameskip = gui.checkbox("frameskip")
+        res_box.add_child(self.frameskip)
+        s_c = self.frameskip.set_checked
+        def set_checked1(val):
+            s_c(val)
+            if val:
+                assets.screen_refresh = 3
+            else:
+                assets.screen_refresh = 1
+            wini(assets)
+        self.frameskip.set_checked = set_checked1
 
         #self.reses = gui.radiobutton.groups["resopt"]
         if assets.fullscreen:
@@ -467,6 +480,8 @@ class settings_menu(gui.pane):
             self.show_fps.checked = True
         if assets.smoothscale:
             self.smoothscale.checked = True
+        if assets.screen_refresh>1:
+            self.frameskip.checked = True
                 
         self.children.append(gui.button(self,"apply",[10,140]))
     def popup_resolution(self,mp):
