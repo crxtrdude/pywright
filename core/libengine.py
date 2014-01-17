@@ -3217,12 +3217,9 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         android.map_key(android.KEYCODE_BACK, pygame.K_SPACE)
     def androidpause():
         if android:
-            print "checking for pause..."
             if android.check_pause():
-                print "WOAH WE PAUSED"
-                #assets.save_game("android_pause",True)
+                assets.save_game("android_pause",True)
                 android.wait_for_resume()
-                print "after resume"
     assets.next_screen = assets.screen_refresh
     while running:
         androidpause()

@@ -26,16 +26,20 @@ abspath = os.path.abspath(os.curdir)
 class Logger(object):
     def __init__(self):
         self.terminal = sys.stdout
+        self.log = self.now = None
         if not android:
             self.log = open("loghistory.txt", "a")
             self.log.write("This log contains debugging and error messages from all runs.\n")
-        self.now = open("lastlog.txt","w")
-        self.now.write("This log contains debugging and error messages from the last run.\n")
+        if not android:
+            self.now = open("lastlog.txt","w")
+            self.now.write("This log contains debugging and error messages from the last run.\n")
 
     def write(self, message):
         self.terminal.write(message)
-        self.log.write(message)
-        self.now.write(message)
+        if self.log:
+            self.log.write(message)
+        if self.now:
+            self.now.write(message)
 #~ import gc
 #~ gc.enable()
 #~ gc.set_debug(gc.DEBUG_LEAK)
