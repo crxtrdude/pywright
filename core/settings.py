@@ -90,8 +90,16 @@ def get_screen_dim(assets,mode,aspect=True):
         top_size = [1,0.5]
         bottom_pos = [0,0.5]
         bottom_size = [1,0.5]
-        if aspect:
-            top_size[0]*=min(aspect/raspect,1)
+        baspect = aspect/raspect
+        #Too skinny
+        if baspect>1: 
+            top_size[1]*=raspect/aspect
+            bottom_size[1]=top_size[1]
+            top_pos[1]=(1-(top_size[1]+bottom_size[1]))/2.0
+            bottom_pos[1]=top_pos[1]+top_size[1]
+        #Too fat
+        elif baspect<1:
+            top_size[0]*=aspect/raspect
             bottom_size[0]=top_size[0]
             top_pos[0]=(1-top_size[0])/2.0
             bottom_pos[0]=(1-bottom_size[0])/2.0
