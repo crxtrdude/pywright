@@ -58,6 +58,7 @@ if __name__=="__main__":
 #game_id="21329" #TAP Case2 Day1 Investigation
 game_id="21884" #TAP Case2 Day2 Trial
 game_id="18079"
+game_id="40201"
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
 class WorkThread:
