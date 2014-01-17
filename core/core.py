@@ -205,7 +205,7 @@ class Variables(dict):
             assets.smus(assets.gmus())
             return
         if key=="_debug":
-            assets.debug_mode = True
+            return
         return dict.__setitem__(self,key,value,*args)
 
 assert Variables().get("_version",None)
