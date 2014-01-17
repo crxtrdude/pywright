@@ -190,6 +190,8 @@ class Variables(dict):
             return __version__
         if key=="_num_screens":
             return str(assets.num_screens)
+        if key=="_debug":
+            return {True:"on",False:"off"}[assets.debug_mode]
         return dict.get(self,key,*args)
     def __setitem__(self,key,value,*args):
         if key=="_speaking":
@@ -202,6 +204,8 @@ class Variables(dict):
             dict.__setitem__(self,key,value,*args)
             assets.smus(assets.gmus())
             return
+        if key=="_debug":
+            assets.debug_mode = True
         return dict.__setitem__(self,key,value,*args)
 
 assert Variables().get("_version",None)
@@ -229,6 +233,7 @@ class Assets(object):
     autosave_interval = 0
     path = ""
     tool_path = ""
+    debug_mode = False
     debugging = "SEARCH"  #debugging mode. SEARCH for stop, STEP each line, or blank
     registry = registry.Registry(".")
     def init(self):

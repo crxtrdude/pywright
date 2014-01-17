@@ -283,6 +283,23 @@ class settings_menu(gui.pane):
             line.children.append(gui.label("Save/Load"))
             line.children.append(gui.button(self,"save_game"))
             line.children.append(gui.button(self,"load_game"))
+        
+        #Create debug mode option if we aren't running a game
+        if assets.game == "games":
+            line = gui.pane([0,90],[sw,20])
+            line.align = "horiz"
+            self.children.append(line)
+            line.children.append(gui.label("Debug mode?"))
+            class myb(gui.checkbox):
+                def click_down_over(self,*args):
+                    super(myb,self).click_down_over(*args)
+                    if self.checked:
+                        assets.debug_mode = True
+                    else:
+                        assets.debug_mode = False
+            line.children.append(myb("debug_mode"))
+            cb = line.children[-1]
+            if assets.debug_mode: cb.checked = True
     def load_game(self):
         self.assets.load_game_menu()
         self.delete()
