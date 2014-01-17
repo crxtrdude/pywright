@@ -230,6 +230,7 @@ class Assets(object):
     sound_init = 0
     sound_volume = 100
     _music_vol = 100
+    mute_sound = 0
     sw = sw
     sh = sh
     last_autosave = 0
@@ -267,6 +268,10 @@ class Assets(object):
     def gmus(self):
         return self._music_vol
     music_volume = property(gmus,smus)
+    def set_mute_sound(self,value):
+        self.mute_sound = value
+        if android and self.mute_sound:
+            self.stop_music()
     def _appendgba(self):
         if not self.gbamode: return ""
         return "_gba"
@@ -576,7 +581,7 @@ set _font_new_resume_size 14""".split("\n"):
         return os.listdir(self.game)
     def play_sound(self,name,wait=False,volume=1.0,offset=0,frequency=1,layer=0):
         #self.init_sound()
-        if self.sound_init == -1 or not self.sound_volume: return
+        if self.sound_init == -1 or not self.sound_volume or self.mute_sound: return
         if name in self.sound_repeat_timer:
             if time.time()-self.sound_repeat_timer[name]<self.min_sound_time:
                 return
@@ -608,7 +613,7 @@ set _font_new_resume_size 14""".split("\n"):
         if reset_track:
             assets.variables["_music_loop"] = track
         self.init_sound()
-        if self.sound_init == -1: return
+        if self.sound_init == -1 or self.mute_sound: return
         self._track=track
         self._loop=loop
         if track:
@@ -2178,7 +2183,7 @@ class textbox(gui.widget):
                 else:
                     next_char = 2
             self._lc = char
-	return next_char
+        return next_char
     def nextline(self):
         """Returns true if all the text waiting to be written into the textbox has been written"""
         t = textutil.markup_text()
@@ -2192,13 +2197,13 @@ class textbox(gui.widget):
         while (not self.nextline()) and self.next_char<=0:
             #self.next_char += 1
             num_chars = max(int(self.speed),1)
-	    next_char = 0
+            next_char = 0
             cnum = num_chars
             while (not self.nextline()) and ((not self.speed) or cnum>0):
                 cnum -= 1
                 next_char += self.add_character()
-	    if self.speed:
-	        self.next_char += (next_char/float(self.speed))
+            if self.speed:
+                self.next_char += (next_char/float(self.speed))
         if assets.portrait:
             if self.next_char>10 or self.nextline():
                 assets.portrait.set_blinking()

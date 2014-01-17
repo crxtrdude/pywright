@@ -1,4 +1,8 @@
 import pygame,sys,os
+try:
+    import android
+except:
+    android = None
 
 import gui
 
@@ -19,6 +23,7 @@ sound_bits=%s
 sound_buffer=%s
 sound_volume=%s
 music_volume=%s
+mute_sound=%s
 screen_compress=%s
 screen_refresh=%s
 autosave=%s
@@ -27,7 +32,7 @@ autosave_keep=%s
 tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.smoothscale,
 assets.fullscreen,assets.num_screens,
 int(assets.show_fps),
-assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),
+assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),int(assets.mute_sound),
 int(assets.screen_compress),int(assets.screen_refresh),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
 assets.tool_path))
     f.close()
@@ -60,6 +65,7 @@ def load(assets):
                 "autosave_keep":"autosave_keep", 
                 "sound_format":"sound_format","sound_bits":"sound_bits",
                 "sound_buffer":"sound_buffer","show_fps":"show_fps",
+                "mute_sound":"mute_sound",
                 "smoothscale":"smoothscale","screen_refresh":"screen_refresh"}
         fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
                 }
@@ -324,6 +330,22 @@ class settings_menu(gui.pane):
         ermsg.rpos = [0,140]
         ermsg.textcol = [255,0,0]
         
+        line = gui.pane([0,130],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        class myb(gui.checkbox):
+            def click_down_over(self,*args):
+                super(myb,self).click_down_over(*args)
+                if self.checked:
+                    assets.set_mute_sound(True)
+                else:
+                    assets.set_mute_sound(False)
+        line.children.append(myb("mute sound"))
+        if assets.mute_sound:
+            line.children[-1].checked = True
+        
+        if android:
+            return
         line = gui.pane([0,30],[sw,20])
         line.align = "horiz"
         self.children.append(line)
@@ -344,7 +366,7 @@ class settings_menu(gui.pane):
         for t in line.children:
             if t.text==str(assets.sound_format):
                 t.checked = True
-                
+        
         line = gui.pane([0,50],[sw,20])
         line.align = "horiz"
         self.children.append(line)
