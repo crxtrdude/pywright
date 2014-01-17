@@ -3222,9 +3222,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         #~ pass
     #~ sys.exit()
     laststack = []
-    assets.screen_refresh = 1
     if android:
-        assets.screen_refresh = 3 #limit fps on android to make it faster
         android.map_key(android.KEYCODE_MENU, pygame.K_ESCAPE)
         android.map_key(android.KEYCODE_BACK, pygame.K_SPACE)
     def androidpause():

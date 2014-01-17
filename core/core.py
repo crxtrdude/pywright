@@ -220,6 +220,9 @@ class Assets(object):
     variables = Variables()
     gbamode = False
     num_screens = 2
+    screen_refresh = 1
+    if android:
+        screen_refresh = 3
     sound_format = 44100
     sound_bits = 16
     sound_sign = -1
