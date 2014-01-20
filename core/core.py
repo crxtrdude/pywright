@@ -3632,10 +3632,11 @@ class effect(object):
 class scroll(effect):
     def __init__(self,amtx=1,amty=1,amtz=1,speed=1,wait=1,filter="top",ramp=-.005):
         super(scroll,self).__init__()
+        self.aamtx,self.aamty,self.aamtz = amtx,amty,amtz
         self.amtx = abs(amtx)
         self.amty = abs(amty)
         self.amtz = abs(amtz)
-	self.ramp = ramp
+        self.ramp = ramp
         self.dx=self.dy=self.dz=0
         if amtx==0 and amty: 
             self.dy=amty/abs(amty)
@@ -3663,8 +3664,27 @@ class scroll(effect):
         self.obs = assets.cur_script.obs
         self.filter = filter
         self.wait = wait
+        self.initialized = False
     def draw(self,dest): pass
+    def init_scroll(self):
+        if self.initialized:
+            return
+        self.initialized = True
+        self.stuff = []
+        for o in self.obs:
+            if not hasattr(o,"pos"):
+                continue
+            if self.filter=="top" and o.pos[1]>=192:
+                continue
+            if self.filter=="bottom" and o.pos[1]<192:
+                continue
+            d = {"ob":o,"start":None,"end":None}
+            if hasattr(o,"pos"):
+                d["start"] = o.pos[:]
+                d["end"] = [int(o.pos[0]+self.aamtx),int(o.pos[1]+self.aamty)]
+            self.stuff.append(d)
     def update(self):
+        self.init_scroll()
         ndx,ndy,ndz = self.dx*assets.dt,self.dy*assets.dt,self.dz*assets.dt
         #print "before - ndx:",ndx,"self.amtx:",self.amtx
         self.amtx-=abs(ndx)
@@ -3681,18 +3701,21 @@ class scroll(effect):
         if self.amtz<0:
             ndz+=self.amtz*(self.dz/abs(self.dz))
             self.amtz=0
-        for o in self.obs:
-            if getattr(o,"kill",0): continue
-            if hasattr(o,"pos") and (not self.filter or self.filter=="top" and o.pos[1]<192 or self.filter=="bottom" and o.pos[1]>=192):
-                o.pos[0]+=ndx
-                o.pos[1]+=ndy
-            if isinstance(o,mesh):
-                o.trans(z=ndz)
+        for d in self.stuff:
+            if getattr(d["ob"],"kill",0): continue
+            if d["start"]:
+                d["ob"].pos[0]+=ndx
+                d["ob"].pos[1]+=ndy
+            if isinstance(d["ob"],mesh):
+                d["ob"].trans(z=ndz)
         #Ramp not really working here
-	#self.dx+=self.ramp*ndx
-	#self.dy+=self.ramp*ndy
-	#self.dz+=self.ramp*ndz
+        #self.dx+=self.ramp*ndx
+        #self.dy+=self.ramp*ndy
+        #self.dz+=self.ramp*ndz
         if self.amtx<=0 and self.amty<=0 and self.amtz<=0:
+            for d in self.stuff:
+                if d["end"]:
+                    d["ob"].pos[:] = d["end"]
             self.delete()
             return False
         if self.wait:
