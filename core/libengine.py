@@ -549,8 +549,12 @@ class Script(gui.widget):
                     if o.cur_script==self: 
                         add_exceptions()
                         return False
-            except Exception,e:
+            except (art_error,script_error),e:
                 exceptions.append(error_msg(e.value,self.lastline_value,self.si,self))
+                import traceback
+                traceback.print_exc()
+            except Exception,e:
+                exceptions.append(error_msg("undefined",self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
         add_exceptions()
