@@ -61,6 +61,10 @@ game_id="18079"
 game_id="40201"
 game_url = "http://aceattorney.sparklin.org/jeu.php?id_proces=%s"%game_id #JM shot dunk
 
+cleanup = {
+    "expressions":[]
+}
+
 class WorkThread:
     def __init__(self,rootpath):
         self.rootpath = rootpath
@@ -244,7 +248,7 @@ def wget(url,saveto):
         if not (os.path.exists(txt_name) or os.path.exists(saveto)):
             try:
                 gif2strip.go(url,saveto)
-            except (urllib2.HTTPError,urllib2.URLError):
+            except (urllib2.HTTPError,urllib2.URLError,IndexError):
                 pass
     elif url.endswith(".mp3"):
         if not os.path.exists(saveto):
@@ -366,7 +370,7 @@ def AfficherElement(vals,elements):
     if type=="profil":
         evid+="$"
     vals["pretextcode"] = "ev ev%s"%evid
-    vals["postcode"] = "delete name=%s"%evid
+    vals["postcode"] = "delete name=ev%s"%evid
 
 #Delete evidence
 def MasquerElements(vals,elements):
@@ -540,9 +544,10 @@ def DefinirVar(vals,elements):
         vals["postcode"] += "\nsetvar %s %s"%(elements[0],elements[1])
 def EvaluerCondition(vals,elements):
     """Evalute condition (condition,jump_if_success,jump_if_fail)"""
-    condition,succeed,fail = [x[0] for x in elements]
+    condition,succeed,fail = [x for x in elements]
     condition = condition.replace("&amp;","AND")
-    vals["postcode"] += "\nis %s line_%s\ngoto line_%s"%(condition,succeed,fail)
+    cleanup["expressions"].append(vals["id_num"])
+    vals["postcode"] += "\nis_ex %s line_%s\ngoto line_%s"%(condition,succeed,fail)
     
 def do_statement(vals):
     if crossexam[0]:
@@ -570,6 +575,7 @@ def MasquerMessage(vals,elements):
     """Hide message OR STATEMENT"""
     vals["postcode"] = "set aao_st_show_"+elements[0]+" false"
     vals["postcode"] += "\nset aao_line_hide_%s true"%elements[0]
+    vals["globals"]["can_be_hidden"][int(elements[0])] = True
 def AjouterCI(vals,elements):
     """Reveal hidden statement OR LINE"""
     vals["postcode"] = "set aao_st_show_"+elements[0]+" true"
@@ -764,7 +770,8 @@ set _debug true
 """)
 had_fg = False
 linked = False
-globals = {}
+globals = {"can_be_hidden":{}}
+all_lines = []
 for id in sorted(namespace["donnees_messages"].keys()):
     print id
     id_num = str(id)
@@ -829,8 +836,7 @@ for id in sorted(namespace["donnees_messages"].keys()):
     is_statement = do_statement(vals)
     if vals["hidden"]:
         wp("set aao_line_hide_%s true\n"%id_num)
-    if not is_statement:
-        vals["precode"] = "is aao_line_hide_%s?\ngoto line_%s\n"%(id_num,int(id_num)+1)+vals["precode"]
+        globals["can_be_hidden"][int(vals["id_num"])] = True
     if vals["skip"]:
         vals["postcode"]+="goto line_%s"%(int(id_num)+1)
     #A delay from the beginning of text before continuing
@@ -841,6 +847,11 @@ for id in sorted(namespace["donnees_messages"].keys()):
         if wait_time>0:
             vals["text"]+="{p%s}"%wait_time
         vals["text"]+="{next}"
+    all_lines.append(vals)
+for vals in all_lines:
+    id_num = vals["id_num"]
+    if globals["can_be_hidden"].get(int(vals["id_num"]),None):
+        vals["precode"] = "is aao_line_hide_%s?\ngoto line_%s\n"%(vals["id_num"],int(vals["id_num"])+1)+vals["precode"]
     if id_num in label_none or id_num in jumpto_when_press or id_num in jumpto_when_present:
         w(end_cross_exam(vals))
     w(u"\nlabel line_%s\n"%id_num)
@@ -891,3 +902,5 @@ for evid in all_evidence:
         
 res.saveall()
 res.close()
+
+print cleanup
