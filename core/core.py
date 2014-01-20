@@ -2180,7 +2180,7 @@ class textbox(gui.widget):
                     assets.portrait.set_talking()
                 if self.in_paren:
                     assets.portrait.set_blinking()
-            if char.strip():
+            if str(char).strip():
                 assets.play_sound(self.clicksound,volume=random.uniform(0.65,1.0))
             next_char = int(next_char*self.delay)
             if self.wait=="manual":
