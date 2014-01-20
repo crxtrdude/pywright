@@ -2070,10 +2070,14 @@ The four types of gui you can create are:
         if "both" in args:
             sh.screen_setting = "both"
             args.remove("both")
-        if len(args)>0:
-            sh.ttl = int(args[0])
-        if len(args)>1:
-            sh.offset = int(args[1])
+        try:
+            if len(args)>0:
+                sh.ttl = int(args[0])
+            if len(args)>1:
+                sh.offset = int(args[1])
+        except ValueError:
+            raise script_error("Shake text macro needs an integer")
+            return
         self.add_object(sh)
     @category([KEYWORD("mag","How many times to magnify","1 (will magnify 1 time, which is 2x magnification)"),
     KEYWORD("frames","how many frames for the zoom to take","1"),
@@ -3266,20 +3270,24 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 assets.cur_script.draw(pygame.screen)
             except (art_error,script_error),e:
                 assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
-            try:
-                if assets.flash:
+            if assets.flash:
+                try:
                     fl = flash()
                     assets.cur_script.obs.append(fl)
                     fl.ttl = assets.flash
                     if hasattr(assets,"flashcolor"):
                         fl.color = assets.flashcolor
-                        assets.flashcolor = [255,255,255]
-                    assets.flash = 0
-                if assets.shakeargs != 0:
+                except (art_error,script_error),e:
+                    assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
+                assets.flash = 0
+                assets.flashcolor = [255,255,255]
+            if assets.shakeargs != 0:
+                try:
                     assets.cur_script._shake("shake",*assets.shakeargs)
-                    assets.shakeargs = 0
-            except (art_error,script_error),e:
-                assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
+                except (art_error,script_error),e:
+                    assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
+                assets.shakeargs = 0
+
             if assets.variables.get("render",1):
                 draw_screen(assets.show_fps)
             assets.next_screen = assets.screen_refresh
