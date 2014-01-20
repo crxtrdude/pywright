@@ -39,8 +39,7 @@ assets.tool_path))
     
 def load(assets):
     assets.fullscreen = 0
-    assets.swidth = 256
-    assets.sheight = 192*2
+    assets.swidth,assets.sheight = pygame.display.list_modes()[0]
     assets.filter = 0
     assets.num_screens = 2
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
@@ -480,9 +479,9 @@ class settings_menu(gui.pane):
         
         res_box.add_child(gui.checkbox("show fps"))
         self.show_fps = res_box.pane.children[-1]
-        s_c = self.show_fps.set_checked
+        s_c1 = self.show_fps.set_checked
         def set_checked(val):
-            s_c(val)
+            s_c1(val)
             assets.show_fps = val
             wini(assets)
         self.show_fps.set_checked = set_checked

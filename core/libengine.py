@@ -3183,6 +3183,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         sys.exit()
     
     assets.init_sound()
+    pygame.display.init()
     settings.load(assets)
 
     game = "menu"
