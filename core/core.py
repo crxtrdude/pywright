@@ -641,6 +641,12 @@ set _font_new_resume_size 14""".split("\n"):
         if getattr(self,"_track",None) and not mcb():
             if assets.variables.get("_music_loop",None):
                 self.play_music(assets.variables["_music_loop"],self._loop)
+    def pause_sound(self):
+        mixer.pause()
+        mixer.music.pause()
+    def resume_sound(self):
+        mixer.unpause()
+        mixer.music.unpause()
     def set_emotion(self,e):
         """Sets the emotion of the current portrait"""
         if not self.portrait:
@@ -4051,13 +4057,11 @@ class guiWait(sprite):
         self.script = assets.cur_script
         self.mute = mute  #Mute sound while waiting
         if self.mute:
-            mixer.pause()
-            mixer.music.pause()
+            assets.pause_sound()
     def delete(self):
         self.kill = 1
         if self.mute:
-            mixer.unpause()
-            mixer.music.unpause()
+            assets.resume_sound()
     def update(self):
         if self.run:
             ns = self.script.execute_macro(self.run)

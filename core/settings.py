@@ -147,6 +147,7 @@ class settings_menu(gui.pane):
         self.sw=kwargs["sw"]
         self.sh=kwargs["sh"]
         self.assets=assets=kwargs["assets"]
+        self.assets.pause_sound()
         gui.widget.__init__(self)
         self.width = 1000
         self.height = 1000
@@ -621,3 +622,4 @@ class settings_menu(gui.pane):
         self.close()
     def delete(self):
         self.kill = 1
+        self.assets.resume_sound()
