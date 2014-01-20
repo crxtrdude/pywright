@@ -3465,7 +3465,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
-        except script_error, e:
+        except (art_error,script_error), e:
             assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             import traceback
             traceback.print_exc()
