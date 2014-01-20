@@ -2066,7 +2066,7 @@ class textbox(gui.widget):
                 s = len(self.mwritten)-1
                 mt = self._markup._text
                 self._markup._text = self.mwritten
-                def back():
+                def back(*args):
                     old()
                     print "MWRIT",s,self.mwritten
                     t0=[]
