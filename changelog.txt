@@ -1,5 +1,39 @@
 (Note: file not intended for word wrapping)
 
+*PyWright 0.988
+    ANDROID:
+        - First official android version!
+        - pretty slow to start the first time
+        - Only supports dual screen view
+        - editboxes dont work
+        - no 3d rendering
+        - some sound issues
+        - make sure to use wifi when downloading games
+        - no error log is written, soo much IO to the sd card. unfortunately this will make bugs harder to figure out
+        
+    BUGS:
+        - subpixel scrolling speeds caused scrolls to not always end on a pixel perfect location
+            - should make court macros less jittery
+            - should solve examine issues with wide screens that could result in scrolling the wrong way
+        - many more defenses added against wrightscript code errors, preventing crashes
+            (usually code referencing sound or artfiles incorrectly)
+        - games with case_screen updates were crashing trying to load the background art
+        
+    DEBUG MODE:
+        - Made an engine wide toggle rather than something you have to write into your game
+        - Go to the debug menu and turn it on when you run PyWright before selecting a case
+        
+    SAVES:
+        - back button on android, space button on computer backs out of menus and even the current case
+        - automatically saves your game when you use the back button to close a case (very useful on android)
+        
+    OTHER:
+        - Loading screen indicates progress with a throbber
+        - {spd} more accurate
+        - aspect ratio corrected in skinny configurations
+        - game download list cleaner
+        - can toggle frameskip rendering on and off
+
 *PyWright 0.987
     - Framerate independance turned on again, games run at the same speed on
         all computers, dropping frames if the rendering can't keep up. At 10fps or less,
