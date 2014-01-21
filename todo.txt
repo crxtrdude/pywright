@@ -3,4 +3,3 @@ custom resolution
 apng
 characters show up in menu
 custom back button w/sound
-cleanup downloads on update service
