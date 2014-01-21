@@ -1,5 +1,5 @@
 version 0.9880
-version_date 1/17/2014
+version_date 1/20/2014
 version_notes android and bugfixes
 author saluk
 website http://pywright.dawnsoft.org/
