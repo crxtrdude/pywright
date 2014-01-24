@@ -207,6 +207,8 @@ class Variables(dict):
         if key=="_debug":
             return
         return dict.__setitem__(self,key,value,*args)
+    def set(self,key,value):
+        return self.__setitem__(key,value)
 
 assert Variables().get("_version",None)
         
@@ -3196,8 +3198,17 @@ class evidence_menu(fadesprite,gui.widget):
                 self.pages_set.remove(p)
         if not self.pages_set:
             self.delete()
-        self.item_set = self.pages_set[0]
+            
+        #Loading saved position
+        self.item_set = assets.variables.get("_cr_current_item_set",self.pages_set[0])
         self.layout()
+        if not self.pages:
+            self.item_set = self.pages_set[0]
+            self.layout()
+        self.page = int(assets.variables.get("_cr_current_page",0))
+        self.sx = int(assets.variables.get("_cr_current_selected_x",0))
+        self.sy = int(assets.variables.get("_cr_current_selected_y",0))
+        
         self.screen_setting = "try_bottom"
     def update(self):
         self.choose()
@@ -3225,6 +3236,11 @@ class evidence_menu(fadesprite,gui.widget):
         self.page = 0
         self.sx = 0
         self.sy = 0
+    def remember_vars(self):
+        assets.variables.set("_cr_current_item_set",self.item_set)
+        assets.variables.set("_cr_current_page",self.page)
+        assets.variables.set("_cr_current_selected_x",self.sx)
+        assets.variables.set("_cr_current_selected_y",self.sy)
     def page_prev(self):
         self.page-=1
         if self.page<0:
@@ -3232,6 +3248,7 @@ class evidence_menu(fadesprite,gui.widget):
         page = self.pages[self.page]
         self.sy = len(page)-1
         self.sx = len(page[self.sy])-1
+        self.remember_vars()
     def page_next(self):
         self.page += 1
         if self.page>len(self.pages)-1:
@@ -3240,6 +3257,7 @@ class evidence_menu(fadesprite,gui.widget):
         page = self.pages[self.page]
         if self.sy>len(page)-1:
             self.sy = 0
+        self.remember_vars()
     def set_bg(self):
         defbg = assets.variables["ev_mode_bg_evidence"]
         bg = assets.variables.get("ev_mode_bg_"+self.item_set,defbg)
@@ -3365,6 +3383,7 @@ class evidence_menu(fadesprite,gui.widget):
             col = row[self.sx]
             self.chosen = col.id
             self.chosen_icon = col
+        self.remember_vars()
     def enter_down(self):
         if self.switch:
             self.k_z()
@@ -3435,6 +3454,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.chosen = None
         self.item_set = self.next_screen()
         self.layout()
+        self.remember_vars()
         #if not self.pages: self.item_set = modes[self.item_set]
         #self.layout()
         self.switch = False
