@@ -1811,41 +1811,6 @@ class testimony_blink(fg):
         if self.time>20 and vtrue(assets.variables.get("_testimony_blinker", "true")):
             w,h = self.img.get_size()
             dest.blit(pygame.transform.scale(self.img,[int(w//1.5),int(h//1.5)]),self.pos)
-    
-class press_button(fadesprite,gui.widget):
-    def __init__(self,parent):
-        fadesprite.__init__(self)
-        self.z = zlayers.index(self.__class__.__name__)
-        self.normal = assets.open_art("general/press/press_old")[0]
-        self.high = assets.open_art("general/press/press_old_high")[0]
-        self.highlight = False
-        self.pos = [0,192]
-        self.screen_setting = "try_bottom"
-        gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
-        self.width,self.height = self.normal.get_size()
-    def draw(self,dest):
-        self.img = {False:self.normal,True:self.high}[self.highlight is True]
-        super(press_button,self).draw(dest)
-    def click_down_over(self,mp):
-        self.parent.k_z()
-
-class present_button(fadesprite,gui.widget):
-    def __init__(self,parent):
-        fadesprite.__init__(self)
-        self.z = zlayers.index(self.__class__.__name__)
-        self.normal = assets.open_art("general/press/present_old")[0]
-        self.high = assets.open_art("general/press/present_old_high")[0]
-        self.rect = self.normal.get_rect()
-        self.highlight = False
-        self.pos = [sw-self.rect.width,192]
-        self.screen_setting = "try_bottom"
-        gui.widget.__init__(self,self.pos,self.normal.get_size(),parent)
-        self.width,self.height = self.normal.get_size()
-    def draw(self,dest):
-        self.img = {False:self.normal,True:self.high}[self.highlight is True]
-        super(present_button,self).draw(dest)
-    def click_down_over(self,mp):
-        self.parent.k_x()
 
 class textbox(gui.widget):
     pri = 30
@@ -1920,22 +1885,21 @@ class textbox(gui.widget):
         self.statement = None
         self.wait = "auto"
         
-        self.pressb = press_button(self)
-        self.presentb = present_button(self)
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
         
         self.id_name = "_textbox_"
     def init_cross(self):
-        pass
+        subscript("show_press_button")
+        subscript("show_present_button")
     def init_normal(self):
         subscript("show_court_record_button")
     def delete(self):
-        self.pressb.delete()
-        self.presentb.delete()
         self.kill = 1
         assets.cur_script.refresh_arrows(self)
         subscript("hide_court_record_button")
+        subscript("hide_press_button")
+        subscript("hide_present_button")
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
         if assets.portrait:
@@ -2050,23 +2014,6 @@ class textbox(gui.widget):
             if assets.variables.get("_nt_text_y","")!="":
                 ny += int(assets.variables.get("_nt_text_y",0))
             dest.blit(self.nt_text_image,[nx+5,ny])
-        if self.statement:
-            h1=h2=False
-            for o in assets.cur_script.obs:
-                if isinstance(o,press_button):
-                    if o != self.pressb:
-                        o.delete()
-                    else:
-                        h1 = o
-                if isinstance(o,present_button):
-                    if o != self.presentb:
-                        o.delete()
-                    else:
-                        h2 = o
-            if not h1:
-                assets.cur_script.obs.append(self.pressb)
-            if not h2:
-                assets.cur_script.obs.append(self.presentb)
     def add_character(self):
         command = None
         next_char = 1
@@ -3153,13 +3100,6 @@ class evidence_menu(fadesprite,gui.widget):
         chk = [sw-check.get_width(),sh-check.get_height()]
         if mp[0]>=chk[0] and mp[1]>=chk[1]:
             self.do_check()
-        if self.can_present():
-            mp[1]+=self.getpos()[1]
-            self.present_button.draw(assets.Surface([64,64]))
-            sb = self.present_button
-            sbpos = sb.getpos()
-            if mp[0]>=sbpos[0] and mp[0]<=sbpos[0]+sb.width and mp[1]>=sbpos[1] and mp[1]<=sbpos[1]+sb.height:
-                self.k_x()
         #~ self.enter_down()
         #~ gui.window.over = None
         #~ gui.window.focused = None
@@ -3198,9 +3138,6 @@ class evidence_menu(fadesprite,gui.widget):
         self.scroll = 0
         self.scroll_dir = 0
         
-        self.present_button = present_button(self)
-        self.present_button.pos = [int(assets.variables["ev_present_x"]),
-                    int(assets.variables["ev_present_y"])+192]
         self.pages_set = assets.variables.get("_ev_pages","evidence profiles").split(" ")
         for p in self.pages_set[:]:
             if not vtrue(assets.variables.get("_%s_enabled"%p,"true")):
@@ -3219,6 +3156,9 @@ class evidence_menu(fadesprite,gui.widget):
         self.sy = int(assets.variables.get("_cr_current_selected_y",0))
         
         self.screen_setting = "try_bottom"
+    def delete(self):
+        super(evidence_menu,self).delete()
+        subscript("hide_present_button2")
     def update(self):
         self.choose()
         if not getattr(self,"hidden",None):
@@ -3499,8 +3439,6 @@ class evidence_menu(fadesprite,gui.widget):
             dest.blit(assets.get_font("itemset_big").render(
                 self.next_screen().capitalize(),1,[255,255,255]),
                 [x+int(assets.variables["ev_modebutton_x"]),y+int(assets.variables["ev_modebutton_y"])])
-        if self.can_present():
-            self.present_button.draw(dest)
         page = []
         if self.pages:
             page = self.pages[self.page]
@@ -3563,6 +3501,17 @@ class evidence_menu(fadesprite,gui.widget):
                 self.mode = "overview"
         if self.canback():
             self.back_button.draw(dest)
+        #present button
+        if not hasattr(self,"present_button"):
+            self.present_button = False
+        if self.can_present():
+            if not self.present_button:
+                subscript("show_present_button2")
+                self.present_button = True
+        else:
+            if self.present_button:
+                subscript("hide_present_button2")
+                self.present_button = False
     def draw_ev_zoom(self,icon,pos,surf):
         if not hasattr(self,icon.id+"_zoom_"+str(assets.gbamode)):
             if assets.gbamode:

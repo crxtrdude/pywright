@@ -11,7 +11,6 @@ isnot _cr_button exit
 {hide_court_record_button}
 {_default_court_record_button}
 label exit
-
 endmacro
 
 macro hide_court_record_button
@@ -26,6 +25,88 @@ endmacro
 macro enable_court_record_button
 set _cr_button true
 endmacro
+
+
+
+
+
+###PRESS BUTTON###
+#Command to activate
+macro _pressbut
+callpress
+endmacro
+
+#Command to display
+macro _default_press_button
+gui Button {_pressbut} name=_pressbut_ graphic=general/press/press graphichigh=general/press/press_high x=0 y=192 z=6 try_bottom
+endmacro
+
+#Command to show it, deleting old one if it exists
+macro show_press_button
+{hide_press_button}
+{_default_press_button}
+endmacro
+
+#Command to hide it
+macro hide_press_button
+delete name=_pressbut_
+endmacro
+###END PRESS BUTTON###
+
+
+
+
+
+###PRESENT BUTTON###
+#Command to activate
+macro _presentbut
+showrecord
+endmacro
+
+#Command to display
+macro _default_present_button
+gui Button {_presentbut} name=_presentbut_ graphic=general/press/present graphichigh=general/press/present_high x=176 y=192 z=6 try_bottom
+endmacro
+
+#Command to show it, deleting old one if it exists
+macro show_present_button
+{hide_present_button}
+{_default_present_button}
+endmacro
+
+#Command to hide it
+macro hide_present_button
+delete name=_presentbut_
+endmacro
+###END PRESENT BUTTON###
+
+
+
+###PRESENT BUTTON IN COURT RECORD###
+#Command to activate
+macro _presentbut2
+callpresent
+endmacro
+
+#Command to display
+macro _default_present_button2
+gui Button {_presentbut2} name=_presentbut2_ graphic=general/press/present2 graphichigh=general/press/present2_high x=90 y=192 z=12 try_bottom
+endmacro
+
+#Command to show it, deleting old one if it exists
+macro show_present_button2
+{hide_present_button2}
+{_default_present_button2}
+endmacro
+
+#Command to hide it
+macro hide_present_button2
+delete name=_presentbut2_
+endmacro
+###END PRESENT BUTTON IN COURT RECORD###
+
+
+
 
 macro theme_screen2
     set theme $1

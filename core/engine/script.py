@@ -1182,6 +1182,22 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
     def _showrecord(self,command,*args):
         print "show ev menu"
         assets.addevmenu()
+    @category([],type="interface")
+    def _callpress(self,command,*args):
+        #FIXME - this makes callpress only work from a macro executing one level above current script
+        del assets.stack[-1]
+        for o in self.obs:
+            if isinstance(o,textbox):
+                o.k_z()
+                break
+    @category([],type="interface")
+    def _callpresent(self,command,*args):
+        #FIXME - this makes callpress only work from a macro executing one level above current script
+        del assets.stack[-1]
+        for o in self.obs:
+            if isinstance(o,evidence_menu):
+                o.k_x()
+                break
     @category([VALUE("scene_name","Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'"),
     KEYWORD('examine','whether to show the examine button','true'),
     KEYWORD('talk','whether to show the talk button','true'),

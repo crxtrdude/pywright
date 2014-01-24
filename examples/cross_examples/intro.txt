@@ -1,4 +1,6 @@
 addev t
+addev t$
+
 goto blah3
 
 cross blah
