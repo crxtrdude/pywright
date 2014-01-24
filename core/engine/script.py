@@ -708,7 +708,7 @@ char test
     @category([VALUE("folder","List all games in this folder, relative to current game directory")],type="gameflow")
     def _gamemenu(self,command,folder,*args):
         """Can be used to list games in a folder"""
-        cm = choose_game()
+        cm = assets.choose_game()
         cm.pause = True
         cm.list_games(assets.game+"/"+folder)
         if "close" in args:

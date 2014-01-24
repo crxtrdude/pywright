@@ -162,6 +162,8 @@ class choose_game(gui.widget):
                 setattr(self,f.replace(" ","_"),_play_game)
             else:
                 setattr(self,f.replace(" ","_"),lambda: 1)
+#FIXME: out of place
+assets.choose_game = choose_game
         
 def load_game_menu():
     if [1 for o in assets.cur_script.obs if isinstance(o,choose_game)]:
