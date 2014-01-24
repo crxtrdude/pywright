@@ -929,6 +929,21 @@ set _font_new_resume_size 14""".split("\n"):
         self.cur_script.execute_macro("font_defaults")
         self.cur_script.execute_macro("load_defaults")
         self.cur_script.execute_macro("init_court_record_settings")
+    def addevmenu(self):
+        try:
+            em = evidence_menu(self.items)
+            self.cur_script.add_object(em,True)
+        except art_error,e:
+            self.cur_script.obs.append(error_msg(e.value,"",0,self.cur_script))
+            import traceback
+            traceback.print_exc()
+            return
+        return em
+    def addscene(self,scene):
+        #FIXME - assets.Script should be script.Script
+        s = self.Script()
+        s.init(scene)
+        self.stack.append(s)
         
 def vtrue(variable):
     if variable.lower() in ["on","1","true"]:
