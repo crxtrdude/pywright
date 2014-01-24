@@ -1690,8 +1690,8 @@ class evidence(fadesprite):
             traceback.print_exc()
             self.img = assets.Surface([16,16])
             self.img.fill([255,255,255])
-        self.small = pygame.transform.scale(self.img,[35,35])
-        self.scaled = pygame.transform.scale(self.img,[70,70])
+        self.small = pygame.transform.smoothscale(self.img,[35,35])
+        self.scaled = pygame.transform.smoothscale(self.img,[70,70])
         self.setfade()
         self.name = assets.variables.get(self.id+"_name",self.id.replace("$",""))
         self.desc = assets.variables.get(self.id+"_desc",self.id.replace("$",""))
@@ -3242,11 +3242,11 @@ class evidence_menu(fadesprite,gui.widget):
             self.sy = 0
     def set_bg(self):
         defbg = assets.variables["ev_mode_bg_evidence"]
-	bg = assets.variables.get("ev_mode_bg_"+self.item_set,defbg)
+        bg = assets.variables.get("ev_mode_bg_"+self.item_set,defbg)
         self.load(bg+assets.appendgba)
     def k_left(self):
         if self.page>=len(self.pages): return
-	self.set_bg()
+        self.set_bg()
         self.back = False
         self.back_button.unhighlight()
         self.sx-=1
@@ -3276,7 +3276,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.choose()
     def k_right(self):
         if self.page>=len(self.pages): return
-	self.set_bg()
+        self.set_bg()
         self.back = False
         self.back_button.unhighlight()
         self.sx+=1
