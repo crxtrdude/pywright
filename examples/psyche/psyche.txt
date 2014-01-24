@@ -1,0 +1,31 @@
+macro lock_option
+lo checkmark=general/checkmark_lock check_x=0 check_y=-2
+endmacro
+
+list stuff
+li this is option 1
+li this is option 2
+li this is option 3 (locked!)
+lock_option
+showlist
+goto end
+
+label this is option 1
+"stuff"
+goto stuff
+
+label this is option 2
+"more stuff"
+goto stuff
+
+label this is option 3 (locked!)
+psyche1
+"Uh oh! This option is locked"
+clear
+goto stuff
+
+label none
+goto stuff
+
+
+label end

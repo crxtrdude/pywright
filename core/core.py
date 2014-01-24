@@ -2648,10 +2648,10 @@ class listmenu(fadesprite,gui.widget):
         if not self.selected:
             return
         if self.tag:
-            assets.lists[self.tag][self.selected[0]] = 1
-        if self.selected[1] != "Back":
-            assets.variables["_selected"] = self.selected[1]
-            assets.cur_script.goto_result(self.selected[1],backup=self.fail)
+            assets.lists[self.tag][self.selected["label"]] = 1
+        if self.selected["result"] != "Back":
+            assets.variables["_selected"] = self.selected["result"]
+            assets.cur_script.goto_result(self.selected["result"],backup=self.fail)
         else:
             assets.variables["_selected"] = "Back"
         self.delete()
@@ -2665,16 +2665,19 @@ class listmenu(fadesprite,gui.widget):
         y = self.getpos()[1]+30
         #self.choice.setfade(200)
         #self.choice_high.setfade(200)
-        try:
-            checkmark = sprite().load(assets.variables.get("_list_checked_img","general/checkmark"))
-        except:
-            checkmark = None
         for c in self.options:
             if 0:#self.selected == c:
                 img = self.choice_high.img.copy()
             else:
                 img = self.choice.img.copy()
-            rt = c[0]
+            rt = c["label"]
+            checkmark = assets.variables.get("_list_checked_img","general/checkmark")
+            if "checkmark" in c:
+                checkmark = c["checkmark"]
+            try:
+                checkmark = sprite().load(checkmark)
+            except:
+                checkmark = None
             if (not (checkmark and checkmark.width)) and self.tag and assets.lists[self.tag].get(rt,None):
                 rt = "("+rt+")"
             txt = assets.get_image_font("list").render(rt,[110,20,20])
@@ -2696,8 +2699,14 @@ class listmenu(fadesprite,gui.widget):
                 pygame.draw.line(dest,color,[x-1,y+img.get_height()-2],[x-1,y+img.get_height()-9],lwi)
                 pygame.draw.line(dest,color,[x+1,y+img.get_height()],[x+8,y+img.get_height()],lwi)
             if checkmark and checkmark.width and self.tag and assets.lists[self.tag].get(rt,None):
-                cx = int(assets.variables.get("_list_checked_x","-10"))
-                cy = int(assets.variables.get("_list_checked_y","-10"))
+                if "check_x" in c:
+                    cx = int(c["check_x"])
+                else:
+                    cx = int(assets.variables.get("_list_checked_x","-10"))
+                if "check_y" in c:
+                    cy = int(c["check_y"])
+                else:
+                    cy = int(assets.variables.get("_list_checked_y","-10"))
                 dest.blit(checkmark.base[0],[x+cx,y+cy])
             y+=self.choice.img.get_height()+5
     def k_space(self):
