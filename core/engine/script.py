@@ -248,6 +248,7 @@ class Script(gui.widget):
             assets.save_game("android_pause",True)
             assets.quit_game()
     def save(self):
+        from core import save
         props = {}
         save.cp(["scene","si","cross","statement","instatement","lastline","pri","viewed"],self,props)
         if self.parent and self.parent in assets.stack:
