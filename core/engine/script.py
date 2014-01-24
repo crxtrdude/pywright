@@ -2131,7 +2131,17 @@ exit}}}
             label=result=" ".join(label)
         for o in self.obs:
             if isinstance(o,listmenu):
-                o.options.append([label,result])
+                o.options.append({"label":label,"result":result})
+    @category([KEYWORD('checkmark','image used for checkmark'),
+    KEYWORD('check_x','x position of check image'),
+    KEYWORD('check_y','y position of check image')],type="interface")
+    def _lo(self,command,*keys):
+        for o in self.obs:
+            if isinstance(o,listmenu):
+                for k in keys:
+                    key,value = k.split("=")
+                    if key in ["checkmark","check_x","check_y"]:
+                        o.options[-1][key]=value
     @category([],type="interface")
     def _showlist(self,command,*args):
         """Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
