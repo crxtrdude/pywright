@@ -18,6 +18,7 @@ smoothscale=%s
 fullscreen=%s
 screens=%s
 show_fps=%s
+framerate=%s
 sound_format=%s
 sound_bits=%s
 sound_buffer=%s
@@ -31,7 +32,7 @@ autosave_interval=%s
 autosave_keep=%s
 tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.smoothscale,
 assets.fullscreen,assets.num_screens,
-int(assets.show_fps),
+int(assets.show_fps),float(assets.framerate),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),int(assets.mute_sound),
 int(assets.screen_compress),int(assets.screen_refresh),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
 assets.tool_path))
@@ -47,6 +48,7 @@ def load(assets):
     assets.autosave_interval = 5 #minutes between autosaves
     assets.autosave_keep = 2 #how many saves to keep
     assets.show_fps = 0
+    assets.framerate = 60
     assets.smoothscale = 0
     if os.path.exists("display.ini"):
         f = open("display.ini")
@@ -66,7 +68,7 @@ def load(assets):
                 "sound_buffer":"sound_buffer","show_fps":"show_fps",
                 "mute_sound":"mute_sound",
                 "smoothscale":"smoothscale","screen_refresh":"screen_refresh"}
-        fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume"
+        fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume","framerate":"framerate"
                 }
         s_val = {"tool_path":"tool_path"}
 
