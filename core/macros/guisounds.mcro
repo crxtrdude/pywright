@@ -20,3 +20,11 @@ endmacro
 macro sound_list_menu_confirm
 sfx Confirm.ogg volume=70
 endmacro
+
+macro sound_case_menu_select
+sfx Blink.ogg volume=70
+endmacro
+
+macro sound_examine_menu_cancel
+sfx Cancel.ogg volume=70
+endmacro
