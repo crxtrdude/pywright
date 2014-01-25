@@ -954,15 +954,21 @@ def vtrue(variable):
     
 assets = Assets()
 
+assets.subscripts = {}
 def subscript(macro):
     """Runs a macro all the way through"""
+    #FIXME - limit recursion for subscripts. kind of a hack
+    if macro in assets.subscripts:
+        return
     script = assets.cur_script.execute_macro(macro)
     print "start subscript",script.scene
+    assets.subscripts[macro] = 1
     while script in assets.stack:
         e = script.update()
         if e:
             break
     print "end subscript",script.scene
+    del assets.subscripts[macro]
     
 
 class SoundEvent(object):
