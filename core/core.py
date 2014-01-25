@@ -4080,6 +4080,7 @@ class guiBack(sprite,gui.widget):
         self.load(self.image+assets.appendgba)
     def k_space(self):
         self.delete()
+        subscript("sound_back_button_cancel")
     def update(self):
         return True
         
@@ -4098,6 +4099,7 @@ class guiScroll(sprite,gui.widget):
     def k_z(self):
         self.delete()
         self.parent.xscrolling = self.direction*sw
+        subscript("sound_examine_scroll")
         #del self.parent.scrollbut
     def update(self):
         return True
