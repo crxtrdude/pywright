@@ -8,3 +8,15 @@ endmacro
 macro sound_investigate_menu_confirm
 sfx Confirm.ogg volume=70
 endmacro
+
+macro sound_list_menu_select
+sfx Select.ogg volume=70
+endmacro
+
+macro sound_list_menu_cancel
+sfx Cancel.ogg volume=70
+endmacro
+
+macro sound_list_menu_confirm
+sfx Confirm.ogg volume=70
+endmacro

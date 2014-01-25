@@ -2542,6 +2542,7 @@ class listmenu(fadesprite,gui.widget):
         si = self.over(mp)
         if self.si==si and si is not None:
             self.enter_down()
+            subscript("sound_list_menu_confirm")
     def __init__(self,tag=None):
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,192
@@ -2580,6 +2581,7 @@ class listmenu(fadesprite,gui.widget):
             self.bck.pri = 1000
             def k_space(b=self.bck):
                 self.delete()
+                subscript("sound_list_menu_cancel")
                 print "kill back button and self"
                 assets.variables["_selected"] = "Back"
             self.bck.k_space = k_space
@@ -2595,6 +2597,7 @@ class listmenu(fadesprite,gui.widget):
             self.si = len(self.options)-1
         self.selected = self.options[self.si]
         self.change_selected()
+        subscript("sound_list_menu_select")
     def k_down(self):
         if getattr(self,"kill",0):
             return False
@@ -2603,6 +2606,7 @@ class listmenu(fadesprite,gui.widget):
             self.si = 0
         self.selected = self.options[self.si]
         self.change_selected()
+        subscript("sound_list_menu_select")
     def enter_down(self):
         if getattr(self,"kill",0):
             return False
@@ -2681,6 +2685,7 @@ class listmenu(fadesprite,gui.widget):
             return False
         if hasattr(self,"bck") or "Back" in self.options:
             self.delete()
+            subscript("sound_list_menu_cancel")
 
 class case_menu(fadesprite,gui.widget):
     children = []
