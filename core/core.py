@@ -955,17 +955,19 @@ def vtrue(variable):
 assets = Assets()
 
 assets.subscripts = {}
-def subscript(macro):
+def subscript(macro,execute=False):
     """Runs a macro all the way through"""
     #FIXME - limit recursion for subscripts. kind of a hack
     if macro in assets.subscripts:
         return
     script = assets.cur_script.execute_macro(macro)
-    return
     print "start subscript",macro,getattr(script,"scene","(no scene)")
     assets.subscripts[macro] = 1
     while script in assets.stack:
-        e = script.update()
+        if execute:
+            e = script.interpret()
+        else:
+            e = script.update()
         if e:
             break
     print "end subscript",macro,getattr(script,"scene","(no scene)")
@@ -1900,17 +1902,10 @@ class textbox(gui.widget):
         
         self.id_name = "_textbox_"
     def init_cross(self):
-        subscript("show_press_button")
-        subscript("show_present_button")
+        subscript("show_press_button",execute=True)
+        subscript("show_present_button",execute=True)
     def init_normal(self):
         subscript("show_court_record_button")
-    def init_gui(self):
-        if not self.made_gui:
-            self.made_gui = True
-            if self.statement:
-                self.init_cross()
-            else:
-                self.init_normal()
     def delete(self):
         self.kill = 1
         assets.cur_script.refresh_arrows(self)
@@ -2179,7 +2174,6 @@ class textbox(gui.widget):
         t._text = self.mwritten
         return not len(self.mwritten)<len(self._markup._text) or len(t.fulltext().split("\n"))>=self.num_lines
     def update(self):
-        self.init_gui()
         #assets.play_sound(self.clicksound)
         self.rpi.update()
         if self.kill: return

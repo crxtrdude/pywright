@@ -541,9 +541,15 @@ char test
         if self.cross is not None and self.instatement:
             self.tbon()
             if self.cross == "proceed":
+                tbox.init_cross()
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
                 tbox.set_text("{c283}"+t)
+        else:
+            tbox.init_normal()
+        #~ tbox.update()
+        #~ s = pygame.Surface([32,32])
+        #~ tbox.draw(s)
     def execute_line(self,line):
         if not line:
             return
