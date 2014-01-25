@@ -1895,12 +1895,21 @@ class textbox(gui.widget):
         self.can_skip = True
         self.blocking = not vtrue(assets.variables.get("_textbox_skipupdate","0"))
         
+        self.made_gui = False
+        
         self.id_name = "_textbox_"
     def init_cross(self):
         subscript("show_press_button")
         subscript("show_present_button")
     def init_normal(self):
         subscript("show_court_record_button")
+    def init_gui(self):
+        if not self.made_gui:
+            self.made_gui = True
+            if self.statement:
+                self.init_cross()
+            else:
+                self.init_normal()
     def delete(self):
         self.kill = 1
         assets.cur_script.refresh_arrows(self)
@@ -2167,6 +2176,7 @@ class textbox(gui.widget):
         t._text = self.mwritten
         return not len(self.mwritten)<len(self._markup._text) or len(t.fulltext().split("\n"))>=self.num_lines
     def update(self):
+        self.init_gui()
         #assets.play_sound(self.clicksound)
         self.rpi.update()
         if self.kill: return
