@@ -2182,6 +2182,7 @@ class textbox(gui.widget):
         self.rpi.update()
         if self.kill: return
         self.next_char -= assets.dt
+        #FIXME - logic is horrendously convoluted
         while (not self.nextline()) and self.next_char<=0:
             #self.next_char += 1
             num_chars = max(int(self.speed),1)
@@ -2189,7 +2190,9 @@ class textbox(gui.widget):
             cnum = num_chars
             while (not self.nextline()) and ((not self.speed) or cnum>0):
                 cnum -= 1
-                next_char += self.add_character()
+                ac_next = self.add_character()
+                if self.speed:
+                    next_char += ac_next
             if self.speed:
                 self.next_char += (next_char/float(self.speed))
         if assets.portrait:
