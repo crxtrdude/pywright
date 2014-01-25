@@ -2560,7 +2560,6 @@ class listmenu(fadesprite,gui.widget):
         si = self.over(mp)
         if self.si==si and si is not None:
             self.enter_down()
-            subscript("sound_list_menu_confirm")
     def __init__(self,tag=None):
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,192
@@ -2630,6 +2629,7 @@ class listmenu(fadesprite,gui.widget):
             return False
         if not self.selected:
             return
+        subscript("sound_list_menu_confirm")
         if self.tag:
             assets.lists[self.tag][self.selected["label"]] = 1
         if self.selected["result"] != "Back":
