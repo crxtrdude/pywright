@@ -459,7 +459,11 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 #~ print [[x,x.pri] for x in assets.cur_script.obs]
         if not assets.cur_script: break
         assets.next_screen -= assets.dt
-        if assets.next_screen < 0 and (not assets.cur_script or not assets.cur_script.buildmode):
+        [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
+        for o in assets.cur_script.world.all[:]:
+            if getattr(o,"kill",0):
+                assets.cur_script.world.all.remove(o)
+        if assets.next_screen < 0:# and (not assets.cur_script or not assets.cur_script.buildmode):
             pygame.screen.blit(pygame.blank,[0,0])
             try:
                 assets.cur_script.draw(pygame.screen)
