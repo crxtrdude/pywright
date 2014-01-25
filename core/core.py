@@ -974,16 +974,17 @@ def subscript(macro):
 class SoundEvent(object):
     kill = 0
     pri = -1000000
-    def __init__(self,name,after=0):
+    def __init__(self,name,after=0,volume=1.0):
         self.name = name
         self.wait = after
+        self.volume = volume
         self.z = zlayers.index(self.__class__.__name__)
     def delete(self):
         self.kill = 1
     def update(self):
         self.wait-=assets.dt
         if self.wait<=0:
-            assets.play_sound(self.name)
+            assets.play_sound(self.name,volume=self.volume)
             self.delete()
         return False
     def draw(self,*args):

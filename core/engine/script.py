@@ -2057,18 +2057,25 @@ the speed would divide evenly over the distance)."""
         else:
             assets.play_music(track)
     @category([COMBINED("filename","Filename of sound file, searches game/case/sfx, game/sfx, and PyWright/sfx"),
-    KEYWORD("after","Delay sound for this many frames")],type="sounds")
-    def _sfx(self,command,*sound):
+    KEYWORD("after","Delay sound for this many frames"),
+    KEYWORD("volume","0 to 100 for the sound volume")],type="sounds")
+    def _sfx(self,command,*args):
         """Play a sound effect. If 'after' will play the sound after a certain number of frames (useful to time an effect with a specific
         frame of an animation).
         
         Sound files can be .ogg or uncompressed .wav"""
         after = 0
-        if sound and sound[0].startswith("after="):
-            after = float(sound[0].replace("after=","",1))
-            sound = sound[1:]
-        sound = " ".join(sound)
-        self.add_object(SoundEvent(sound,after))
+        volume = 1.0
+        sound = ""
+        for arg in args:
+            if arg.startswith("after="):
+                after = float(arg.replace("after=","",1))
+            elif arg.startswith("volume="):
+                volume = float(arg.replace("volume=","",1))/100.0
+            else:
+                sound += " "+arg
+        sound = sound[1:]
+        self.add_object(SoundEvent(sound,after,volume))
     @category([COMBINED("nametag","Text to set for the next nametag","If no text is given, the next nametag will be invisible")],type="text")
     def _nt(self,command,*name):
         """Sets or clears the next nametag. Must be called immediately before the textbox it alters. Other commands like "char" or "set _speaking" which alter the
