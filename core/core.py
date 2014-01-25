@@ -843,7 +843,7 @@ set _font_new_resume_size 14""".split("\n"):
             os.remove(path+"/save_backup/"+p)
         print "autosaves",autosaves
     def save_game(self,filename="save",hide=False):
-        if not vtrue(self.variables.get("_allow_saveload","true")):
+        if not vtrue(self.variables.get("_allow_saveload","true")) and not vtrue(self.variables.get("_debug","false")):
             return
         if "\\" in filename or "/" in filename:
             raise script_error("Invalid save file path:'%s'"%(filename,))
