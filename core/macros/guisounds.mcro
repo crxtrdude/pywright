@@ -1,0 +1,10 @@
+#Feel free to copy this file into your game to alter the sounds
+
+
+macro sound_investigate_menu_select
+sfx Select.ogg volume=70
+endmacro
+
+macro sound_investigate_menu_confirm
+sfx Confirm.ogg volume=70
+endmacro

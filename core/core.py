@@ -2444,6 +2444,7 @@ class menu(fadesprite,gui.widget):
         sel = self.opos_l[coord[1]][coord[0]]
         if sel in self.options:
             self.selected = sel
+        subscript("sound_investigate_menu_select")
     def k_left(self):
         coord = self.get_coord()
         coord[0]-=1
@@ -2452,6 +2453,7 @@ class menu(fadesprite,gui.widget):
         sel = self.opos_l[coord[1]][coord[0]]
         if sel in self.options:
             self.selected = sel
+        subscript("sound_investigate_menu_select")
     def k_up(self):
         coord = self.get_coord()
         coord[1]-=1
@@ -2460,6 +2462,7 @@ class menu(fadesprite,gui.widget):
         sel = self.opos_l[coord[1]][coord[0]]
         if sel in self.options:
             self.selected = sel
+        subscript("sound_investigate_menu_select")
     def k_down(self):
         coord = self.get_coord()
         coord[1]+=1
@@ -2468,6 +2471,7 @@ class menu(fadesprite,gui.widget):
         sel = self.opos_l[coord[1]][coord[0]]
         if sel in self.options:
             self.selected = sel
+        subscript("sound_investigate_menu_select")
     def enter_down(self):
         if self.open_script:
             print "INITIALIZE MENU SCENE"
@@ -2476,6 +2480,7 @@ class menu(fadesprite,gui.widget):
             print "TRY TO JUMP TO LABEL"
             assets.cur_script.goto_result(self.selected,backup=self.fail)
         self.delete()
+        subscript("sound_investigate_menu_confirm")
     def addm(self,opt):
         if opt:
             self.options.append(opt)
