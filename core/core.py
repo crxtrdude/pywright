@@ -2834,10 +2834,12 @@ class case_menu(fadesprite,gui.widget):
         if self.choice<len(self.options)-1:
             self.choice += 1
         self.case_screen()
+        subscript("sound_case_menu_select")
     def k_left(self):
         if self.choice>0:
             self.choice -= 1
         self.case_screen()
+        subscript("sound_case_menu_select")
     def case_screen(self):
         if not self.options:
             return
@@ -3042,7 +3044,7 @@ class examine_menu(sprite,gui.widget):
             self.bck = guiBack()
             self.bck.pri = 1000
             def k_space(b=self.bck):
-                self.delete()
+                self.k_space()
             self.bck.k_space = k_space
             self.bck.update = lambda *x: False
             assets.cur_script.obs.append(self.bck)
@@ -3075,6 +3077,7 @@ class examine_menu(sprite,gui.widget):
     def k_space(self):
         if not self.hide:
             self.delete()
+            subscript("sound_examine_menu_cancel")
 
 class evidence_menu(fadesprite,gui.widget):
     fail = "none"
