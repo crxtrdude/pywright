@@ -57,3 +57,11 @@ endmacro
 macro sound_court_record_switch
 sfx Scroll.ogg volume=70
 endmacro
+
+macro sound_back_button_cancel
+sfx Cancel.ogg volume=70
+endmacro
+
+macro sound_examine_scroll
+sfx Confirm.ogg volume=70
+endmacro
