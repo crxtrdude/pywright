@@ -49,7 +49,7 @@ endmacro
 
 #Command to hide it
 macro hide_press_button
-delete name=_pressbut_
+delete name=_pressbut_ suppress
 endmacro
 ###END PRESS BUTTON###
 
@@ -76,7 +76,7 @@ endmacro
 
 #Command to hide it
 macro hide_present_button
-delete name=_presentbut_
+delete name=_presentbut_ suppress
 endmacro
 ###END PRESENT BUTTON###
 
@@ -101,7 +101,7 @@ endmacro
 
 #Command to hide it
 macro hide_present_button2
-delete name=_presentbut2_
+delete name=_presentbut2_ suppress
 endmacro
 ###END PRESENT BUTTON IN COURT RECORD###
 
