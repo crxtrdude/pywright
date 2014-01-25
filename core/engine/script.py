@@ -539,14 +539,11 @@ char test
         self.refresh_arrows(tbox)
         self.tboff()
         if self.cross is not None and self.instatement:
-            tbox.init_cross()
             self.tbon()
             if self.cross == "proceed":
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
                 tbox.set_text("{c283}"+t)
-        else:
-            tbox.init_normal()
     def execute_line(self,line):
         if not line:
             return
