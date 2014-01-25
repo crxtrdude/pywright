@@ -2164,7 +2164,7 @@ exit}}}
             if isinstance(o,listmenu):
                 for k in keys:
                     key,value = k.split("=")
-                    if key in ["checkmark","check_x","check_y"]:
+                    if key in ["checkmark","check_x","check_y","on_select"]:
                         o.options[-1][key]=value
     @category([],type="interface")
     def _showlist(self,command,*args):

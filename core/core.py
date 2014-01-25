@@ -2594,6 +2594,7 @@ class listmenu(fadesprite,gui.widget):
         if self.si<0:
             self.si = len(self.options)-1
         self.selected = self.options[self.si]
+        self.change_selected()
     def k_down(self):
         if getattr(self,"kill",0):
             return False
@@ -2601,6 +2602,7 @@ class listmenu(fadesprite,gui.widget):
         if self.si>=len(self.options):
             self.si = 0
         self.selected = self.options[self.si]
+        self.change_selected()
     def enter_down(self):
         if getattr(self,"kill",0):
             return False
@@ -2614,11 +2616,17 @@ class listmenu(fadesprite,gui.widget):
         else:
             assets.variables["_selected"] = "Back"
         self.delete()
+    def change_selected(self):
+        scr = self.options[self.si].get("on_select",None)
+        if scr:
+            assets.cur_script.execute_macro(scr)
+            #subscript(scr)
     def draw(self,dest):
         if getattr(self,"kill",0):
             return False
         if not self.selected and self.options:
             self.selected = self.options[self.si]
+            self.change_selected()
         fadesprite.draw(self,dest)
         x = (sw-self.choice.img.get_width())/2
         y = self.getpos()[1]+30
