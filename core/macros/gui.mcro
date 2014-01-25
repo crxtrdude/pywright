@@ -60,7 +60,7 @@ endmacro
 ###PRESENT BUTTON###
 #Command to activate
 macro _presentbut
-showrecord
+showpresent
 endmacro
 
 #Command to display

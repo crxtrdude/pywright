@@ -1188,6 +1188,14 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
                 o.k_z()
                 break
     @category([],type="interface")
+    def _showpresent(self,command,*args):
+        #FIXME - this makes callpress only work from a macro executing one level above current script
+        del assets.stack[-1]
+        for o in self.obs:
+            if isinstance(o,textbox):
+                o.k_x()
+                break
+    @category([],type="interface")
     def _callpresent(self,command,*args):
         #FIXME - this makes callpress only work from a macro executing one level above current script
         del assets.stack[-1]
