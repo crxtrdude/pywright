@@ -963,7 +963,6 @@ def subscript(macro):
     if macro in assets.subscripts:
         return
     script = assets.cur_script.execute_macro(macro)
-    return
     print "start subscript",macro,getattr(script,"scene","(no scene)")
     assets.subscripts[macro] = 1
     while script in assets.stack:

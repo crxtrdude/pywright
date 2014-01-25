@@ -509,12 +509,6 @@ class Script(gui.widget):
     def interpret(self):
         print "ENTERING INTERPRET"
         
-        #FIXME - this is weird
-        [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
-        for o in assets.cur_script.world.all[:]:
-            if getattr(o,"kill",0):
-                assets.cur_script.world.all.remove(o)
-        
         self.buildmode = True
         exit = False
         while self.buildmode and not exit:
@@ -1211,6 +1205,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
     def _showrecord(self,command,*args):
         print "show ev menu"
         assets.addevmenu()
+        self.buildmode = False
     @category([],type="interface")
     def _callpress(self,command,*args):
         #FIXME - this makes callpress only work from a macro executing one level above current script
@@ -1227,6 +1222,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
             if isinstance(o,textbox):
                 o.k_x()
                 break
+        self.buildmode = False
     @category([],type="interface")
     def _callpresent(self,command,*args):
         #FIXME - this makes callpress only work from a macro executing one level above current script
