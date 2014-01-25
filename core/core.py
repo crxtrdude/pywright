@@ -192,6 +192,8 @@ class Variables(dict):
             return str(assets.num_screens)
         if key=="_debug":
             return {True:"on",False:"off"}[assets.debug_mode]
+        if key=="_buildmode":
+            return str(assets.cur_script.buildmode)
         return dict.get(self,key,*args)
     def __setitem__(self,key,value,*args):
         if key=="_speaking":
@@ -1917,6 +1919,8 @@ class textbox(gui.widget):
         subscript("hide_court_record_button")
         subscript("hide_press_button")
         subscript("hide_present_button")
+        print "TEXTBOX DELETED"
+        assets.cur_script.build_mode = True
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
         if assets.portrait:

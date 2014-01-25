@@ -447,6 +447,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         assets.dt = min(assets.dt*.001*60,10.0)
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
+                
         #~ if vtrue(assets.variables.get("_debug","false")):
             #~ ns = assets.get_stack()
             #~ if ns != laststack:
@@ -457,12 +458,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 #~ print "vvvvvvvvvvvvvvvvvvvvvvv"
                 #~ print [[x,x.pri] for x in assets.cur_script.obs]
         if not assets.cur_script: break
-        [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
-        for o in assets.cur_script.world.all[:]:
-            if getattr(o,"kill",0):
-                assets.cur_script.world.all.remove(o)
         assets.next_screen -= assets.dt
-        if assets.next_screen < 0:
+        if assets.next_screen < 0 and (not assets.cur_script or not assets.cur_script.buildmode):
             pygame.screen.blit(pygame.blank,[0,0])
             try:
                 assets.cur_script.draw(pygame.screen)

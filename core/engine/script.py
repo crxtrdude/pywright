@@ -214,6 +214,7 @@ class Script(gui.widget):
         self.lastline = ""  #Remember where we jumped from in a script so we can go back
         self.lastline_value = ""   #Remember last line we executed
         self.held = []
+        self.buildmode = True    #Do not refresh the screen while we are executing stuff
     def __repr__(self):
         return "Script object, scene=%s id=%s line_no=%s"%(self.scene,id(self),self.si)
     obs = property(lambda self: self.world.render_order(),lambda self,val: setattr(self,"world",World(val)))
@@ -478,20 +479,42 @@ class Script(gui.widget):
         return vtrue(assets.variables.get(test,"false"))
     def refresh_arrows(self,tbox):
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
-        for a in arrows:
-            a.delete()
         if vtrue(assets.variables.get("_textbox_show_button","true")):
-            u = uglyarrow()
-            self.add_object(u,True)
-            u.textbox = tbox
-            if assets.variables.get("_statements",[]) and self.cross=="proceed":
-                statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
-                if statements and (statements[0]["words"] == self.statement) or not self.statement:
-                    u.showleft = False
-                else:
-                    u.showleft = True
-                    tbox.showleft = True
+            if not arrows:
+                u = uglyarrow()
+                self.add_object(u,True)
+            else:
+                u = arrows[0]
+        else:
+            for a in arrows:
+                a.delete()
+            return
+        if len(arrows)>1:
+            for a in arrows.reverse()[1:]:
+                a.delete()
+        u.textbox = tbox
+        u.last = None
+        if assets.variables.get("_statements",[]) and self.cross=="proceed":
+            u.show_cross()
+            statements = [x for x in assets.variables["_statements"] if self.state_test_true(x["test"])]
+            if statements and (statements[0]["words"] == self.statement) or not self.statement:
+                u.showleft = False
+            else:
+                u.showleft = True
+                tbox.showleft = True
+        else:
+            u.show_unclicked()
+            u.showleft = False
+            u.showright = False
     def interpret(self):
+        print "ENTERING INTERPRET"
+        
+        #FIXME - this is weird
+        [o.unadd() for o in assets.cur_script.obs if getattr(o,"kill",0) and hasattr(o,"unadd")]
+        for o in assets.cur_script.world.all[:]:
+            if getattr(o,"kill",0):
+                assets.cur_script.world.all.remove(o)
+        
         self.buildmode = True
         exit = False
         while self.buildmode and not exit:
@@ -504,10 +527,18 @@ class Script(gui.widget):
             #print "exec(",repr(line),")"
             self.si += 1
             assets.variables["_currentline"] = str(self.si)
+            print "execute line:",repr(line)
             exit = self.execute_line(line)
             if assets.debugging == "step":
                 self.obs.append(script_code(self))
+                print "RETURNED VIA DEBUG"
+                self.buildmode = False
                 return True
+        self.buildmode = False
+        if exit:
+            print "RETURNED VIA EXIT"
+        else:
+            print "RETURNED VIA BUILDMODE"
     def _framerate(self,command,fr):
         assets.framerate = int(fr)
     @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
@@ -544,6 +575,7 @@ char test
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
                 tbox.set_text("{c283}"+t)
+        self.buildmode = False
     def execute_line(self,line):
         if not line:
             return
