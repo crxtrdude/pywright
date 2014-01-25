@@ -2170,6 +2170,8 @@ class textbox(gui.widget):
                 else:
                     next_char = 2
             self._lc = char
+        if self.speed:
+            self.next_char += next_char
         return next_char
     def nextline(self):
         """Returns true if all the text waiting to be written into the textbox has been written"""
@@ -2182,16 +2184,15 @@ class textbox(gui.widget):
         self.rpi.update()
         if self.kill: return
         self.next_char -= assets.dt
+        char_per_frame = 0
         while (not self.nextline()) and self.next_char<=0:
             #self.next_char += 1
             num_chars = max(int(self.speed),1)
-            next_char = 0
             cnum = num_chars
             while (not self.nextline()) and ((not self.speed) or cnum>0):
                 cnum -= 1
-                next_char += self.add_character()
-            if self.speed:
-                self.next_char += (next_char/float(self.speed))
+                self.add_character()
+                char_per_frame += 1
         if assets.portrait:
             if self.next_char>10 or self.nextline():
                 assets.portrait.set_blinking()
