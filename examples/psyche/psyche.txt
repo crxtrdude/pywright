@@ -1,6 +1,20 @@
-macro lock_option
-lo checkmark=general/checkmark_lock check_x=0 check_y=-2
+macro guiclean
+
 endmacro
+
+macro lock_option
+lo checkmark=general/checkmark_lock check_x=0 check_y=-2 on_select=show_psyche_button
+endmacro
+
+macro gopsyche
+goto psyche_section
+endmacro
+
+macro show_psyche_button
+gui Button psyche_section graphic=general/psyche/psyche_normal x=100 y=192 name=listgui
+endmacro
+
+show_psche_button
 
 list stuff
 li this is option 1
@@ -29,3 +43,8 @@ goto stuff
 
 
 label end
+endscript
+
+
+label psyche_section
+"do psyche stuff here"
