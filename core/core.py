@@ -961,13 +961,13 @@ def subscript(macro):
     if macro in assets.subscripts:
         return
     script = assets.cur_script.execute_macro(macro)
-    print "start subscript",script.scene
+    print "start subscript",macro,getattr(script,"scene","(no scene)")
     assets.subscripts[macro] = 1
     while script in assets.stack:
         e = script.update()
         if e:
             break
-    print "end subscript",script.scene
+    print "end subscript",macro,getattr(script,"scene","(no scene)")
     del assets.subscripts[macro]
     
 
@@ -3113,11 +3113,13 @@ class evidence_menu(fadesprite,gui.widget):
         if mp[0]>=0 and mp[1]>=56 and mp[0]<=16 and mp[1]<=149:
             if self.mode=="overview" and len(self.pages)>1:
                 self.page_prev()
+                subscript("sound_court_record_scroll")
             if self.mode=="zoomed":
                 self.k_left()
         if mp[0]>=238 and mp[1]>=56 and mp[1]<=149:
             if self.mode=="overview" and len(self.pages)>1:
                 self.page_next()
+                subscript("sound_court_record_scroll")
             if self.mode=="zoomed":
                 self.k_right()
         if mp[0]>=177 and mp[1]<=29:
@@ -3134,6 +3136,7 @@ class evidence_menu(fadesprite,gui.widget):
     def load(self,*args,**kwargs):
         fadesprite.load(self,*args,**kwargs)
     def __init__(self,items=[],gba=True):
+        subscript("sound_court_record_display")
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,192
         self.z = zlayers.index(self.__class__.__name__)
@@ -3253,6 +3256,7 @@ class evidence_menu(fadesprite,gui.widget):
                 self.sy = 0
             while self.sx>len(page[self.sy])-1 and self.sx>0:
                 self.sx -= 1
+            subscript("sound_court_record_scroll")
         elif self.mode == "zoomed":
             if self.sx<0 and self.sy>0:
                 self.sx = 3
@@ -3268,6 +3272,7 @@ class evidence_menu(fadesprite,gui.widget):
             if scroll>1:
                 self.scroll = 256
                 self.scroll_dir = 1
+            subscript("sound_court_record_scroll_zoomed")
         self.choose()
     def k_right(self):
         if self.page>=len(self.pages): return
@@ -3285,6 +3290,7 @@ class evidence_menu(fadesprite,gui.widget):
             page = self.pages[self.page]
             if self.sy>len(page)-1:
                 self.sy = 0
+            subscript("sound_court_record_scroll")
         elif self.mode == "zoomed":
             page = self.pages[self.page]
             if self.sx>len(page[self.sy])-1:
@@ -3305,6 +3311,7 @@ class evidence_menu(fadesprite,gui.widget):
             if scroll>1:
                 self.scroll = 256
                 self.scroll_dir = -1
+            subscript("sound_court_record_scroll_zoomed")
         self.choose()
     def k_up(self):
         self.set_bg()
@@ -3317,6 +3324,7 @@ class evidence_menu(fadesprite,gui.widget):
                 self.sy = 1
             if self.page>=len(self.pages) or self.sy>len(self.pages[self.page])-1:
                 self.sy = 0
+            subscript("sound_court_record_scroll")
         elif not self.back:
             self.switch = True
         self.back = False
@@ -3333,6 +3341,7 @@ class evidence_menu(fadesprite,gui.widget):
             if self.page>=len(self.pages) or self.sy>=len(self.pages[self.page]) and self.canback():
                 self.back = True
                 self.back_button.highlight()
+            subscript("sound_court_record_scroll")
         elif self.mode == "zoomed":
             if self.switch == False and self.canback():
                 self.back = True
@@ -3365,6 +3374,7 @@ class evidence_menu(fadesprite,gui.widget):
         if self.switch:
             self.k_z()
         elif self.back and self.canback():
+            subscript("sound_court_record_cancel")
             if self.mode == "overview":
                 self.delete()
             elif self.mode == "zoomed":
@@ -3375,6 +3385,7 @@ class evidence_menu(fadesprite,gui.widget):
         else:
             if self.mode == "overview":
                 self.mode = "zoomed"
+                subscript("sound_court_record_zoom")
             elif self.mode == "zoomed":
                 #make sure we can check first
                 #self.mode = "check"
@@ -3386,6 +3397,7 @@ class evidence_menu(fadesprite,gui.widget):
         chk = assets.variables.get(self.chosen+"_check",None)
         if chk:
             assets.addscene(chk)
+            subscript("sound_court_record_check")
     def can_present(self):
         if not vtrue(assets.variables.get("_"+self.item_set+"_present","true")):
             #print "_"+self.item_set+"_present","is false"
@@ -3435,7 +3447,9 @@ class evidence_menu(fadesprite,gui.widget):
         #if not self.pages: self.item_set = modes[self.item_set]
         #self.layout()
         self.switch = False
+        subscript("sound_court_record_switch")
     def k_space(self):
+        subscript("sound_court_record_cancel")
         if self.mode=="zoomed":
             if assets.gbamode: self.delete()
             else: self.mode = "overview"

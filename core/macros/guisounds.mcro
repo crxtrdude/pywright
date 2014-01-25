@@ -28,3 +28,32 @@ endmacro
 macro sound_examine_menu_cancel
 sfx Cancel.ogg volume=70
 endmacro
+
+
+macro sound_court_record_display
+sfx Scroll.ogg volume=50
+endmacro
+
+macro sound_court_record_scroll
+sfx Select.ogg volume=70
+endmacro
+
+macro sound_court_record_scroll_zoomed
+sfx Blink.ogg volume=70
+endmacro
+
+macro sound_court_record_cancel
+sfx Cancel.ogg volume=70
+endmacro
+
+macro sound_court_record_zoom
+sfx Scroll.ogg volume=70
+endmacro
+
+macro sound_court_record_check
+sfx Confirm.ogg volume=70
+endmacro
+
+macro sound_court_record_switch
+sfx Scroll.ogg volume=70
+endmacro
