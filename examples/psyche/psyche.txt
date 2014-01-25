@@ -3,7 +3,7 @@ macro guiclean
 endmacro
 
 macro lock_option
-lo checkmark=general/checkmark_lock check_x=0 check_y=-2 on_select=show_psyche_button
+lo checkmark=general/checkmark_lock check_x=0 check_y=-2
 endmacro
 
 macro gopsyche
@@ -14,13 +14,12 @@ macro show_psyche_button
 gui Button psyche_section graphic=general/psyche/psyche_normal x=100 y=192 name=listgui
 endmacro
 
-show_psche_button
-
 list stuff
 li this is option 1
 li this is option 2
 li this is option 3 (locked!)
 lock_option
+{show_psyche_button}
 showlist
 goto end
 
