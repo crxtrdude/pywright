@@ -463,7 +463,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         for o in assets.cur_script.world.all[:]:
             if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
-        if assets.next_screen < 0:# and (not assets.cur_script or not assets.cur_script.buildmode):
+        if assets.next_screen < 0 and (not assets.cur_script or not assets.cur_script.buildmode):
             pygame.screen.blit(pygame.blank,[0,0])
             try:
                 assets.cur_script.draw(pygame.screen)

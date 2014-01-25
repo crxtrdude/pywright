@@ -431,23 +431,21 @@ class Script(gui.widget):
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-            return e
         except art_error,e:
             if vtrue(assets.variables.get("_debug","false")):
                 self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
-                return e
         except markup_error,e:
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-            return e
         except Exception,e:
             self.obs.append(error_msg("Undefined:"+e.message,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-            return e
+        self.buildmode = False
+        return e
     def update(self):
         if time.time()-assets.last_autosave>assets.autosave_interval*60:
             self.autosave()
@@ -569,6 +567,8 @@ char test
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
                 tbox.set_text("{c283}"+t)
+        tbox.init_gui()
+        tbox.update()
         self.buildmode = False
     def execute_line(self,line):
         if not line:

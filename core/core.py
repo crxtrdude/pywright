@@ -937,6 +937,7 @@ set _font_new_resume_size 14""".split("\n"):
         try:
             em = evidence_menu(self.items)
             self.cur_script.add_object(em,True)
+            em.update()
         except art_error,e:
             self.cur_script.obs.append(error_msg(e.value,"",0,self.cur_script))
             import traceback
@@ -1876,7 +1877,7 @@ class textbox(gui.widget):
             self.nt_right = assets.open_art("general/nt_right")[0].convert_alpha()
         self.nametag = nametag
         self.img = self.base.copy()
-        self.go = 0
+        self.go = 1
         self.text = text
         self.mwritten = []
         self.num_lines = 4
@@ -1980,6 +1981,7 @@ class textbox(gui.widget):
             self.delete()
         if sound:
             assets.play_sound("bloop.ogg",volume=0.7)
+        assets.cur_script.buildmode = True
     def draw(self,dest):
         self.children = []
         if not self.go or self.kill:
@@ -2180,7 +2182,6 @@ class textbox(gui.widget):
         t._text = self.mwritten
         return not len(self.mwritten)<len(self._markup._text) or len(t.fulltext().split("\n"))>=self.num_lines
     def update(self):
-        self.init_gui()
         #assets.play_sound(self.clicksound)
         self.rpi.update()
         if self.kill: return
@@ -3209,6 +3210,17 @@ class evidence_menu(fadesprite,gui.widget):
         subscript("hide_present_button2")
     def update(self):
         self.choose()
+        #present button
+        if not hasattr(self,"present_button"):
+            self.present_button = False
+        if self.can_present():
+            if not self.present_button:
+                subscript("show_present_button2")
+                self.present_button = True
+        else:
+            if self.present_button:
+                subscript("hide_present_button2")
+                self.present_button = False
         if not getattr(self,"hidden",None):
             return True #Don't update anything else
     def layout(self):
@@ -3560,17 +3572,6 @@ class evidence_menu(fadesprite,gui.widget):
                 self.mode = "overview"
         if self.canback():
             self.back_button.draw(dest)
-        #present button
-        if not hasattr(self,"present_button"):
-            self.present_button = False
-        if self.can_present():
-            if not self.present_button:
-                subscript("show_present_button2")
-                self.present_button = True
-        else:
-            if self.present_button:
-                subscript("hide_present_button2")
-                self.present_button = False
     def draw_ev_zoom(self,icon,pos,surf):
         if not hasattr(self,icon.id+"_zoom_"+str(assets.gbamode)):
             if assets.gbamode:
