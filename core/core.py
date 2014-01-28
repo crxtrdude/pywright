@@ -2851,13 +2851,13 @@ class case_menu(fadesprite,gui.widget):
     def k_right(self):
         if self.choice<len(self.options)-1:
             self.choice += 1
+            subscript("sound_case_menu_select")
         self.case_screen()
-        subscript("sound_case_menu_select")
     def k_left(self):
         if self.choice>0:
             self.choice -= 1
+            subscript("sound_case_menu_select")
         self.case_screen()
-        subscript("sound_case_menu_select")
     def case_screen(self):
         if not self.options:
             return
