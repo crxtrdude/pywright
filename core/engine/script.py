@@ -477,6 +477,9 @@ class Script(gui.widget):
         return vtrue(assets.variables.get(test,"false"))
     def refresh_arrows(self,tbox):
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
+        for a in arrows:
+            a.delete()
+        arrows = []
         if vtrue(assets.variables.get("_textbox_show_button","true")):
             if not arrows:
                 u = uglyarrow()
