@@ -180,7 +180,7 @@ for line in sort.readlines():
         
 class Variables(dict):
     def __getitem__(self,key):
-        return self.get(key)
+        return self.get(key,"")
     def get(self,key,*args):
         if key.startswith("_layer_"):
             layer = zlayers.index(key[7:])
