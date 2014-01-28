@@ -7,10 +7,3 @@ custom back button w/sound
 
 Other macros running too slowly? Well, here's an example. Take a look at the Cross Examination Tests > Full Cross Examination Sequence. I'm using the court macros, e.g. {judge},{defense},{prosecutor},{witness}. On v0.987, I found a perfect way to not have them change poses every time they appear. On 0.988, they default back to normal and don't go into their newest pose instantly.
 Another example, do a bad objection. I have two custom macros: {health} and {threat} The second one takes too long to execute, even though there's just two lines of code on it. In fact, take a look at the General Macros.mcro and look at threat. I believe the "delay" part is causing trouble. I put it to 1 and it's taking a whole second to finish when it should be 0.015 sec (1 frame) to finish.
-
-On any other version of py, this would not trigger a textbox to appear until the actual text starts. For example
-"{edeskslam}{p60}{ehandsondesk}Your Honor! The witness's testimony is an impossibility!"
-or
-"{edeskslam}{p60}{next}"
-"{ehandsondesk}Your Honor! The witness's testimony is an impossibility!"
-But on the latest engine fix, it causes the text box to appear even if the dialogue doesn't start for a whole second or so.
