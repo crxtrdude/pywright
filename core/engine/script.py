@@ -896,40 +896,55 @@ will output "3:15"
         """Adds an amount to a variable. If the variable 'x' were set to 4, the script:
 {{{addvar x 1}}}
 would set 'x' to 5."""
-        oldvalue = INT(assets.variables.get(variable,0))
-        oldvalue += INT(value)
+        try:
+            oldvalue = INT(assets.variables[variable])
+            oldvalue += INT(value)
+        except ValueError,TypeError:
+            raise script_error("Invalid non-number to add")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to subtract from and save to"),VALUE("amount","amount to subtract from the variable")],type="logic")
     def _subvar(self,command,variable,value):
         """Subtract an amount from a variable. If the variable 'x' were set to 33, the script:
 {{{subvar x 3}}}
 would set 'x' to 30."""
-        oldvalue = INT(assets.variables[variable])
-        oldvalue -= INT(value)
+        try:
+            oldvalue = INT(assets.variables[variable])
+            oldvalue -= INT(value)
+        except ValueError,TypeError:
+            raise script_error("Invalid non-number to subtract")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to"),VALUE("amount","amount to multiply the variable by")],type="logic")
     def _mulvar(self,command,variable,value):
         """Multiply a variable by a number. If the variable 'x' were set to 5, the script:
 {{{mulvar x 3}}}
 would set 'x' to 15."""
-        oldvalue = INT(assets.variables[variable])
-        oldvalue *= INT(value)
+        try:
+            oldvalue = INT(assets.variables[variable])
+            oldvalue *= INT(value)
+        except ValueError,TypeError:
+            raise script_error("Invalid non-number to multiply")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to"),VALUE("amount","amount to divide the variable by")],type="logic")
     def _divvar(self,command,variable,value):
         """Divide a variable by a number. If the variable 'x' were set to 10, the script:
 {{{divvar x 2}}}
 would set 'x' to 5."""
-        oldvalue = INT(assets.variables[variable])
-        oldvalue /= float(value)
+        try:
+            oldvalue = INT(assets.variables[variable])
+            oldvalue /= float(value)
+        except ValueError,TypeError:
+            raise script_error("Invalid number to divide")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to")])
     def _absvar(self,command,variable):
         """Force a variable to be positive. If the variable 'x' were set to -12, the script:
 {{{absvar x}}}
 would set 'x' to 12."""
-        oldvalue = INT(assets.variables.get(variable,0))
-        oldvalue = abs(INT(oldvalue))
+        try:
+            oldvalue = INT(assets.variables.get(variable,0))
+            oldvalue = abs(INT(oldvalue))
+        except ValueError,TypeError:
+            raise script_error("Invalid number to absolute")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("filename","file to export variables into, relative to the case folder"),
             ETC("variable_names",
@@ -1086,7 +1101,10 @@ would set 'x' to 12."""
             label = "?"
         args = " ".join(args).split(" AND ")
         args = [x.split(" OR ") for x in args]
-        args = [OR(x) for x in args]
+        try:
+            args = [OR(x) for x in args]
+        except TypeError:
+            raise script_error("Invalid string value type for numerical comparison")
         if False in args: return self.fail(label,fail)
         self.succeed(label)
     @category([COMBINED('expression','An expression that evaluates to true or false'),
