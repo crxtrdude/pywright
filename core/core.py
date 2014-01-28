@@ -2181,11 +2181,13 @@ class textbox(gui.widget):
         t = textutil.markup_text()
         t._text = self.mwritten
         return not len(self.mwritten)<len(self._markup._text) or len(t.fulltext().split("\n"))>=self.num_lines
-    def update(self):
+    def update(self,dt=None):
         #assets.play_sound(self.clicksound)
         self.rpi.update()
         if self.kill: return
-        self.next_char -= assets.dt
+        if dt is None:
+            dt = assets.dt
+        self.next_char -= dt
         #FIXME - logic is horrendously convoluted
         while (not self.nextline()) and self.next_char<=0:
             #self.next_char += 1
@@ -3718,6 +3720,8 @@ class scroll(effect):
         self.filter = filter
         self.wait = wait
         self.initialized = False
+        if not self.amtx and not self.amty and not self.amtz:
+            self.wait = False
     def draw(self,dest): pass
     def init_scroll(self):
         if self.initialized:

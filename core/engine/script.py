@@ -449,9 +449,11 @@ class Script(gui.widget):
     def update(self):
         if time.time()-assets.last_autosave>assets.autosave_interval*60:
             self.autosave()
+        self.buildmode = True
         interp = self.safe_exec(self.update_objects)
         if interp==True:
             return self.safe_exec(self.interpret)
+        self.buildmode = False
     def add_object(self,ob,single=False):
         if single:
             for o2 in self.obs[:]:
@@ -509,8 +511,6 @@ class Script(gui.widget):
             u.showright = False
     def interpret(self):
         print "ENTERING INTERPRET"
-        
-        self.buildmode = True
         exit = False
         while self.buildmode and not exit:
             line = self.getline()
@@ -527,9 +527,7 @@ class Script(gui.widget):
             if assets.debugging == "step":
                 self.obs.append(script_code(self))
                 print "RETURNED VIA DEBUG"
-                self.buildmode = False
                 return True
-        self.buildmode = False
         if exit:
             print "RETURNED VIA EXIT"
         else:
@@ -571,8 +569,8 @@ char test
                 nt,t = tbox._text.split("\n",1)
                 tbox.set_text("{c283}"+t)
         tbox.init_gui()
-        tbox.update()
-        self.buildmode = False
+        tbox.update(0)
+        self.buildmode = True
     def execute_line(self,line):
         if not line:
             return
@@ -620,7 +618,8 @@ char test
         nscript.scene = self.scene+"/"+macroname
         nscript.macros = self.macros
         assets.stack.append(nscript)
-        self.buildmode = False
+        self.buildmode = True
+        nscript.buildmode = True
         return nscript
     def next_statement(self):
         if not assets.variables.get("_statements",[]):
@@ -635,6 +634,7 @@ char test
                 break
         if which is not None:
             self.si = which
+        self.buildmode = True
     def prev_statement(self):
         if not assets.variables.get("_statements",[]):
             return
@@ -649,6 +649,7 @@ char test
             self.si = which
         else:
             self.si -= 1
+        self.buildmode = True
     def goto_result(self,name,wrap=False,backup="none"):
         for o in self.obs:
             if isinstance(o,guiWait): o.delete()
@@ -1329,6 +1330,8 @@ type="gameflow")
     def _script(self,command,scriptname,*args):
         """Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
 resume when the new script exits, otherwise, the current script will vanish."""
+        print "RUNNING SCRIPT:",scriptname
+        print assets.stack
         label = None
         for a in args:
             if a.startswith("label="):
@@ -1347,12 +1350,16 @@ resume when the new script exits, otherwise, the current script will vanish."""
             p = self.parent
             self.init(name)
             self.parent = p
+        print "New stack:",assets.stack
         while assets.cur_script.parent:
             parent = assets.cur_script.parent
             assets.cur_script.parent = parent.parent
             assets.stack.remove(parent)
         if label:
             self.goto_result(label,backup=None)
+        print "Stack after clean up:",assets.stack
+        print "cur script",assets.cur_script
+        print "buildmode",assets.cur_script.buildmode
         self.execute_macro("defaults")
     @category([],type="logic")
     def _top(self,command):
@@ -1929,7 +1936,7 @@ The four types of gui you can create are:
         pen = penalty(end,var,flash_amount=flash_amount)
         pen.delay = delay
         self.add_object(pen,True)
-        self.buildmode = False
+        #self.buildmode = False
     @category([KEYWORD("degrees","How many degrees to rotate"),KEYWORD("speed","How many degrees to rotate per frame"),
     KEYWORD("axis","which axis to rotate on, z is the only valid value","z"),
     KEYWORD("name","Name a specific object to rotate","Will try to rotate all objects (not what you might expect)"),
@@ -2098,7 +2105,7 @@ the speed would divide evenly over the distance)."""
             scr.control_last()
         if name:
             scr.control(name)
-        if wait: self.buildmode = False
+        #if wait: self.buildmode = False
     @category([COMBINED("filename","Filename of song, searches game/case/music, game/music, and PyWright/music","If no path is listed, music will stop")],type="music")
     def _mus(self,command,*song):
         """Stops currently playing music file, and if 'filename' is given, starts playing a new one. If you want to queue up a song to play when the current
