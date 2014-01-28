@@ -1877,7 +1877,7 @@ class textbox(gui.widget):
             self.nt_right = assets.open_art("general/nt_right")[0].convert_alpha()
         self.nametag = nametag
         self.img = self.base.copy()
-        self.go = 1
+        self.go = 0
         self.text = text
         self.mwritten = []
         self.num_lines = 4
