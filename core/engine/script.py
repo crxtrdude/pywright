@@ -1728,7 +1728,7 @@ The four types of gui you can create are:
         width=None
         height=None
         name=""
-        if guitype=="Back":
+        if guitype.lower()=="back":
             while args:
                 a = args.pop(0)
                 if a.startswith("x="): x=int(a[2:])
@@ -1739,7 +1739,7 @@ The four types of gui you can create are:
                 y -= 192
             self.add_object(guiBack(x=x,y=y,z=z,name=name))
             self.buildmode = False
-        if guitype=="Button":
+        if guitype.lower()=="Button":
             macroname=args[0]; del args[0]
             graphic = None
             graphichigh = None
@@ -1796,7 +1796,7 @@ The four types of gui you can create are:
             self.add_object(btn)
             if name: btn.id_name = name
             else: btn.id_name = "$$"+str(id(btn))+"$$"
-        if guitype=="Input":
+        if guitype.lower()=="Input":
             varname=args[0]; del args[0]
             varvalue = assets.variables.get(varname,"")
             assets.variables[varname] = varvalue
@@ -1830,7 +1830,7 @@ The four types of gui you can create are:
             if name: eb.id_name = name
             else: eb.id_name = "$$"+str(id(eb))+"$$"
             self.add_object(eb)
-        if guitype=="Wait":
+        if guitype.lower()=="Wait":
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
             self.add_object(guiWait(run=run))
