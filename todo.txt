@@ -3,3 +3,18 @@ custom resolution
 apng
 characters show up in menu
 custom back button w/sound
+
+
+Other macros running too slowly? Well, here's an example. Take a look at the Cross Examination Tests > Full Cross Examination Sequence. I'm using the court macros, e.g. {judge},{defense},{prosecutor},{witness}. On v0.987, I found a perfect way to not have them change poses every time they appear. On 0.988, they default back to normal and don't go into their newest pose instantly.
+Another example, do a bad objection. I have two custom macros: {health} and {threat} The second one takes too long to execute, even though there's just two lines of code on it. In fact, take a look at the General Macros.mcro and look at threat. I believe the "delay" part is causing trouble. I put it to 1 and it's taking a whole second to finish when it should be 0.015 sec (1 frame) to finish.
+
+case screen disable left/right sounds when appropriate
+
+I also noticed one thing that's really bugging me about the CR. Whenever I try to make my own CR with the evidence, things don't line up nicely. I thought it was just me, but nope, it's also happening on the default settings. Take a look at this pic. Zoom that pic to 300% at least. The default cursor is 42*42. With two more hollow squares inside, it leaves an area of 36*36 for the evidence. Yet, the evidence is shrunk to 35*35 and positioned on the lower right hand corner. Which means the cursor does not fit snugly around the evidence. It can be a bit of an eyesore and a pain to keep adjusting settings. I wonder if that can be fixed or give us the option to resize the evidence for the CR with a variable setting. For example, set ev_size_x 36 and set ev_size_y 36. OR perhaps have the evidence be aligned with the top left hand corner (to start).
+
+On any other version of py, this would not trigger a textbox to appear until the actual text starts. For example
+"{edeskslam}{p60}{ehandsondesk}Your Honor! The witness's testimony is an impossibility!"
+or
+"{edeskslam}{p60}{next}"
+"{ehandsondesk}Your Honor! The witness's testimony is an impossibility!"
+But on the latest engine fix, it causes the text box to appear even if the dialogue doesn't start for a whole second or so.
