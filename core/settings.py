@@ -16,7 +16,6 @@ height=%s
 scale2x=%s
 smoothscale=%s
 fullscreen=%s
-screens=%s
 show_fps=%s
 framerate=%s
 sound_format=%s
@@ -25,23 +24,24 @@ sound_buffer=%s
 sound_volume=%s
 music_volume=%s
 mute_sound=%s
-screen_compress=%s
 screen_refresh=%s
 autosave=%s
 autosave_interval=%s
 autosave_keep=%s
-tool_path=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.smoothscale,
-assets.fullscreen,assets.num_screens,
+tool_path=%s,
+screen_mode=%s"""%(assets.swidth,assets.sheight,assets.filter,assets.smoothscale,
+assets.fullscreen,
 int(assets.show_fps),float(assets.framerate),
 assets.sound_format,assets.sound_bits,assets.sound_buffer,int(assets.sound_volume),int(assets.music_volume),int(assets.mute_sound),
-int(assets.screen_compress),int(assets.screen_refresh),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
-assets.tool_path))
+int(assets.screen_refresh),int(assets.autosave),int(assets.autosave_interval),int(assets.autosave_keep),
+assets.tool_path,assets.screen_mode))
     f.close()
     
 def load(assets):
     assets.fullscreen = 0
     assets.swidth,assets.sheight = pygame.display.list_modes()[0]
     assets.filter = 0
+    assets.screen_mode = "not_set"
     assets.num_screens = 2
     assets.screen_compress = 0  #Whether to move objects on screen 2 to screen 1 if num_screens is 1
     assets.autosave = 1
@@ -70,7 +70,7 @@ def load(assets):
                 "smoothscale":"smoothscale","screen_refresh":"screen_refresh"}
         fl_val = {"sound_volume":"sound_volume","music_volume":"music_volume","framerate":"framerate"
                 }
-        s_val = {"tool_path":"tool_path"}
+        s_val = {"tool_path":"tool_path","screen_mode":"screen_mode"}
 
         for line in f.readlines():
             spl = line.split("=")
@@ -82,13 +82,17 @@ def load(assets):
             elif spl[0] in s_val:
                 setattr(assets,s_val[spl[0]],spl[1].strip())
 
-def get_screen_mode(assets):
+def old_get_screen_mode(assets):
     mode="two_screens"
     if assets.num_screens == 1:
-        mode = "squished"
+        mode = "scaled_single"
         if assets.screen_compress:
             mode = "show_one"
     return mode
+def get_screen_mode(assets):
+    if assets.screen_mode == "not_set":
+        assets.screen_mode = old_get_screen_mode(assets)
+    return assets.screen_mode
 def get_screen_dim(assets,mode,aspect=True):
     raspect = assets.swidth/float(assets.sheight)
     if mode == "two_screens":
@@ -115,7 +119,12 @@ def get_screen_dim(assets,mode,aspect=True):
         top_size = [0.5,0.75]
         bottom_pos = [0.5,0.25]
         bottom_size = [0.5,0.75]
-    if mode == "squished":
+    if mode == "small_bottom_screen":
+        top_pos = [0,0]
+        top_size = [0.75,1]
+        bottom_pos = [0.75,0.25]
+        bottom_size = [0.25,0.4]
+    if mode == "scaled_single":
         top_pos = [0,0]
         top_size = [1,1]
         bottom_pos = None
@@ -140,6 +149,13 @@ def get_screen_dim(assets,mode,aspect=True):
     return d
 def screen_format(assets):
     mode = get_screen_mode(assets)
+    if mode in ["scaled_single","show_one"]:
+        assets.num_screens = 1
+        if mode == "show_one":
+            assets.screen_compress = 1
+    else:
+        assets.num_screens = 2
+        assets.screen_compress = 0
     dim = get_screen_dim(assets,mode)
     return mode,dim
 
@@ -486,17 +502,18 @@ class settings_menu(gui.pane):
         res.checked = True
         res.click_down_over = self.popup_resolution
         
+        res_box.add_child(gui.button(self,"dualscreen mode(%s)"%(assets.screen_mode)))
+        res = res_box.pane.children[-1]
+        self.screens = []
+
+        res.checked = True
+        res.click_down_over = self.popup_screenmode
+        
         res_box.add_child(gui.checkbox("smoothscale"))
         self.smoothscale = res_box.pane.children[-1]
         
         res_box.add_child(gui.checkbox("fullscreen"))
         self.fs = res_box.pane.children[-1]
-        res_box.add_child(gui.checkbox("dualscreen"))
-        ds = self.ds = res_box.pane.children[-1]
-        
-        res_box.add_child(gui.checkbox("virtual dualscreen"))
-        self.vds = res_box.pane.children[-1]
-        self.vds.visible = 0
         
         res_box.add_child(gui.checkbox("show fps"))
         self.show_fps = res_box.pane.children[-1]
@@ -522,10 +539,6 @@ class settings_menu(gui.pane):
         #self.reses = gui.radiobutton.groups["resopt"]
         if assets.fullscreen:
             self.fs.checked = True
-        if assets.num_screens==2:
-            self.ds.checked = True
-        if not assets.screen_compress:
-            self.vds.checked = True
         if assets.show_fps:
             self.show_fps.checked = True
         if assets.smoothscale:
@@ -553,6 +566,26 @@ class settings_menu(gui.pane):
             if str(assets.swidth)+"x" in r.text and "x"+str(assets.sheight) in r.text:
                 r.checked = True
         self.res_box.updatescroll()
+    def popup_screenmode(self,mp):
+        assets = self.assets
+        sw,sh = self.sw,self.sh
+        self.res_box.pane.children[:] = []
+        for mode in ["scaled_single","two_screens","horizontal","small_bottom_screen","show_one"]:
+            r = gui.radiobutton("%s"%mode,"scropt")
+            self.res_box.add_child(r)
+            s_c = r.set_checked
+            def set_checked1(val):
+                s_c(val)
+                assets.screen_mode = r.text
+                wini(assets)
+                assets.make_screen()
+            r.set_checked = set_checked1
+        self.screens = gui.radiobutton.groups["scropt"]
+            
+        for r in self.screens:
+            if r.text==assets.screen_mode:
+                r.checked = True
+        self.res_box.updatescroll()
     def setdl(self,v):
         self.dislis.checked = 1-self.dislis.checked
         pygame.DISPLAY_LIST = self.dislis.checked
@@ -560,6 +593,9 @@ class settings_menu(gui.pane):
     def apply(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
+        for r in self.screens: 
+            if r.checked:
+                assets.screen_mode = r.text
         for r in self.reses: 
             if r.checked:
                 self.oldwidth,self.oldheight = assets.swidth,assets.sheight
@@ -584,12 +620,6 @@ class settings_menu(gui.pane):
         if self.fs.checked:
             assets.fullscreen = 1
         self.old_num_screens = assets.num_screens
-        assets.num_screens = 1
-        if self.ds.checked:
-            assets.num_screens = 2
-        assets.screen_compress = 1
-        if self.vds.checked:
-            assets.screen_compress = 0
         assets.smoothscale = 0
         if self.smoothscale.checked:
             assets.smoothscale = 1

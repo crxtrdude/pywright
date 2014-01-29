@@ -85,6 +85,7 @@ def translate_click(pos):
     return [-100000,-100000]
 def fit(surf,size):
     if assets.smoothscale and surf.get_bitsize() in [24,32]:
+        surf = pygame.transform.scale2x(surf)
         surf = pygame.transform.smoothscale(surf,[int(x) for x in size])
     else:
         surf = pygame.transform.scale(surf,[int(x) for x in size])
@@ -96,7 +97,7 @@ def draw_screen(showfps):
     top = scaled.subsurface([[0,0],[sw,sh]])
     bottom = top
     mode,dim = settings.screen_format(assets)
-    if mode == "two_screens" or mode == "horizontal" or mode == "show_one":
+    if mode == "two_screens" or mode == "horizontal" or mode == "show_one" or mode == "small_bottom_screen":
         bottom = scaled.subsurface([[0,sh],[sw,sh]])
     pygame.real_screen.fill([10,10,10])
     def draw_segment(dest,surf,pos,size):

@@ -223,6 +223,7 @@ class Assets(object):
     art_cache = {}
     variables = Variables()
     gbamode = False
+    screen_mode = "not_set"
     num_screens = 2
     screen_refresh = 1
     if android:
