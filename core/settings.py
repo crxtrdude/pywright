@@ -128,15 +128,15 @@ def get_screen_dim(assets,mode,aspect=True):
         top_pos = [0,0]
         top_size = [1,1]
         bottom_pos = None
+        bottom_size = None
     if mode == "show_one":
-        if assets.cur_screen == 0:
-            top_pos = [0,0]
-            top_size = [1,1]
-            bottom_pos = None
-        else:
-            top_pos = None
-            bottom_pos = [0,0]
-            bottom_size = [1,1]
+        top_pos = [0,0]
+        top_size = [1,1]
+        bottom_pos = None
+        bottom_size = None
+    if assets.cur_screen != 0:
+        top_size,bottom_size = bottom_size,top_size
+        top_pos,bottom_pos = bottom_pos,top_pos
     d = {"top":None,"bottom":None}
     if top_pos:
         top_pos_t = [top_pos[0]*assets.swidth,top_pos[1]*assets.sheight]
