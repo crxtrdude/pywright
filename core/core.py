@@ -2903,14 +2903,20 @@ class case_menu(fadesprite,gui.widget):
 class examine_menu(sprite,gui.widget):
     fail = "none"
     def move_over(self,pos,rel,buttons):
+        if self.xscrolling:
+            return
         if gui.window.focused == self:
             self.mx,self.my = [pos[0],pos[1]-self.getpos()[1]]
             self.highlight()
     def click_down_over(self,mp):
+        if self.xscrolling:
+            return
         gui.window.focused = self
         if self.hide or self.selected == ["none"] or mp[0]<175 or mp[1]<159+self.getpos()[1]:
             self.move_over(mp,None,None)
     def click_up(self,mp):
+        if self.xscrolling:
+            return
         if gui.window.focused == self:
             self.enter_down()
             gui.window.over = None
@@ -2946,6 +2952,7 @@ class examine_menu(sprite,gui.widget):
             if self.getoffset()!=-256:
                 assets.cur_script.obs.append(scroll(amtx=-256,amty=0,speed=256))
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
+        self.klefth = self.krighth = self.kuph = self.kdownh = 0
         self.screen_setting = "try_bottom"
     def init_normal(self):
         subscript("show_court_record_button")
@@ -3027,6 +3034,14 @@ class examine_menu(sprite,gui.widget):
             #~ y = int(assets.variables.get("_examine_offsety",0))
             #~ tb = textblock("offsetx:%s offsety%s"%(x,y),[0,192],[256,20],[255,255,255])
             #~ tb.draw(dest)
+    def k_left(self,*args):
+        self.klefth = 1
+    def k_right(self,*args):
+        self.krighth = 1
+    def k_up(self,*args):
+        self.kuph = 1
+    def k_down(self,*args):
+        self.kdownh = 1
     def update(self,*args):
         if self.xscrolling:
             assets.cur_script.obs.append(scroll(-self.xscrolling,0,speed=16))
@@ -3037,6 +3052,7 @@ class examine_menu(sprite,gui.widget):
             return self.blocking
         keys = pygame.key.get_pressed()
         spd = 3*assets.dt
+        print spd
         d = [0,0]
         if keys[pygame.K_LEFT] or pygame.jsleft():
             d[0]-=spd
@@ -3046,6 +3062,7 @@ class examine_menu(sprite,gui.widget):
             d[1]-=spd
         if keys[pygame.K_DOWN] or pygame.jsdown():
             d[1]+=spd
+        self.klefth = self.krighth = self.kuph = self.kdownh = 0
         self.mx+=d[0]
         self.my+=d[1]
         if self.mx-5<0: self.mx=5
@@ -4130,7 +4147,7 @@ class guiScroll(sprite,gui.widget):
         subscript("sound_examine_scroll")
         #del self.parent.scrollbut
     def update(self):
-        return True
+        return False
         
 class guiWait(sprite):
     id_name = "_guiWait_"
