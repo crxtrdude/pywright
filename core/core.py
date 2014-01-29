@@ -242,6 +242,7 @@ class Assets(object):
     path = ""
     tool_path = ""
     debug_mode = False
+    game_speed = 1
     debugging = "SEARCH"  #debugging mode. SEARCH for stop, STEP each line, or blank
     registry = registry.Registry(".")
     def init(self):

@@ -254,6 +254,21 @@ class settings_menu(gui.pane):
                 s.debug_game("all","quote")
                 print "finished"
         line.children.append(myb(None,"Find quote errors"))
+        
+        line = gui.pane([0,110],[sw,20])
+        line.align = "horiz"
+        self.children.append(line)
+        class newr(gui.radiobutton):
+            def click_down_over(s,*args):
+                gui.radiobutton.click_down_over(s,*args)
+                assets.game_speed = int(s.text)
+        line.children.append(gui.label("Game speed"))
+        line.children.append(newr("1","gamespeed"))
+        line.children.append(newr("2","gamespeed"))
+        line.children.append(newr("6","gamespeed"))
+        for t in line.children:
+            if t.text==str(assets.game_speed):
+                t.checked = True
     def saves(self):
         assets = self.assets
         sw,sh = self.sw,self.sh
