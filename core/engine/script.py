@@ -477,24 +477,17 @@ class Script(gui.widget):
         if test is None:
             return True
         return vtrue(assets.variables.get(test,"false"))
-    def refresh_arrows(self,tbox):
+    def clear_arrows(self):
         arrows = [x for x in self.obs if isinstance(x,uglyarrow) and not getattr(x,"kill",0)]
         for a in arrows:
             a.delete()
-        arrows = []
+    def refresh_arrows(self,tbox):
+        self.clear_arrows()
         if vtrue(assets.variables.get("_textbox_show_button","true")):
-            if not arrows:
-                u = uglyarrow()
-                self.add_object(u,True)
-            else:
-                u = arrows[0]
+            u = uglyarrow()
+            self.add_object(u,True)
         else:
-            for a in arrows:
-                a.delete()
             return
-        if len(arrows)>1:
-            for a in arrows.reverse()[1:]:
-                a.delete()
         u.textbox = tbox
         u.last = None
         if assets.variables.get("_statements",[]) and self.cross=="proceed":
