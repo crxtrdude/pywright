@@ -1704,8 +1704,12 @@ class evidence(fadesprite):
             traceback.print_exc()
             self.img = assets.Surface([16,16])
             self.img.fill([255,255,255])
-        self.small = pygame.transform.smoothscale(self.img,[36,36])
-        self.scaled = pygame.transform.smoothscale(self.img,[70,70])
+        try:
+            self.small = pygame.transform.smoothscale(self.img,[36,36])
+            self.scaled = pygame.transform.smoothscale(self.img,[70,70])
+        except:
+            self.small = pygame.transform.scale(self.img,[36,36])
+            self.scaled = pygame.transform.scale(self.img,[70,70])
         self.setfade()
         self.name = assets.variables.get(self.id+"_name",self.id.replace("$",""))
         self.desc = assets.variables.get(self.id+"_desc",self.id.replace("$",""))
