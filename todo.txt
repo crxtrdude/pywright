@@ -1,3 +1,5 @@
+court record over menu = control menu not court record
+
 psyche lock macro covers ugly arrow
 custom resolution
 apng
