@@ -1349,7 +1349,9 @@ resume when the new script exits, otherwise, the current script will vanish."""
         while assets.cur_script.parent:
             parent = assets.cur_script.parent
             assets.cur_script.parent = parent.parent
-            assets.stack.remove(parent)
+            #FIXME - How can we be removing a parent that's not there?
+            if parent in assets.stack:
+                assets.stack.remove(parent)
         if label:
             self.goto_result(label,backup=None)
         print "Stack after clean up:",assets.stack
