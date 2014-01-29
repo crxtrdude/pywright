@@ -2253,12 +2253,21 @@ exit}}}
         if tag in assets.lists:
             if item in assets.lists[tag]:
                 del assets.lists[tag][item]
-    @category([],type="objects")
-    def _clear(self,command):
+    @category([KEYWORD("top","only clear top screen"),KEYWORD("bottom","only clear bottom screen")],type="objects")
+    def _clear(self,command,*args):
         """Clears all objects from the scene."""
+        if "top" in args:
+            for o in self.obs:
+                if hasattr(o,"pos") and o.pos[1]<192:
+                    o.delete()
+            return
+        elif "bottom" in args:
+            for o in self.obs:
+                if hasattr(o,"pos") and o.pos[1]>=192:
+                    o.delete()
+            return
         for o in self.obs:
             o.delete()
-        pygame.screen.fill([0,0,0])
     @category([KEYWORD("name","Unique name of object to delete."),TOKEN("suppress","Don't show error message even if object cannot be found to delete")],type="objects")
     def _delete(self,command,*args):
         """Deletes the named object from the scene. (Any time you give an object a name, such as 'ev bloody_knife name=bk' you can
