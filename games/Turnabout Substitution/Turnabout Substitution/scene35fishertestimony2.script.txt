@@ -1,0 +1,478 @@
+#-version-1
+set _list_back_button false
+set wrongevidence 1
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Fisher
+set _judge G.Strings
+set _helper Rhea
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+label start
+startcourt
+cross fishertestimony2
+
+statement fisher2A
+witness
+emo boastful name=wc
+"My job was to make sure Erlenmeyer{n}would remain quiet in his cell."
+
+statement fisher2B
+witness
+emo normal name=wc
+"At 1 AM Mike arrived with Chambers.{n}He said our boss had ordered him{n}to check the cell, then Mike left."
+
+statement fisher2C
+witness
+"Once we were in the cell, Chambers{n}suddenly whipped out his gun{n}and fired, but missed."
+
+statement fisher2D
+witness
+"There was a struggle between{n}Erlenmeyer and Chambers."
+
+statement fisher2E
+witness
+"Chambers shot Erlenmeyer in{n}the forehead! {sfx/gunshot.wav}{s}BANG!"
+
+statement fisher2F
+witness
+emo complaining name=wc
+"He then knocked me unconscious{n}with his gun! {sfx/Slash.ogg}{s}BAM!"
+endcross
+
+label comments
+helper
+emo aideserious name=hc
+"{sfx/Smack.ogg}{s 5 5}C'mon Apollo, Think! What would{n}a second testimony sound like?"
+"Figure out what's strange about{n}this testimony, and press him on it!"
+goto start
+
+label press fisher2A
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo objects name=dc
+"So now... {sfx/Shing.ogg}{f}{s 5 5}Did you guard that{n}cell the entire night!"
+scrollwitness
+"Yep."
+scrolldefense
+emo confident name=dc
+"Oh really?"
+scrollwitness
+emo boastful name=wc
+"Yeah really."
+scrolldefense
+emo sheepish name=dc
+"Seriously?"
+scrollwitness
+emo boastful name=wc
+"Yeah seriously."
+emo laughing name=wc
+pause 100 script
+emo boastful name=wc
+scrollprosecutor
+"That was a pretty stupid{n}question to ask."
+"First, if you had evidence{n}proving he left his post,{n}you should just present it."
+"Secondly, it wouldn't change much{n}since he was there during{n}the time of the murder."
+scrolldefense
+emo sweats name=dc
+"That wasn't the question I{n}meant... I was just trying to{n}get some more information."
+judge
+emo serious name=jc
+"Please try to focus and just ask{n}this question, Mr. Justice."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+set _speaking dc
+"{c099}(No way...)"
+is penalty 0 gameover
+resume
+
+label press fisher2B
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal name=dc
+"Are you sure that this{n}occurred at 1 AM?"
+scrollwitness
+"Well, I did have{n}a watch on."
+scrollprosecutor
+"And Meekins must keep a record{n}of who he lets into{n}the prison, and when."
+"This murder occurred at 1 AM - there{n}is no doubt about that."
+judge
+"I believe that effectively demolishes{n}any theory you might have had,{n}Mr. Justice."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo handsondesk name=dc
+"{sfx/Ding.ogg}{f}Wait! I still have{n}another question!"
+is penalty 0 gameover
+resume
+
+label press fisher2C
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal name=dc
+"Was there anything {sfx/Key.ogg}{f}{c900}unusual{c}{n}about the gun?"
+scrollwitness
+"Nope. It was the standard gun{n}issued to prison guards."
+scrollprosecutor
+emo serious name=pc
+"Stop with these pointless{n}questions, Mr. Justice!"
+"You are wasting this court's time."
+judge
+"I agree with the prosecution."
+sfx /Bwaaah.ogg
+penalty -25
+is penalty 0 gameover
+"Now ask a question that's{n}relevant and meaningful, or{n}stop wasting our time!"
+helper
+emo aideserious name=hc
+"Wow, even Strings is getting{n}angry at you! You'd{n}better hurry it up!"
+resume
+
+label press fisher2D
+mus
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo confident name=dc
+"And {sfx/Key.ogg}{f}what exactly were you{n}doing during the struggle?"
+scrollwitness
+"I was...{sfx/Ding.ogg}{f}{s 5 5}!"
+scrolldefense
+set _speaking dc
+"{c099}(Got you now, Fisher!)"
+"Why didn't you do anything{n}to stop the struggle?"
+scrollwitness
+emo complaining name=wc
+"I... I {sfx/Smack.ogg}{s 10 10}don't know! What was{n}I supposed to do?"
+scrolldefense
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+"You are a prison guard. It was {sfx/Shing.ogg}{f}{s 5 5}your{n}job to make sure nothing{n}like this happened!"
+scrollwitness
+emo complaining name=wc
+"Well... how was I supposed to{n}stop the goddamn struggle?"
+scrolldefense
+emo pointing name=dc
+"You had a {sfx/Shock.ogg}{s 10 10}gun, didn't you?"
+scrollwitness
+"{sfx/Slash.ogg}{s 5 5}Er... I was... {sfx/Ding.ogg}{f}{s 5 5}too shocked to do{n}anything! I was glued to the spot!"
+judge
+emo thinking name=jc
+"I would also be scared if two{n}people broke into a fight like{n}that in front of me."
+defense
+emo thinking name=dc
+set _speaking dc
+"{c099}(Well, he got a believable answer{n}out... What should I do?)"
+list fishersmistake
+li Back off
+li Press harder
+showlist
+label Back off
+mus
+defense
+emo normal name=dc
+"Okay. I'll just get back to{n}the cross-examination now...{p10}{next}"
+fg ObjectionAnimPoole
+pause 5 script
+scrollprosecutor
+"{sfx/Smack.ogg}{s 5 5}Not so fast! What happened to{n}the contradiction you were{n}talking about before?"
+scrolldefense
+emo sheepish name=dc
+"{sfx/Key.ogg}{f}Oh, well..."
+judge
+"You don't have to answer{n}that question. I'll just give{n}you a penalty instead."
+sfx /Bwaaah.ogg
+penalty -25
+is penalty 0 gameover
+helper
+emo aideserious name=hc
+"{sfx/Ding.ogg}{f}{s 5 5}Come on, Apollo! You were{n}on the right track!"
+mus 114 - Apollo Justice - Examination allegro.ogg
+set _music_loop 114 - Apollo Justice - Examination allegroloop.ogg
+clear
+goto start
+label Press harder
+defense
+emo handsondesk name=dc
+"{sfx/Smack.ogg}{s 10 10}Come on, Fisher! You were trained{n}for this sort of thing!"
+"Chambers is an old man who{n}has never used a gun."
+emo objects name=dc
+"There's {sfx/Shing.ogg}{f}{s 10 10}{epointing}no way you couldn't{n}stop him, especially when you{n}had a gun yourself!"
+fg ObjectionAnimPoole
+pause 5 script
+prosecutor
+"You're {sfx/Ding.ogg}{f}{s 5 5}badgering{n}my witness! Stop!"
+fg ObjectionAnimApollo
+pause 5 script
+defense
+emo pointing name=dc
+"I {sfx/Smack.ogg}{s 10 10}refuse to believe{n}he just stood there!"
+scrollwitness
+"What if I didn't have time{n}to do anything, {sfx/Smack.ogg}{s 5 5}punk?"
+"Chambers {sfx/gunshot.wav}{s 5 5}shot the gun as soon{n}as he was in the cell!"
+scrolldefense
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"Of course you had time{n}to do something!"
+"That first shot missed, and{n}afterwards there was a struggle!"
+scrollwitness
+"I... was {sfx/Shock.ogg}{f}{s 5 5}nervous!"
+scrolldefense
+"You were {s 10 10}trained to be a prison{n}guard, and Chambers is an {f}old man!"
+"{sfx/Shing.ogg}{f}{s 20 20}Anyone could have stopped{n}the struggle!!"
+scrollwitness
+mus
+"WELL COULD {s 5 5}ANYONE DO{n}ANYTHING WHILE{n}{sfx/Bwaaah.ogg}{f}{s 20 20}{c900}UNCONSCIOUS{c}?!?!"
+defense
+set _speaking dc
+"{sfx/Ding.ogg}{f}{s 10 10}!"
+pause 60 script
+prosecutor
+"{sfx/Awe.ogg}{f}{s 5 5}..."
+judge
+"{sfx/Awe.ogg}{f}{s 5 5}..."
+witness
+pause 60 script
+"..."
+pause 60 script
+"...{sfx/oops.wav}{f}{s 5 5}Whoops."
+sfx /Jury.ogg
+pause 60 script
+judge
+"{sfx/Gavel.ogg}{s 5 5}Order! {sfx/Gavel.ogg}{s 5 5}Order!"
+emo shocked name=jc
+"You were... {sfx/Key.ogg}{f}{c900}unconscious{c} when{n}the struggle happened?"
+witness
+"...{f}Yeah."
+prosecutor
+"Tell us what happened. Now."
+mus 112 - Apollo Justice - Trance Logic.ogg
+set _music_loop 112 - Apollo Justice - Trance Logicloop.ogg
+witness
+"I walked into the cell first, and as{n}soon as I did Chambers hit me{n}over the head with the gun.
+"I heard the first gunshot{n}as I passed out."
+scrolldefense
+"So anything in your testimony{n}was just a {sfx/Key.ogg}{f}{c900}big lie{c}?"
+scrollwitness
+"Well, starting with the{n}struggle... yeah."
+"But I {sfx/Ding.ogg}{f}{s 5 5}figured that was the{n}only thing that could've happened!"
+"{sfx/Smack.ogg}{s 10 10}That's why I said{n}what I did!"
+scrollprosecutor
+emo serious name=pc
+"Even if that part of his{n}testimony is discarded..."
+"...The defendant {sfx/Shing.ogg}{f}{s 10 10}still attacked{n}the witness and fired the gun!"
+fg ObjectionAnimApollo
+pause 5 script
+defense
+emo pointing name=dc
+"{sfx/Ding.ogg}{f}{s 5 5}That bullet missed! There's no way{n}you can prove Chambers{n}fired the second shot!"
+mus
+fg ani-judge-gavel.png
+pause 30 script
+judge
+"I agree with the defense.{n}It is almost certain that{n}the defendant is guilty."
+"However, we do not have an{n}eyewitness to the moment{n}of the crime, and therefore"
+"there is still a{n}shred of doubt."
+"I will extend this trial a{n}day, to give the prosecution{n}and defense--{p10}{next}"
+fg ObjectionAnimPoole
+pause 5 script
+prosecutor
+mus 10 - Suspense.ogg
+set _music_loop 10 - Suspenseloop.ogg
+"There is no need for that,{n}Your Honor."
+"If you want me to eliminate{n}that shred of doubt..."
+"...All I need is another short{n}recess to prep a {sfx/Key.ogg}{f}{c900}witness{c}."
+judge
+"...Are you positive that this{n}witness will be able to{n}eliminate all doubt?"
+prosecutor
+"Of course."
+mus
+judge
+"Very well."
+"Court is adjourned for{n}a 10-minute recess!"
+fg ani-judge-gavel.png
+pause 30 script
+script scene36
+
+label press fisher2E
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo thinking name=dc
+"How come Chambers could shoot{n}Erlenmeyer this time, but{n}missed the first time?"
+scrollwitness
+"Luck of the shot, I guess."
+"Plus Erlenmeyer was recovering from{n}the struggle, so he was an easier{n}target than the first shot."
+scrollprosecutor
+"Wasn't that made clear from{n}the previous cross-examination?{n}{sfx/Bwaaah.ogg}{s 5 5}Penalty, Mr. Justice!"
+scrolldefense
+emo sweats name=dc
+"{sfx/Shock.ogg}{s 10 10}Wait! You can't give{n}me a penalty!"
+judge
+"{sfx/Gavel.ogg}{s 5 5}Settle down, you two!{n}You're both right!"
+emo sarcastic name=jc
+"Mrs. Poole can't give out{n}penalties... but Mr. Justice is{n}getting one anyway."
+sfx /Bwaaah.ogg
+penalty -25
+is penalty 0 gameover
+"Now get on with it!"
+resume
+
+label press fisher2F
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal name=dc
+"Where in the head{n}were you hit?"
+scrollwitness
+"My temple. And I got a nasty{n}bruise to prove it, too!"
+scrolldefense
+"...{p30}I don't see anything."
+scrollwitness
+"...{p30}{sfx/Key.ogg}{f}I know a good{n}make-up artist."
+scrollprosecutor
+"The investigation team confirmed{n}that Fisher had a bruise on his head.{n}That was a waste of a question."
+judge
+emo sarcastic name=jc
+"I'll make sure this penalty isn't{n}a waste, though!"
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo handsondesk name=dc
+"{sfx/Ding.ogg}{f}Wait! Please let me{n}ask one more!"
+is penalty 0 gameover
+judge
+emo serious name=jc
+"Fine, but stop wasting our time!"
+resume
+
+label none
+is wrongevidence 1 wrongevidence1
+is wrongevidence 2 wrongevidence2
+is wrongevidence 3 wrongevidence3
+
+label wrongevidence1
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo objects name=dc
+"{sfx/Dunnn.ogg}{s}Your Honor!{n}That statement contradicts{n}the evidence!"
+judge
+emo shocked name=jc
+"...{sfx/Key.ogg}{f}Really? Let me see that..."
+"...{sfx/Ding.ogg}{f}! Why, you're right!"
+"This is... unheard of{n}in this courtroom!"
+"You single-handedly turned{n}the case around with{n}this one piece of evidence!"
+defense
+emo confident name=dc
+"Didn't I? Didn't I?"
+judge
+emo sarcastic name=jc
+"...{sfx/oops.wav}Of course you didn't."
+"What IS unheard of in this courtroom{n}is your credulity, Mr.Justice.{n}You deserve this penalty."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(My ego... it hurts...)"
+is penalty 0 gameover
+set wrongevidence 2
+clear
+goto start
+
+label wrongevidence2
+fg ObjectionAnimApollo
+pause 5 script
+judge
+emo serious name=jc
+"{sfx/Dunnn.ogg}{s}Penalty!"
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo objects name=dc
+"{sfx/Shing.ogg}{f}What?!{n}I haven't said anything yet!"
+judge
+"But you were definitely going{n}to say something{n}ridiculous, weren't you?"
+defense
+set _speaking dc
+"{c099}(Actually, he's right...)"
+judge
+emo sarcastic name=jc
+"Which is why I decided{n}to prevent you from{n}further embarrassing yourself."
+"You should be grateful."
+defense
+emo sheepish name=dc
+"Thank you, Your Honor."
+set _speaking dc
+"{c099}(Though I AM embarrassed now.)"
+is penalty 0 gameover
+set wrongevidence 3
+clear
+goto start
+
+label wrongevidence3
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+"..."
+emo sheepish name=dc
+"{sfx/oops.wav}Please give me a penalty, Your{n}Honor. I swear I was going{n}to say something stupid."
+judge
+"...You sure do learn fast, Mr.Justice.{n}Alright, I'd be glad to."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(I a-bso-lu-tely need{n}to remember to{n}forget that moment.)"
+is penalty 0 gameover
+set wrongevidence 1
+clear
+goto start
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

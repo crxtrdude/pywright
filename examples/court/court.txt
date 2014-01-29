@@ -1,0 +1,25 @@
+clearcourt
+
+set helper_nt Emakin
+set defense_nt Justice
+set witness_nt Hobo
+set prosecutor_nt Painful
+set judge_nt Abjudicator
+set _defense apollo
+set _witness hobo
+set _helper skye
+set _prosecutor paynette
+set _judge judge
+
+startcourt
+
+judge
+"Stuff is going down in this here court of mine!"
+scrolldefense
+"(I hope this goes well for me. This guy is a bit odd if I do say so)"
+scrollprosecutor
+"Heh. Heh. Heh. Heh. Heeeeeh....."
+scrollwitness
+"Don't I have something to say about it?"
+scrollhelper
+"NO! You need to answer Polly's questions!"

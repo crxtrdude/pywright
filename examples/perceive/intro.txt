@@ -1,0 +1,47 @@
+# character which appears above
+set _perceive_char_small kagerou
+
+# character which is zoomed in to be examined
+set _perceive_char_big kageroubig
+
+
+
+
+# As long as this point is within the eye (30 pixels away)
+# and the user is pressing on the correct line
+# will go to the 'correct' label
+set _twitch_center_x -21
+set _twitch_center_y -188
+
+
+
+# Perceive_debug will print the x and y value of the center to help 
+# you find the right values for the center
+set _perceive_debug true
+
+
+
+# The actual lines of text that appear, and the emotion animation file to use for each line
+set _perceive_text1 This is some text to begin with.
+set _perceive_emo1 normal
+
+set _perceive_text2 This is some text for the middle (twitch is here!).
+set _perceive_emo2 twitch
+
+set _perceive_text3 This is some text for the end.
+set _perceive_emo3 normal
+
+# Which line the player should be up to when they click notice to win
+set _perceive_correct_line 2
+
+label perceive
+{perceive}
+
+label fail
+"You don't really notice anything here."
+penalty -1
+"Why don't you try again?"
+goto perceive
+
+label correct
+"You have won"

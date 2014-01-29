@@ -1,0 +1,71 @@
+set _debug on
+set examine off
+set talk off
+set present off
+set move off
+
+"Toggle the following items on or off"
+list toggle
+	li Examine $examine
+	li Talk $talk
+	li Present $present
+	li Move $move
+	li Show Menu
+showlist
+
+label Examine off
+set examine on
+goto toggle
+
+label Talk off
+set talk on
+goto toggle
+
+label Present off
+set present on
+goto toggle
+
+label Move off
+set move on
+goto toggle
+
+label Examine on
+set examine off
+goto toggle
+
+label Talk on
+set talk off
+
+label Present on
+set present off
+goto toggle
+
+label Move on
+set move off
+goto toggle
+
+label Show_Menu
+bg black
+localmenu examine=$examine move=$move talk=$talk present=$present
+"Apparently, no options are available, please enable something"
+goto toggle
+
+label move
+"There would be move code here."
+"Back to the menu"
+goto Show_Menu
+
+label examine
+"There would be examine code here."
+"Back to the menu"
+goto Show_Menu
+
+label talk
+"There would be talk code here."
+"Back to the menu"
+goto Show_Menu
+
+label present
+"There would be present code here."
+"back to the menu"
+goto Show_Menu

@@ -1,0 +1,195 @@
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Erlenmeyer
+startcourt
+fg TakeThatAnimApollo
+pause 5 script
+mus 115 - Apollo Justice - Tell the Truth.ogg
+set _music_loop 115 - Apollo Justice - Tell the Truthloop.ogg
+defense
+char Apollo
+"{defense}{enormal-nobrac}On the morning of December 26,{n}at 1 AM, in Erlenmeyer's cell...{p30}"
+"Erlenmeyer and Chambers stood{n}{f}face to face, as we all{n}know very well."
+"If Erlenmeyer truly wanted{n}to kill Chambers,"
+"{epointing-nobrac}{sfx /Shing.ogg}{f}{s 10 10}he would've done so three days{n}ago, when the had the perfect{n}opportunity!"
+prosecutor
+char Poole
+"{prosecutor}Not necessarily."
+"Two nights ago Erlenmeyer{n}and Chambers were alone{n}at the same time and place,"
+"and one of them wound up dead...{p30}{n}{sfx /Key.ogg}{f}for real, this time."
+"{sfx /Ding.ogg}{f}So why was he killed?"
+"There {s 8 8}had to be a reason!"
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}{c099}(...{p30}She's right. There has to be a{n}reason Judge was killed,"
+"{c099}(especially if Erlenmeyer{n}was the intended {f}victim{n}and Judge was there by {f}accident..."
+"{c099}(...{p30}but I have no idea what it was!)"
+helper
+char Rhea e=aide
+"{helper}{sfx /Ding.ogg}{f}Hey, Polly." 
+"Do you know why I always put{n}{f}strawberry chewing gum and {f}lemon{n}chewing gum in the same box?"
+char Apollo hide
+"Uh...{sfx /Ding.ogg}{f} because you're{n}weird?"
+helper
+char Rhea e=aide
+"{helper}{sfx /Smack.ogg}{s}Because I want to experience both{n}sides of that chewing gum world,{n}because I want to see the big picture!"
+"Recall everything you know about{n}Erlenmeyer and about Judge...{p40} and{n}the truth will become clear."
+defense
+char Apollo 
+"{defense}{ehandsondesk-nobrac}{p40}...{sfx /Ding.ogg}{f}Of course!{n}{enormal-nobrac}Mrs. Poole, you thought you had me,{n}didn't you?" 
+"{econfident-nobrac}Well you {s 5 5}don't, since I now know{n}the {f}{s 10 10}real reason for Chambers'{n}murder!"
+label figureditout
+list therealreason
+li Self-defense
+li Accident
+li Chb. saw sthg he shouldn't have
+li Chb. mistaken fr smn else
+showlist
+scene16
+label Self-defense
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}Chambers {sfx/Slash.ogg}{f}{s 8 8}attacked the defendant,{n}who had no choice but to {sfx/Slash.ogg}{f}{s 8 8}strike{n}back in self-defense!"
+prosecutor
+char Poole
+"{prosecutor}{sfx /Ding.ogg}{f}You really think so?"
+defense
+char Apollo
+"{defense}{enormal-nobrac}Well, it's just a theory..."
+prosecutor
+char Poole
+"{prosecutor}Then I'm glad you just admitted{n}that Erlenmeyer is {sfx/Key.ogg}{f}guilty."
+"Are you going to change{n}your plea now?"
+defense
+char Apollo
+"{defense}{ehandsondesk(blink)}{c099}(If I do that, the best{n}scenario is just a {s 5 5}reduced{n}sentence!)"
+"{c099}(Plus, I have {f}no proof that Judge attacked Erlenmeyer...)"
+"{c099}(There wasn't a weapon or anything.)"
+"{esweats-nobrac}Never mind, I'm {s 5 5}standing{n}by my plea of "Not Guilty.""
+judge
+char G.Strings
+"{judge}{enormal}So you've changed{n}your mind?"
+defense
+char Apollo
+"{defense}{esweats-nobrac}{sfx /Shock.ogg}{f}{s 8 8}N-No! {enormal-nobrac}{sfx /Ding.ogg}{f}...{p30}I mean, yes."
+judge
+char G.Strings
+"{judge}{esarcastic}Don't worry about it.{n}It happens to all of us. I{n}won't even give you a penalty!"
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}R-{sfx /Ding.ogg}{f}Really?"
+judge
+char G.Strings
+"{judge}{enormal}...{p30}{sfx/oops.wav}{f}No, I changed my mind."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"So why was Chambers{n}killed?"
+goto figureditout
+label Accident
+defense
+char Apollo
+"{defense}{epointing-nobrac}{sfx /Shing.ogg}{f}Chambers wasn't murdered!{n}He was killed by {sfx/Slash.ogg}{f}{s 8 8}accident!"
+prosecutor
+char Poole
+"{prosecutor}{sfx Key.ogg}{f}By accident?"
+"Makes perfect sense."
+"So someone {f}"accidentally" knocked{n}Chambers against the car, and"
+"{f}"accidentally" got into the car, and{n}{f}"accidentally" put it in park, and{n}{f}"accidentally" ran him over?"
+defense
+char Apollo 
+"{defense}{ehandsondesk-nobrac}{sfx /Smack.ogg}{s}I said he wasn't murdered!"
+prosecutor
+char Poole
+"{prosecutor}...{p30}{f]Right."
+"Because cars these days just{n}don't know the meaning of{n}{f}"obedience.""
+defense
+char Apollo
+"{defense}{esweats-nobrac(blink)}{c099}(...{p30}{sfx/oops.wav}{f}Seriously, what was I thinking?)"
+"{enormal-nobrac}{sfx /Ding.ogg}{f}O-Okay, maybe it{n}wasn't an accident..."
+judge
+char G.Strings
+"{judge}{enormal}So you've changed{n}your mind?"
+defense
+char Apollo
+"{defense}{esweats-nobrac}{sfx /Shock.ogg}{f}{s 8 8}N-No! {enormal-nobrac}{sfx /Ding.ogg}{f}...{p30}I mean, yes."
+judge
+char G.Strings
+"{judge}{esarcastic}Don't worry about it.{n}It happens to all of us. I{n}won't even give you a penalty!"
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}R-{sfx /Ding.ogg}{f}Really?"
+judge
+char G.Strings
+"{judge}{enormal}...{p30}{sfx/oops.wav}{f}No, I changed my mind."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"So why was Chambers{n}killed?"
+goto figureditout
+label Chb. mistaken fr smn else
+defense
+char Apollo
+"{defense}{epointing}{sfx /Shing.ogg}{f}Chambers was killed because{n}he was {sfx/Dunnn.ogg}{f}{s 8 8}mistaken for someone else!"
+"{ethinking-nobrac}It was dark, so he could{n}be mistaken for someone like..."
+judge
+char G.Strings
+"{judge}{eserious}{sfx /Smack.ogg}{s}Santa Claus?!"
+defense
+char Apollo
+"{defense}{esweats-nobrac}...{p30}{f}No. I was going{n}to say his {sfx/Key.ogg}{f}brother, Arthur{n}Chambers."
+prosecutor
+char Poole
+"{prosecutor}Who had been {f}dead{n}exactly one year."
+"And Erlenmeyer would know that,{n}since he is the one who killed him."
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac}{s 8 8}Exactly! He was at a{n}graveyard and saw the ghost of{n}one of his victims..."
+"{epointing-nobrac}{sfx /Shing.ogg}{f}{s 10 10}He panicked, and tried{n}to get rid of it by all means!"
+judge
+char G.Strings
+"{judge}{enormal}You get bonus points{n}for imagination,{n}Mr. Justice."
+"{eserious}...{p30}And I mean that in the{n}{s 8 8}worst possible way."
+sfx /Bwaaah.ogg
+penalty -20
+is penalty 0 gameover
+"So why was Chambers really{n}killed?" 
+goto figureditout
+label Chb. saw sthg he shouldn't have
+script scene97
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

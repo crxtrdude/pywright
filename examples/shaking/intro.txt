@@ -1,0 +1,8 @@
+bg lobby
+"{s 120 nowait}Oh no the room is shaking"
+shake
+"what the..."
+shake
+"haha"
+shake 30 50 nowait
+"why!"

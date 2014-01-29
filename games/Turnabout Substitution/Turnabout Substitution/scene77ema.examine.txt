@@ -1,0 +1,56 @@
+#-version-1
+label top
+bg policehq
+
+examine
+region 15 60 10 50 detective
+region 120 50 10 25 captain
+region 160 50 15 17 bluebadger
+menu scene77ema
+
+label detective
+char Apollo hide
+"These detectives must have{n}a lot of work going{n}on with the case."
+char Rhea
+"...{sfx/Key.ogg}This one's playing video games."
+char Apollo hide
+"{sfx/Shock.ogg}{c900}Alex Trugh: Ace Attorney{c}?{n}What a {sfx/Smack.ogg}stupid name!"
+char Rhea
+"It's not Alex. It's {sfx/Ding.ogg}{c900}Axel{c}."
+char Apollo hide
+"Maybe, but it's still a stupid name."
+char nothing
+goto top
+
+label captain
+char Apollo hide
+"So, I wonder if it's a mannequin{n}again today..."
+char Chief hide
+"H-Hey! Don't poke me like that!"
+char Apollo hide
+"O-Oh! Sorry, I thought...{n}Never mind. So you gave up{n}using that mannequin?"
+char Chief hide
+"Well, not exactly...{n}He's having brunch with my{n}mother-in-law!"
+char Apollo hide
+"...{n}{c099}(The mannequin is at brunch,{n}but the dummy is right here.)"
+goto top
+
+label bluebadger
+char Apollo hide
+"The Blue Badger, police mascot,{n}defender of truth and justice."
+"Now that's unfair competition.{n}Normally I'm the one{n}badgering witnesses."
+char Rhea
+"{sfx/Ding.ogg}You know what's funny with a{n}badger as a police mascot?{n}Badgers have poor vision."
+char Apollo hide
+"Which is probably why this badger{n}doesn't look like a badger at all."
+char Rhea
+"On the other hand, badgers are{n}renowned for their{n}bravery and ferocity."
+char Apollo hide
+"{c099}(What's this, some kind{n}of animal documentary?)"
+char nothing
+goto top
+
+label none
+char Apollo hide
+"No clues here."
+goto top

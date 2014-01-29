@@ -1,0 +1,121 @@
+bg courtroomHall fade
+
+
+pause 5 script
+"{c090}{center}{type}December 29, 2:11 PM{n}District Court{n}Defendant Lobby No.4"
+
+char Apollo hide
+"{c089}(All right, so what first{n}happened, was...)"
+
+char Rhea fade
+"{sfx/Ding.ogg}{f}Hey there, Polly!"
+
+mus 30 - Search ~ Core 2002.ogg
+set _music_loop 30 - Search ~ Core 2002loop.ogg
+char Apollo hide
+"{sfx/Smack.ogg}{s 8 8}Rhea!{p20} {s 8 8}What the hell are{n}you doing here?"
+
+char Rhea e=smiling1
+"{sfx/Ding.ogg}{f}Gosh, Polly, I didn't think{n}you were a curser."
+
+char Apollo hide
+"{sfx/Shock.ogg}{s 10 10}What are you doing here?!"
+
+char Rhea
+"Just dropping by to see{n}how it's going."
+
+char Apollo hide
+"H-{p20}{s 8 8}How things are going?{p20} I'm{n}about to prove that you're{n}{s}a {sfx/Smack.ogg}serial killer!"
+
+char Rhea e=smiling1
+"Oh, {sfx/Ding.ogg}{f}that. {p20}You mean how I {s 8 8}murdered{n}dozens of respectable {p10}{c666}(albeit{n}boring){c}{p10} human beings for no"
+"reason?{p30} Don't lose sleep over it.{p20}{n}{esmiling2}I'm going to get away {f}scot-{f}free,{n}just like last time."
+
+char Apollo hide
+"{sfx/Dunnn.ogg}{s 10 10}!!{p12}"
+
+char Rhea
+"{sfx/Key.ogg}{f}What, surprised by the confession,{n}Polly?{p30} We both know reporting it{n}{f}won't go over in court."
+"And even if it would...{p30} Strings is{n}{f}eating out of the palm of my hand,{n}and there's no way Poole will go"
+"after me over Erlenmeyer.{p20} It's {s 5 5}you{n}and {s 5 5}me against the world...{p40} except{n}I have a {sfx/Slash.ogg}{f}{s 10 10}knife at your throat." 
+"{esmiling2}I'm {f}surprised you figured it out,{n}even if it was {f}{delay2}painfully obvious."
+
+char Apollo hide
+"You...{p40} You {sfx/Bwaaah.ogg}{s 12 12}monster!{p20}{n}{s 10 10}Why are you doing this?"
+
+char Rhea
+"You mean {f}talking to you, right{n}now?{p20} {esmiling1}Because I'm {sfx/Ding.ogg}{f}taunting you,{n}and it's fun.{p20} This will also"
+"{s 8 8}destabilize you, and cause you{n}to {s 8 8}crack pretty soon.{p20} {enormal}Or {sfx/Key.ogg}{f}did{n}you mean the murdering business?"
+
+char Apollo hide
+"{delay4}..."
+
+char Rhea e=smiling1
+"{sfx/Ding.ogg}{f}Oh, silly me!{p20} {enormal}Well, you might{n}get mad, but I'll answer your{n}question with a question:"
+"{sfx/Key.ogg}{c900}why are you so afraid of dying{c}?{p20}{n}Why is everyone so afraid of{n}dying?!" 
+"{delay2}...When they're not even living..."
+
+char Apollo hide
+"Y-{p20}{sfx/Shock.ogg}{s 10 10}You're talking like we're from{n}different species!{p20} Don't {s 10 10}human{n}lives mean anything to you?"
+
+char Rhea
+"Of {s 10 10}course they do! ...{p30}The ones{n}that matter.{p20} People who experience{n}what it means to {f}{c900}live{c} aren't"
+"afraid of {sfx/Key.ogg}{f}{c900}death{c}. {p20}An {sfx/Ding.ogg}{f}interesting{n}paradox, don't you think?{p20}{n}{s 8 8}Terrorists, {s 8 8}movie stars, {s 8 8}thrill-"
+"seekers...{p30} they are ready to{n}{f}disappear from this world at{n}any moment."
+"I would be too, if I was beaten...{p30}{n}which I {f}don't think is likely,{n}though."
+"If that happened, I'd {f}gladly{n}accept death."
+"{emad}But {s 8 8}threaten any regular Joe{n}Schmoe and he'll be {s 8 8}begging{n}for his life in an instant."
+
+char Apollo hide
+"{sfx/Smack.ogg}{s 10 10}Just because you don't think{n}they're living their life to{n}the fullest {s 10 10}doesn't mean they"
+"{s 10 10}deserve to die!"
+
+char Rhea
+"Yes, no one {sfx/Ding.ogg}{f}'deserves' to die,{n}but then again, who {sfx/Key.ogg}{f}'wants' to{n}die?{p30} Forgetting about suicide..."
+"Whether it's an {s 8 8}avalanche, a{n}{s 8 8}bacterium, or {s 8 8}another person,{n}you are going to {s 8 8}die against"
+"your will. I'm just doing{n}{f}nature's job...{p30} although{n}{sfx/Ding.ogg}{f}much less violently."
+"Although I suppose running over{n}Judge four times was {f}overkill...{p30}{n}{esmiling1}{sfx/Ding.ogg}{f}no pun intended."
+"{emad}At least in my case, {s 10 10}all their{n}deaths weren't in vain!" 
+"{enormal}The sheer {s 10 10}ecstasy from {s 8 8}killing{n}them and {s 8 8}getting away...{p40} {esmiling1}it's{n}{sfx/Awe.ogg}{f}{s}{c900}why we live{c}, Apollo!"
+
+char Apollo hide
+"You're {sfx/Bwaaah.ogg}{s}sick! Are you going to{n}{s 8 8}lecture me all day, because{n}there's {s 10 10}no way I'll even begin"
+"to comprehend your {s 10 10}deranged mind!"
+
+char Rhea
+"I suppose.{p30} But {f}all this time{n}you've spent listening to me"
+"is time {esmiling1}you haven't been{n}{f}preparing your arguments."
+
+char Apollo hide
+"...!{sfx/Ding.ogg}{p5}"
+
+char Rhea
+"{f}Everything I do is for a reason.{p30}{n}{esmiling2}Do you really think I wouldn't{n}get caught after dozens of"
+"murders if I was sloppy?"
+
+char Apollo hide
+"{s 10 10}Grrr..."
+
+char Rhea e=smiling1
+"{sfx/Ding.ogg}{f}Aw, you're cute when you're mad.{p20}{n}How about a {f}date after this?"
+
+char Apollo hide
+"{sfx/Dunnn.ogg}{s}Enough of this!!"
+
+char Rhea e=smiling1
+"C'mon, you {f}know I'm a great cook.{p30}{n}I hope you like what I've {s 8 8}whipped{n}up for you in there."
+"And once you've eaten enough, {esmiling2}I'll{n}have {f}{s 10 10}you for dinner.{p30} So, ready for{n}the {sfx/Key.ogg}{f}{c900}final course{c}?"
+
+char Apollo hide
+"You're not going anywhere.{p20}{n}I'm {sfx/Smack.ogg}{s 10 10}putting you behind bars!"
+
+char Rhea e=smiling1
+"{sfx/Smack.ogg}{s 10 10}Ha ha, {s 8 8}good luck with that!{p20} I{n}sincerely mean it...{p20} {esmiling2}The {s 8 8}closer{n}I come to getting caught,"
+"the more {s 8 8}fun it will be!{p20}{n}{sfx/Ding.ogg}{f}See you later, Polly!"
+
+char nothing fade
+
+char Apollo hide
+"{c089}({s 12 12}Grr...{p30} Just you {f}wait, Rhea!{p30}{n}I'll make sure you get your{n}{s 10 10}just desserts!)"
+
+script scene103

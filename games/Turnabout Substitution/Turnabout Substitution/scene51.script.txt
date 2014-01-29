@@ -1,0 +1,39 @@
+#-version-1
+pause 60 script
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Fisher
+set _judge G.Strings
+set _helper Rhea
+startcourt
+mus 107 - Apollo Justice - Trial.ogg
+set _music_loop 107 - Apollo Justice - Trialloop.ogg
+judge
+"Now then, if there are no objections,{n}I believe it is time for the{n}jury to make their verdict."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+prosecutor
+emo serious name=pc
+"{sfx/Ding.ogg}{f}Don't. Just... don't."
+judge
+"Alright, you may now retire{n}to deliberate."
+mus
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+notguilty
+pause 30 script
+sfx /gallerycheer.wav
+pause 160 script
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+script scene52

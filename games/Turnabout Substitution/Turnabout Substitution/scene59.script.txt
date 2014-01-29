@@ -1,0 +1,53 @@
+#-version-1
+mus
+bg records
+flag G.Stringsinrecord skipPStrings
+nt
+"{c090}{center}{type}December 27{n}Police Headquarters{n}Records Room"
+pause 60
+char G.Strings fade e=normal-outofcourt
+"..."
+char Apollo hide
+"{sfx/sfx general/sfx-realization.wav}{f}Judge Strings? What are you doing{n}here?"
+char G.Strings e=shocked-outofcourt
+"{sfx/sfx general/sfx-stab2.wav}{s}Aaaaaaaaaaaaaaaaaaaaaaaaaaa{n}aaaah!"
+char Apollo hide
+"{c099}(What the heck?)"
+char G.Strings e=normal-outofcourt
+"Oh...{p40} it's you, Mr. Justice. I'm very{n}sorry- I was just looking for some{n}copies of the HT5 case files"
+"when you ambushed me like that."
+char Apollo hide
+"{c099}(Ambushed?)"
+char Rhea fade e=normal
+"Strange. Isn't that Chambers's{n}case, not yours?"
+char G.Strings fade e=shocked-outofcourt
+"Hm?{p30} {enormal-outofcourt}Well nonetheless, I have{n}been following it quite closely."
+"After all, these cases are{n}quite related, are they not?"
+char Rhea fade e=normal
+"I suppose."
+char G.Strings e=normal-outofcourt
+"At any rate, I know my father would{n}never do something that{n}wasn't right."
+"Therefore, Erlenmeyer must{n}surely be innocent."
+"Naturally, I figured that I{n}might find some sort of{n}clue in the old case files..."
+"Maybe find a new piece of the{n}puzzle that will completely{n}change how we look at it."
+char Apollo hide
+"Well, it just happens that{n}we're looking for that same file."
+"Do you think it would be{n}alright if we took a copy?"
+char G.Strings e=normal-outofcourt
+"Well, of course. Most parts of{n}this file are now open to the{n}public anyway."
+"Here, Mr. Justice, you may take{n}my copy. I can easily make another{n}for myself."
+addev ht5files
+nt
+"{sfx/evidence.wav}{c099}HT5 Files added to the Court Record."
+char Rhea fade e=normal
+"Say, you wouldn't happen to know{n}anything about where Erlenmeyer{n}is hiding, would you?"
+char G.Strings fade e=shocked-outofcourt
+"I apologize, but I really,{n}uh...{p30} don't have a clue.{p20} {enormal-outofcourt}I'll try{n}my best to help you out, though."
+char Apollo hide
+"{c099}{sfx/sfx general/sfx-whoops.wav}(Looks like this guy is even more{n}of a pushover when he isn't acting{n}as a judge.)"
+setflag G.Stringsinrecord
+label scene59
+script scene59menu
+
+label skipPStrings
+script scene59menu

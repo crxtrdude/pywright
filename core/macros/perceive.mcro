@@ -1,0 +1,129 @@
+macro _pline1
+set _perceive_correct false
+emo name=big $_perceive_emo1
+is _perceive_correct_line != 1 endd
+"SETTING TRUE ON LINE 1"
+pause 200
+set _perceive_correct true
+label endd
+endmacro
+
+macro _pline2
+set _perceive_correct false
+emo name=big $_perceive_emo2
+is _perceive_correct_line != 2 endd
+set _perceive_correct true
+label endd
+endmacro
+
+macro _pline3
+set _perceive_correct false
+emo name=big $_perceive_emo3
+is _perceive_correct_line != 3 endd
+set _perceive_correct true
+label endd
+endmacro
+
+macro _perceive_restart
+set _per_restart true
+endmacro
+
+macro _per_deletes
+delete name=sauron
+delete name=big
+delete name=bl
+delete name=br
+delete name=bu
+delete name=bd
+delete name=bn
+endmacro
+
+macro perceive
+label begin
+set _textbox_show_button false
+set _saur_ox 0
+set _saur_oy 0
+set _perceive_correct false
+set _per_restart false
+
+clear
+bg witness
+char $_perceive_char_small
+char $_perceive_char_big y=192 z=-10 stack name=big emo=fail
+fg sauron y=192 nowait
+
+gui Button {_saur_move_left} x=125 y=292 hotkey=k_left name=bl hold left
+gui Button {_saur_move_right} x=145 y=292 hotkey=k_right name=br hold right
+gui Button {_saur_move_up} x=132 y=285 hotkey=k_up name=bu hold up
+gui Button {_saur_move_down} x=132 y=300 hotkey=k_down name=bd hold down
+gui Button perc_try x=50 y=192 name=bn Notice
+
+label talkie
+set _textbox_skipupdate true
+"{delay 5}{_pline1}{$_perceive_text1}{p60} {_pline2}{$_perceive_text2}{p60} {_pline3}{$_perceive_text3}{p60}{_perceive_restart}{next}"
+set _textbox_skipupdate false
+
+label wait
+set _textbox_skipupdate false
+pause 1
+is _per_restart endd
+goto wait
+
+label perc_try
+set _textbox_skipupdate false
+set _l $_twitch_center_x
+set _r $_l
+set _t $_twitch_center_y
+set _b $_t
+subvar _l 30
+addvar _r 30
+subvar _t 30
+addvar _b 30
+
+is _saur_ox >= $_l AND _saur_ox <= $_r AND _saur_oy >= $_t AND _saur_oy <= $_b AND _perceive_correct = true dotwitch
+
+label endd
+_per_deletes
+set _textbox_skipupdate false
+set _textbox_show_button true
+goto fail
+
+label dotwitch
+_per_deletes
+set _textbox_skipupdate false
+set _textbox_show_button true
+"You found the spot"
+goto correct
+
+endmacro
+
+macro perc_debug
+delete name=saur_debug_text
+is _perceive_debug?
+textblock 0 0 100 10 color=000 name=saur_debug_text X= $_saur_ox Y= $_saur_oy
+endmacro
+
+macro _saur_move_left
+scroll name=big x=1 nowait
+subvar _saur_ox 1
+{perc_debug}
+endmacro
+
+macro _saur_move_right
+scroll name=big x=-1 nowait
+addvar _saur_ox 1
+{perc_debug}
+endmacro
+
+macro _saur_move_up
+scroll name=big y=1 nowait
+subvar _saur_oy 1
+{perc_debug}
+endmacro
+
+macro _saur_move_down
+scroll name=big y=-1 nowait
+addvar _saur_oy 1
+{perc_debug}
+endmacro
+

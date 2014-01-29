@@ -1,0 +1,5 @@
+horizontal 6
+vertical 6
+length 32
+loops 0
+offsetx -30

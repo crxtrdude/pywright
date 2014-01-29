@@ -1,0 +1,78 @@
+#Setting with macro
+theme_screen2 phoenix
+"Hello I am phoenix."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_screen2 mia
+"Hello I am mia."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_screen2 edgeworth
+"Hello I am edgeworth."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_screen2 apollo
+"Hello I am apollo(blank)."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+theme_screen2 gk
+"Hello I am gk(pink)."
+cross
+statement 1
+"test"
+endcross
+label none
+"next"
+
+#Setting individually
+theme_screen2 default
+set _bigbutton_img general/bigbutton/empty
+"No scanlines on bigbutton"
+set _bigbutton_scanlines on
+"Now there are"
+
+set _bigbutton_bg bg/mainpw
+set _bigbutton_img general/bigbutton/phoenix
+"See phoenix big button background"
+set _bigbutton_img general/bigbutton/mia
+"Button changed to mia"
+set _bigbutton_img general/bigbutton/edgeworth
+"Button changed to edgeworth"
+
+
+set _bigbutton_bg bg/mainaj
+set _bigbutton_img general/bigbutton/empty
+"Button and background changed to apollo"
+
+set _bigbutton_bg bg/maingk
+set _bigbutton_img general/bigbutton/gk
+"See edgeworth from gk button and bg"
+
+
+set _bigbutton_cross general/bigbutton/gk_cross
+cross
+statement 1
+"test"
+endcross
+label none
+"whatever"

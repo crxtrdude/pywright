@@ -1,0 +1,156 @@
+macro _crbut
+showrecord
+endmacro
+
+macro _default_court_record_button
+gui Button {_crbut} name=_crbut_ graphic=general/record x=177 y=192 hotkey=k_tab z=6 try_bottom
+endmacro
+
+macro show_court_record_button
+isnot _cr_button exit
+{hide_court_record_button}
+{_default_court_record_button}
+label exit
+endmacro
+
+macro hide_court_record_button
+delete name=_crbut_ suppress
+endmacro
+
+macro disable_court_record_button
+set _cr_button false
+delete name=_crbut_ suppress
+endmacro
+
+macro enable_court_record_button
+set _cr_button true
+endmacro
+
+
+
+
+
+###PRESS BUTTON###
+#Command to activate
+macro _pressbut
+callpress
+endmacro
+
+#Command to display
+macro _default_press_button
+gui Button {_pressbut} name=_pressbut_ graphic=general/press/press graphichigh=general/press/press_high x=0 y=192 z=6 try_bottom
+endmacro
+
+#Command to show it, deleting old one if it exists
+macro show_press_button
+{hide_press_button}
+{_default_press_button}
+endmacro
+
+#Command to hide it
+macro hide_press_button
+delete name=_pressbut_ suppress
+endmacro
+###END PRESS BUTTON###
+
+
+
+
+
+###PRESENT BUTTON###
+#Command to activate
+macro _presentbut
+showpresent
+endmacro
+
+#Command to display
+macro _default_present_button
+gui Button {_presentbut} name=_presentbut_ graphic=general/press/present graphichigh=general/press/present_high x=176 y=192 z=6 try_bottom
+endmacro
+
+#Command to show it, deleting old one if it exists
+macro show_present_button
+{hide_present_button}
+{_default_present_button}
+endmacro
+
+#Command to hide it
+macro hide_present_button
+delete name=_presentbut_ suppress
+endmacro
+###END PRESENT BUTTON###
+
+
+
+###PRESENT BUTTON IN COURT RECORD###
+#Command to activate
+macro _presentbut2
+callpresent
+endmacro
+
+#Command to display
+macro _default_present_button2
+gui Button {_presentbut2} name=_presentbut2_ graphic=general/press/present2 graphichigh=general/press/present2_high x=90 y=192 z=12 try_bottom
+endmacro
+
+#Command to show it, deleting old one if it exists
+macro show_present_button2
+{hide_present_button2}
+{_default_present_button2}
+endmacro
+
+#Command to hide it
+macro hide_present_button2
+delete name=_presentbut2_ suppress
+endmacro
+###END PRESENT BUTTON IN COURT RECORD###
+
+
+
+
+macro theme_screen2
+    set theme $1
+    print The theme is $theme
+    set _screen2_scanlines on
+    set _screen2_letterbox on
+    set _screen2_letterbox_img general/bigbutton/border
+    goto $theme
+    "ERROR, NO BIGBUTTON THEME {$theme}"
+    label default
+        set _bigbutton_bg bg/main
+        set _bigbutton_img general/buttonpress
+        set _bigbutton_cross general/cross_exam_buttons
+        set _screen2_scanlines off
+        exit
+    label phoenix
+        print label phoenix
+        set _bigbutton_bg bg/mainpw
+        set _bigbutton_img general/bigbutton/phoenix
+        set _bigbutton_cross general/bigbutton/phoenix_cross
+        endscript
+    label empty
+    label apollo
+        print label apollo
+        set _bigbutton_bg bg/mainaj
+        set _bigbutton_img general/bigbutton/empty
+        set _bigbutton_cross general/bigbutton/empty_cross
+        endscript
+    label mia
+        print label mia
+        set _bigbutton_bg bg/mainpw
+        set _bigbutton_img general/bigbutton/mia
+        set _bigbutton_cross general/bigbutton/mia_cross
+        endscript
+    label edgeworth
+        print label edgeworth
+        set _bigbutton_bg bg/mainpw
+        set _bigbutton_img general/bigbutton/edgeworth
+        set _bigbutton_cross general/bigbutton/edgeworth_cross
+        endscript
+    label gk
+        print label gk
+        set _bigbutton_bg bg/maingk
+        set _bigbutton_img general/bigbutton/gk
+        set _bigbutton_cross general/bigbutton/gk_cross
+        endscript
+endmacro

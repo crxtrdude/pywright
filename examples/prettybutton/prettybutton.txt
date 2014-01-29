@@ -1,0 +1,5 @@
+gui Button next x=0 y=0 graphic=general/back graphichigh=general/back_high
+gui Wait
+
+label next
+"good job"

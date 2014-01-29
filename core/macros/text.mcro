@@ -1,0 +1,30 @@
+macro cmode
+setprop name=$_speaking prop=mode $1
+setprop name=$_speaking prop=supermode $1
+endmacro
+
+#@sig 'type':'text/commands','args':[],'desc':'Makes current speaking character use its blinking animation, meant to run inside text: "Now I am {blink} blinking"'
+macro blink
+cmode blink
+endmacro
+
+#@sig 'type':'text/commands','args':[],'desc':'makes current speaking character use its talking animation, meant to run inside text: "Now I am {talk} talking"'
+macro talk
+cmode talk
+endmacro
+
+#@sig 'type':'text/commands','args':[],'desc':'makes current speaking character determine speaking or talking based on text. Meant to run inside text: "{blink}Im not talking{lipsync} Now I am talking (now I am blinking)"'
+macro lipsync
+cmode lipsync
+endmacro
+
+#@sig 'type':'text/commands','args':[],'desc':'makes current speaking character loop its current animation rather than using the random blinking code'
+macro loop
+{cmode loop}
+endmacro
+
+#@sig 'type':'text/commands','args':[],'desc':'Adds contents of previous textbox into this one. Ex: "Wait I dont want to{next}" [insert some crazy code here]  "{linked} do that!"'
+macro linked
+joinvar _return {spd0} $_last_written_text {spd1}
+endmacro
+

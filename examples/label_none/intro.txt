@@ -1,0 +1,116 @@
+"If game quits unexpectedly, that's an error"
+goto lobby2 fail=is_flag
+
+exit
+
+label is_flag
+set is_1 1
+set is_2 2
+
+#standard checks
+is is_1 = 1 good
+exit
+label good
+isnot is_1 = 1 bad
+goto good
+exit
+label good
+is is_1 = 1?
+is is_1 = 2?
+exit
+isnot is_1 = 1?
+exit
+isnot is_1 = 2?
+
+is is_1 = 1 good fail=bad
+exit
+label bad
+exit
+label good
+isnot is_1 = 1 good fail=bad
+label good
+exit
+label bad
+is is_1 = $is_2 bad fail=good
+exit
+label bad
+exit
+label good
+flag x bad fail=good
+exit
+label good
+noflag is_1 bad fail=good
+exot
+label bad
+exit
+label good
+
+addev bus
+label lobby
+bg lobby
+localmenu examine=on talk=on present=on move=on fail=mfail
+
+label examine
+examine fail=efail
+goto lobby
+
+label talk
+list talk
+li {c900}something
+li something else
+showlist fail=lfail
+goto lobby
+
+label present
+present fail=pfail
+goto lobby
+
+
+label mfail
+"No movement option is actually available. (Used fail= correctly!)"
+list nothing
+li Ok then. (goto none)
+li crossexam
+showlist
+goto lobby
+
+label lfail
+"Yes, that is interesting."
+goto lobby
+
+label efail
+"Wow, look at that thing."
+goto lobby
+
+label pfail
+"I don't know what that is."
+goto lobby
+
+label crossexam
+goto crossexam
+
+label none
+"at actual label none, shouldnt be here unless last option said so"
+goto lobby
+
+
+label crossexam
+cross x fail=cefail
+statement s1
+"This is the first statement"
+statement s2
+"There is no result for this, but present the bus"
+endcross
+"restart"
+goto crossexam
+label none
+exit
+label press_s1
+"pressing first statement"
+resume
+label bus s2
+"it's a bus"
+resume
+label cefail
+"no result found. yay!"
+resume

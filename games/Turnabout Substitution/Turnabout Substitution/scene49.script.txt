@@ -1,0 +1,103 @@
+#-version-1
+set _list_back_button false
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Fisher
+set _judge G.Strings
+set _helper Rhea
+startcourt
+defense
+emo handsondesk name=dc
+"I... {sfx/Ding.ogg}{f}{s 5 5}I have more evidence!"
+label moreevidence
+set _cr_back_button false
+present
+
+label goldenplate
+set _cr_back_button true
+mus
+fg TakeThatAnimApollo
+pause 5 script
+defense
+emo normal name=dc
+sfx /evidenceshoop.wav
+ev goldenplate name=goldenplate x=185
+"This plate is also located{n}in Paul Strings's office."
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"And at the beginning of{n}the message it says "480"!"
+"{sfx/Shing.ogg}{f}{s 20 20}This can't just be a coincidence!"
+delete name=goldenplate
+judge
+emo embarrassed name=jc
+"{sfx/Slash.ogg}{f}{s 25 25}AAAAAAAARGH!!"
+delev bust
+addev bustupdated
+delev letter
+addev letterupdated
+helper
+emo aide name=hc
+"{sfx/Key.ogg}{f}Oh, and by the way..."
+"I also have something{n}I'd like to add."
+set _speaking dc
+"{c099}(Eh...?)"
+helper
+emo aide name=hc
+"I suggest you momentarily turn{n}off the cameras, Your Honor."
+judge
+emo embarrassed name=jc
+"...{p30}Okay."
+delete
+script scene50
+
+label none
+set _cr_back_button true
+judge
+emo serious name=jc
+"You have more evidence...{n}but it isn't relevant."
+sfx /Bwaaah.ogg
+penalty -50
+is penalty 0 gameover
+defense
+emo sweats name=dc
+"Please give me one{n}more chance, Your Honor."
+goto moreevidence
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit
+

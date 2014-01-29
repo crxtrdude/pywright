@@ -1,0 +1,482 @@
+<html><style type='text/css'>
+table
+{
+border-collapse:collapse;
+}
+table, th, td
+{
+border: 1px solid black;
+font-size: 12px;
+}
+th
+{
+background-color:#88ff88;
+}</style><body style='width:640px;background-color:#cccccc'><div style=''><h2>Command Categories</h2><a href=#crossexam>crossexam</a><br><a href=#files>files</a><br><a href=#objects>objects</a><br><a href=#text>text</a><br><a href=#interface/case_menu>interface/case_menu</a><br><a href=#evidence>evidence</a><br><a href=#interface>interface</a><br><a href=#gameflow>gameflow</a><br><a href=#animation>animation</a><br><a href=#music>music</a><br><a href=#logic>logic</a><br><a href=#debug>debug</a><br><a href=#effect>effect</a><br><a href=#sounds>sounds</a><br><a href=#text/commands>text/commands</a><br></div><br><br><br><br><br><hr><h3>Commands</h3><div style=''><a name='crossexam'><h2>Category: crossexam</h2><div style='background-color:#eeeeee;padding:10px'><a name="clearcross"><p>
+    <b>clearcross</b> 
+    </p><p>Clears all cross exam related variables. A good idea to call this after a testimony
+        is officially over, to ensure that 'resumes' don't mistakenly go back to the cross exam, 
+        and prevent other bugs from occuring.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="cross"><p>
+    <b>cross</b> label fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>label</td><td>label the cross exam so that you can 'goto label' later to start from the top</td><tr><td>fail</td><td>label to jump to if no label is defined for an action, when pressing or presenting</td><td>"none"</td></tr></table><p>Begin a cross examination. You may tag this cross examination, such as 'cross testimony1' which will
+allow you to jump to the beginning of the testimony again with 'goto testimony1'. Aftter the 'cross' line,
+you will have a series of 'statement's which define each line of text that the witness says which make up the testimony.
+When statements are finished, you will have the line 'endcross' which signifies that responses for player action
+during the testimony, in the form of 'label's, will follow.<br><br>General layout of a cross examination:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>cross [label]
+statement [statement tag]
+[text]
+statement [statement tag]
+[text]
+statement [statement tag]
+endcross<br><br>[defense and helper discussing about difficuly]
+goto [label]<br><br>[label for user action]
+[text]
+resume<br><br>[label for another user action]
+[text]
+resume<br><br>[label for successful user action (probably a present)]
+[text]
+goto continue<br><br>label none
+[general text for a bad present]
+resume<br><br>label continue
+[rest of game]</pre><br><br>See <a href="#statement">statement</a> for more info on hiding and revealing statements. Also, <a href="#endcross">endcross</a>.
+<a href="#resume">resume</a> has a special use for cross examinations, in that it will jump back to the next statement
+the user was on, after handling logic outside of cross/endcross. It is better to use 'resume' than
+'goto top' or 'goto [label]', which will restart the cross examination from the beginning. It's especially
+useful to use 'resume' in the 'fail' case, because you won't know where the player came from.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="cross_restart"><p>
+    <b>cross_restart</b> 
+    </p><p>Go to the first line in the current cross examination</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="endcross"><p>
+    <b>endcross</b> 
+    </p><p>End the current cross examination section. Usually followed by labels for responding to user action.
+        See <a href="#cross">cross</a> and <a href="#statement">statement</a> for more info on cross examinations.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="next_statement"><p>
+    <b>next_statement</b> 
+    </p><p>Go to the next statement, usually not needed (the user is usually in control of navigating statements)</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="prev_statement"><p>
+    <b>prev_statement</b> 
+    </p><p>Go to the previous statement, usually not needed (the user is usually in control of navigating statements)</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="statement"><p>
+    <b>statement</b> [tag] test=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Name the statement so you can match up user action results with it</td><tr><td>test</td><td>Name of a variable. Only show this statement if that variable is true.</td><td>all statements shown by default</td></tr></table><p>Must be between 'cross' and 'endcross'. Defines a specific statement within a witness testimony for 
+        cross examination. Usually followed by a line of text spoken by the witness. The 'tag' will be refered to by labels
+        which follow the 'endcross' of this cross examination (although it is also possible to put the response label
+        immediately following the line of text).<br><br>        label press [tag] - PyWright will jump to a label that looks like this if the user "presses" this statement<br><br>        label [evidence_tag] [tag] - PyWright will jump to this label when the user presents this evidence to this statement<br><br>        If no matching label is found, PyWright will jump to the value of 'fail=' given to '<a href="#cross">cross</a>'.</p></div><br><br><a name='files'><h2>Category: files</h2><div style='background-color:#eeeeee;padding:10px'><a name="exportvars"><p>
+    <b>exportvars</b> filename (variable_names) 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>file to export variables into, relative to the case folder</td><tr><td>variable_names</td><td>The names of variables to export. If none are listed, all variables will be exported</td><td>all variables</td></tr></table><p>Saves the name and value of listed variables to a file. They can later be restored. Can be used to make
+        ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="filewrite"><p>
+    <b>filewrite</b> filename [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>file to write to</td><tr><td>text</td><td>text to write</td></table><p>Writes text to the end of the specified file. Text is immediately flushed, files written to in
+        this way do not need to be explicitly "saved". Use "
+" for carriage return in the file, "	" for tab
+        characters. 'filename' cannot contain spaces or be located earlier than the current game on the path.<br><br>        See <a href="#fileclear">fileclear</a> and <a href="#fileseek">fileseek</a> for other file commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="importvars"><p>
+    <b>importvars</b> filename 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>file to import variables from, relative to the case folder</td></table><p>Restores previously exported variables from the file.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="loadgame"><p>
+    <b>loadgame</b> filename <i>hide</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>Saved game to load, relative to case folder. Saved games may not be named 'hide'</td><td>save</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the load.</td></table><p>Restores a save file.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="savegame"><p>
+    <b>savegame</b> filename <i>hide</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>File to save to, relative to case folder. Saved games may not be named 'hide'</td><td>save</td></tr><tr><td>hide</td><td>If hide token is included, the interface wont inform the user of the save.</td></table><p>Creates a new saved game in the case folder.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="screenshot"><p>
+    <b>screenshot</b> path width=VALUE height=VALUE x=VALUE y=VALUE rwidth=VALUE rheight=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>path</td><td>path, relative to game's directory, to save the screenshot, including file extension (.png or .jpg)</td><tr><td>width</td><td>shrink screenshot to this width</td><td>256</td></tr><tr><td>height</td><td>shrink screenshot to this height</td><td>192</td></tr><tr><td>x</td><td>x-value of region to screenshot</td><td>0</td></tr><tr><td>y</td><td>y-value of region to screenshot</td><td>0</td></tr><tr><td>rwidth</td><td>width of region to screenshot</td><td>256</td></tr><tr><td>rheight</td><td>height of region to screenshot</td><td>192</td></tr></table><p>Takes a screenshot and saves the image. Can select a specific region of the screen to
+        snapshot. Useful for custom interfaces, or just providing a snapshot feature.</p></div><br><br><a name='objects'><h2>Category: objects</h2><div style='background-color:#eeeeee;padding:10px'><a name="bemo"><p>
+    <b>bemo</b> emotion name 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>emotion</td><td>Blinking emotion animation to set character to</td><tr><td>name</td><td>Object name of character to change blinking emotion of</td><td>Chooses currently speaking character (value of _speaking)</td></tr></table><p>Sets a current char object to a specific blinking emotion animation.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="bg"><p>
+    <b>bg</b> bg_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>stack</i> <i>fade</i> <i>wait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>bg_path</td><td>Path to the graphics file relative to case/art/bg and without extension; such as scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default bg z values</td></tr><tr><td>loops</td><td>alter the loops of the bg animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the bg a unique name to be used for other commands</td><td>Default name will be the bg path</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>stack</td><td>The scene won't be cleared when the background is loaded</td><tr><td>fade</td><td>Background will fade in instead of popping in</td><tr><td>wait</td><td>Wait until animation is finished to continue</td></table><p>Creates a background object. If 'stack' is not included, the scene will be cleared before the background is loaded. Backgrounds also
+default to a lower z value than other objects, ensuring that they will be in the background (though this can be modified). Other than that,
+backgrounds have the same properties as other graphic objects, and may be animated or manipulated.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="char"><p>
+    <b>char</b> character_name nametag=VALUE e=VALUE be=VALUE x=VALUE y=VALUE z=VALUE name=VALUE pri=VALUE <i>fade</i> <i>stack</i> <i>hide</i> <i>noauto</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>character_name</td><td>Name of character folder in art/port. If the character is to be hidden, the character_name doesn't need to match up to any actual directory. Graphics will be loaded from that directory according to the visible emotion</td><tr><td>nametag</td><td>The name to actually display to the player as this character's name.</td><td>character_name</td></tr><tr><td>e</td><td>The character's starting emotion</td><td>normal</td></tr><tr><td>be</td><td>The emotion to use while character is in the blink pose</td><tr><td>x</td><td>set the x value</td><td>default x places character in the center of the screen</td></tr><tr><td>y</td><td>set the y value</td><td>default y places the bottom of the character graphic at the bottom of the screen</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default char z values</td></tr><tr><td>name</td><td>Gives the object a unique name to be used for other commands</td><td>Default name will be character_name</td></tr><tr><td>pri</td><td>Alter the default priority of the character animation</td><td>sorting.txt lists default pri values</td></tr><tr><td>fade</td><td>Character will fade in instead of popping in</td><tr><td>stack</td><td>Don't delete other characters before adding this one</td><td>All other characters are deleted</td></tr><tr><td>hide</td><td>Don't actually show the character, just set who is talking</td><tr><td>noauto</td><td>Just play the animation, don't let textboxes set talk/blink modes or do lip syncing.</td></table><p>Create a character object, and set that object as the currently speaking character. (The variable _speaking_name contains
+the object name of the currently speaking character). Character's in pywright refer to a folder containing various animations belonging
+to the character. This "emotion" can be set with the e= keyword on the char command, as well as modified during text. Textboxes
+also will control the animation of the currently speaking character to make the mouth movements match the speed the text is
+printing.<br><br>There are several variables which further control properties of characters. All characters will, by default, use the sound
+effect "blipmale.ogg" as the sound the text makes as it prints out, which is the male voice. If the character's name is located
+under the female section in core/blipsounds.txt, the default sound used will instead be "blipfemale.ogg". The sound can be changed
+on a text by text basis, with "{soundnewsound.ogg}The text sound has now been changed", but this can get tedious. <br><br>A new default sound, based on the characters id name (the name used for their art folder, and used by the char command as 
+in 'char name') can be set. The syntax is 'set char_defsound_[name] [sound file]', where [name] is the name you will use, 
+and [sound file] is the filename relative to the sfx/ folder to play for the text blip sound.<br><br>The default blip for characters who aren't predefined in this way can be changed from blipmale.ogg to something else by
+setting the variable 'char_defsound': 'set char_defsound [sound file]'<br><br>The best place to set these variables is in a separate file included in intro.txt, so that the settings will remain
+throughout the game.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="clear"><p>
+    <b>clear</b> 
+    </p><p>Clears all objects from the scene.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delete"><p>
+    <b>delete</b> name=VALUE <i>suppress</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Unique name of object to delete.</td><tr><td>suppress</td><td>Don't show error message even if object cannot be found to delete</td></table><p>Deletes the named object from the scene. (Any time you give an object a name, such as 'ev bloody_knife name=bk' you can
+        use this command to delete it later, such as 'delete name=bk'.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="emo"><p>
+    <b>emo</b> emotion name 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>emotion</td><td>Emotion animation to set character to</td><tr><td>name</td><td>Object name of character to change emotion of</td><td>Chooses currently speaking character (value of _speaking)</td></tr></table><p>Sets a current char object to a specific emotion animation.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="ev"><p>
+    <b>ev</b> evidencekey x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>fade</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>evidencekey</td><td>Evidence id key. PyWright will look at the 'evidencekey_pic' variable to determine what graphic file to load</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default ev z values</td></tr><tr><td>loops</td><td>alter the loops of the animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the object a unique name to be used for other commands</td><td>Default name will be the evidence key</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>fade</td><td>Object will fade in instead of popping in</td></table><p>Creates a graphic for an evidence key. The graphic is based on whatever you set for that specific evidence key. You can easily
+add an item to the court record and then display the same item on screen. Example:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>set housekey_pic key1
+set housekey_name House Key
+set housekey_desc The key to the victim's house
+addev housekey
+ev housekey
+"House key added to court record"
+</pre></p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="fg"><p>
+    <b>fg</b> fg_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>nowait</i> <i>fade</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fg_path</td><td>Path to the graphics file relative to case/art/fg and without extension; such as fence for games/mygame/mycase/art/fg/fence.png and fence.txt</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default fg z values</td></tr><tr><td>loops</td><td>alter the loops of the fg animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the fg object a unique name to be used for other commands</td><td>Default name will be the fg path</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>nowait</td><td>Continue game execution without waiting for foreground animation to finish.</td><tr><td>fade</td><td>Object will fade in instead of popping in</td></table><p>Creates a foreground object. These are just like any other object, except the default z value will place them in front of most of the
+objects in the scene.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="obj"><p>
+    <b>obj</b> graphic_path x=VALUE y=VALUE z=VALUE loops=VALUE <i>flipx</i> name=VALUE rotz=VALUE <i>fade</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>graphic_path</td><td>Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt</td><tr><td>x</td><td>set the x value</td><td>0</td></tr><tr><td>y</td><td>set the y value</td><td>0</td></tr><tr><td>z</td><td>set the z value (check PyWright/core/sorting.txt for idea of z values)</td><td>sorting.txt lists default object z values</td></tr><tr><td>loops</td><td>alter the loops of the object animation</td><tr><td>flipx</td><td>Mirror the image on the x axis</td><tr><td>name</td><td>Gives the object a unique name to be used for other commands</td><td>Default name will be the graphic path</td></tr><tr><td>rotz</td><td>rotate the object on the z axis</td><td>0</td></tr><tr><td>fade</td><td>Object will fade in instead of popping in</td></table><p>Creates a generic graphics object and places it in the scene. It will be drawn on a layer according to it's z value.
+graphics objects may or may not be animated, which is defined in metadata files stored along with the graphics. ball.png will
+have a ball.txt describing it's animation qualities, if it has any.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="penalty"><p>
+    <b>penalty</b> change_amount variable=VALUE threat=VALUE delay=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>change_amount</td><td>Amount of health to change, either adding, subtracting, or setting the health, while animating the change on the bar</td><td>By default there will be no change</td></tr><tr><td>variable</td><td>the health variable to use</td><td>"penalty"</td></tr><tr><td>threat</td><td>Amount of health to threaten the player with losing (flashes this portion of the bar)</td><td>0</td></tr><tr><td>delay</td><td>How long to delay the script before deleting the bar and continuing. A value of 0 means no delay and the bar will stay onscreen until deleted.</td><td>Default is 50 if the value is changing, and 0 if the value is not</td></tr></table><p>Display a health bar, and if change_amount is given, show the player that they are losing health, 
+        and subtract the health. If change_amount starts with a minus sign, the amount will be subtracted from
+        the current health value. If it starts with a plus sign, the amount will be added to the current health value.
+        With no minus or plus sign, it will SET the health value to this amount, but still animate the change. At 
+        your game's checkpoints, you will probably want "penalty 100", which will show the healthbar
+        filling up to that amount.<br><br>        Without change_amount, you are just showing the player their current health, and optionally threatening
+        them with an amount they may lose if they make the wrong choice.<br><br>        There is support for multiple health variables, if you were to have a multiple
+        character game, or maybe you want to keep score and have a new health bar in each case. The 'variable'
+        keyword allows you to choose which health bar the penalty command is referring to.<br><br>        Since it just uses variables, you can also change the health bar values behind the scenes without showing
+        the penalty bar at all, by just using the normal variable commands. The default penalty variable is 'penalty'.</p></div><br><br><a name='text'><h2>Category: text</h2><div style='background-color:#eeeeee;padding:10px'><a name="nt"><p>
+    <b>nt</b> [nametag] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>nametag</td><td>Text to set for the next nametag</td><td>If no text is given, the next nametag will be invisible</td></tr></table><p>Sets or clears the next nametag. Must be called immediately before the textbox it alters. Other commands like "char" or "set _speaking" which alter the
+        nametag may conflict with this command.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="textblock"><p>
+    <b>textblock</b> x y width height color=VALUE name=VALUE [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>x</td><td>x value to place text</td><tr><td>y</td><td>y value to place text</td><tr><td>width</td><td>width of text block</td><tr><td>height</td><td>height of text block (determines rows but the value is in pixels)</td><tr><td>color</td><td>color of the text</td><tr><td>name</td><td>id of textblock object for later reference</td><tr><td>text</td><td>text to display</td></table><p>Displays a block of text all at once on the screen somewhere. Used to create custom interfaces. The text doesn't
+        support markup in the same way that textboxes do.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="textbox"><p>
+    <b>textbox</b> [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>text</td><td>Text to be print in the textbox, with markup.</td><td></td></tr></table><p>Draws a several line animated textbox to the screen. Uses art/general/textbox_2 as the back
+        drop. The letters of the textbox will print one by one at a set rate, which can be modified
+        with the markup commands. If there is a character speaking (the _speaking variable is set, a char
+        command has just been issued, etc) then the character will animate as the text is output.
+        The game script will pause until the player (or the textbox via markup) tells the game to 
+        continue. This command can also be issued by having a blank line surrounded by quotes. Ex:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+char test
+textbox This is some text that is printing
+#The same text could be printed this way:
+char test
+"This is some text that is printing."
+</pre></p></div><br><br><a name='interface/case_menu'><h2>Category: interface/case_menu</h2><div style='background-color:#eeeeee;padding:10px'><a name="casemenu"><p>
+    <b>casemenu</b> pri=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>pri</td><td>What priority to update the case menu</td><td>Default casemenu priority listed in core/sorting.txt</td></tr></table><p>Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
+and choose one to play. The priority might need to be adjusted if you have any special animation going on, but don't modify it unless
+you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
+run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
+folder be the same, and not show a case menu at all.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="locked_cases"><p>
+    <b>locked_cases</b> 
+    </p><p>Call in a game folder level intro.txt to set up locked cases for that game.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="addcase"><p>
+    <b>addcase</b> case_name 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>case_name</td><td>case folder name to add to the menu</td></table><p>Adds a case to the next menu slot. After calling {locked_cases}, call {addcase [case]} for each case that should be on the menu when they are all unlocked.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="wincase"><p>
+    <b>wincase</b> 
+    </p><p>Sets the currently played case as beaten, so that when the case menu comes up again, the next case will be added to the menu. Call {wincase} somewhere in the ending sequence of the case, near the point at which it runs out of code and launches back into the case menu.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="resetcase"><p>
+    <b>resetcase</b> 
+    </p><p>Sets currently played case as no longer beaten.</p></div><br><br><a name='evidence'><h2>Category: evidence</h2><div style='background-color:#eeeeee;padding:10px'><a name="addev"><p>
+    <b>addev</b> tag page 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Name of evidence to add to the court record</td><tr><td>page</td><td>Which page to add evidence to</td><td>Default is to add to the evidence page, unless the tag ends with a '$' in which case it will add to profiles</td></tr></table><p>Adds evidence to the court record based on an evidence 'tag'. The various properties of the evidence should be stored in variables based on this tag:<br><br>set [tag]_name: the name displayed to the player on court record screen for this item, defaults to the tag itself<br><br>set [tag]_pic: the image to use, should be in game/case/art/ev, or game/art/ev, defaults to the tag ([tag].png in art/ev)<br><br>set [tag]_desc: the long description of the evidence, shown on zoomed court record view, defaults to blank<br><br>set [tag]_check: name of a script to run if item is checked by player</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delev"><p>
+    <b>delev</b> tag 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>name of evidence to delete from court record</td></table><p>Delete an item from the court record.</p></div><br><br><a name='interface'><h2>Category: interface</h2><div style='background-color:#eeeeee;padding:10px'><a name="examine"><p>
+    <b>examine</b> <i>hide</i> fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>hide</td><td>Hides the labels for the examine regions from the player</td><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr></table><p>Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
+        based on the spot. Immediately following the examine command, you must use region commands to define where the
+        player can click.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="examine3d"><p>
+    <b>examine3d</b> 
+    </p><p>Turn 3d examinations on</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gui"><p>
+    <b>gui</b> type macro var_name x=VALUE y=VALUE z=VALUE width=VALUE name=VALUE graphic=VALUE graphichigh=VALUE <i>hold</i> <i>password</i> <i>try_bottom</i> run=VALUE [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>type</td><td>type of gui to create. (Back, Button, Input, or Wait)</td><tr><td>macro</td><td>First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)</td><tr><td>var_name</td><td>Variable name to save input text into, valid for (Input)</td><tr><td>x</td><td>x position of created item, valid for (Back, Button, Input)</td><tr><td>y</td><td>y position of created item, valid for (Back, Button, Input)</td><tr><td>z</td><td>z position of created item, valid for (Back, Button, Input)</td><tr><td>width</td><td>pixel width of input box, valid for (Input)</td><tr><td>name</td><td>id to give object for later reference, valid for (Back, Button, Input)</td><tr><td>graphic</td><td>path to graphic file, valid for (Button)</td><td>default for buttons is to have an outline with the text of the button label</td></tr><tr><td>graphichigh</td><td>path to graphic file, what to display on mouseover, valid for (Button)</td><td>default is no mouseover behavior</td></tr><tr><td>hold</td><td>hold means that the macro will repeatedly execute as long as the button is held down, valid for (Button)</td><td>default is that it only executes with each distinct click</td></tr><tr><td>password</td><td>typed text will be displayed with stars *****, valid for (Input)</td><td>default is to show text</td></tr><tr><td>try_bottom</td><td>Try to keep object in bottom screen, but if no bottom screen exists move it up, valid for (Button)</td><tr><td>run</td><td>repeatedly execute this macro, valid for (Wait)</td><td>default is no macro will be run</td></tr><tr><td>text</td><td>remaining text will display for Button if there is no graphic, valid for (Button)</td><td>default is no text</td></tr></table><p>This complex command is used to build custom interfaces and behavior into your game. If you don't understand it you probably
+don't need to use it, but if you are doing something that isn't quite standard you will probably need this command at one time or another.
+The four types of gui you can create are:<br><br>* Button - This creates a button that can be clicked. When clicked a macro will run.
+* Back - This is a specialized button which displays the PyWright back button. The game will halt until the back button is pressed, making it pretty easy to create a custom screen for evidence
+* Input - this will show an input box allowing the player to input text. This text will be saved into a variable which you define.
+* Wait - this command will pause the script and optionally execute a macro each frame
+</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="li"><p>
+    <b>li</b> [option] result=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>option</td><td>text to display, and if 'result' not given, label to jump to if option is selected</td><tr><td>result</td><td>specifically named label to jump to if this option is chosen</td></table><p>Add an item to the current list. When clicked, PyWright will go to a label either matching the option text, or matching the value of 'result'
+        if that was given. Must be used between 'list' and 'showlist' commands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="list"><p>
+    <b>list</b> tag <i>noback</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>Tag this list with some name so PyWright can keep track of which list options the player has tried already</td><td>Default is to name the list based on what script it's found in and on what line</td></tr><tr><td>noback</td><td>No back button will be displayed if this token is included</td></table><p>Start building a list of options to present the player. By default, each list will be unique. If you have a list appear in multiple parts of the code, but
+        they are meant to appear to the player as the same list, make sure they have the same tag. Also, the tag you give will do double duty, as you can use
+        'goto [tag]' to jump straight to the list without any other labels. If noback is included, then no back button will be displayed, 
+        forcing the player to choose an option. You may not use "noback" as the tag. To actually build the list requires a series of 'li' commands, and then displaying the list 
+        will require the command 'showlist'. Upon choosing an option, PyWright will try to jump to a label matching the text of the option. Example below, more info
+        under 'li' and 'showlist'. 
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+"What is your favorite food?"<br><br>list faveorite_food
+li hamburger
+li HAMBURGER
+li hamburger?
+showlist<br><br>label hamburger
+"Wow you like hamburgers too?"
+exit<br><br>label HAMBURGER
+"Gee, you don't have to be so grumpy about it."
+exit<br><br>label hamburger?
+"Yes, that is correct. Don't be timid."
+exit</pre>
+</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="localmenu"><p>
+    <b>localmenu</b> examine=VALUE talk=VALUE present=VALUE move=VALUE fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>examine</td><td>whether to show the examine button</td><td>false</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>false</td></tr><tr><td>present</td><td>whether to show the present button</td><td>false</td></tr><tr><td>move</td><td>whether to show the move button</td><td>false</td></tr><tr><td>fail</td><td>label to jump to if the label for an action was not found</td><td>none</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
+        are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="menu"><p>
+    <b>menu</b> scene_name examine=VALUE talk=VALUE present=VALUE move=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>scene_name</td><td>Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'</td><tr><td>examine</td><td>whether to show the examine button</td><td>true</td></tr><tr><td>talk</td><td>whether to show the talk button</td><td>true</td></tr><tr><td>present</td><td>whether to show the present button</td><td>true</td></tr><tr><td>move</td><td>whether to show the move button</td><td>true</td></tr></table><p>Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
+        is clicked, a separate script will be run for that action, as determined by the value of scene_name. When that
+        external script is finished, the game won't return to this spot automatically, so you will need to be sure
+        you can create the proper menu from the external screen as well. People usually do this by creating a script
+        [scene_name].txt which loads the background and shows the menu. Then, any external script can
+        instantly load the proper scene with "script [scene_name]". You can control which options
+        are shown through the keywords described.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="present"><p>
+    <b>present</b> fail=VALUE <i>noback</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>fail</td><td>label to jump to when a specific evidence label is not found.</td><td>none</td></tr><tr><td>noback</td><td>Don't show back button</td></table><p>Displays the court record and allows the player to present evidence. After the presentation,
+        will jump to the label named after the selected evidence tag. If a label for the chosen evidence
+        is not found, will either jump to 'label none', or the value of 'fail'. To disable showing the back
+        button, use the 'noback' token
+        <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+        #add some evidence
+        addev sillyputty
+        addev redherring<br><br>        #show present screen
+        present fail=badpresent<br><br>        #back was pressed
+        "So you don't want to present anything at all?"
+        goto next<br><br>        #silly putty was presented
+        label sillyputty
+        "That's just what I needed."
+        goto next<br><br>        #Something else was presented
+        label badpresent
+        "I don't care about that."<br><br>        label next
+        #show present with no back button
+        present fail=badpresent noback
+        "the code will never get here"
+        label sillyputty
+        "good I needed that"
+        "by the way, I saw you couldn't press the back button"
+        goto next
+        label badpresent
+        "I don't care about that."
+        label next
+        </pre>
+        </p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="region3d"><p>
+    <b>region3d</b> x y width height label 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>x</td><td>x value of rectangular region on the texture</td><tr><td>y</td><td>y value of rectangular region on the texture</td><tr><td>width</td><td>width of rectangular region on texture</td><tr><td>height</td><td>height of rectangular region on texture</td><tr><td>label</td><td>label to jump to when region is clicked</td></table><p>Creates a clickable region on a 3d object by binding a rectangular region of the object's texture to a wrightscript
+        label event. Applies to current 3d object if there is one.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="showlist"><p>
+    <b>showlist</b> 
+    </p><p>Finish building a list and display it to the user, waiting for the user to choose a list option before script resumes. Must follow 'list' and
+        a series of 'li' commands.</p></div><br><br><a name='gameflow'><h2>Category: gameflow</h2><div style='background-color:#eeeeee;padding:10px'><a name="endscript"><p>
+    <b>endscript</b> 
+    </p><p>Ends the currently running script and pops it off the stack. Multiple scripts
+        may be running in PyWright, in which case the next script on the stack will
+        resume running.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="exit"><p>
+    <b>exit</b> 
+    </p><p>Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
+        resume.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="forgetlist"><p>
+    <b>forgetlist</b> tag 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>list tag to forget</td></table><p>Clears the memory of which options player has chosen from a specific list. Normally, chosen options from a list
+        will be shown with a checkmark to remind the player which options they have tried, and which ones are new. You
+        can make all the options for a list not show checkmarks by clearing the memory.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="forgetlistitem"><p>
+    <b>forgetlistitem</b> tag [option] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>tag</td><td>list to forget item from</td><tr><td>option</td><td>option from list to forget state of</td></table><p>Forget checkmark status of a specific option from a specific list.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="game"><p>
+    <b>game</b> game script 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>game</td><td>Path to game. Should be from the root, i.e. games/mygame or games/mygame/mycase</td><tr><td>script</td><td>Script to look for in the game folder to run first</td><td>intro</td></tr></table><p>Can be used to start a new game or case.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="script"><p>
+    <b>script</b> script_name label=VALUE <i>noclear</i> <i>stack</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>script_name</td><td>name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder.</td><tr><td>label</td><td>A label in the loading script to jump to after it loads.</td><td>Execution starts at the top of the script instead of a label</td></tr><tr><td>noclear</td><td>If this token is present, all the objects that exist will carry over into the new script.</td><td>Otherwise, the scene will be cleared.</td></tr><tr><td>stack</td><td>Puts the new script on top of the current script, instead of replacing it. When the new script exits, the current script will resume following this "script" command.</td><td>The new script will replace the current script.</td></tr></table><p>Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
+resume when the new script exits, otherwise, the current script will vanish.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="timer"><p>
+    <b>timer</b> ticks command 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) before the command will be run</td><tr><td>command</td><td>The name of a macro to be run after the timer runs out</td></table><p>Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
+        fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
+        completed.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="waitenter"><p>
+    <b>waitenter</b> 
+    </p><p>The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
+        it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred.</p></div><br><br><a name='animation'><h2>Category: animation</h2><div style='background-color:#eeeeee;padding:10px'><a name="controlanim"><p>
+    <b>controlanim</b> name=VALUE start=VALUE end=VALUE jumpto=VALUE pause=VALUE <i>loop</i> <i>noloop</i> <i>b</i> <i>t</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Named object to control</td><td>Will alter animation of all current objects - not recommended to use the default value.</td></tr><tr><td>start</td><td>Alter the starting frame of the animation</td><td>Leave starting frame what it was.</td></tr><tr><td>end</td><td>Alter ending frame of the animation</td><td>Leave ending frame what it was.</td></tr><tr><td>jumpto</td><td>Instantly set an animations frame to this value</td><td>Don't change frames</td></tr><tr><td>pause</td><td>Pause animation</td><tr><td>loop</td><td>Force animation to loop</td><tr><td>noloop</td><td>Force animation not to loop</td><tr><td>b</td><td>Alter blink animation of chars</td><tr><td>t</td><td>Alter talk animation of chars</td></table><p>Alter the animation settings for a currently playing animated object. Normally you will use the settings that come with
+the animation in the form of a .txt file next to the graphic file. Occasionally you may wish to play an animation differently, such
+as having a non looping animation play several times, or only playing a portion of a longer animation.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="globaldelay"><p>
+    <b>globaldelay</b> speed name=VALUE <i>b</i> <i>t</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>speed</td><td>The speed to set the selected animation to - this is the number of display frames to wait before showing the next animation frame.</td><tr><td>name</td><td>Only change the animation speed of objects with the given name</td><td>Change animation speed of all objects (if you want to mimic fastforward or slowdown you want to leave name= off)</td></tr><tr><td>b</td><td>Select blinking animation for char objects</td><tr><td>t</td><td>Select talking animation for char objects</td></table><p>Changes the default delay value for either all running animations or specific ones. First create the animation 
+with a char, bg, fg, etc command, then call globaldelay to adjust the rate the animation will play. Use b or t to choose
+blinking or talking animations if used with char. Normally, you will use the delay values stored with the animations themselves,
+in the .txt files that go alongside the graphics. However, sometimes you may wish something to happen faster or slower.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="pause"><p>
+    <b>pause</b> ticks <i>all</i> <i>script</i> priority=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>ticks</td><td>How many ticks (1/60 of a second) to wait</td><tr><td>all</td><td>Pause EVERYTHING</td><td>default behavior pauses script execution but lets animation continue</td></tr><tr><td>script</td><td>Pause only the script</td><td>this is the default behavior</td></tr><tr><td>priority</td><td>Fine tune what gets paused and what doesnt.</td><td>10000 (such a high number for priority means that most objects will not be paused</td></tr></table><p>This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing.</p></div><br><br><a name='music'><h2>Category: music</h2><div style='background-color:#eeeeee;padding:10px'><a name="mus"><p>
+    <b>mus</b> [filename] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>Filename of song, searches game/case/music, game/music, and PyWright/music</td><td>If no path is listed, music will stop</td></tr></table><p>Stops currently playing music file, and if 'filename' is given, starts playing a new one. If you want to queue up a song to play when the current
+        song is finished, used for situations where you want an intro to a looping track, run this code anytime after the mus command: <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>set _music_loop track_name</pre>.<br><br>        Songs can be .ogg, .mod, .it, .mid, .xm, .s3m, or uncompressed .wav</p></div><br><br><a name='logic'><h2>Category: logic</h2><div style='background-color:#eeeeee;padding:10px'><a name="addvar"><p>
+    <b>addvar</b> variable amount 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to add to the variable</td></table><p>Adds an amount to a variable. If the variable 'x' were set to 4, the script:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>addvar x 1</pre>
+would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delflag"><p>
+    <b>delflag</b> flag_name 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>flag_name</td><td>flag to unset</td></table><p>Deletes a flag. Flags will remain set for the remainder of the game, but
+        can be forgotten with delflag.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="divvar"><p>
+    <b>divvar</b> variable amount 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to divide the variable by</td></table><p>Divide a variable by a number. If the variable 'x' were set to 10, the script:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>divvar x 2</pre>
+would set 'x' to 5.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="flag"><p>
+    <b>flag</b> [flag_expression] &lt;<i>?</i>  OR label &gt; fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>flag_expression</td><td>list of flag names joined with AND or OR</td><tr><td>?</td><td></td><tr><td>label</td><td>label to jump to if the evaluation is true</td><tr><td>fail</td><td>label to jump to if evaluation is false</td><td>none</td></tr></table><p>Evaluates an expression with flag names. If the expression
+        is true, jumps to the listed label. Otherwise, will
+        jump to the fail keyword if that was given. If the line ends
+        with a '?', it will execute the next line and the next line only
+        when the flag expression is true.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="gamemenu"><p>
+    <b>gamemenu</b> [destination] fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>destination</td><td>The destination label to move to</td><tr><td>fail</td><td>A label to jump to if the destination can't be found</td></table><p>Can be used to list games in a folder</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getprop"><p>
+    <b>getprop</b> variable name=VALUE prop=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>name</td><td>The object to get the property from</td><tr><td>prop</td><td>The property to get from the object</td></table><p>Copies the value of some property of an object into a variable</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="getvar"><p>
+    <b>getvar</b> variable [source variable] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>source variable</td><td>The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.</td></table><p>Copies the value of one variable into another.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="goto"><p>
+    <b>goto</b> [destination] fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>destination</td><td>The destination label to move to</td><tr><td>fail</td><td>A label to jump to if the destination can't be found</td></table><p>Makes the script go to a different section, based on the label name.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="is"><p>
+    <b>is</b> [expression] fail=VALUE &lt;label  OR <i>?</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>expression</td><td></td><tr><td>fail</td><td>label to jump to if expression fails</td><tr><td>label</td><td></td><tr><td>?</td><td></td></table><p>Evaluates the expression. If the expression is true, will either jump to 'label' or execute the next
+        line if a '?' is used instead of a label name. If 'fail=' is given, will jump to that label when the expression
+        is false.<br><br>        Expressions are very simplistic, supporting only AND and OR for operations, and numbers/text
+        or $variables for operands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="is_ex"><p>
+    <b>is_ex</b> [expression2] &lt;label  OR <i>?</i> &gt; fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>expression2</td><td></td><tr><td>label</td><td></td><tr><td>?</td><td></td><tr><td>fail</td><td>label to jump to if expression fails</td></table><p>Evaluates the expression. If the expression is true, will either jump to 'label' or execute the next
+        line if a '?' is used instead of a label name. If 'fail=' is given, will jump to that label when the expression
+        is false.<br><br>        Expressions are modelled after ace attorney online, and support () - + / * == < > <= >= AND and OR for
+        operations, and var1 (variables), 'blah' (text) or 239 (numbers) for values. Functions are not 
+        supported, use pywright operations to manipulate variables before using the 
+        variable in an expression.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="isempty"><p>
+    <b>isempty</b> variable &lt;label  OR <i>?</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>Variable to check if it doesn't exist</td><tr><td>label</td><td>a label to jump to if the variable has not been set or is blank</td><tr><td>?</td><td>execute next line only if variable is unset or blank</td></table><p>If the variable has not been set (it is equal to "") then either jump to the given label or 
+        execute the next line if the given label is a '?'.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="isnot"><p>
+    <b>isnot</b> [expression] fail=VALUE &lt;label  OR <i>?</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>expression</td><td>An expression that evaluates to true or false</td><tr><td>fail</td><td>label to jump to if expression fails</td><tr><td>label</td><td>a label to jump to if the expression evaluates to false</td><tr><td>?</td><td>execute next line only if expression evaluates to false</td></table><p>If the expression is false, will jump to the success label.
+        Otherwise, it will either continue to the next line, or jump to
+        the label set by the fail keyword<br><br>        Expressions are very simplistic, supporting only AND and OR for operations, and numbers/text
+        or $variables for operands.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="isnotempty"><p>
+    <b>isnotempty</b> variable &lt;label  OR <i>?</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>Variable to check if it exists</td><tr><td>label</td><td>a label to jump to if the variable has been set and is not blank</td><tr><td>?</td><td>execute next line only if variable is set and not blank</td></table><p>If the variable has been set (it is not equal to "") then either jump to the given label or 
+        execute the next line if the given label is a '?'.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="isnumber"><p>
+    <b>isnumber</b> variable &lt;label  OR <i>?</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>Variable to check if it exists</td><tr><td>label</td><td>a label to jump to if the variable has been set and is not blank</td><tr><td>?</td><td>execute next line only if variable is set and not blank</td></table><p>If the variable contains a number jump to the given label or execute the next line if the given
+        label is a '?'</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="joinvar"><p>
+    <b>joinvar</b> variable [words] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to save value to</td><tr><td>words</td><td>words to join together</td></table><p>Takes a series of words and joins them together, save the joined
+string to a variable. For instance:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>setvar hour 3
+setvar minute 15
+joinvar time $hour : $minute
+"{$time}"</pre>
+will output "3:15"
+</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="label"><p>
+    <b>label</b> [label text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>label text</td><td>The name of this section of code</td></table><p>Used to mark a spot in a wrightscript file. Other code can then refer to this spot,
+        specifically for making the code reader "goto" this spot.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="mulvar"><p>
+    <b>mulvar</b> variable amount 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to save to</td><tr><td>amount</td><td>amount to multiply the variable by</td></table><p>Multiply a variable by a number. If the variable 'x' were set to 5, the script:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>mulvar x 3</pre>
+would set 'x' to 15.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="noflag"><p>
+    <b>noflag</b> [flag_expression] &lt;<i>?</i>  OR label &gt; fail=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>flag_expression</td><td>list of flag names joined with AND or OR</td><tr><td>?</td><td></td><tr><td>label</td><td>label to jump to if the evaluation is true</td><tr><td>fail</td><td>label to jump to if evaluation is false</td><td>none</td></tr></table><p>Evaluates an expression with flag names. If the expression
+        is not true, jumps to the listed label. Otherwise, will
+        jump to the fail keyword if that was given. If the line ends
+        with a '?', it will execute the next line and the next line only
+        when the flag expression is false.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="random"><p>
+    <b>random</b> variable start end 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable name to save random value to</td><tr><td>start</td><td>smallest number to generate</td><tr><td>end</td><td>largest number to generate</td></table><p>Generates a random integer with a minimum
+        value of START, a maximum value of END, and
+        stores that value to VARIABLE</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="resume"><p>
+    <b>resume</b> 
+    </p><p>Returns to the next line after a jump. Also, in cross examinations, will
+        return the the proper statement.<br><br>        Example:
+        <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>"This is just a test. Jumping elsewhere in the code..."
+        goto test
+        "And now we are back."<br><br>        label test
+        "Here we have jumped, but now we go back..."
+        resume</pre><br><br>        This will print:
+        <br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+        "This is just a test. Jumping elsewhere in the code..."
+        "Here we have jumped, but now we go back..."
+        "And now we are back."</pre></p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar"><p>
+    <b>setvar</b> variable [value] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable name to set</td><tr><td>value</td><td>Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.</td></table><p>Sets a variable to some value.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar_ex"><p>
+    <b>setvar_ex</b> variable [expression2] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable name to set</td><tr><td>expression2</td><td>The results of the expression will be stored in the variable.</td></table><p>Sets a variable to some value based on an expression</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setflag"><p>
+    <b>setflag</b> flag_name 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>flag_name</td><td>flag to set</td></table><p>Sets a flag. Shorthand for setting a variable equal to true. Flags
+        will remain set for the remainder of the game, and can be used to
+        track what a player has done.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setprop"><p>
+    <b>setprop</b> variable name=VALUE prop=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>The variable to save the value into</td><tr><td>name</td><td>The object to get the property from</td><tr><td>prop</td><td>The property to get from the object</td></table><p>Copies the value of a variable to some property of an object</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar"><p>
+    <b>setvar</b> variable [value] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable name to set</td><tr><td>value</td><td>Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.</td></table><p>Sets a variable to some value.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="setvar_ex"><p>
+    <b>setvar_ex</b> variable [expression2] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable name to set</td><tr><td>expression2</td><td>The results of the expression will be stored in the variable.</td></table><p>Sets a variable to some value based on an expression</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="subvar"><p>
+    <b>subvar</b> variable amount 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>variable</td><td>variable to subtract from and save to</td><tr><td>amount</td><td>amount to subtract from the variable</td></table><p>Subtract an amount from a variable. If the variable 'x' were set to 33, the script:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>subvar x 3</pre>
+would set 'x' to 30.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="top"><p>
+    <b>top</b> 
+    </p><p>Jumps to the top of the currently running script.</p></div><br><br><a name='debug'><h2>Category: debug</h2><div style='background-color:#eeeeee;padding:10px'><a name="debug"><p>
+    <b>debug</b> &lt;<i>true</i>  OR <i>false</i> &gt; 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>true</td><td>turns on debug mode</td><tr><td>false</td><td>turns off debug mode</td></table><p>Used to turn debug mode on or off. Debug mode will print more errors to the screen,
+        and allow you to skip through any text.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="print"><p>
+    <b>print</b> [text] 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>text</td><td>Some text to print</td></table><p>Prints some text to the logfile. Only useful for debugging purposes.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="step"><p>
+    <b>step</b> 
+    </p><p>Begins stepping each line of code. Only works in debug mode.</p></div><br><br><a name='effect'><h2>Category: effect</h2><div style='background-color:#eeeeee;padding:10px'><a name="fade"><p>
+    <b>fade</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>start</td><td>What fade level to start at</td><td>0</td></tr><tr><td>end</td><td>What fade level to end at</td><td>100</td></tr><tr><td>speed</td><td>How many fade steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to fade</td><td>Will try to fade all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Fade an object or objects in or out</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="grey"><p>
+    <b>grey</b> value=VALUE name=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>value</td><td>Whether an object should be greyscale or not: 1=greyscale 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to set to greyscale</td><td>Will try to greyscale all objects</td></tr></table><p>Makes an object display in greyscale.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="invert"><p>
+    <b>invert</b> value=VALUE name=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>value</td><td>Whether an object should be inverted or not: 1=inverted 0=not</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr></table><p>Invert the colors of an object.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="rotate"><p>
+    <b>rotate</b> degrees=VALUE speed=VALUE axis=VALUE name=VALUE <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>degrees</td><td>How many degrees to rotate</td><tr><td>speed</td><td>How many degrees to rotate per frame</td><tr><td>axis</td><td>which axis to rotate on, z is the only valid value</td><td>z</td></tr><tr><td>name</td><td>Name a specific object to rotate</td><td>Will try to rotate all objects (not what you might expect)</td></tr><tr><td>nowait</td><td>Continue script while rotation happens</td><td>The script will pause until rotation is finished</td></tr></table><p>Begins an object rotation animation. Will wait for rotation to finish unless
+        'nowait' is included.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="scroll"><p>
+    <b>scroll</b> name=VALUE filter=VALUE x=VALUE y=VALUE z=VALUE speed=VALUE <i>last</i> <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>name</td><td>Name of object to scroll</td><td>scrolls everything</td></tr><tr><td>filter</td><td>select only objects on the 'top' screen or 'bottom' screen, leave blank for either</td><td>'top'</td></tr><tr><td>x</td><td>amount to scroll horizontally</td><td>0</td></tr><tr><td>y</td><td>amount to scroll vertically</td><td>0</td></tr><tr><td>z</td><td>amount to scroll into the screen, only really valid for mesh objects</td><td>0</td></tr><tr><td>speed</td><td>pixels per frame to scroll</td><td>1</td></tr><tr><td>last</td><td>select last added object as scroll target</td><tr><td>nowait</td><td>continue script while scrolling</td></table><p>Scrolls the screen around, can also be used to move individual objects. Positive values for x will move objects LEFT 
+(consider moving the viewpoint/camera RIGHT) and positive values for y will move objects UP (moving the viewpoint/camera DOWN) If the
+scroll amount does not divide evenly by the speed, it will still stop at the right place. (In older versions you needed to make sure
+the speed would divide evenly over the distance).</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="shake"><p>
+    <b>shake</b> ttl offset <i>nowait</i> <i>both</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>ttl</td><td>Time for shake to last in frames</td><td>30</td></tr><tr><td>offset</td><td>How many pixels away to move the screen (how violent)</td><td>15</td></tr><tr><td>nowait</td><td>Continue executing script during shake</td><tr><td>both</td><td>Shake affects both screens as a whole</td></table><p>Shake the screen for effect.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tint"><p>
+    <b>tint</b> start=VALUE end=VALUE speed=VALUE name=VALUE <i>nowait</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>start</td><td>Color tint to start at</td><td>'ffffff' or no tint (full color)</td></tr><tr><td>end</td><td>Color tint to end at</td><td>'000000' or full black tint</td></tr><tr><td>speed</td><td>How many color steps per frame</td><td>1</td></tr><tr><td>name</td><td>Name a specific object to tint</td><td>Will try to tint all objects</td></tr><tr><td>nowait</td><td>Continue script while fade happens</td><td>The script will pause until fade is finished</td></tr></table><p>Animate an object's tint from one color to another. You can make an object darker but not brighter. Tinting an object
+        to red subtly can make a blush effect, tinting objects darker if there is a cloud overhead, or mixing tint with greyscale
+        to make a sepia toned flashback scene are different ways this can be used.</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="zoom"><p>
+    <b>zoom</b> mag=VALUE frames=VALUE name=VALUE <i>nowait</i> <i>last</i> 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>mag</td><td>How many times to magnify</td><td>1 (will magnify 1 time, which is 2x magnification)</td></tr><tr><td>frames</td><td>how many frames for the zoom to take</td><td>1</td></tr><tr><td>name</td><td>Which object to magnify</td><td>tries to magnify everything</td></tr><tr><td>nowait</td><td>continue script during magnification</td><tr><td>last</td><td>Choose last added object as target</td></table><p>Causes a single object or all objects to be magnified. The value for 'mag' will be added to the current magnification
+        value of an object, and it will take 'frames' frames to get to the new value. By default, all objects are at a magnification
+        of 1. To shrink an object to half it's size for instance, you would use this command:
+<br><pre style='background-color:#eeeeff;padding:5px;border-width:1px;border-style:solid'>
+zoom mag=-0.5 frames=10
+</pre>
+        This will subtract half magnification from an object over 10 frames: 1x - 0.5x = 0.5x.</p></div><br><br><a name='sounds'><h2>Category: sounds</h2><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>
+    <b>sfx</b> [filename] after=VALUE 
+    </p><table><tr><th>Name</th><th>Description</th><th>Default value</th></tr><tr><td>filename</td><td>Filename of sound file, searches game/case/sfx, game/sfx, and PyWright/sfx</td><tr><td>after</td><td>Delay sound for this many frames</td></table><p>Play a sound effect. If 'after' will play the sound after a certain number of frames (useful to time an effect with a specific
+        frame of an animation).<br><br>        Sound files can be .ogg or uncompressed .wav</p></div><br><br><a name='text/commands'><h2>Category: text/commands</h2><div style='background-color:#eeeeee;padding:10px'><a name="blink"><p>
+    <b>blink</b> 
+    </p><p>Makes current speaking character use its blinking animation, meant to run inside text: "Now I am {blink} blinking"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="talk"><p>
+    <b>talk</b> 
+    </p><p>makes current speaking character use its talking animation, meant to run inside text: "Now I am {talk} talking"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="lipsync"><p>
+    <b>lipsync</b> 
+    </p><p>makes current speaking character determine speaking or talking based on text. Meant to run inside text: "{blink}Im not talking{lipsync} Now I am talking (now I am blinking)"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="loop"><p>
+    <b>loop</b> 
+    </p><p>makes current speaking character loop its current animation rather than using the random blinking code</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="linked"><p>
+    <b>linked</b> 
+    </p><p>Adds contents of previous textbox into this one. Ex: "Wait I dont want to{next}" [insert some crazy code here]  "{linked} do that!"</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="sfx"><p>
+    <b>sfx</b> 
+    </p><p>play a sound effect</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="sound"><p>
+    <b>sound</b> 
+    </p><p>set the clicking noise for each text character printed</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="delay"><p>
+    <b>delay</b> 
+    </p><p>set delay between letters</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="spd"><p>
+    <b>spd</b> 
+    </p><p>set how fast letters are added</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="_fullspeed"><p>
+    <b>_fullspeed</b> 
+    </p><p>add all characters after that in a single frame</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="_endfullspeed"><p>
+    <b>_endfullspeed</b> 
+    </p><p>return to animated printing",</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="wait"><p>
+    <b>wait</b> 
+    </p><p>set to 'manual' to print letters at a consistent speed, set to 'auto' to alter the delay based on punctuation</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="center"><p>
+    <b>center</b> 
+    </p><p>center all text</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="type"><p>
+    <b>type</b> 
+    </p><p>set color to green, style to center, and clicking sound to typewritter</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="next"><p>
+    <b>next</b> 
+    </p><p>erase textbox instantly</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tbon"><p>
+    <b>tbon</b> 
+    </p><p>turn on testimony blinking graphic</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="tboff"><p>
+    <b>tboff</b> 
+    </p><p>turn off testimony blinking graphic</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="e"><p>
+    <b>e</b> 
+    </p><p>set emotion of speaking character</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="f"><p>
+    <b>f</b> 
+    </p><p>white flash on the screen. {f}={f 3}. {f 10} - longer flash.  {f 3 ff0000} - flash the screen red (html colorcode)</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="s"><p>
+    <b>s</b> 
+    </p><p>shake the screen</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="p"><p>
+    <b>p</b> 
+    </p><p>pause</p></div><br><br><div style='background-color:#eeeeee;padding:10px'><a name="c"><p>
+    <b>c</b> 
+    </p><p>sets the color</p></div><br><br></div></body></html>

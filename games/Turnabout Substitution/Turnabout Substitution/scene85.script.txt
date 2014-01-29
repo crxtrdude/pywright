@@ -1,0 +1,50 @@
+fg ani-judge-gavel
+pause 30 script
+clear
+label court
+set _defense Apollo
+set _prosecutor Poole
+set _judge G.Strings
+set _helper Rhea
+set _witness Jake
+startcourt
+judge
+char G.Strings
+"{judge}{eserious}Mr. Justice, your cross-examination{n}has gone on for some time now."
+"Do any facts in this testimony strike{n}you as unusual or contradictory?"
+"If they do, you'd better speak{n}up now and make your case."
+"Otherwise, we should just move on."
+prosecutor
+char Poole
+"{prosecutor}I concur, Your Honor."
+helper
+char Rhea e=aideserious
+"{helper}{sfx /Ding.ogg}{f}Gosh, this early and you're{n}already on the spot!"
+defense
+char Apollo
+"{defense}{ehandsondesk-nobrac(blink)}{c099}(Nothing is jumping out at me{n}as being contradictory...)"
+mus 116 - Apollo Justice - Suspense.ogg
+set _music_loop 116 - Apollo Justice - Suspenseloop.ogg
+"{c099}(But if this testimony stands, it will{n}almost {s 5 5}certainly mean{n}Erlenmeyer is the killer!)"
+"{c099}(If I'm not agressive now,{n}it might be too late{n}afterwards...)"   
+"{sfx /Ding.ogg}{f}{c099}({f}What do I do?)"
+
+list conornot
+li Move on
+li Go back to the testimony
+showlist
+label Go back to the testimony
+mus
+defense
+char Apollo
+"{defense}{enormal-nobrac}{sfx /Ding.ogg}{f}I think....{p40} {sfx /Key.ogg}{f}{s 5 5}I may have found{n}{s 5 5}something wrong with the testimony."
+helper
+char Rhea e=aideserious
+"{helper}{sfx /Smack.ogg}{s}Then present it already!"
+judge
+char G.Strings
+"{judge}{enormal}Very well.{n}{eserious}Return to the cross-examination!"
+script scene84jaketestimony2
+
+label Move on
+script scene86

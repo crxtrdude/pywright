@@ -1,0 +1,316 @@
+#-version-1
+set _list_back_button false
+set wrongevidence 1
+
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness Ema
+set _judge G.Strings
+set _helper Rhea
+startcourt
+mus 111 - Apollo Justice - Examination moderate.ogg
+set _music_loop 111 - Apollo Justice - Examination moderateloop.ogg
+witness
+emo hair name=wc
+"The defendant would only have{n}infiltrated a prison to kill{n}a convict with good reason."
+emo mu name=wc
+"And what better reason{n}than revenge? The victim had{n}murdered his brother."
+emo uninterested name=wc
+"Still, Erlenmeyer got off with a{n}lighter sentence than expected,{n}even with Chambers as a judge."
+emo glasses name=wc
+"Which is why, dissatisfied{n}with the verdict, he decided{n}to render his own."
+mus
+judge
+"You may begin the{n}cross-examination."
+witness
+fg Cross-ExaminationAnim fade
+nt
+"{n}{c900}{center}-- Chambers's Motive --"
+mus 111 - Apollo Justice - Examination moderate.ogg
+set _music_loop 111 - Apollo Justice - Examination moderateloop.ogg
+label start
+startcourt
+cross ematestimony2
+
+statement ema2A
+witness
+emo hair name=wc
+"The defendant would only have{n}infiltrated a prison to kill{n}a convict with good reason."
+
+statement ema2B
+witness
+emo mu name=wc
+"And what better reason{n}than revenge? The victim had{n}murdered his brother."
+
+statement ema2C
+witness
+emo uninterested name=wc
+"Still, Erlenmeyer got off with a{n}lighter sentence than expected,{n}even with Chambers as a judge."
+
+statement ema2D
+witness
+emo glasses name=wc
+"Which is why, dissatisfied{n}with the verdict, he decided{n}to render his own."
+endcross
+
+label comments
+helper
+emo aide name=hc
+"So Erlenmeyer's past is coming{n}back to haunt Judge."
+set _speaking dc
+"It's a legitimate motive."
+helper
+emo aideserious name=hc
+"But it's not the right one!"
+set _speaking dc
+"True."
+helper
+emo aide name=hc
+"And we know what his{n}real motive was for{n}going to the prison!"
+"So hurry up and{n}present it!"
+goto start
+
+label press ema2A
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"But we don't know that he{n}is actually the criminal!"
+scrollwitness
+"True, but he still infiltrated{n}the prison. That fact{n}speaks for itself."
+"Besides, why else would he{n}sneak into a prison?"
+scrolldefense
+emo normal name=dc
+"Well..."
+prosecutor
+"Don't even think of answering{n}that question unless you have{n}the evidence to back it up."
+resume
+
+label press ema2B
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+"The defendant's brother was{n}Arthur Chambers, correct?"
+scrollwitness
+emo normal name=wc
+"Yes."
+scrollprosecutor
+"I knew him personally, and let me{n}say that even though on the surface{n}Judge and Arthur often quarreled,"
+"they had a deep relationship{n}and were very close."
+judge
+"Many siblings are like that."
+prosecutor
+emo serious name=pc
+"The defendant was devastated by{n}the murder of his brother. I kept{n}a letter he sent me about it."
+judge
+emo thinking name=jc
+"I see..."
+prosecutor
+emo serious name=pc
+"{sfx/Key.ogg}{f}I also wrote down conversations{n}we had on this matter."
+helper
+emo aide name=hc
+"She's a bit neurotic,{n}isn't she?"
+prosecutor
+"{sfx/Key.ogg}{f}In addition, I have recorded phone{n}calls in which he said{n}this world would be a better"
+"place if Erlenmeyer{n}wasn't in it."
+defense
+emo sweats name=dc
+"I think we get it!"
+set _speaking dc
+"{c099}(...It's like she knew this trial{n}would come and has been{n}preparing her whole life.)"
+judge
+"I believe just about any older{n}sibling would feel the same{n}way in the defendant's place."
+witness
+emo uninterested name=wc
+"But the defendant was a judge,{n}which changed things a lot."
+resume
+
+label press ema2C
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo normal name=dc
+"Why did the victim receive{n}a lighter sentence?"
+scrollwitness
+emo profile name=wc
+"Well, the defense attorney{n}proved he was {sfx/Key.ogg}{f}deranged."
+scrolldefense
+"So the question became: should{n}we kill him because of{n}his mental disorder?"
+scrollprosecutor
+"That might be what you or an{n}average person would think, but{n}Chambers was close to the victim."
+emo serious name=pc
+"If someone murdered your family{n}in front of your eyes..."
+"If someone did that, wouldn't{n}you want to get retribution{n}no matter what?"
+scrolldefense
+emo handsondesk name=dc
+"{sfx/Ding.ogg}{f}!"
+set _speaking dc
+"{c099}(Could that have affected why{n}she thinks Chambers is guilty?)"
+"{c099}(That doesn't matter right now.)"
+"{c099}(What does matter is that{n}Judge would never take someone's{n}life, no matter what!)"
+"{c099}(...{p30}Now I just gotta prove that.)"
+resume
+
+label press ema2D
+fg HoldItAnimApollo
+pause 5 script
+scrolldefense
+emo thinking name=dc
+"Why would an old man like the{n}defendant suddenly decide to{n}become some sort of vigilante hero?"
+scrollprosecutor
+"You're implying the defendant's age{n}means he is less likely{n}to be the culprit,"
+"but the opposite is true! Because he{n}is old, he would have nothing{n}to lose if he were caught."
+emo serious name=pc
+"Besides, he didn't suddenly{n}and spontaneously change."
+"Emotional trauma like the{n}death of a loved one{n}can change people..."
+defense
+set _speaking dc
+"{c099}(She's bringing psychology into this,{n}and I won't be able to{n}beat her with that.)"
+"{c099}(But what I can beat her{n}with is... evidence.)"
+resume
+
+label letter ema2A
+mus
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo deskslam name=dc
+sfx /deskslam.wav
+pause 30 script
+emo handsondesk name=dc
+"The defendant did have a good{n}reason for entering Clooney Prison...{n}{f}and {f}it {sfx/Shing.ogg}{f}wasn't murder!"
+set _speaking dc
+"{c099}(This is the only way...{n}I have to do this!)"
+"{c099}(Poole is going to rip my{n}case to shreds, but the jury{n}just might believe me...)"
+scrollwitness
+emo glasses name=wc
+"So what is his other motive?"
+scrolldefense
+emo normal name=dc
+"Chambers told me something very{n}interesting when I spoke{n}with him yesterday..."
+delete
+script scene28
+
+label none
+is wrongevidence 1 wrongevidence1
+is wrongevidence 2 wrongevidence2
+is wrongevidence 3 wrongevidence3
+
+label wrongevidence1
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+emo objects name=dc
+"{sfx/Dunnn.ogg}{s}Your Honor!{n}That statement contradicts{n}the evidence!"
+judge
+emo shocked name=jc
+"...{sfx/Key.ogg}{f}Really? Let me see that..."
+"...{sfx/Ding.ogg}{f}! Why, you're right!"
+"This is... unheard of{n}in this courtroom!"
+"You single-handedly turned{n}the case around with{n}this one piece of evidence!"
+defense
+emo confident name=dc
+"Didn't I? Didn't I?"
+judge
+emo sarcastic name=jc
+"...{sfx/oops.wav}Of course you didn't."
+"What IS unheard of in this courtroom{n}is your credulity, Mr.Justice.{n}You deserve this penalty."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(My ego... it hurts...)"
+is penalty 0 gameover
+set wrongevidence 2
+clear
+goto start
+
+label wrongevidence2
+fg ObjectionAnimApollo
+pause 5 script
+judge
+emo serious name=jc
+"{sfx/Dunnn.ogg}{s}Penalty!"
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo objects name=dc
+"{sfx/Shing.ogg}{f}What?!{n}I haven't said anything yet!"
+judge
+"But you were definitely going{n}to say something{n}ridiculous, weren't you?"
+defense
+set _speaking dc
+"{c099}(Actually, he's right...)"
+judge
+emo sarcastic name=jc
+"Which is why I decided{n}to prevent you from{n}further embarrassing yourself."
+"You should be grateful."
+defense
+emo sheepish name=dc
+"Thank you, Your Honor."
+set _speaking dc
+"{c099}(Though I AM embarrassed now.)"
+is penalty 0 gameover
+set wrongevidence 3
+clear
+goto start
+
+label wrongevidence3
+fg ObjectionAnimApollo
+pause 5 script
+scrolldefense
+"..."
+emo sheepish name=dc
+"{sfx/oops.wav}Please give me a penalty, Your{n}Honor. I swear I was going{n}to say something stupid."
+judge
+"...You sure do learn fast, Mr.Justice.{n}Alright, I'd be glad to."
+sfx /Bwaaah.ogg
+penalty -25
+defense
+emo sweats name=dc
+set _speaking dc
+"{c099}(I a-bso-lu-tely need{n}to remember to{n}forget that moment.)"
+is penalty 0 gameover
+set wrongevidence 1
+clear
+goto start
+
+label gameover
+mus
+fg ani-judge-gavel
+pause 30 script
+clear
+bg aj/judgeseat
+char G.Strings
+"...I believe we've reached{n}a conclusion."
+"Members of the jury, you have{n}seen and heard all the evidence and{n}the arguments of the attorneys."
+"Now I will instruct you on the law."
+clear
+pause 60
+nt
+"{c090}{center}Five hours later..."
+bg aj/judgeseat
+char G.Strings
+"You may now retire{n}to deliberate."
+clear
+pause 60
+nt
+"{c090}{center}One minute later..."
+bg aj/judgeseat
+char G.Strings
+"Members of the jury."
+"By unanimous verdict, you have{n}found the accused...{next}"
+guilty
+"The defendant will surrender{n}himself to the court's care..."
+"...to undergo a regular trial{n}at the High Court within a{n}month's time."
+"Court is adjourned!"
+fg ani-judge-gavel
+pause 30 script
+exit

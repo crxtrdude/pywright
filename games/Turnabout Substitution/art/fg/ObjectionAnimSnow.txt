@@ -1,0 +1,3 @@
+horizontal 11
+loops 0
+sfx 0 VivianObjection.ogg

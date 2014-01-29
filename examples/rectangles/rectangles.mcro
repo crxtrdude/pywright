@@ -1,0 +1,155 @@
+macro rectangle_init
+set rect_index 0
+endmacro
+
+macro add_rectangle
+setvar _index $rect_index
+addvar rect_index 1
+joinvar s rectangle_ $_index .x
+setvar $s $1
+joinvar s rectangle_ $_index .y
+setvar $s $2
+joinvar s rectangle_ $_index .w
+setvar $s $3
+joinvar s rectangle_ $_index .h
+setvar $s $4
+joinvar s rectangle_ $_index .type
+setvar $s $5
+endmacro
+
+macro get_x
+getvar x rectangle_ $1 .x
+endmacro
+
+macro get_y
+getvar y rectangle_ $1 .y
+endmacro
+
+macro get_r
+{get_x $1}
+getvar r rectangle_ $1 .w
+addvar r $x
+endmacro
+
+macro get_b
+{get_y $1}
+getvar b rectangle_ $1 .h
+addvar b $y
+endmacro
+
+macro get_type
+getvar type rectangle_ $1 .type
+endmacro
+
+
+macro check_collide
+set index 0
+set collide 0
+set types $1
+
+
+#rectangle loop
+label each_rectangle$0
+is index >= $rect_index end$0
+
+{get_type $index}
+is type != $types next$0
+
+{get_x $index}
+is cx < $x next$0
+
+{get_y $index}
+is cy < $y next$0
+
+{get_r $index}
+is cx > $r next$0
+
+{get_b $index}
+is cy > $b next$0
+
+set collide 1
+goto end$0
+
+label next$0
+addvar index 1
+goto each_rectangle$0
+#end rectangle loop
+
+
+label end$0
+endmacro
+
+
+
+
+macro walk_left
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cx -$3
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cx $3
+goto end$0
+label doscroll$0
+scroll name=$1 x=-$3 nowait
+label end$0
+subvar _lli 1
+is _lli > 0 $0
+endmacro
+
+macro walk_right
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cx $3
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cx -$3
+goto end$0
+label doscroll$0
+scroll name=$1 x=$3 nowait
+label end$0
+subvar _lli 1
+is _lli > 0 $0
+endmacro
+
+macro walk_up
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cy -$3
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cy $3
+goto end$0
+label doscroll$0
+scroll name=$1 y=-$3 nowait
+label end$0
+subvar _lli 1
+is _lli > 0 $0
+endmacro
+
+macro walk_down
+set times $2
+set _lli 1
+isempty times $0
+set _lli $2
+label $0
+addvar cy $3
+{check_collide collide}
+is collide = 0 doscroll$0
+addvar cy -$3
+goto end$0
+label doscroll$0
+scroll name=$1 y=$3 nowait
+label end$0
+subvar _lli 1
+is _lli > 0 $0
+endmacro

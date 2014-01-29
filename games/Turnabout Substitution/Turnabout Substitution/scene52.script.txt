@@ -1,0 +1,77 @@
+#-version-1
+bg aj/courtlobby fade
+nt
+"{c090}{center}{type}December 27, 3:33 PM{n}District Court{n}Defendant Lobby No. 4"
+mus 109 - Apollo Justice - Victory.ogg
+set _music_loop 109 - Apollo Justice - Victoryloop.ogg
+char Ema fade
+"{sfx/Ding.ogg}{f}Hey, Apollo! Rhea!"
+char Apollo hide
+"Hey, Ema."
+char Ema e=profile
+"Thanks for figuring all{n}that out for us."
+char Ema e=glasses
+"The police are already on their way{n}to the Chief Justice's office!"
+char Apollo hide
+"No problem. Just doing my job."
+char Rhea fade
+"And {sfx/Ding.ogg}{s 5 5}helping him with it!"
+char Ema e=hair
+"It should be easy to get{n}them, since they aren't aware{n}we're after them."
+char Ema e=hiya
+"We'll have our criminal{n}behind bars in no time!"
+"Anyway, {f}congratulations{n}on winning the case!"
+"See you guys later!"
+char Judge fade
+"{sfx/Key.ogg}{f}..."
+char Rhea fade e=sad
+"Judge, what's wrong?{n}We {f}won the case!"
+char Judge fade
+"...I am so grateful, Apollo, Rhea, for{n}everything you two have done,{n}{sfx/Key.ogg}{f}but... I don't understand."
+char Apollo hide
+"You don't understand what?"
+char Judge
+"I've known Paul for so long...{n}Why would he frame me for murder?"
+char Apollo hide
+"...Actually, I think I might know."
+present
+
+label gstrings$
+char Judge
+"{sfx/Ding.ogg}{f}!"
+char Apollo hide
+"He did it all for his son."
+"He wanted his son to become{n}the top judge in the city... and that{n}meant taking care of you."
+char Judge
+"He would really do that... {sfx/Key.ogg}{f}for his son?"
+goto enddialogue
+
+label none
+char Judge
+"I'm sorry, I still don't understand."
+char Apollo hide
+"...Uh..."
+char Judge
+"{sfx/Ding.ogg}{f}No, no it's okay.{n}It really didn't matter."
+goto enddialogue
+
+label enddialogue
+char Rhea fade
+"{sfx/Ding.ogg}{f}Hey, why don't you two come{n}over to my place and we'll{n}have a drink to celebrate?"
+char Apollo hide
+"Sure."
+char Judge fade
+"I'm sorry, but I must decline."
+"I have an {sfx/Key.ogg}{f}important{n}matter to attend to."
+"I will see you two later,{n}and once again, thank you."
+char Rhea fade
+"You're welcome, Judge!"
+"...Anyway, it looks like it's {sfx/Ding.ogg}{f}just{n}the two of us, Apollo..."
+char Apollo hide
+"{c099}(I thought Rhea had a good{n}idea, to celebrate the end{n}of this with a drink.)"
+"{c099}(Little did I know,{n}it wasn't the end at all...)"
+clear
+pause 60 script
+fg tobecontinued fade x=60 y=85
+pause 300 script
+script scene53

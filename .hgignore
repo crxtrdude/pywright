@@ -1,0 +1,30 @@
+glob:*.pyc
+glob:*.pyo
+glob:.svn/*
+glob:last
+glob:0.95Patch/*
+glob:*.zip
+glob:0.970/*
+glob:0.974/*
+glob:PyWright.src/*
+glob:PyWright/*
+glob:PyWright_t/*
+glob:build/*
+glob:core/cache/*
+glob:scriptdist/*
+glob:tools/tools.ini
+syntax: glob
+dist/*
+downloads/*
+games/*
+tools/tmp/*
+PyWright - 0.981/*
+PyWright - 0986update/*
+tools/roomedit/*
+loghistory.txt
+settings.ini
+lastgame
+lastlog.txt
+*/Thumbs.db
+tools/gifsicle.exe
+tools/mp3ogg/*

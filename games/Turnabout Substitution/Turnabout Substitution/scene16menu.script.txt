@@ -1,0 +1,6 @@
+#-version-1
+bg ts/1stringsoffice fade
+char strings
+mus 140 - Turnabout Substitution - Paul Strings - Ex officio.ogg
+set _music_loop 140 - Turnabout Substitution - Paul Strings - Ex officioloop.ogg
+menu scene16strings

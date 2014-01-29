@@ -1,0 +1,5 @@
+bg black
+textblock 0 0 100 100 5 seconds
+pause 300
+textblock 0 20 100 100 Exit on enter
+waitenter

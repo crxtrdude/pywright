@@ -1,0 +1,7 @@
+bg defence
+char phoenix
+fg dbench
+"Hello all."
+bg black stack name=fader
+fade name=fader start=0 end=40 wait
+"{ethinking}(Now, what am I supposed to do?)"

@@ -1,0 +1,29 @@
+#-version-1
+clear
+nt
+"{c090}{center}{type}December 27, 10:09 AM{n}District Court{n}Courtroom No. 4"
+clear
+label court
+clearcourt
+set _defense Apollo
+set _prosecutor Poole
+set _witness nothing
+set _judge nothing
+set _helper Rhea
+startcourt
+sfx /Jury.ogg
+defense
+emo thinking name=dc
+set _speaking dc
+"{c099}(He could've at least warned{n}us he'd be late...)"
+scrollprosecutor
+"{c099}(Maybe the judge realized that Judge{n}is obviously guilty, and decided{n}to just not show up.)"
+addev poole$
+pause 60 script
+sfx /dooropens.wav
+judge
+pause 30 script
+sfx /swoop.wav
+char G.Strings e=shocked fade
+"H-Hello, everybody! Sorry{n}I'm late... I-I initially walked{n}into the wrong room..."
+script scene20

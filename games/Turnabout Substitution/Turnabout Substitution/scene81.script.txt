@@ -1,0 +1,78 @@
+set nophoneincourt 1
+draw_off
+penalty 100
+draw_on
+mus
+bg courtroomHall fade
+pause 5 script
+"{c090}{center}{type}December 29, 9:37 AM{n}District Court{n}Defendant Lobby No.4
+mus 106 - Apollo Justice - Courtroom Lobby.ogg
+set _music_loop 106 - Apollo Justice - Courtroom Lobbyloop.ogg
+pause 20 script
+char Apollo hide
+"{c099}(This is it....{p30} The day I defend a serial{n}killer for the murder of Judge....)"
+char Erlenmeyer e=normal(blink) fade
+pause 50 script
+"{delay2}.........."
+char Apollo hide
+"{sfx /Ding.ogg}{f}Hello!{p30} Are you feeling better?"
+char Erlenmeyer e=normal
+"...{p30}I am...{p30} Erlenmeyer, and I am...{p30} fine...{p40}"
+pause 60 script
+char Apollo hide
+"{c099}(...It's like deja vu all over again.)"
+char Erlenmeyer e=normal
+"I just needed...{p40} less of not{n}having water...{p30}"
+char Apollo hide
+"It seemed like there was more to it{n}than just dehydration.{n}{p40}Was that really it?"
+char Erlenmeyer e=normal(blink)
+"{delay2}......"
+char Apollo hide
+"What happened that night?{n}{p40}Are you really the murderer?{p30} Who is?"
+char Erlenmeyer e=normal
+"{p60}...Miss Scarlet in the study."
+char Apollo hide
+"{sfx /Smack.ogg}{s}Ms. Scarlet!?{p30} {sfx /Smack.ogg}{f}Who is that?!"
+char Erlenmeyer e=normal
+"{p30}...But with the wrench...{p30}{n}not the candlestick."
+char Apollo hide
+"{c099}(Ugh...{p30} Just what I was afraid of.{n}{p40}Back to the Erlenmeyer we know{n}and don't understand.)
+pause 60 script
+char Rhea e=normal fade
+pause 30 script
+"Hey, Polly.{n}How's it going?"
+char Apollo hide
+"As good as I expected."
+char Rhea e=normal
+"Ouch."
+"{emad}{sfx /Smack.ogg}{s}C'mon, Mr. Erlenmeyer!{n}{p30}Do you remember anything?"
+char Erlenmeyer e=sad fade
+"{p40}...Miss Peach wasn't there before."
+char Rhea e=sad fade
+"{p30}...Really ouch."
+char Apollo hide
+"I don't know what I'm going to do {n}Rhea.{p30} I have no idea what happened{n}that night,"
+"or what I'm going to do in the trial.{p30}{n}Every time I begin to think{n}Erlenmeyer might be innocent...{p40}"
+char Erlenmeyer e=normal fade
+"I'm bored...{p40} Let's play something else."
+pause 40 script
+char Apollo hide
+"That happens.{p50} I...{p30} I'm not even sure{n}I can go through with this."
+char Rhea e=normal fade
+"{sfx /Smack.ogg}{s}Don't say that, Apollo!{n}{p40}If there's one person who has{n}to have hope now, it's you."
+char Apollo hide
+"{p50}...I suppose Erlenmeyer isn't in{n}any mental condition to have{n}such a feeling...{p40}"
+char Rhea e=mad
+"{sfx /Smack.ogg}{s}I'm serious here, Apollo.{p40}{enormal} You have{n}to go the entire way! I'm sure you{n}can prove Erlenmeyer is innocent."
+"After all, you've already found a few{n}things wrong with the police's{n}theory."
+"Now's not the time to give up,{n}Apollo!"
+char Apollo hide
+"{delay3}{p30}...I-{p15}I suppose."
+char Rhea e=normal
+"{sfx /Ding.ogg}{f}That's the spirit!{p40}{n}The trial is about to start."
+char Apollo hide
+"Yeah.{p30}{n}Let's finally put an end to all{n}of this...{p60} for Judge's sake."
+pause script 50
+mus
+clear
+script scene82

@@ -1,0 +1,1540 @@
+(Note: file not intended for word wrapping)
+
+*PyWright 0.988
+    ANDROID:
+        - First official android version!
+        - pretty slow to start the first time
+        - Only supports dual screen view
+        - editboxes dont work
+        - no 3d rendering
+        - some sound issues
+        - make sure to use wifi when downloading games
+        - no error log is written, soo much IO to the sd card. unfortunately this will make bugs harder to figure out
+        
+    BUGS:
+        - subpixel scrolling speeds caused scrolls to not always end on a pixel perfect location
+            - should make court macros less jittery
+            - should solve examine issues with wide screens that could result in scrolling the wrong way
+        - many more defenses added against wrightscript code errors, preventing crashes
+            (usually code referencing sound or artfiles incorrectly)
+        - games with case_screen updates were crashing trying to load the background art
+        
+    DEBUG MODE:
+        - Made an engine wide toggle rather than something you have to write into your game
+        - Go to the debug menu and turn it on when you run PyWright before selecting a case
+        
+    SAVES:
+        - back button on android, space button on computer backs out of menus and even the current case
+        - automatically saves your game when you use the back button to close a case (very useful on android)
+        
+    OTHER:
+        - Loading screen indicates progress with a throbber
+        - {spd} more accurate
+        - aspect ratio corrected in skinny configurations
+        - game download list cleaner
+        - can toggle frameskip rendering on and off
+
+*PyWright 0.987
+    - Framerate independance turned on again, games run at the same speed on
+        all computers, dropping frames if the rendering can't keep up. At 10fps or less,
+        the game will start to slow down to stay playable
+    - Scrolling speed can now include decimals for more control
+    - 'gui Input' objects could not be deleted
+    - 'gui Input variable password x=0 y=0' will actually hide the text with **** as mentioned in docs
+    - 'gui Button next x=0 y=0 graphic=general/back graphichigh=general/back_high' - will highlight the button
+	   when the player mouses over it with the graphichigh option
+    - 'fade in name=background' and 'fade out name=background' to fade things in and out
+           easily without having to set the start and end alpha values of the fade
+    - green text bug in cross exams
+    - some better behavior when playing double screen oriented games in single screen mode
+    - paths to content files cached on game start to make loading files faster
+    - can use a zip file instead of a directory for some art to make a game take less space on disk
+    - cleaner save file format
+    - in single screen mode, can press F4 to switch which screen is viewed. Kind of a crutch for when
+	   a game doesn't work properly in single screen mode
+    - all text macros can include spaces between the command and the arguments, i.e. {e mad} etc
+    - forgetlistitem command was not working
+    - some unicode fixes
+    - smoothscale view
+    - other changes and bugfixes
+
+*PyWright 0.986
+    - Fixed setting blipsound from character animation files. You can't set the blipsound this
+        way for "hide" characters. Prefered method is to 'set char_[folder name]_defsound blipfemale.ogg',
+        as you only have to set this once and it works for all animation files in the folder, and lasts
+        for the entire game. If your character goes through a sex change you can also change it easier :)
+    - Back button blocks script again so it will work properly from check scripts
+    - fixed some debugging info that broke unicode, multi character sets work again
+    - slightly better gui scrollbars, was cutting off lower pixels
+    - changed method of running the court_record button macros to fix some order of operation bugs
+    - bugs fixed in wide examine scenes related to court record button, and correct scroll position
+    - in rare cases save could crash
+    - some timing issues with text reverted to old code, still need to work harder to make things
+        framerate independant
+    - press F3 while a game is running in debug mode ('set _debug true') to see a dialog showing
+        the currently running script code with the current line highlighted in red
+
+*PyWright 0.985
+
+    Wrightscript
+    - Fixed letter spacing when using pwinternational font (which changed to be the default)
+    - "noback" option added for 'list' and 'present', USE THIS instead of setting _list_back_button
+        and _cr_back_button variables.
+        The hidden back button on the interface will only be hidden during this specific present
+        screen. You can cause a dangerous bug in your games if you disable the back button with
+        the variable and forget to restore it.
+    - 'is variable' now properly checks if the variable is true/false, instead of only checking
+        if the variable existed. Use 'isempty' or 'isnotempty' to check if a variable exists
+    - loading a game saved during a localmenu command would go to the next line after the menu
+    - game pauses when minimized (a few animations continue)
+    - Text macro {linked} when at the start of a textbox will join the current textbox to the previous
+        one. Example:
+                "This is weird."
+                pause 60
+                "{linked} What is going on?"
+            Will print "This is weird. What is going on?" with a pause in between the two sentances.
+    - changed emotions on characters dont erase certain settings, such as their z value
+    - characters with greyscale effect animate in greyscale
+    - Fix for fail= argument with 'examine' command
+    - set a character's default "voice", otherwise known as blipsound, to avoid having to use
+        {sound blipfemale.ogg} on every female character's line:
+        set char_defsound blipmale.ogg - set default blipsound for ALL characters
+        set char_[folder name]_defsound blipfemale.ogg - set default sound for that port folder
+    - also set a characters permanent default nametag:
+        set char_[folder name]_name Bob
+    - If character's nametag is not manually set, it will default to capitalized
+    - can force a character animation to play a certain way with text macros:
+        {blink} {talk} {loop} and {lipsync}
+        Characters default to lipsync, which means they will talk when text is printing,
+        and blink when it is not. {blink} and {talk} will force either of those modes.
+        {loop} will just cause the animation to cycle forever. Example:
+        "{talk}(Even though text is in parenthesis, I'm still talking.){blink}"
+        Only affects currently _speaking character
+    - arguments can be passed to a called macro:
+                macro testmacro
+                "You have passed this argument {$1}"
+                endmacro
+                testmacro some_argument
+        Above script will print "You have passed this argument some_argument"
+    - can pass named values into a macro:
+                macro something
+                "{$passed_value}"
+                endmacro
+                something passed_value=hello
+            Will print "hello"
+    - sometimes would crash if you click before text in a textbox starts displaying
+    - games slow down less if framerate drops, will become more jerky but not slow
+    - force an animation to pause:
+        controlanim name=someanim pause
+        controlanim name=someanim resume
+    - can specifically set the frame of an animation with:
+        setprop name=someanim frame=5
+    - gui button's were not able to be deleted
+    - try_bottom option added for gui button command. If PyWright is running in dual screen
+        mode, the button will appear on the bottom screen. If PyWright is running in single
+        screen mode, the button will appear on the top screen. For x and y values, use values
+        which would place the button on the bottom screen. When the engine forces the button
+        to the top screen, it will subtract 192 from whatever the y value is.
+    - music_fade_in nowait, music_fade_out nowait available, if you want to fade the music 
+        while doing other things
+    - fix bug where fg objects with wait would execute the next line of code before pausing
+    - the _num_screens variable will be set to 1 if there is only 1 screen, and 2 if there are 2
+    
+    Engine/Updater
+    - What used to be called "display.ini" is now called "settings.ini" because it stores
+        more settings than just the display ones.
+    - downloader creates missing folders
+    - less downloader crashes, such as when it tries to resume a failed download
+    - minor pywright gui tweaks to mouse click detection
+    - changed pywright gui colors to better represent phoenix stylings
+    - display games on game list in alphabetical, or most recently played order
+    - game titles on menu have word wrapping
+    - some settings screen adjustments
+    - fps display moved to lower left corner, toggle it in settings
+    - changed autosave to work based on time rather than scripts, saving evey 20 minutes
+        by default, interval can be changed from settings
+    - Command line arguments, could be built into a shortcut:
+        Run a game directly with:
+            PyWright.exe -run "games/MyGame"
+        text mode, useful to debug quickly, will get more useful as it gets updated
+            PyWright.exe -run "games/MyGame" -text 
+    
+    Customizability
+    - some helpers to show evidence added graphic:
+        core/macros/evidence.mcro
+            set _ev [evidence_tag]
+            set _description description to display
+            set _name name to display
+                and then
+            addevanim - show scrolling info box about evidence, while also adding evidence to the court record
+            showevl - popup evidence in left corner
+            hideevl - pop away evidence in left corner
+            showevr - popup evidence in right corner
+            hideevr - pop away evidence in right corner
+            If you want the description to match previously set description:
+            set _ev [tag]
+            set _description [tag]_desc
+            set _name [tag]_name
+    - couldnt override press/present buttons with different sized images, replaced custom press/present
+        with ripped versions
+    - hardcoded court_record button replaced with macro in core/macros/gui.mcro
+        You can still change how it looks by overriding the graphic, but if you override
+        the macros you can control how it works too, such as where it is positioned
+        on the screen.
+    - More built-in options for second screen interface:
+        'theme_screen2 {theme}' is a macro to set how the interface on the second screen looks
+        replace {theme} with one of:
+            phoenix - from pheonix wright, or GS1-3
+            mia - mia shadow from phoenix wright series
+            edgeworth - edgeworth shadow from phoenix wright series
+            apollo - for apollo justice
+            gk - for pink button from Ace Attorney Investigations/GK
+        You can also configure scanlines, the button images, and the background with
+        more precision by setting _bigbutton_bg, _bigbutton_img, _bigbutton_cross to the
+        respective image path for those elements, and setting _screen2_scanlines on or off.
+        Default is to use the old button and backgroundwith scanlines off, since those images
+        have scanlines in the image already.
+        You can turn the 2nd screen letterbox (white lines on top and bottom) on and off
+        with _screen2_letterbox (this one defaults to "on")
+        macro found in core/macros/gui.mcro/theme_bigbutton
+        Check examples/bigbutton_changes for example
+
+*PyWright 0.980/0.981: September 21, 2010*
+    (0.981 fixed some last minute bugs with mac, the updater, and cross examination arrows)
+
+    -large collection of random examples included with update, demonstrating (badly) features from the
+            last few versions
+            
+    -{spd5} in a textbox determines how many letters are added per update, {delay5} is how many frames
+            between updates. ({spd} was disabled in previous versions due to bugs)
+            {spd0} is a special case that will print every available character up to either a speed change
+            or the end of the text. 
+            "{spd0}This is all printed in one go{spd1}Back to letter by letter"
+    -For every textbox, the text that is displayed is set to the variable $_last_written_text
+    -textboxes can be "linked" a la aao like so:
+        "Some text to start with, {next}"
+        #change background or character or what have you
+        "{spd0}{$_last_written_text}{spd1}and some more text"
+    -Fixed a bug with vairable substitution in textboxes that didn't keep formatting intact:
+        set james_name {c009}James{c}
+        "Oh look, it's {$james_name}!"
+        Will now print James in blue text
+        
+    -changes to options screen
+        -users can limit how many autosaves are kept
+        -resolution sets the actual resolution, double or single screen is stretched to fit. Before, the
+            resolution option was setting the resolution for a single screen, so doubling it might have
+            gone into an invalid resolution
+        -resolution also lists actual resolutions your monitor will support
+
+    -software 3d rendering support
+        example in "examples/3d_real"
+        file format supported is wavefront OBJ files. Free software blender (blender.org) can export
+            into that format.
+        use the "surf3d" command to create a display area for the 3d object
+            syntax: surf3d x y render_width render_height display_width display_height
+            If you set a smaller render_width than display_width, you will get lower quality rendering that is 
+            then scaled up to fit.
+            the surf3d automatically gets the id_name (used with delete name=) of "surf3d"
+        use the "mesh" command to load a .OBJ/.MTL file. The files should contain a single object, a single
+            material, and a single texture.
+            syntax: mesh obj_name
+            the obj name should be something like "some_object.obj" and the files "some_object.obj" and
+                associated .mtl and texture image files should be located in art/models
+            the mesh automatically gets the id_name (used with delete name=) of "mesh"
+            You should only load one object at a time
+        to rotate the object, you can use the normal "rotate" command. "rotate name=mesh axis=y" will
+            rotate left and right, axis=x will rotate up and down, and axis=z will rotate it in a flat 2d way
+        to zoom in and out on an object, use the normal scroll command, to change the z value
+            there is a hardcoded limit of maximum and minimum zoom
+        to set up examine points on an object, first use a set of "region3d" commands to define clickable
+            regions. These regions are actually a rectangular region referencing the image texture mapped
+            onto the mesh. For instance, if you have a blood splatter you want to be able to click in 3d,
+            you would find a rectangular region on the texture which has the splatter, and call 
+            "region3d x y width height blood_splatter" for that hotspot.
+            syntax: region3d x y width height label
+        to activate those 3d regions, call "examine3d"
+        mesh/surf3d are saved in save files, but their rotation and zoom are not saved
+        
+    -some special effects added
+        check examples/tint_effects
+        -can tint graphics: tint name=id_name start=color_to_start_on end=color_to_end_on speed=fade_speed
+        -can invert graphics: invert name=id_name
+        -can greyscale graphics: grey name=id_name
+        
+    -If you add "hold" to the arguments for a gui Button, the action will repeat each frame as long as
+            the button is held down with the mouse
+
+    -can fade music in and out
+        check core/macros/music.mcro for the code
+        basically:
+            mus blah
+            music_fade_in
+        and:
+            music_fade_out
+        but for more control, you can "set _music_fade" a value from 0 (no volume) to 100 (maximum
+            volume according to users volume settings)
+    -getprop, setprop commands added to explicitly get and set properties of objects
+        example:
+        #get the x value of the phoenix wright portrait
+        getprop phx name=phoenix prop=x
+        #Add 5 to the value
+        addvar phx 5
+        #Set the x property of the portrait again
+        setprop name=phoenix prop=x $phx
+        
+        Currently the only interesting properties you can manipulate are x, y, and z; but it may be more clear to do it this way
+            than using scroll in some cases. Also if you want to do your own scroll effect, this is a better way to do it.
+
+    -debug mode changes:
+        when in debug mode (set _debug true at the start of a script) "debug" is displayed in the corner of the screen
+        More errors are shown:
+            *anytime you interact with an object (scroll, delete, etc) by name= and the object doesn't 
+            exist you will get a warning
+            *non matching brackets in text: "{command{ hello there" or "this is a statement {f"
+            *text that goes offscreen
+            *invalid commands
+    -production mode: "set _production true" will turn on production mode.
+        in production mode, errors will be logged but not displayed to the user (and
+        no clicking will be needed by them to bypass the error)
+
+    -other bugs fixed
+        _textbox_show_button works correctly, _cr_button no longer hides the bottom screen
+        -left/right tiny arrow for cross examination
+        -made sure to include cross examination arrows with rounded edge
+        -small changes to error display, displays a bit more text
+    
+    -unicode and multiple font support: 
+        set _punctuation - Sets which characters are considered punctuation for lipsyncing
+        set _font_tb - the name of the font file (relative to fonts/) to use for textboxes
+        set _font_tb_size - the point size of the font for textboxes
+        check core/macros/defaults.mcro:init_defaults for all of the other fonts that can be set
+    -set _textbox_lines is back:
+        if this is 3 -> The number of displayed lines of a textbox will be 3
+        if this is 2 -> the number displayed will be 2
+        if this is auto -> the number of lines displayed will depend on the length of the text
+        the default is 3
+    
+    - penalty bar options: 
+        "penalty threaten=10" will show a flashing reminder of how much health they will lose (and it stays
+            by default)
+        "penalty" by itself will just show the penalty bar (and it stays)
+        "penalty delay=100" shows the penalty bar for 100 frames before it goes away
+        "penalty -10 delay=0" Will show a normal bar deleting 10 points of health, but it will
+            stay and let the script continue. Do other animations while losing health!
+        delete name=penalty will delete a penalty bar that stays
+    - notguilty command moved to core/macros/guilty.mcro, copy the macro and edit if you want to customize notguilty
+    - guilty command moved to core/macros/guilty.mcro copy the macro and edit if you want to customize guilty
+        "guilty" for standard guilty text and doors
+        "guilty_words" for just the words
+        "guilty_doors" for just the doors (which clear the scene when they finish)
+    -fixed scroll animations that went further than you told it due to the speed
+
+    -new command "gamemenu" to list games in a folder. Use it if your game has a large number
+        of cases (10 or more) where the normal case selection screen is a bit hard to navigate. Good
+        for demos.
+        Syntax:  "gamemenu folder" - allows player to choose from games located in the folder. The folder
+        is relative to the current game directory.
+        Mostly this command will be used by me to organize the examples better
+    
+
+*PyWright 0.976: July 31, 2010*
+    - Fixed a memory leak that would slow a game down over time until a "clear"
+
+*PyWright 0.975: July 30, 2010*
+    - Standardized resource loading routings - anytime you load a resource, or set a resource to be
+            loaded, you may leave the extension off, or include the extension - your choice. Before, some commands
+            needed a file extension, some commands needed them off, and some commands worked either way.
+            Now it is consistent. 
+            For music: you can leave off the extension for .wav*, .mid, .mod, .xm, .s3m, .it, .ogg
+            For sound effects: you can leave off the extension for .wav*, .ogg
+                *Only uncompressed wave is supported
+            For graphics: you can leave the extension off for .png or .jpg
+            For scripts: you can leave the extension off for .txt
+            For movies: you can leave the extension off for .mpg or .mpeg
+            For all types: if you include the extension it should work
+            Exception: char - you never include an extension for char as they are a bit special
+    - cleanup of the big arrow code, should be less buggy in general
+    - fix left and right arrows remaining when not in a cross examine
+    - The variable _version will be set to the PyWright version. You can use this to version
+        lock your games if you like:
+            is _version < 0.974 bad_ver
+            script scene1
+            label bad_ver
+            "I'm sorry, you will need to update PyWright to at least version 0.974 to play"
+        Rather than locking, I suggest displaying a message that updating would be a good idea
+    - Some issues with object priorities were fixed, specificlally timers now run at all times
+    - interface for loading a saved game
+        (The sorting and dates may not be completely accurate with older saves, but
+        newer saves should always be at the top of the list from now on)
+    - more clear when there is an update
+    - more clear to restart the game after update
+    - user can turn autosaving off
+    - configure the hit regions of the court record button
+                set _cr_button_loadsave off
+                will make it so the court record button ONLY handles the court record (no save or load)
+    - added a new defaults macro, load_defaults. These are values that should be set after
+        a game is loaded, in order to force certain settings even if a save is "corrupted". Not that
+        useful for the first version, but can be useful to include things here for game updates. All you
+        have to do is define a load_defaults macro, and set variables in there:
+        
+        Example:
+            
+            games/mygame/mydefaults.mcro:
+            macro load_defaults
+            set _cr_button_loadsave off
+            endmacro
+            
+            This will force the court record to not have the save and load click regions, even 
+            if someone has previously saved without that variable set
+            
+    - autosave respects _allow_saveload variable
+    - the _allow_autosave variable can be set to off, to allow the user to save but prevent
+            autosaves. Not really recommended, users can turn off autosave or not if they
+            like, and if you want to control whether they save or not you should use
+            _allow_saveload. However if you have a lot of very short scenes, the autosaving
+            can be pretty bad, and you should probably turn it off for that. You could also
+            handle your own autosaves by doing a "save autosave" at set points, rather
+            than having autosaves happen with scene changes. In this case it makes sense
+            to turn this off. Note that the players autosave setting will not affect your
+            own autosaves.
+    - savegame and loadgame command dont alter the _allow_saveload variable
+        (You can turn off saves, call savegame at checkpoints or when prompted by 
+        a custom save interface, and not have to worry about the player trying to
+        save in other ways, or autosave)
+    - save games from very old versions of PyWright are not supported (the first released
+        version of Turnabout Substitution for instance) If you have used PyWright
+        in the last year or so you shouldn't have any old saves anyway.
+    - Script loading errors don't crash
+    - Game folders with spaces are supported by the downloader
+    
+
+
+*PyWright 0.974: June 11, 2010*
+    - preliminary gamepad/joystick support
+    - court macro fix for scrolling from helper
+    - examine screens with 2 sides remember which side the player was looking at last
+        (can do: 
+            set _xscroll_scriptname:linenumber 0
+        to reset, where scriptname is the name of the script the examine was from,
+        and linenumber is the line number the examine command was on)
+    - the keyword "noauto" on a "char" line will force it to just play the animation straight
+        without using lipsyncing or blink automation
+    - download progress sometimes too fast, interfering with the download
+    - Every time a save file is overwritten the old one is backed up into 
+            "case/save_backup". No interface for restoring saves is implemented,
+            but the files can manually be copied
+    - Automatic saves are created every time a new script is run with the "script" or
+            "menu" commands
+    - less intrusive save/load messages
+    
+    - More powerful expressions
+    
+        Commands using expressions:
+            setvar_ex [variable name] [expression]
+            is_ex [expression] [label]
+        They follow the format of the regular command, except the expression format is a bit more
+        powerful.
+        
+        Expression format:
+        [number or variable] [operator] [number or variable] ...
+        
+        Operators:
+            +
+            -
+            *
+            /
+            ==
+            >
+            >=
+            <
+            <=
+            AND
+            OR
+        Terms can be grouped by parenthesis to alter the order of operations.
+        The order of operations is: * / + - == < <= > >= AND OR
+        
+        Examples
+        
+            setvar_ex hours_played hours_played + 1
+            (This is the same as 'addvar hours_played 1' but you can do more complex things with
+            it of course)
+        
+            is_ex age > 10 AND height >= 5 good
+            "You are too young or too small, please try another ride."
+            exit
+            label good
+            "You are old enough and tall enough for this ride."
+            NOTE: the label name cannot have spaces
+        
+    - fg/detention and fg/detention_apollo included for detention center scenes
+    - slightly updated interface buttons and cross examination from bigfish
+    - "check" on examine screen not as finicky
+    - looping music after save/load bugfix
+    - press/present on lower screen
+    - can resize the window with the mouse, slightly better drawing routine for scaled views
+    - bars on main arrow
+        set _bigbutton_bg main2
+    - bigfish shake smoothing, also use {s nowait} if you want text
+        to continue during the shake
+    - Added command "shake" to cause a shaking outside of text
+        shake [time] [distance] {nowait}
+    - change text of evidence/profiles
+        dollar sign ($) not required for profile ids
+        when using addev, second argument is the name of the court record page
+            to place the item on
+        addev maya profiles
+        addev card evidence
+        When renaming the pages, make sure to addev to the right one.
+        addev with no second argument (addev document) will go to the "first"
+            page, whatever the name.
+        addev with dollar sign ids will go to the "second" page whatever the name
+        rename pages with "set _ev_pages [firstpagename] [secondpagename] [thirdpagename]"
+        unlimited # of pages allowed
+    - discontinued "_allow_present_evidence" and "_allow_present_profiles"
+        use "_evidence_present" and "_profiles_present" instead
+        (or "_pagename_present" for renamed pages)
+    - discontinued "_textbox_show_recordbutton"
+        use "_cr_button" instead
+    - skinnable examine cursor:
+        set _examine_cursor_col FFFFFF
+                changes the color (html color string)
+        set _examine_cursor_img path_from_art
+                use an image instead. Center of image is placed at cursor
+                ex: set _examine_cursor_img general/evcursor
+    - defaults:
+        workaround for making some control variables more obvious and a bit safer
+        should make the "no back button" type of bug less deadly
+        new "defaults" macro (in core/macros). This macro resets most customization
+            variables to their default value. Just use the "defaults" command that
+            this file supplies.
+        What this means in practice: If you forget to reset a control variable, it will
+        automatically reset when a new script is run
+            
+
+*PyWright 0.971/0.973: March 22, 2010*
+    - Major bug in updater, downloads only worked on resumable files
+
+*PyWright 0.970: March 19, 2010*
+    - characters can choose different blink animations than the default:
+        Try with the updated apollo:
+        char apollo e=confident    -> when he's blinking, his mouth is open
+        char apollo e=confident be=confident2   -> When he's blinking, mouth is closed.
+    - downloader a little more fault tolerant
+    - downloader has less urls hardcoded, this will help when I move downloads
+        to a separate content service from the web site
+    - randomized clicksound volume
+    - fixed check button on examine
+    - loading a game uses correct path for art
+    - set _blinkspeed_global [min] [max] - overrides global minimum and maximum
+            frames to wait for a character to blink
+            set _blinkspeed_global default to reset
+    - set _blinkspeed_next [min] [max] - the next character added will inherit
+            this minimum and maimum frames to wait to play the next blink animation
+    - blinkspeed [min] [max] in art files will set the default speed for that sprite
+    - blinking sprites "park" at the first frame of the animation instead of the last
+    - can control a playing animation's properties:
+           controlanim name=thename start=n end=n jumpto=n {loop} {noloop} {b/t}
+           name should be equal to the name of an existing object
+           start will change the first frame of the animation
+           end will change the last frame of the animation
+           jumpto will set the current frame of the animation
+           loop will force the animation to loop
+           noloop will force the animation not to loop
+           b will control the blink sprite of named character
+           t will control the talking sprite of named character
+    - globaldelay command can control characters now by appending b or t to control
+            the blink or talk sprite of that character
+    - fixed word wrapping some more. Bugs seem to be gone. If
+        _textbox_wrap_avoid_controlled is true (defaults to true), lines containing
+        {n} will not be wrapped, even if _textbox_wrap is true. If you want to
+        have text wrapping on lines containing {n}, set _textbox_wrap_avoid_controlled
+        to false, and _textbox_wrap to true. To always control text wrapping manually,
+        set _textbox_wrap to false. AAO games have lines containing {n} that also
+        need wrapping, so aao conversion needs to use _textbox_wrap true and
+        _textbox_wrap_avoid_controlled false.
+    - added "gui Input" command:
+        gui Input [variable_name] {x=} {y=} {z=} {name=} {width=width of box}
+        The input box will start pre filled with the value of the variable given
+        When the player types in the box, it will save the results back to that variable
+        later you can get what they entered by checking the value of the variable
+    - entering the court record during a press of a cross examine statement doesn't show the
+        present option
+    - set _layering_method stack to make the order of objects be based
+         on the time they were added
+      set _layering_method zorder (default) to make the order be based on
+         each objects z= value
+    - set _penalty_script [scriptname] {label} to define a place to go if a penalty
+        bar runs out.  Label is optional. Example:
+            set _penalty_script penalty     -  Will run "penalty.txt" if any penalty bar
+                                                        runs out
+            set _penalty_script intro fail    -  Will run "intro.txt" and jump to label "fail"
+                                                        if a penalty bar runs out
+    - added a screenshot command:
+            screenshot [name] {width=} {height=} {x=} {y=} {rwidth=} {rheight=}
+        saves a screenshot as [name], make sure to include the .png or .jpg on the end
+        [name] is relative to the current game directory
+        if you put it in art/fg you can then show it in game
+        will resize to width and height if they are listed (they
+        must both be listed if one is)
+        if x, y, rwidth, and rheight are listed, this is the region of the screen that
+        will be in the screenshot
+        
+        
+
+*PyWright 0.960: March 11, 2010*
+    - fix for combined sprite fading
+    - cached fades are refreshed if the source content changes
+    - some fading graphics crashed
+    - F7 to load worked but not clicking the button
+    - valid expression "is var1 AND var2 OR var3" to test truth of flags or variables
+
+*PyWright Version 0.95: February 28, 2010*
+
+        Version 0.95 represents a couple months of extra effort poured into various aspects
+    of the engine. Of all of the versions I have made, I am most happy with this one. It
+    has the least amount of bugs ever, and the least amount of things that just bug me.
+    It is a combination of some reworked code, some thrown on features, and some just plain
+    tinkering and experimenting. Most of the changes have been made possible due to the
+    great feedback I've received from the community, along with feature suggestions, and
+    some real effort at beta testing. I think it has earned it's not-beta-any-longer status.
+    Enjoy!
+    
+    -----------------------------------------------------
+    
+    Textual changes:
+        * Automatic wrapping is based on words, so it's a more sane default setting. If {n} is 
+        in the text, the autowrapper will shut off, as behavior gets complex to mix the two.
+        If {n} is not in the text, can still disable wrap by setting _textbox_wrap to false.
+        * Colors can be either the old style 3 digit color, or the new 6 digit color based on html
+        * Colors can be set based on a variable, use {c variable} to set the color the variable value
+        * textblocks can be colored with "color=[color]" where color is anything accepted by {c}
+    Positioning of textbox and nametag:
+        set _textbox_x, _textbox_y (default 0,0)  to reposition the textbox (absolute values!)
+        set _textbox_bg  to change the image
+        set _nt_image to use a different nametag image
+            note: if _nt_image is set the image is displayed even if the nametag is blank
+            this is so you can put text on a nametag image in your art program
+            and display it instead of letting the code write the name
+        set _nt_x, _nt_y  to reposition the nametag image (absolute values!)
+        set _nt_text_x _nt_text_y to reposition nametag text  (relative values)
+        set _nt_text_color to 3 digit or 6 digit color string to change the nametag color
+                                                        
+    Animation changes:
+        The animation speed of objects is now controllable
+        2 ways:
+            * In the .txt file along with your animation (something.png which may have something.txt)
+                add a command "globaldelay x", where x is the amount of frames to pause between
+                frame changes.
+            * with the command "globaldelay x name=y" where x is the amount of frames to pause
+                between frame changes, and y should be the name of an existing object. Without
+                name it will change everything!
+            The delay amount can be a decimal number, like 4.5
+            The delay will not affect animations which already use "framedelay" in their .txt file
+                to set individual delays for specific frames
+                
+     Customize button look:
+        Buttons can now have a graphic, allowing much more freedom in custom gui design.
+        gui Button [label] x=[x] y=[y] graphic=[path/to/image]
+            Path to image is the path starting after the art folder, such as "fg/my_button"
+            or "general/somebutton"
+            
+    Customize list menus:
+        Asside from the more accurate builtin checkmark and check placing, you can also
+        customize your lists a bit more.
+            - adjust checkmark (for options you've already tried) image by setting variable
+                    _list_checked_img to path relative to art folder
+            - change background with _list_bg_image (default general/black)
+                    Might want to adjust _menu_fade_level to 0 to see fully opaque image
+            - adjust checkmark position with variables _list_checked_x, _list_checked_y
+                    relative to top left corner of option button
+            - color of text more accurate
+            - little known tip: color of list options can be set with {c462} syntax
+            
+    Zoom command: to zoom into the screen or scale objects
+        Syntax:
+            zoom mag=[amount] frames=[number] [last] [nowait] {name=somename}
+                mag is the number of scaling levels to zoom. A mag of 2 means "add 2 scaling
+            levels to current scale". If current scale is 1, the final scale is 3x. Semantics of this
+            is likely to change.
+                frames is the number of frames for zoom to happen
+                last will only scale the last object
+                nowait to continue script while zooming.
+                name=somename will only scale the named object
+                
+    Customize investigation menu:
+    
+        A new command "localmenu" was added, allowing you to set up the 
+        investigation menu manually, and letting you organize your scripts how you please. 
+        The syntax is this:
+            localmenu examine=on/off talk=on/off present=on/off move=on/off
+        This will show a normal investigation menu with those items either on or off. All of the 
+        options default to off, so
+            localmenu talk=on
+        will show a menu that only has the talk option. The options work with variables so 
+        you can have code or what the player has done determine what is shown:
+            localmenu talk=$ema_here present=$ema_here move=on examine=on
+        will only show talk and present when $ema_here is equal to on.
+        When a user chooses one of the options in localmenu, instead of running a 
+        separate script, it will jump to a label for "examine", "talk", "move", or "present". If 
+        a localmenu is shown with every item set to off, it will skip the localmenu line.
+    
+        Can turn OFF menu items from the regular menu command
+            menu scene examine=off
+        will show the menu, and leave examine out of the selectable items, even if scene.examine.txt
+        exists.
+    
+    Label none workaround:
+            Frequently in medium to complex scripts, it becoms impossible for an interface, such
+        as a "present" or an "examine", to jump to a label past another section of code - because 
+        it stops when it hits a "label none" that was meant for a different interface. Frequently
+        when this happens you have to resort to jumping to a middle part of the code and then
+        calling "goto" from there to actually get where you want. 0.95 lets you be absolutely
+        explicit about the behavior of interfaces and labels.
+            Simply add a "fail=x" to the end of the interface command, and it will consider "x"
+        to be where it stops searching, instead of "none".
+        Commands that support "fail=x" in their arguments:
+            goto*, showlist, menu, localmenu, cross, present, examine
+            *normally goto does NOT stop when it hits label none, but with fail= you can
+                    give it that behavior.
+        
+        Logic commands in 0.95 also support "fail=x" in order to tell it to jump to "x" when the
+            expression is false; rather than continuing on the next line.
+            
+            Logic commands that support "fail=x" at the very end of the command:
+                flag, noflag, is, isnot
+    
+    Advanced scripting changes:
+            Some builtin interfaces give a bit more feedback to scripts in the form of variables
+            that they set:
+                _examine_clickx, _examine_clicky are set to x and y after
+                                        clicking a spot in the examine screen; 
+                _selected is set to the evidence id when running an evidence check script
+                
+            Script command:
+                Made "script" command a bit more flexible. Can pass a label= argument to jump
+            to a label after loading the file. If [name].script.txt is not found, will look for
+            [name].txt. Also, the script command can be called safely from a running macro.
+            
+            Copying variables dynamically:
+                Can copy the value of a variable into another. Allows using code to generate a 
+            variable name to access. Allows processing lists of items, or selecting variables 
+            for some reason or other. More complicated than other methods, but more flexible 
+            as well.
+            
+            syntax: getvar [destination variable] [namefragment] [namefragment]
+            
+            All of the name fragments are joined together into one name. The value of whatever 
+            variable that combined name refers to is copied into the destination variable.
+            
+            Example:
+            
+            getvar x rectangle_ $index .x
+            
+            First, "rectangle_", the VALUE of $index, and ".x" are all joined into a single
+            variable name. If $index were equal to 0, this would be like "getvar my_x rectangle_0.x",
+            and whatever was stored in the rectangle_0.x variable would be copied into the "my_x"
+            variable.
+            
+    Timers:
+        Added a timer command, like a stopwatch or a countdown. It's possible to run multiple timers 
+        at once, and the value of each timer is saved to an independant variable. When the timer
+        runs to zero, a macro you specifiy is run. It could be used to give the player a time limit
+        to solve some piece of logic, where they get a penalty if they run out of time. It is also
+        useful for many other things. Consider a short timer to control some animation - when the
+        timer runs out, you move an object, and then start the timer again. It will keep moving the
+        object at those set intervals.
+            Syntax:
+                timer [ticks] [macroname]
+                
+            The value of the timer (ticks left till macro is run) can be accessed 
+            from $_timer_value_[macroname]
+
+    Updated updater:
+            Metadata support added for all content types. This data used to be stored in a file
+        called ".pwv" which came with content, such as the game, or the character; and it
+        used to be limited to only a version number.
+            With 0.95, the standard filename is data.txt. A data.txt file should always be
+        included in the root of your game folder. It's purpose is to tell potential players or
+        potential downloaders some more information about your game. If data.txt is not 
+        included, your version will be assumed to be 0, and you won't have an icon, or title,
+        etc.
+            Each row of the file has a field name, a space, followed by the field data. 
+            
+             Currently supported/planned to be supported fields:
+                * version - Any floating point number is valid. If a higher number is 
+                                available on updater, it will let the user know that they 
+                                can update. Also multiple decimal places are supported. 
+                                example: 1.5.1
+                * version_date - the date this version was released - mm/dd/yyyy
+                * version_notes - info about what was changed in this version
+                * description - info about the game itself
+                * author - the name of the game creator. Displayed next to 
+                        title on the game list.
+                * title - the game name, displayed on the game list
+                * icon - path to an image to use as the game's icon, relative to the root
+                        of the game folder; include file extension
+                        (i.e., if icon equals "art/general/icon.png" there should be a
+                        "games/my_game/art/general/icon.png" present)
+                        should be 70x70
+                        required for games on update service
+                * website - a link to the project website if there is one
+                * category - may be used to sort games later on
+        
+            Metadata changes have allowed some modifications to the view of the 
+        updater and the games list, especially the icon, to make choosing the right
+        game easier.
+            Beyond that, the updater is now more stable, able to resume downloads
+        (if you try and download something that halted in the middle again, it will
+        resume), and will attempt to extract
+        
+    Reworked saving system. Very careful about what can be saved and what cannot.
+        Logic behind it is still to record the state of every object currently in memory to
+        a file, and then recreate it when loading, but method is different. 
+        What cannot be saved:
+            - position in currently playing song
+            - movie objects are not saved (a load will resume after the "movie" command)
+            - position of text - when saved in the middle of a textbox printing out,
+                    loading that game will make the textbox start printing out from
+                    the begining again. This can make perceive saves imperfect.
+            - many macros running at once, and many timers running at once can be
+                    saved but the behavior of loading may not be accurate
+        * Be aware of these limitations, you can control when it is allowed to save the game or
+        not by setting the _allow_saveload variable on or off. It might be a good idea to turn
+        it off before starting a movie for instance.
+        * Also remember that there is a command to force the game to save, it might be a good
+        idea to use this for checkpoints to control where saves occur. A save at the start
+        of each scene might work.
+
+    Regressions (changes that could be seen as downgrades):
+        * It's official - gif support on pywright is not "recommended". The code is not actually
+        gone, but it will not work on a mac, and never worked wll anyway.
+        Converter available: http://pywright.dawnsoft.org/gif2strip/index.cgi
+        * Automatic updates are disabled. Too dangerous. In a later release, there will
+        at least be notifications that a new version is available, but it will never force
+        the user to upgrade.
+        * Any time an image fades in, the fadeable image will be stored to core/cache.
+        This will speed up the fade animation on later runs. The downside, is it eats hard
+        drive space, and if you make a modification to a graphic file, it will rever to the 
+        old version during the fade. Faster fading without the cache is a possibility
+        down the road.
+        
+    -other random bug fixes/additions:
+        *scrolling objects on bottom screen works
+        *psyche5 macro included in chains to have 5 locks
+        *if "intro.txt" not found in a game, looks for "[game].txt" instead, if you would rather
+            name it that
+        *fixed court record buttons from investigation menu
+
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+Beta versions before 0.95 (RIP December 2007-December 2009):
+
+PyWright Beta 10.94
+    - Some more fixes to hidden statements
+    - Fix to gui mouse event handler, next button sometimes hard to click (thanks StBacchus for helping
+        pinpoint this longstanding bug!)
+    - Add the "random" command to generate random numbers. "random x 1 10" will set x to a number
+        from 1 to 10.
+    - The underscore character in nametags/character names will translate into spaces when the
+        name is printed
+    - The nametag bar expands horizontally to fit the width of the nametag
+        (The 3 image files, nt_left, nt_middle, and nt_right in art/general control how each part of
+        the name bar looks. The nt_left controls the left corner, nt_middle is repeated along
+        the length of the bar, and nt_right is displayed on the right corner.)
+        You can add arbitrary spacing in the name (extra padding) by adding spaces at the beginning
+        or end of the nametag: char guy nametag=_______Guy_______" will have a longer
+        name bar.
+    - safety mode for resolution changes, will revert back after a few seconds if the change is not OK'ed
+    - fading does not corrupt the original image (fixes ever darkening lists)
+    - black fade in for lists and investigation buttons is back in single screen mode (and optionally in
+        double screen mode, if _double_screen_list_fade is true)
+
+PyWright Beta 10.93
+    - Access the updater from within pywright itself on all platforms (previously this
+      was only on OSX. Updater.exe will be discontinued in a later full release)
+    - Added _default_port_frame_delay, and _default_fg_frame_delay, to enable control
+      of the default speed of these respective animations
+    - Fading works decently without opengl, opengl still disabled
+    - statements now have a "test=" optional argument, placed after the statement name
+        if you want to hide statements, put a flag or variable name after the "test=" and the
+        statement will only be visible if that flag or variable is true
+    - added a few other commands to aid cross examinations:
+        next_statement, prev_statement, and cross_restart
+        go to the next statement, previous statement, or beginning of the cross examination,
+        respectively. Next and prev to be used within cross/endcross, cross_restart typically
+        to be used after endcross.
+    - "*" text character displays correctly
+    - New variables to further customize presenting:
+        _profiles_enable to toggle profile viewing
+        _evidence_enable to toggle evidence viewing
+        _profiles_present to toggle profile presenting
+        _evidence_present to toggle evidence presenting
+        NOTE: these ALSO control court record, so set them back if you need to when you are done
+        But you can also, for instance, disable profiles for the entire game if you don't use them
+    - Fix evidence deleting on enter keypress bug
+    - court macros added newwitness, newprosecutor, newdefense, newjudge, and newhelper
+       to trigger a character switch in the middle of a court macro session (uses the same variables
+       as used in court setup)
+
+PyWright Beta 10.92 - hotfix
+    - Altered case title display slightly to fix some instances of cutoff
+    - emo command doesn't alter nametags
+    - "script newscript noclear" to run a new script without clearing the screen
+    - intro.txt from a game directory doesn't kill PyWright when it ends
+    - Double screen examine no longer broken
+    - added "loops" argument to the fg command, to control how many times fg animations loop from code
+    - can set the position of "gui Back" with "gui Back x=0 y=351 (note that y=351 will put it on the 
+            bottom of the 2nd screen)
+
+PyWright Beta 10.91
+
+    Fixes:
+     - Saves the current frame of fg animations - fixes a bug where loading a game would make
+            all of the hold it and objection animations show again (only fixes new saves)
+     - Supports ä ö ü and other international characters through the PWinternational font
+            (thanks to AAO for this)  You'll have to wait for b11 for more control over fonts.
+     - Don't crash when trying to load and no save exists!
+     - Restored games that use the looping music feature will no longer get stuck looping the intro
+     - Saved games no longer save the state of the court record, solving some bugs with this
+     - Viewed list entries no longer have multiple sets of parenthesis
+     - Some keyboard issues fixed (couldnt interact with court-record displayed during
+            a list)
+     - Better able to handle multiple cross examinations in one file
+     - Macros defined in your game directory or in a script will override any built in macros
+            If you copy core/macros/court.mcro into your game directory and alter it, 
+            the changes will be reflected in your game.
+            DO NOT MODIFY core/macros/* DIRECTLY!
+                Always copy the .mcro file you want to modify into your game or case
+            directory, and modify that copy.  The reason for this is that updates to
+            pywright may modify those files, and wipe out any modifications you had made.
+                Also, when you distribute the game to someone elses pywright installation,
+            they wouldn't have the modification you made in yours.
+     - Opengl mode discontinued - weird graphical bugs in default viewmode are gone
+            Too difficult to maintain with very little payoff
+            Beta11 is written to better make use of opengl, but it's prohibitive to bring
+            these changes to beta10 series
+        
+    Improvements:
+     - New variables _allow_click_load and _allow_click_save to enable/disable clicking of
+            the save/load buttons - best if used with custom court record button that doesnt
+            have those icons.
+            _allow_saveload can also be used to disable the save/load hotkeys along with the
+            buttons
+     - New variables _allow_present_evidence, _allow_present_profiles, and 
+            [evidence_id]_presentable to change when court record items are
+            allowed to be presented
+     - Court macros now start one screen to the left of defense, so that it will
+            be black to begin with.  The first command to go to a screen will then
+            be the first screen the player sees.
+            Also, the startcourt macro doesn't clear the existing screen.  This is to allow you
+            to place objects to the left of the wide court before running the macro, if you want to
+            show things right before a court scene. Beware to clear the screen before running
+            startcourt, if you need to
+     - Set _list_checked_img to the path to a checkmark image.  This will be displayed on lists
+            to show which items the player has already seen instead of the parenthesis.
+     - "forgetlist" command to forget that a player has chosen items from that list
+     - "forgetlistitem" command to forget a specific chosen item within a list
+     
+    Tweaks:
+     - A bit more class with the save/load game messages
+     - Longer case names look less bad on case selection screen
+     - Slightly more PW styled list selection box
+     - left arrow hidden on first statement of a cross examination
+     - Added debug message in labels if the label doesn't exist
+ 
+
+PyWright Beta 10.9
+ - Added a "print" command to print debug information to the log file.
+ - Debug error messages are no longer clipped (the whole message is visible)
+ - Added "framedelay" command in sprite text files to assign extra delay to specific frames in an animation
+ - its possible to skip the update check on program start by clicking anywhere
+ - Three new commands to deal with saves: savegame, loadgame, deletegame - check the doc and example
+ - Control over case order on case selection screen, also which cases are
+ shown:
+     * 'set _order_cases alphabetical' to use the default order
+     * 'set _order_cases variable' to only show cases that are assigned
+        to variables:
+     * in variable ordering, 'set _case_1 Turnabout Something'
+                             'set _case_2 aaaa'
+        First case and second case will appear as shown, other cases
+         will be hidden
+ - Add save all variables option to exportvars
+ - Added a variable to control text skipping, independant from _debug mode - 
+        "set _textbox_allow_skip true"
+ - move court record button to second screen when second screen is available
+ - Added two debug properties which stop hard-coded interfaces from pausing the game:
+     "set _textbox_skipupdate false" will make the script continue while a textbox is still printing text
+     "set _examine_skipupdate false" will make the script continue after an examine interface is shown
+     You can then use the "gui Wait" command to halt script execution where you want to.
+ - able to choose whether to hide bars on an examine with "set _examine_showbars false" 
+       (can be toggled while an examine is shown as well)
+ - able to choose whether to hide the cursor on an examine with "set _examine_showcursor false"
+       (can be toggled while an examine is shown as well)
+ - Above modifications allow more custom interfaces, such as perceive
+        see the perceive example in games/beta10.9, which you can download through updater
+ - cross examination shows a back arrow as well as forward
+
+PyWright Beta 10.86
+ - Added an exportvars and importvars function to write the value of variables to a file or read them in
+    Can use this to, for instance, record that the player has completed a case.
+ - Customization of case selection screen: place a file "case_screen.txt" inside of a case
+    When selected on the case menu, this script will be executed, allowing you to have custom
+    backgrounds for each case.  Using the exportvars/importvars, and some extra logic in the case_screen
+    file, it is possible to show a different background when the case is completed.
+ - After a cross examination, testimony blinking object is deleted
+    It can also be deleted manually with the in-text command {tboff}
+    Or added manually with the in-text command {tbon}
+ - Green testimony only colors the text green, not the nametag
+ - Present command doesn't make pywright think a cross examination is occuring
+ - save/load buttons are clickable
+ - scroll command clamps at the endpoint of the scroll so that objects never go past where they should
+ - Add some loading dialogs for choosing a game, loading a case
+ - Add helper to court record (Thanks Brawldud!)
+     Also added some variables to rename the court characters:
+     judge_nt, prosecutor_nt, helper_nt,defense_nt, and witness_nt
+     Set those variables to the name you want to show up for that person
+     when using the court.mcro functions defined in core/court.mcro
+ - Saved game improvements: character positions, name of who is talking, what
+    text you have already seen so you can skip through it
+ - Engine auto-update updates more functions without having to restart the engine
+ - Tab brings up court record again
+
+PyWright Beta 10.85
+ - Disabled certain keys in editor which inserted junk into the text
+ - Added Gotcha balloon
+       macro: {shout gotcha apollo}
+       just the image: fg GotchaAnim
+ - Make looping tracks work
+ - Court record graphics can be customized: see core/court_record_vars.txt
+ - can show a court record without a back button (forced present)
+       set _cr_back_button false
+ - Cannot press space to back out of hidden examine screen (examine hide)
+ - can change the graphic used for the continue button arrow
+       set _bigbutton_img "general/buttonpress.png"
+       (search _bugbutton_img in doc.txt for full help)
+ - added a command "emo" to set the emotion of characters with a bit
+        more freedom. See emo in doc.txt.
+ - most objects are added with a sane default name that can be referenced 
+        for deleting or other commands that take names (char phoenix can
+        be referenced as phoenix).  This only is a problem if you have for
+        instance char phoenix, and ev phoenix at the same time, in which case
+        you will still need to use name= manually to differentiate them.
+ - movies can be played with sound if a separate sound file is provided
+ - Added draw_on and draw_off commands to control rendering issues!
+     (ported from beta11)
+     Call draw_off before changing stuff around, then call draw_on again when done
+ - looping tracks from http://studio-amaterasu.com/storage/pwmusic/ work
+     command is:
+        mus introfile
+        set _music_loop loopfile
+     Thanks to maelstrom!
+
+PyWright Beta 10.84
+ - Taller textbox to make text less squished
+
+PyWright Beta 10.82-83
+ - Menu can load without a bg
+ - Again with the evil crashing music
+ - {next} in a dialog resets the profile to blink in case the next
+   message is from a diffferent speaker
+ - The right side of double-sided scenes is now clickable in single screen
+    display mode.
+ - Backgrounds actually overwrite things like they are supposed to
+ - Disable court record display while examining (the CR and examine
+    menu's conflict with each other)
+
+PyWright Beta 10.78-81 (Turnabout Substitution Fixes)
+ - Fix for game crashing if music is broken
+ - Disable multiple evidence screens
+ - Save and Restore are functional again
+    - If there is a problem with the save, it won't
+      overwrite the old save, so you are free to save
+      often
+ - (beta 10.81 fixed save in software mode)
+ - Save/load/court record is available on more menus
+
+PyWright Beta 10.76-77
+ - Disabled automated character downloading, it failed with no
+     internet connection and made it impossible to play a game
+ - Allowed fade to be used in characters in sceneview/object placement
+     widget
+
+PyWright Beta 10.75:
+ - Editor: allows creating game and case again
+ - Editor: several values that weren't saving from the object placement widget
+           are now saved: hide and stack
+ - Editor: object view "remembers" any graphics added above it, up to a label.
+           To be safe, you might want to set the background after a label
+           in any case, because you don't know what code may jump to the label
+ - Editor: "set _speaking ..." will cause nametags to be updated (nametag
+           printing is a bit smarter in any case)
+ - Engine: With a line like "char larry e=", it will wait to display the
+           character until {esomething} is found in text.  This is if you
+           want to set the emotion in text instead of on the char line. The best
+           solution for this though is to set the emotion on the char line:
+           "char larry e=something" because that results in smoothest animation.
+
+PyWright Beta 10.71-10.74:
+ - Fix crash error with sound changes and reformat sound settings menu
+ - Automatic speed changes in text happen on the space after punctuation instead
+    of on each punctuation.  "........ " is the same delay as ". "
+ - Proper male/female blip noises, default blip noises set for official characters
+ - Can set default blip sound for new characters by adding "blipsound [sound name]"
+    in each talking animation text file
+ - Fixed bug in preloading which caused some information to be lost when images
+    are pulled out of memory
+ - Fix loading portraits that are not blink/talk
+ - Fix metadata generated for new gif animations (was using an old format)
+ - Better ugly arrow
+ - Prevent crashes with typing into a gui item that doesn't support typing
+ - Editor: Ability to right click on object placement widget to convert back to text
+ - Editor: Ability to right click on object creation commands to convert text to
+        placement widget
+
+PyWright Beta 10.7 update:
+ - Make fading work more consistently
+ - Fixed some obscure textbox related bugs
+ - Called macros support arguments ($1 will be the first argument, $2 the second)
+ - Finished converting updater to use version numbers to know when
+        files need to be updated, rather than dates
+ - Screen 2 has the arrow button
+        the variable _bigbutton_img is the path from art to the image used for it
+        it will be cleared with a "clear" command, and added on the next textbox
+ - bugfix: investigation menu not shown in dualscreen mode
+ - Examine menu now lets the user scroll the room if either the background is large
+        enough, or there are regions defined for both the left and the right views
+ - isempty, isnotempty commands to check whether a variable has been set 
+ - with is,isnot,isnumber,isempty,isnotempty,flag,noflag tests; you can
+        end the line with a "?" instead of placing a label name.
+        When you do so, the next line will be executed if the test passes.  If the test
+        fails, it will skip the next line.  This can make simple functions much simpler, with
+        less spaghetti code jumping all over the place.
+ - can set the variables court_dbench, court_wbench, court_pbench, and
+        court_background to control which graphics are loaded by the court
+        scrolling macros.
+ - Can adjust sound and music volumes
+ - Editor somewhat works again.  Objects can be positioned/viewed/changed with the
+        screen widget, which is inserted wherever object commands are found in the
+        script.  You can scroll up and down through lines with up and down keys.
+        Backspace will delete a line.  Inserting of new widgets is still not implemented,
+        before version 1.0 there will be an editor that it is possible to create a case in
+
+PyWright Beta 10.6 update:
+ - Some performance improvements in opengl mode
+        If performance is still bad, toggle the display list option on 
+        the settings screen (ESC)
+ - Fixed a bug where sound system was being asked to restart on every
+        sound
+ - Added a sound configuration tab to settings screen, play with it if you
+        have sound troubles.
+ - Rotate commands work in software mode if using axis=z (in other words,
+    2d rotations work without opengl)
+ - Fix centering on gl rotation (didn't account for scale)
+ - Improved called macro functionality.  Macros now interact with the same
+    object set as the script which called the macro, however any objects that
+    block do not block the macro from running.  This fixes bugs in "macro in text"
+    and "macro library" in the beta10.5 test game.
+ - fixed positions of prosecutor and witness in the scrolling macros
+ - added {objection} {holdit} and {takethat} macros to be used in a textbox.  Will
+    perform that shout in the speaking characters voice, if they have a named
+    folder in sfx with the matching sound effect.
+ - _speaking_name system variable is set to the nametag of the currently
+    speaking character.  Used in the above macro.
+ - More debug errors: text markup, now display debug errors when a command
+        fails.
+ - Proper sound effect for Cross-ExaminationAnim and TesimonyAnim
+ - portraits dont talk unless there are words
+ - fix issue where an emotion text markup crashed (resulting in an invisible character)
+        if no emotion was previously set.  [Setting the emotion on the char line or
+        at the beginning of a textbox are functionally the same.]
+ - No need to quit pywright to play a different game
+ - Can include an intro.txt in a game folder for either a single case game without
+        selection screen, or if you want a custom game intro/custom selection
+        screen.
+
+PyWright beta 10.5 update:
+
+ - As always, check doc.txt for more specific info on each new thing
+ - There is a new game on the games directory called beta10.5, it includes
+   examples for all of the new functionality.
+ - Make sure to update paynette, his positioning and loops work correctly
+    please comment any characters that have bugs and I will continue to work
+    on fixing them.  Any fixes that need no engine updates, which should
+    be almost all fixes at this point, will be fixed the day I get the report.  Please
+    report at least a specific character, and if possible, the emotions that 
+    aren't working correctly.  
+    
+                                    --------------
+                                    
+New Features
+ * sfx command has a delay, so you can schedule a sound effect
+ * More work done with macros.  Macros can now be called from within
+     a textbox, to add objects or animations at arbitrary points in the
+     script, or run some code before adding text to the textbox.  Set the "_return"
+     variable from the macro to return text back to the textbox.
+ * In some cases, where a command expects a label name to go, a macro
+     name can be inserted instead.  Instead of jumping to a label, the
+     macro code will be executed, and afterward the script will resume
+     at the end of the current code block.
+ * list options (the li command) can include a "result=" argument if you want
+     to name the label/macro differently than the text of the option
+ * Change to "gui Button", the first argument can now be either a label to
+    jump to, or a macro name in {} brackets.
+ * fading is now an action instead of built into the object.
+     The old syntax to make something fade in is still supported, but
+     for more control use the fade command instead.  Similar to the scroll
+     command, it can apply to the full scene or individual objects
+ * New rotation special effect, which also works similarly to the scroll
+     command, but to rotate objects instead.  OPENGL ONLY.  Later,
+     2d rotations may be emulated in software.
+ * New macro library, located in core/macros.  Includes chains, some helpful
+        cross examination functions, and various commands to make things easier.
+        The macros are automatically loaded, so you can use them as if they
+        were built in commands.  The macros aren't currently documented, when
+        I fix the documentation I may add a way to document them.  
+    BE SURE TO CHECK OUT THE NEW PSYCHE LOCKS!  See games/beta10.5/macro_library
+        for how to use all of the new commands, after downloading the beta10.5 game
+        from updater.
+ * a few more variable manipulation commands: absvar, isnot
+     
+Slight improvement
+ * A few more errors caught by the debug system to ease development
+ * textblock objects can be named, allowing them to be deleted with
+        delete name=
+ * Scripts preload graphics before they are run.  This adds some load time,
+        but means that characters display faster.  Keeping the number of graphics
+        in a single script a bit low will keep load times down.
+        To prevent all preloading, set _preload off
+        To prevent preloading on a single script, call the command preload_cancel
+        at the top of the script.
+ 
+Bug Fixes
+ * REALLY fixed the bg command not clearing the screen
+ * Altered rendering code to avoid black screens and flashing objects
+     as much as possible, and attempted to solve flickering with opengl
+     on some users machines
+ * Previously "gui Wait" would be broken as soon as the user clicks any of the
+    script created buttons.  Now that buttons can jump to a label, "gui Wait"
+    can only be broken when a button jumps out. (This probably still needs 
+    some more work before good guis can be written in wrightscript, but
+    you can try it out)
+ * Some changes to what happens when a character is missing either a talk
+    or a blink animation.  It's still best to make sure there is an animation for both.
+    It is not possible to guess the right outcome for all of the artwork, each 
+    animation makes different assumptions.
+ * Allow parenthesis in character names
+ * Some sound effects that were the wrong format were reconverted
+ 
+ 
+ 
+ ------------------------------------------------------------------------------
+ 
+ 
+
+PyWright beta 10.4 update:
+ * Allow bigger images to be loaded in opengl, not a very portable solution
+    (loading big textures is discouraged at this time, although it should be
+    solved in the future).  Fixes full court display.
+ * Allow spaces in most text substitution commands
+ * music can be played before sound effects
+ * guilty/notguilty animations work (timing and format may still need adjusting)
+ * the background command clears the screen properly again
+ * organized voice samples into folders, includes english and japanese voices
+ * hold it, objection animations etc no longer have a default sound (so you can
+     choose which voice sample to use)
+
+PyWright beta 10.3 update:
+ * Software mode zoomed evidence display bug SQUASHED
+ * Opengl mode black scrollbar DESTROYED
+ * Black flashes in opengl mode MIA
+ * Using $ to distinguish portraits from evidence REPLACED
+    (use the command "addev maya portrait" to add art/ev/maya
+    as a portrait)
+
+PyWright beta 10.2 update:
+ * Displays proper quote in textbox, apostrophes return
+ * fixed present bug
+ * "nt [nametag]" works.  Sets the nametag for the textbox and
+    clears the _speaking variable.  If a character is onscreen, this
+    will be like a new offscreen character is speaking.  Blank nt
+    will make the nametag blank.  If you want to rename an existing
+    character, use the nametag=[name] attribute on the char command.
+    "portrait" command is not returning.  "char" replaces it.
+ * examine cursor draw bug in software mode
+ * rotation effect in 3 dimensions
+
+PyWright beta 10.1 update:
+ * Some tweaks to improve opengl compatibility.
+ * Fix for the movie test.
+ * A few more interfaces moved to the bottom screen in dual screen mode.
+ * More exact searching for character emotions, before it was matching part
+    of the word, resulting in maya wearing the wrong outfit.
+ * A few bugfixes in court record.
+
+PyWright beta 10
+
+Rendering/Bugs:
+* Opengl mode is 99% complete and turned on by default.  If you
+    have it turned off, make sure to either set the line "opengl=1" in
+    display.ini, or delete display.ini so it can be created again.  If this
+    mode gives you weird errors/problems, or runs too slow, you can
+    turn it off again by setting the line "opengl=0" in display.ini.  Please
+    report any problems with this mode.  Note that changing the
+    resolution in game may make some objects go white, but they go
+    away as soon as you move on to the next scene or restart the
+    game.
+* With opengl there is 3d object support.  Basic, colored, but untextured 
+    collada meshes can be loaded. The mesh file should go in art/3d
+    and loaded with the "mesh [object name]" command.  They work
+    similarly to fg objects and can be positoned on screen as well
+    as rotated.  True 3d object examination interface is yet to come.
+    Mesh objects will not display if opengl mode is turned off, although
+    a pseudo mode may be created later.
+* Many rendering changes to help optomize opengl mode.  Some of these
+    may have improved the non-opengl rendering speed as well
+* text printing speeds adjusted (a bit faster, and punctuation doesn't
+    pause as much)
+* dual screen mode.  Not all game objects are configured for 2 screens,
+    and switching between modes during a game can lead to problems
+* Added offsetx and offsety commands to art text files, to position
+    portraits from a default starting position.  Some of Kyouya's (kristoph)
+    sprites have been updated so they display in a better spot.  His
+    portrait will need to be redownloaded (delete his folder if he doesn't
+    show up from the updater).
+    
+Game fixes
+* Fixed gui issues with clicking in cross examination.
+* evidence items no longer need an icon, making things easier to debug
+    while you are creating a game. Can start in with less art and set up.
+* multiple onscreen characters are supported.  Use the "set _speaking"
+    command to select which one is talking at any time.
+* investigation scenes can now contain "wide rooms".  See
+    games/beta10/examine for an example.  Basically, if you add a second
+    bg placed either to the left or to the right of the first bg, then scrolling
+    will be handled appropriately.  It can be buggy in that occasionally
+    the click-zones get unaligned from visuals.  This is even more likely
+    to happen if you use script commands to scroll around the scene
+    for an event.
+* Can build interfaces with the "gui Button" command.  The buttons
+    are not skinnable yet, but this feature is coming.
+* the ability to turn on and off the automatic text formatting options
+    through _textbox_wrap and _textbox_lines variables
+* Clicking a textbox, or pressing enter, to skip it will either skip
+    printout animation or go to the next line, instead of skipping
+    potentially many lines at a time.  
+
+Scripting updates
+* cross examination simplified.  See games/beta10/crossexam for an
+    example.  No more label First etc.  If you want the statements
+    to be displayed before cross examination starts (like in the games)
+    you have to display the statements on their own before cross
+    exam starts.  When cross exam statements are finished (after
+    endcross) the next line will be executed straight through.  The old
+    label First section would go here.  
+* the commands list,cross,label,result,and statement all act as labels, 
+    making scripts much shorter and easier to understand
+* endscript command to end a script and return to the pevious one
+* macros can be called as if they were a built in command.  The macro
+    code is executed in it's own script, and then returns to the next line.
+    The old style of macros which are inserted inline are still supported
+    through the normal {} syntax.  The case games/beta10/psyche 
+    makes usage of these "called" macros.  (Functions?)
+    
+Editor
+* The ability to create new games, cases, and scripts
+* Right click on a textbox to edit it, right click on text to view as a textbox
+    again
+(Obviously the editor still has a long way to go)
+
+PyWright beta 9.5
+* Opengl mode disabled until beta 10
+* Textbox looks better with 2 lines, if you use 3 lines
+    it will look like it has in the past, but if you 
+    only have 2 it will be less squished.
+* Should work with no sound drivers
+* resolution configuration screen
+
+PyWright beta 9.1-9.4
+* can play movie files (check the movie command in doc.txt)
+* opengl mode
+* blur filter only applies in scaled video modes
+* Fix for a crash on some systems when initializing graphics.
+* can add gamewide content (art/sfx/music) folders
+* added option to not fade screen in lists and investigation
+    (Check test/menu_fade for an example case that alters these)
+* Added some more system variables - check the doc.
+    Most useful is _selection, which stores what a user
+    chooses from a list.  You can print their choice back at them,
+    or save it to a variable for later use.
+* Can check if a variable is a number or not with isnumber
+    (More variable manipulation coming in 10)
+* "exit" command works again
+* list names become automatic labels
+* allow spaces in game and case folders
+* System variables to toggle flash or shake default sound (variables default
+    to NOT play the sounds, since that seems to be the consensus)
+* Integrate BigFish's patches for better text, shake, and gba mode 
+        (gba mode optional, press 'g' to toggle for now)
+* Made court record button not work if it is hidden
+
+PyWright beta 9
+    
+    Wrightscript:
+* make sure that all command lines are stripped of ending spaces
+* overflowing text can still be continued (shows multiple textboxes until
+    all text is showed, as it's supposed to)
+* enable and disable court record switch
+* Added "joinvar" command to be able to join strings without a space between them
+* Use some system variables for things
+* Deleted specific evidence commands, replacing them with variables
+* set and setvar are now aliases
+* Goto can go to line numbers as well as labels (beware that macros will alter
+    the line number count.  Best used in cunjunction with the _lastline variable)
+    Also, if there are any labels that are named after a number such as "label 1", goto
+    will default to the label instead of the line number
+* Added includes to include one script in another
+* In a label, underscores and spaces are interchangeable.
+    "some_label" is the same as "some label"  This fixes some bugs with the result/label
+    unification of last version.
+* lists and back buttons: You can choose whether to have a Back element of the 
+    list, have a back button in the corner, both, or none.
+    If there is no Back button or Back element, the list is not cancellable.
+* No more "label Back".  All user interfaces will jump to a specific label, otherwise they
+    will simply continue to the next line.  All in my ambition to make the langauge
+    simpler.  If you want label Back to continue, ask me.
+* special effect text markup have control options
+
+    Packaging/Content:
+* Updater can update core files making a quicker release process for me 
+    (don't have to build exe on every release.  Source and exe builds 
+    are nearly identical, using the same core source files.
+* portraits converted from gif to png to avoid gif loader errors
+* image text file format changed, can support images in a grid now
+* pwlib character files can be loaded (not well tested)
+
+    Editor:
+* Added some more command support in editor
+* When you type a command into an empty line in the editor, it transforms the line
+  into the proper type (it can be changed back to standard line with right click)
+
+-----------------------------------------------------------------------------------------
+
+PyWright beta 8
+
+Bugs/Quirks:
+* noflag and flag both can use AND and OR logic to check for multiple flags
+* art loading works in more cases and smoother
+* more controls exposed for gif animations so they can be forced to load right
+* text formatting works better
+* pause pauses script but not animation (can still adjust it if you want to pause everything)
+* faster scrolling through games
+* Cannot skip text the first time it is seen, unless debug mode is turned on in the script with a "debug on" line
+* get rid of result, everything is labels.  More defined method of searching for the label to allow multiple labels with the same name and it works as it should
+* "blinking" character animations can be told to stop on the last line with a "blinkmode = stop" line in their .txt file, this makes kyouya's guitar animation look more correct
+Features:
+* Objects can be named, and can delete individual objects by name
+* nearly complete variable support - can set variables, do the four main math operations on them, and join strings together very easily.  Variables can be used as replacements for almost any value in a script, and can even be inserted into textboxes.
+* Can click between lines in the editor to add a new line.  It doesn't pick up that something is a textbox unless you save and reload the script.
+* Errors in script will give an error message in-game and continue past the problem line, instead of crashing the entire program.  More descriptive messages need to be added, only a few situations are recognized, other things will say "unknown error".
+
+PyWright beta 7
+
+Features:
+* Made a "games" folder where all games are located.  Each game can contain multiple cases.
+* When pywright starts, you can choose a game, and then you get the case selector from before.  You can choose a new game, or, if you have previously saved, resume your old one, on a per case basis.
+* Changed case-wide macro file handling.  Instead of just one macros.txt file, you may include as many files as you like, as long as they all have the .mcro extension.  This way you can use macro files like plugins and trade them around.  Also, I can do some enhancements in a macro instead of in the core, to start making PyWright more flexible.
+* Also improved macro handling a bit.  $0 in a macro will be replaced with a random id, allowing labels etc to be used within a macro without conflicting with the rest of a script.
+* Preliminary psyche lock support.  To enable, download the test game using the updater program, and then look at games/test/chains.  Include the "chain.mcro" file in your cases, and use psyche locks as they are used in chains/intro.txt.  Oh, make sure to download the locks fg pack from update to see the graphics also.
+* Psyche locks don't automatically make your penalty bar go down.  You will have to script the whole psyche lock process.  All "chain.mcro" really gives you are the animations.
+* Preliminary mouse support.  Almost everything works with mouse.  The only thing missing in a few areas is a back button, you will still need to press space in these situations.  Also, now that there is mouse support, some of the new features are missing keyboard support.  This will be cleaned up in the future.
+* Preliminary variable support.  Check the doc for more info. 
+* You can check if multiple flags exist
+* Penalty bar is actually linked to a variable.  You can specify a variable if you want to track multiple penalty values (perhaps reputation for each character).
+* Added music to downloader.  Currently only the game 1 music is posted.  I am very leery about music due to rights etc, so I might take this off.  I also wanted to add appellate's remixes, but I have not yet gotten permission.
+* Downloader can spot when files have been changed, so that I can update files if I need to.  It's still missing a way to update the actual program, but that will come.
+* You are able to upload your own games to the server.  The updater will spot when you have made a change so you can upload a new release.  There is no authentication, so this feature is very beta.  If two people make a game with the same name, they will overwrite each other.
+* Preliminary editor: Can open a script, edit the existing lines, and save.  Cannot add new lines, and the only understanding it has is textboxes.  But it's a nice way to load your script before running through the game and check that all of your textboxes display how you want them to
+
+Bug Fixes:
+* Improved gif support - all animated gifs I have tried look right.  Again, point out any errors you find.
+* Cases automatically return to case selection screen when they finish
+* Long text will wrap - warning it's a bit slow
+* Updater has better feedback about what it's doing
+* Fixed some transparency issues in places
+
+PyWright beta 6
+* Restructured profiles to be organized into character folders
+* Improved gif support
+* Allow blink and talk animations to be stored together:
+    profile name should end with (combined)
+    first half of frames is talking
+    second half of frames is blinking
+* display options are now saved
+* updater to download new art packs
+* nearly all art from games placed on the update service
+* make closing quotation marks on dialog lines optional
+* fix bug with penalty bar if it went below zero
+
+PyWright beta 5
+* Interface icons so the interface doesn't feel so guessy
+  (thanks to BigFish)
+* More authentic healthbar
+* profile available:
+  any evidence with a key ending in a dollar sign ($) is a profile, otherwise
+  they are identical to other evidence
+* more readable court record description font, also allowing line breaks {n}
+* 'check' evidence available.  Evidence objects have a new attribute called
+  'check', set this to the name of a script to run when the item is checked
+  example: "set photo.check examine_crime_photo"
+           when checked, examine_crime_photo.txt is run
+* press 1, 2, or 3, to cycle the graphics modes
+* store custom artwork with your case, makes it easier to trade cases
+* and of course, general bug fixes
+
+PyWright beta 4
+* scroll command documented (badly) and with speed controls
+* if a list is named (list mylist) the engine will remember
+    which items have been chosen.  Helpful for talk
+    screen so player can keep track.
+* possible to not have a nametag (blank nt command will turn off name text)
+* more text markup: play sound effects, center text, change click sound, 
+    skip to next texxtbox
+* evidence commands to define evidence on the fly (create evidence id, and set id.*)
+    see the doc for more info, although docs are still quite sparse
+* old style evidence.txt still works
+* cycling through evidence in the zoomed view has a scrolling animation
+* able to show the examine cursor without "check" icon pointing out when you are
+    over a hotspot - this allows pointing out inconsistencies in pictures
+    for the judge
+* animated gifs are now supported
+* possible to end the game by returning to the menu with "game menu".  Doesn't
+    do this automatically if it reaches the end of a script.
+* reorganized art directory so that the object type is now a folder instead
+    of added to the begining of the name
+* doubled resolution using scale2x filter, also made alt-enter for fullscreen
+    actually work
+* many bug fixes
+
+PyWright beta 3
+* Changed to arial font for nametags
+* Added pause command:
+pause 60 - will pause for 60 frames or 1 second
+* added a sound effect command:
+sfx silly.ogg - will play the sound file sfx/silly.ogg
+
+PyWright beta 2
+* Renamed from pyphoenix to pywright.
+* Don't crash when music file or art can't be loaded
+* Penalty system in place, with temp art and no sound.
+* Show arrows in evidence menu, space works properly in evidence menu
+* Deleted the "Back" option from menus - use spacebar instead. It will choose the "result Back" line as if the user had chosen a "Back" option, so handling this situation is still in an authors hands
+* Allow multiple "result" lines with the same name (there could be many Back's in one script). Execution jumps to the closest one below the current line, or wraps around to the top. Basically makes this behave how one would expect.
+* Delete enter key from held list when examining something (to prevent skipping text)
+* Allow toggling of fps display (and default to off) with the "d" key
+* Eliminate warning which cased an (apparent) crash on exiting exe version
+* Improve examine cursor (offscreen and drawing method)
+
+pyphoenix beta 1
+* Initial release

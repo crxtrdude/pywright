@@ -1,0 +1,17 @@
+#-version-1
+label top
+bg ts/1clooneyprisonasylumcell
+
+list scene9move
+li Clooney Prison's Asylum
+showlist
+menu scene9
+
+result Clooney Prison's Asylum
+noflag secondclooneyprisonasylum scene10
+flag secondclooneyprisonasylum scene10menu
+label scene10
+script scene10
+label scene10menu
+bg ts/1clooneyprisonasylumentrance fade
+script scene10menu

@@ -1,0 +1,28 @@
+timer 420 outoftime
+show_timer
+
+"Do you see a timer? blah blah blah this is long to see how much the numbers actually change and stuff."
+"Wow pretty neat eh?"
+endscript
+
+
+macro outoftime
+"You are out of time"
+endmacro
+
+macro show_timer
+print $_timer_value_outoftime
+#Delete old text
+delete name=timer_text
+#Create new text with the value of the timer variable
+textblock 0 0 200 10 name=timer_text $_timer_value_outoftime
+
+#Stop running this code when timer runs out
+is _timer_value_outoftime <= 0 stop_showing
+
+#If the timer is still running, schedule update
+timer 60 show_timer
+
+#The secondary script will end here
+label stop_showing
+endmacro

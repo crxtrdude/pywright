@@ -1,0 +1,57 @@
+#-version-1
+label top
+
+list scene55move
+li Dee Kay and Co
+li Supreme Court Building
+li Detention Center
+
+flag erlenmeyer,innocent policestation
+label scene55move2
+
+flag G.Stringsinrecord courtroom
+label scene55move3
+
+showlist
+menu scene55
+
+label policestation
+li Police Station
+goto scene55move2
+
+label courtroom
+li Courtroom
+goto scene55move3
+#end menu
+
+label Dee Kay and Co
+script scene57menu
+
+label Supreme Court Building
+noflag whathappened AND whatnow emahere
+flag whathappened AND whatnow emanothere
+label emahere
+script scene54menu
+label emanothere
+script scene54amenu
+
+label Detention Center
+noflag whathappened AND whatnow stringsnothere
+flag whathappened AND whatnow stringshere
+label stringsnothere
+mus
+bg aj/detentioncenter fade
+char Apollo hide
+"{c099}(They're still questioning the{n}Chief Justice... I'll come{n}back later.)"
+char nothing
+bg aj/wrightanything fade
+script scene55menu
+label stringshere
+script scene56
+
+label Police Station
+script scene58menu
+
+label Courtroom
+script scene60
+

@@ -1,0 +1,31 @@
+#The default order object classes are displayed on screen.  Space between items on the same layer.
+[z]
+0  uglyarrow waitenter delay scroll rotateanim fadeanim guiWait SoundEvent invisible
+1  bg
+2  portrait char
+3  sprite fadesprite graphic mesh evidence fg movie testimony_blink 
+4  textblock textbox penalty notguilty guilty
+5  press_button present_button menu listmenu examine_menu gui
+6  record_button
+7  evidence_menu guiBack guiScroll press_button present_button
+8  case_menu
+9 flash shake
+10 saved
+11 error_msg
+
+
+#The order object classes are updated, lower value is "more blocking"
+[pri]
+-10000	error_msg
+-5000 saved
+-1000	waitenter scroll rotateanim fadeanim guiScroll timer zoomanim uglyarrow flash shake
+0	evidence_menu
+1	fg movie sprite fadesprite
+20	portrait
+25	case_menu
+30	textbox
+50	penalty menu listmenu
+80      examine_menu
+81 guiWait
+1000	notguilty guilty
+10000	delay

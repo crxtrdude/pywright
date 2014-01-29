@@ -1,0 +1,5 @@
+#-version-1
+bg ts/1clooneyprisonasylumentrance fade
+char Meekins e=bobs
+mus 126 - Apollo Justice - Eccentric.ogg
+menu scene10meekins

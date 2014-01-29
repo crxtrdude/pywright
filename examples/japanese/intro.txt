@@ -1,0 +1,61 @@
+"This example requires the font file mingliu.ttc to be placed in examples/japanese/fonts"
+
+
+set _textbox_wrap off
+set _font_nt mingliu.ttc
+set _font_nt_size 12
+set _font_tb mingliu.ttc
+set _font_tb_size 14
+set _textbox_lines 2
+set _cr_button false
+"text"
+bg courtroomfull
+bg black stack name=fader
+penalty threat=50
+fade name=fader start=0 end=40 wait
+char クニックありますが hide
+"Yes."
+delete name=penalty
+penalty -50
+penalty delay=0
+char phoenix fade
+"{spd1}。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。"
+"今日はピックニックありますが今日はピックニックありますが{n}少し寝坊したみたいですね今日はピックニックありますが{n}少し寝坊したみたいですね今日はピックニックありますが。"
+pause 300
+char ??? hide
+"{sound blipfemale.ogg}すやすや～"
+pause 150
+mus cellphone.ogg
+pause 300
+"{sound blipfemale.ogg}{delay 1}あれ？{p60} 今何時？{p100} 携帯か？{p60}"
+mus
+pause 50
+sfx blip.ogg
+pause 100
+char Minami hide
+"{sound blipfemale.ogg}もしもし？面田です。{p60}"
+char Michele hide
+"{c080}{delay 1}みなみ？どこにいるの？{p40} ここはみんな待ってるよ！{p60}"
+char Minami hide
+"{sound blipfemale.ogg}え？待ってるって？何で？{p60}"
+char Michele hide
+"{delay 1}{c080}...{p60}...もしかして、寝坊したの？？"
+sfx shock.ogg
+char Minami hide
+"{sound blipfemale.ogg}{f}{s}...きゃあ～～！{p60} ピックニックは今日だった！！"
+pause 100
+mus 14 - Turnabout Sisters' Theme 2001.ogg
+pause 100
+char Maya e=confident nametag=Minami fade
+"{p60}{sound blipfemale.ogg}私は面田みなみです。"
+char Maya e=cheerful nametag=Minami
+"今日はピックニックありますが、少し寝坊したみたいですね。"
+"{p60}{sound blipfemale.ogg}　さあ、準備してから、行きましょう！ {econfident}{p30}　みんなを紹介します！{p60}"
+bg nothing fade
+pause 100
+mus
+pause 150
+
+clear
+
+script scene2
