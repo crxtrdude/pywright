@@ -1915,7 +1915,6 @@ class textbox(gui.widget):
                 self.init_normal()
     def delete(self):
         self.kill = 1
-        assets.cur_script.refresh_arrows(self)
         subscript("hide_court_record_button")
         subscript("hide_press_button")
         subscript("hide_present_button")

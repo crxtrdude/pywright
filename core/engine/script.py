@@ -602,6 +602,7 @@ char test
     def execute_macro(self,macroname,args="",obs=None):
         mlines = self.macros.get(macroname,None)
         if not mlines: return
+        print "     EXECUTE MACRO:    ",macroname,"from",self.scene
         if args: args = " "+args
         nscript = assets.Script(self)
         nscript.world = self.world
@@ -611,7 +612,7 @@ char test
         nscript.scene = self.scene+"/"+macroname
         nscript.macros = self.macros
         assets.stack.append(nscript)
-        self.buildmode = True
+        self.buildmode = False
         nscript.buildmode = True
         return nscript
     def next_statement(self):
@@ -1276,6 +1277,7 @@ VALUE('command','The name of a macro to be run after the timer runs out')],type=
         self.scriptlines = []
         self.si = 0
         self.add_object(m,True)
+        print "MENU DEFAULTS"
         self.execute_macro("defaults")
         m.init_normal()
     @category([KEYWORD('examine','whether to show the examine button','false'),
@@ -1353,6 +1355,7 @@ resume when the new script exits, otherwise, the current script will vanish."""
         print "Stack after clean up:",assets.stack
         print "cur script",assets.cur_script
         print "buildmode",assets.cur_script.buildmode
+        print "SCRIPT DEFAULTS"
         self.execute_macro("defaults")
     @category([],type="logic")
     def _top(self,command):
