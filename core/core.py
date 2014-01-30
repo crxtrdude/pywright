@@ -1813,8 +1813,11 @@ class fg(fadesprite):
         super(fg,self).update()
         if self.next>=0 and self.wait:
             return True
-        
+
+
+#Keep this for saved games
 class testimony_blink(fg):
+    id_name = "_tb_blinker_"
     def draw(self,dest):
         self.pos[0] = 0
         self.pos[1] = 22
@@ -1976,7 +1979,6 @@ class textbox(gui.widget):
         t = textutil.markup_text()
         t._text = self.mwritten
         assets.variables["_last_written_text"] = t.fulltext()
-        assets.cur_script.tboff()
         lines = self.text.split("\n")
         lines = lines[4:]
         self.set_text("\n".join(lines))
@@ -3230,6 +3232,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.sy = int(assets.variables.get("_cr_current_selected_y",0))
         
         self.screen_setting = "try_bottom"
+        self.script = assets.cur_script
     def delete(self):
         super(evidence_menu,self).delete()
         subscript("hide_present_button2")
@@ -3691,14 +3694,14 @@ class timer(sprite):
         self.ticks = abs(ticks)
         self.pri = ulayers.index(self.__class__.__name__)
         self.run = run
-        self.script = assets.cur_script
+        #self.script = assets.cur_script
     def update(self):
         self.ticks-=assets.dt
         assets.variables["_timer_value_"+self.run] = str(self.ticks)
         if self.ticks<=0:
             self.delete()
             if self.run:
-                ns = self.script.execute_macro(self.run)
+                subscript(self.run)
         
 class effect(object):
     id_name = "_effect_"
