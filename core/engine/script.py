@@ -215,6 +215,7 @@ class Script(gui.widget):
         self.lastline_value = ""   #Remember last line we executed
         self.held = []
         self.buildmode = True    #Do not refresh the screen while we are executing stuff
+        self.si = None
     def __repr__(self):
         return "Script object, scene=%s id=%s line_no=%s"%(self.scene,id(self),self.si)
     obs = property(lambda self: self.world.render_order(),lambda self,val: setattr(self,"world",World(val)))
