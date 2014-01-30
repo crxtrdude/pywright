@@ -1989,6 +1989,8 @@ class textbox(gui.widget):
             self.delete()
         if sound:
             assets.play_sound("bloop.ogg",volume=0.7)
+        if vtrue(assets.variables.get("_tb_on","off")):
+            assets.cur_script.execute_macro("tboff")
         assets.cur_script.buildmode = True
     def draw(self,dest):
         self.children = []
