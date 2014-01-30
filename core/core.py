@@ -3225,6 +3225,8 @@ class evidence_menu(fadesprite,gui.widget):
             
         #Loading saved position
         self.item_set = assets.variables.get("_cr_current_item_set",self.pages_set[0])
+        if self.item_set not in self.pages_set:
+            self.item_set = self.pages_set[0]
         self.layout()
         if not self.pages:
             self.item_set = self.pages_set[0]
