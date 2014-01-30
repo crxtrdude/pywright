@@ -1,3 +1,4 @@
+###COURT RECORD BUTTON###
 macro _crbut
 showrecord
 endmacro
@@ -25,7 +26,7 @@ endmacro
 macro enable_court_record_button
 set _cr_button true
 endmacro
-
+###END COURT RECORD BUTTON
 
 
 
@@ -106,8 +107,38 @@ endmacro
 ###END PRESENT BUTTON IN COURT RECORD###
 
 
+###TBON TBOFF MACROS###
+macro flicker_tb_off
+delete name=_tb_blinker_
+isnot _tb_on = 1 end
+timer 20 flicker_tb_on name=tbon_timer
+label end
+endmacro
+
+macro flicker_tb_on
+isnot _tb_on = 1 end
+{tbon}
+goto end
+label end
+endmacro
+
+macro tbon
+delete name=_tb_blinker_
+set _tb_on 1
+timer 60 flicker_tb_off name=tboff_timer
+fg testimony name=_tb_blinker_ x=-90 y=-76
+endmacro
+
+macro tboff
+set _tb_on 0
+delete name=_tb_blinker_
+delete name=tboff_timer
+delete name=tbon_timer
+endmacro
 
 
+
+###SETTING DEFAULT THEMES FOR SECOND SCREEN
 macro theme_screen2
     set theme $1
     print The theme is $theme

@@ -467,13 +467,6 @@ class Script(gui.widget):
                 o.draw(screen)
         if vtrue(assets.variables.get("_debug","false")):
             screen.blit(assets.get_font("nt").render("debug",1,[240,240,240]),[220,0])
-    def tboff(self):
-        for o in self.obs:
-            if isinstance(o,testimony_blink):
-                self.world.remove(o)
-                break
-    def tbon(self):
-        self.add_object(testimony_blink("testimony"),True)
     def state_test_true(self,test):
         if test is None:
             return True
@@ -555,13 +548,15 @@ char test
         self.viewed[assets.game+self.scene+str(self.si-1)] = True
         self.add_object(tbox,True)
         self.refresh_arrows(tbox)
-        self.tboff()
         if self.cross is not None and self.instatement:
-            self.tbon()
+            self.execute_macro("tbon")
             if self.cross == "proceed":
                 tbox.statement = self.statement
                 nt,t = tbox._text.split("\n",1)
                 tbox.set_text("{c283}"+t)
+        else:
+            if vtrue(assets.variables.get("_tb_on","off")):
+                self.execute_macro("tboff")
         tbox.init_gui()
         tbox.update(0)
         self.buildmode = True
@@ -1201,12 +1196,21 @@ KEYWORD('priority','Fine tune what gets paused and what doesnt.','10000 (such a 
         self.add_object(do)
     @category([
 VALUE('ticks','How many ticks (1/60 of a second) before the command will be run'),
-VALUE('command','The name of a macro to be run after the timer runs out')],type="gameflow")
-    def _timer(self,command,ticks,run):
+VALUE('command','The name of a macro to be run after the timer runs out'),
+KEYWORD('name','The name of this timer so it can later be controlled. Only one timer with this name can be activated at once.')],type="gameflow")
+    def _timer(self,command,ticks,run,*args):
         """Schedule a macro to be executed after a certain amount of time. The rest of the game will proceed normally until the timer
         fires it's macro. Depending on what the macro does, the game may switch to a new mode or resume after the macro has
         completed."""
-        self.add_object(timer(int(ticks),run))
+        kwargs,args = parseargs(args,defaults={"name":None})
+        if kwargs["name"]:
+            for o in self.obs:
+                if isinstance(o,timer) and getattr(o,"id_name",None)==kwargs["name"]:
+                    o.delete()
+        t = timer(int(ticks),run)
+        if kwargs["name"]:
+            t.id_name = kwargs["name"]
+        self.add_object(t)
     @category([],type="gameflow")
     def _waitenter(self,command):
         """The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as

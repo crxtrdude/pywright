@@ -13,6 +13,7 @@ glob:build/*
 glob:core/cache/*
 glob:scriptdist/*
 glob:tools/tools.ini
+glob:*/Thumbs.db
 syntax: glob
 dist/*
 downloads/*
@@ -25,6 +26,5 @@ loghistory.txt
 settings.ini
 lastgame
 lastlog.txt
-*/Thumbs.db
 tools/gifsicle.exe
 tools/mp3ogg/*
