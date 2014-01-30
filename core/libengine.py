@@ -511,7 +511,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             keybinds["joyhatmotion"][(1,0)] = "k_right"
             keybinds["keydown"][pygame.K_LEFT] = "k_left"
             keybinds["keyhold"][pygame.K_LEFT] = "k_hold_left"
-            keybinds["joyhatmotion"][(-1,0)] = "k_right"
+            keybinds["joyhatmotion"][(-1,0)] = "k_left"
             keybinds["keydown"][pygame.K_UP] = "k_up"
             keybinds["joyhatmotion"][(0,1)] = "k_up"
             keybinds["keydown"][pygame.K_DOWN] = "k_down"
