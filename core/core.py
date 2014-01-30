@@ -1924,7 +1924,7 @@ class textbox(gui.widget):
         subscript("hide_court_record_button")
         subscript("hide_press_button")
         subscript("hide_present_button")
-        assets.cur_script.clear_arrows()
+        assets.cur_script.refresh_arrows(self)
         print "TEXTBOX DELETED"
         assets.cur_script.build_mode = True
     def gsound(self):
