@@ -45,7 +45,7 @@ class choose_game(gui.widget):
         self.pri = -1000
         
         self.list = gui.scrollpane([0,10])
-        self.list.width,self.list.height = [sw,sh-10]
+        self.list.width,self.list.height = [assets.sw,assets.sh-10]
         self.add_child(self.list)
         self.jump_when_close = None
         self.sort = "played"
@@ -171,9 +171,9 @@ def load_game_menu():
     root = choose_game()
     root.pri = -1000
     root.z = 5000
-    root.width,root.height = [sw,sh]
+    root.width,root.height = [assets.sw,assets.sh]
     list = gui.scrollpane([0,0])
-    list.width,list.height = [sw,sh]
+    list.width,list.height = [assets.sw,assets.sh]
     root.add_child(list)
     title = gui.editbox(None,"Choose save to load")
     title.draw_back = False
@@ -294,7 +294,7 @@ def make_start_script(logo=True):
     
     def pl(*args):
         [x.close() for x in assets.cur_script.obs if isinstance(x,settings.settings_menu)]
-        assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
+        assets.cur_script.obs.append(settings.settings_menu(sw=assets.sw,sh=assets.sh,assets=assets))
     setattr(make_start_script,"SETTINGS",pl)
     item = ws_button(make_start_script,"SETTINGS")
     item.bordercolor = [255,255,255]
@@ -306,7 +306,7 @@ def make_start_script(logo=True):
     if not android:
         def pl(*args):
             [x.close() for x in assets.cur_script.obs if isinstance(x,tools_menu.tools_menu)]
-            assets.cur_script.obs.append(tools_menu.tools_menu(sw=sw,sh=sh,assets=assets))
+            assets.cur_script.obs.append(tools_menu.tools_menu(sw=assets.sw,sh=assets.sh,assets=assets))
         setattr(make_start_script,"TOOLS",pl)
         item = ws_button(make_start_script,"TOOLS")
         item.bordercolor = [255,255,255]
@@ -562,7 +562,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     if ss:
                         ss[0].close()
                     else:
-                        assets.cur_script.obs.append(settings.settings_menu(sw=sw,sh=sh,assets=assets))
+                        assets.cur_script.obs.append(settings.settings_menu(sw=assets.sw,sh=assets.sh,assets=assets))
                 def enter_up():
                     if "enter" in assets.cur_script.held: assets.cur_script.held.remove("enter")
                     for o in assets.cur_script.upobs:

@@ -222,8 +222,8 @@ class Script(gui.widget):
     upobs = property(lambda self: self.world.update_order())
     def _gchildren(self): return self.world.render_order()
     children = property(_gchildren)
-    width = property(lambda x: sw)
-    height = property(lambda x: sh*2)
+    width = property(lambda x: assets.sw)
+    height = property(lambda x: assets.sh*2)
     def handle_events(self,evts):
         n = []
         dp = translate_click

@@ -46,8 +46,7 @@ try:
 except:
     numpy = None
     pygame.use_numpy = False
-sw,sh = 256,192
-#sw,sh = 640,480
+standard_sw,standard_sh = 256,192
 spd = 6
 
 ext_map = {"image":["png","jpg"],
@@ -86,7 +85,7 @@ def to_triplets(li):
     return new
 
 def other_screen(y):
-    return y+(assets.num_screens-1)*sh
+    return y+(assets.num_screens-1)*assets.sh
 
 class meta:
     def __init__(self):
@@ -208,6 +207,15 @@ class Variables(dict):
             return
         if key=="_debug":
             return
+        if key=="_sw":
+            print "SETTING SW"
+            assets.sw = int(value)
+            assets.make_screen()
+            return
+        if key=="_sh":
+            assets.sh = int(value)
+            assets.make_screen()
+            return
         return dict.__setitem__(self,key,value,*args)
     def set(self,key,value):
         return self.__setitem__(key,value)
@@ -236,8 +244,8 @@ class Assets(object):
     sound_volume = 100
     _music_vol = 100
     mute_sound = 0
-    sw = sw
-    sh = sh
+    sw = standard_sw
+    sh = standard_sh
     last_autosave = 0
     autosave_interval = 0
     path = ""
@@ -1070,7 +1078,7 @@ class sprite(gui.button):
         if not hasattr(self,"pos"): return [0,0]
         return self.getpos()
     rpos = property(_g_rpos)
-    width,height = [sw,sh]
+    width,height = [assets.sw,assets.sh]
     children = []
     spd = 6
     def getpos(self):
@@ -1626,8 +1634,8 @@ class portrait(sprite):
             self.cur_sprite.greyscale = self.greyscale
             self.cur_sprite.invert = self.invert
             pos = self.pos[:]
-            pos[0] += (sw-(self.cur_sprite.offsetx+self.cur_sprite.img.get_width()))//2
-            pos[1] += (sh-(self.cur_sprite.img.get_height()-self.cur_sprite.offsety))
+            pos[0] += (assets.sw-(self.cur_sprite.offsetx+self.cur_sprite.img.get_width()))//2
+            pos[1] += (assets.sh-(self.cur_sprite.img.get_height()-self.cur_sprite.offsety))
             self.cur_sprite.pos = pos
             self.cur_sprite.rot = self.rot[:]
             self.cur_sprite.draw(dest)
@@ -1743,7 +1751,7 @@ class penalty(fadesprite):
         assets.variables[self.var] = str(val)
     def draw(self,dest):
         v = self.gv()
-        x = sw-110
+        x = assets.sw-110
         dest.blit(self.left,[x,2]); x+=2
         if v<0: v=0
         for i in range(v):
@@ -1752,7 +1760,7 @@ class penalty(fadesprite):
             dest.blit(self.bad,[x,2]); x += 1
         dest.blit(self.right,[x,2])
         if self.flash_amount:
-            fx = sw-108+v-self.flash_amount
+            fx = assets.sw-108+v-self.flash_amount
             fw = self.flash_amount
             fy = 4
             fh = 10
@@ -1806,7 +1814,7 @@ class fg(fadesprite):
         super(fg,self).__init__(**kwargs)
         if name:
             self.load("fg/"+name)
-            self.pos = [(sw-self.img.get_width())/2+self.pos[0],(sh-self.img.get_height())/2+self.pos[1]]
+            self.pos = [(assets.sw-self.img.get_width())/2+self.pos[0],(assets.sh-self.img.get_height())/2+self.pos[1]]
         self.wait = kwargs.get("wait",1)
         self.spd = int(assets.variables.get("_default_fg_frame_delay",self.spd))
     def update(self):
@@ -1868,7 +1876,7 @@ class textbox(gui.widget):
     def __init__(self,text="",color=[255,255,255],delay=2,speed=1,rightp=True,leftp=False,nametag="\n"):
         self.nametag = nametag
         ImgFont.lastcolor = [255,255,255]
-        gui.widget.__init__(self,[0,0],[sw,sh])
+        gui.widget.__init__(self,[0,0],[assets.sw,assets.sh])
         self.z = zlayers.index(self.__class__.__name__)
         nametag = self.nametag
         if assets.portrait:
@@ -1927,6 +1935,8 @@ class textbox(gui.widget):
         subscript("hide_court_record_button")
         subscript("hide_press_button")
         subscript("hide_present_button")
+        if vtrue(assets.variables.get("_tb_on","off")):
+            subscript("tboff")
         assets.cur_script.refresh_arrows(self)
         print "TEXTBOX DELETED"
         assets.cur_script.build_mode = True
@@ -1989,8 +1999,6 @@ class textbox(gui.widget):
             self.delete()
         if sound:
             assets.play_sound("bloop.ogg",volume=0.7)
-        if vtrue(assets.variables.get("_tb_on","off")):
-            assets.cur_script.execute_macro("tboff")
         assets.cur_script.buildmode = True
     def draw(self,dest):
         self.children = []
@@ -1999,8 +2007,8 @@ class textbox(gui.widget):
         #For the widget
         x = assets.variables.get("_textbox_x","")
         y = assets.variables.get("_textbox_y","")
-        self.rpos1 = [(sw-self.img.get_width())/2,
-            sh-self.img.get_height()]
+        self.rpos1 = [(assets.sw-self.img.get_width())/2,
+            assets.sh-self.img.get_height()]
         if x!="":
             self.rpos1[0] = int(x)
         if y!="":
@@ -2253,10 +2261,10 @@ class textbox(gui.widget):
                     if "{center}" in line:
                         center = not center
                     if center:
-                        x = (sw-img.get_width())//2
-                    if x+img.get_width()>256:
+                        x = (assets.sw-img.get_width())//2
+                    if x+img.get_width()>assets.sw:
                         if not getattr(self,"OVERAGE",None) and vtrue(assets.variables.get("_debug","false")):
-                            self.OVERAGE = x+img.get_width()-256
+                            self.OVERAGE = x+img.get_width()-assets.sw
                             raise offscreen_text('Text Overflow:"%s" over by %s'%(line,self.OVERAGE))
                     self.img.blit(img,[x,y])
                     y+=inc
@@ -2268,7 +2276,7 @@ class textbox(gui.widget):
         
 class uglyarrow(fadesprite):
     def __init__(self):
-        fadesprite.__init__(self,x=0,y=sh)
+        fadesprite.__init__(self,x=0,y=assets.sh)
         self.load(assets.variables.get("_bigbutton_bg","bg/main"))
         self.arrow = sprite(0,0).load("general/arrow_big")
         self.scanlines = fadesprite(0,0).load("fg/scanlines")
@@ -2279,8 +2287,8 @@ class uglyarrow(fadesprite):
         self.double = None
         self.textbox = None
         self.pri = ulayers.index(self.__class__.__name__)
-        self.width = self.iwidth = sw
-        self.height = self.iheight = sh
+        self.width = self.iwidth = assets.sw
+        self.height = self.iheight = assets.sh
         self.high = False
         self.showleft = True
         self.last = None
@@ -2301,7 +2309,7 @@ class uglyarrow(fadesprite):
             self.double = sprite(0,0).load(assets.variables.get("_bigbutton_cross","general/cross_exam_buttons"))
         self.button = None
     def update(self):
-        self.pos[1] = sh
+        self.pos[1] = assets.sh
         if self.high:
             self.show_clicked()
         else:
@@ -2313,29 +2321,29 @@ class uglyarrow(fadesprite):
     def draw(self,dest):
         fadesprite.draw(self,dest)
         if self.button:
-            self.button.pos[0] = (sw-self.button.img.get_width())//2
-            self.button.pos[1] = (sh-self.button.img.get_height())//2+sh
+            self.button.pos[0] = (assets.sw-self.button.img.get_width())//2
+            self.button.pos[1] = (assets.sh-self.button.img.get_height())//2+assets.sh
             self.button.draw(dest)
             self.iwidth = self.button.img.get_width()
             self.iheight = self.button.img.get_height()
             if self.can_click():
-                self.arrow.pos[0] = (sw-self.arrow.img.get_width())//2
-                self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
+                self.arrow.pos[0] = (assets.sw-self.arrow.img.get_width())//2
+                self.arrow.pos[1] = (assets.sh-self.arrow.img.get_height())//2+assets.sh
                 self.arrow.draw(dest)
         elif self.double:
-            self.double.pos[0] = (sw-self.double.img.get_width())//2
-            self.double.pos[1] = (sh-self.double.img.get_height())//2+sh
+            self.double.pos[0] = (assets.sw-self.double.img.get_width())//2
+            self.double.pos[1] = (assets.sh-self.double.img.get_height())//2+assets.sh
             self.double.draw(dest)
             self.iwidth = self.double.img.get_width()
             self.iheight = self.double.img.get_height()
             if self.can_click():
-                self.arrow.pos[0] = (sw-self.arrow.img.get_width())//2-75
-                self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
+                self.arrow.pos[0] = (assets.sw-self.arrow.img.get_width())//2-75
+                self.arrow.pos[1] = (assets.sh-self.arrow.img.get_height())//2+assets.sh
                 self.arrow.img = pygame.transform.flip(self.arrow.img,1,0)
                 if self.showleft:
                     self.arrow.draw(dest)
-                self.arrow.pos[0] = (sw-self.arrow.img.get_width())//2+70
-                self.arrow.pos[1] = (sh-self.arrow.img.get_height())//2+sh
+                self.arrow.pos[0] = (assets.sw-self.arrow.img.get_width())//2+70
+                self.arrow.pos[1] = (assets.sh-self.arrow.img.get_height())//2+assets.sh
                 self.arrow.img = pygame.transform.flip(self.arrow.img,1,0)
                 self.arrow.draw(dest)
         if vtrue(assets.variables.get("_screen2_scanlines","off")):
@@ -2413,7 +2421,7 @@ class menu(fadesprite,gui.widget):
         self.bg = None
         oy = 192
         fadesprite.__init__(self,x=0,y=oy)
-        gui.widget.__init__(self,[0,oy],[sw,sh])
+        gui.widget.__init__(self,[0,oy],[assets.sw,assets.sh])
         self.load("general/black")
         self.max_fade = int(float(assets.variables.get("_menu_fade_level",50)))
         self.fade = 0
@@ -2424,7 +2432,7 @@ class menu(fadesprite,gui.widget):
         self.options = []
         self.selected = ""
         self.opt = assets.open_art("general/talkbuttons",key=[255,0,255])[0]
-        stx,sty = (sw-self.opt.get_width())/2,(sh-self.opt.get_height())/2
+        stx,sty = (assets.sw-self.opt.get_width())/2,(assets.sh-self.opt.get_height())/2
         self.opos_c = {"examine":[0,0],"move":[1,0],
             "talk":[0,1],"present":[1,1]}
         self.opos_l = [["examine","move"],["talk","present"]]
@@ -2543,7 +2551,7 @@ class listmenu(fadesprite,gui.widget):
     def over(self,mp):
         if getattr(self,"kill",0):
             return False
-        x = (sw-self.choice.img.get_width())/2
+        x = (assets.sw-self.choice.img.get_width())/2
         y = self.getpos()[1]+30
         si = None
         i = 0
@@ -2575,7 +2583,7 @@ class listmenu(fadesprite,gui.widget):
     def __init__(self,tag=None):
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,192
-        gui.widget.__init__(self,[x,y],[sw,sh])
+        gui.widget.__init__(self,[x,y],[assets.sw,assets.sh])
         fadesprite.__init__(self,x=x,y=y)
         self.load(assets.variables.get("_list_bg_image","general/black"))
         self.max_fade = int(float(assets.variables.get("_menu_fade_level",50)))
@@ -2662,7 +2670,7 @@ class listmenu(fadesprite,gui.widget):
             self.selected = self.options[self.si]
             self.change_selected()
         fadesprite.draw(self,dest)
-        x = (sw-self.choice.img.get_width())/2
+        x = (assets.sw-self.choice.img.get_width())/2
         y = self.getpos()[1]+30
         #self.choice.setfade(200)
         #self.choice_high.setfade(200)
@@ -2750,8 +2758,8 @@ class case_menu(fadesprite,gui.widget):
         self.base = self.img = assets.Surface([64,64])
         self.max_fade = 150
         self.next = 0
-        self.width = sw
-        self.height = sh
+        self.width = assets.sw
+        self.height = assets.sh
         self.options = []
         order = assets.variables.get("_order_cases","alphabetical")
         if order=="alphabetical":
@@ -2796,8 +2804,8 @@ class case_menu(fadesprite,gui.widget):
     def init_options(self):
         self.option_imgs = []
         base = assets.open_art("general/selection_chapter")[0].convert()
-        x = self.pos[0]+sw/2-base.get_width()/2
-        y = self.pos[1]+sh/2-base.get_height()/2
+        x = self.pos[0]+assets.sw/2-base.get_width()/2
+        y = self.pos[1]+assets.sh/2-base.get_height()/2
         for o in self.options:
             spr = base.copy()
             
@@ -2841,7 +2849,7 @@ class case_menu(fadesprite,gui.widget):
                 self.option_imgs.append([spr,[x,y+90]])
             else:
                 self.option_imgs.append([None,None])
-            x+=sw
+            x+=assets.sw
         self.children = self.option_imgs
     def update(self):
         if self.reload:
@@ -2851,14 +2859,14 @@ class case_menu(fadesprite,gui.widget):
         if abs(spd)>0 and abs(spd)<10:
             spd = 10*abs(spd)/spd
         spd *= assets.dt
-        if self.x<self.choice*sw:
+        if self.x<self.choice*assets.sw:
             self.x+=spd
-            if self.x>self.choice*sw:
-                self.x=self.choice*sw
-        if self.x>self.choice*sw:
+            if self.x>self.choice*assets.sw:
+                self.x=self.choice*assets.sw
+        if self.x>self.choice*assets.sw:
             self.x+=spd
-            if self.x<self.choice*sw:
-                self.x=self.choice*sw
+            if self.x<self.choice*assets.sw:
+                self.x=self.choice*assets.sw
         return True
     def k_right(self):
         if self.choice<len(self.options)-1:
@@ -2898,7 +2906,7 @@ class case_menu(fadesprite,gui.widget):
         for s,p in self.option_imgs:
             if not s: continue
             dest.blit(s,[p[0]-self.x,p[1]])
-        if self.x==self.choice*sw:
+        if self.x==self.choice*assets.sw:
             if self.choice<len(self.options)-1:
                 dest.blit(self.arr,[self.pos[0]+240,self.pos[1]+80])
             if self.choice>0:
@@ -2931,15 +2939,15 @@ class examine_menu(sprite,gui.widget):
         sprite.__init__(self)
         self.pos = [0,192]
         self.z = zlayers.index(self.__class__.__name__)
-        self.width = sw
-        self.height = sh
-        gui.widget.__init__(self,self.pos,[sw,sh])
+        self.width = assets.sw
+        self.height = assets.sh
+        gui.widget.__init__(self,self.pos,[assets.sw,assets.sh])
         self.img = assets.Surface([64,64])
         self.regions = []
         self.mouse = pygame.Surface([10,10])
         self.mouse.fill([100,100,100])
         self.selected = [None]
-        self.mx,self.my = sw/2,sh/2
+        self.mx,self.my = assets.sw/2,assets.sh/2
         self.check = assets.open_art("general/check"+assets.appendgba,key=[255,0,255])[0]
         self.hide = hide
         self.bg = []
@@ -2982,9 +2990,9 @@ class examine_menu(sprite,gui.widget):
             smallest = xes[0]
         for mx in xes:
             x = mx-smallest
-            if x>=sw and screens<2:
+            if x>=assets.sw and screens<2:
                 screens = 2
-            if x>=sw*2 and screens<3:
+            if x>=assets.sw*2 and screens<3:
                 screens = 3
         xes = [o[0] for o in self.regions]
         xes.sort()
@@ -2993,11 +3001,11 @@ class examine_menu(sprite,gui.widget):
             smallest = xes[0]
         for mx in xes:
             x = mx-smallest
-            if x>=sw and screens<2:
+            if x>=assets.sw and screens<2:
                 screens = 2
-            if x>=sw*2 and screens<3:
+            if x>=assets.sw*2 and screens<3:
                 screens = 3
-        self.width = screens*sw
+        self.width = screens*assets.sw
         return screens
     def addregion(self,x,y,width,height,label):
         reg = [int(x),int(y),int(width),int(height),label]
@@ -3025,19 +3033,14 @@ class examine_menu(sprite,gui.widget):
             else:
                 col = color_str(assets.variables.get("_examine_cursor_col","FFFFFF"))
                 pygame.draw.line(dest,col,[0,my],[self.mx-5,my])
-                pygame.draw.line(dest,col,[self.mx+5,my],[sw,my])
+                pygame.draw.line(dest,col,[self.mx+5,my],[assets.sw,my])
                 pygame.draw.line(dest,col,[self.mx,self.getpos()[1]],[self.mx,my-5])
-                pygame.draw.line(dest,col,[self.mx,my+5],[self.mx,self.getpos()[1]+sh])
+                pygame.draw.line(dest,col,[self.mx,my+5],[self.mx,self.getpos()[1]+assets.sh])
                 pygame.draw.rect(dest,col,[[self.mx-5,my-5],[10,10]],1)
         if vtrue(assets.variables.get("_examine_showbars", "true")):
             dest.blit(self.fg,[0,self.getpos()[1]])
         if self.selected != [None] and not self.hide:
-            dest.blit(self.check,[sw-self.check.get_width()+3,self.getpos()[1]+sh-self.check.get_height()])
-        #~ if vtrue(assets.variables.get("_debug","false")):
-            #~ x = int(assets.variables.get("_examine_offsetx",0))
-            #~ y = int(assets.variables.get("_examine_offsety",0))
-            #~ tb = textblock("offsetx:%s offsety%s"%(x,y),[0,192],[256,20],[255,255,255])
-            #~ tb.draw(dest)
+            dest.blit(self.check,[assets.sw-self.check.get_width()+3,self.getpos()[1]+assets.sh-self.check.get_height()])
     def k_left(self,*args):
         self.klefth = 1
     def k_right(self,*args):
@@ -3070,9 +3073,9 @@ class examine_menu(sprite,gui.widget):
         self.mx+=d[0]
         self.my+=d[1]
         if self.mx-5<0: self.mx=5
-        if self.mx+5>sw: self.mx=sw-5
+        if self.mx+5>assets.sw: self.mx=assets.sw-5
         if self.my-5<0: self.my=5
-        if self.my+5>sh: self.my=sh-5
+        if self.my+5>assets.sh: self.my=assets.sh-5
         if assets.variables.get("_examine_scrolling",None)=="perceive":
             def add(x):
                 x.pos[0]-=d[0]
@@ -3095,7 +3098,7 @@ class examine_menu(sprite,gui.widget):
             self.bck.k_space = k_space
             self.bck.update = lambda *x: False
             assets.cur_script.obs.append(self.bck)
-        scrn = (-self.getoffset()//sw)+1
+        scrn = (-self.getoffset()//assets.sw)+1
         self.xscroll = None
         if scrn<self.screens():
             self.xscroll = 1
@@ -3174,7 +3177,7 @@ class evidence_menu(fadesprite,gui.widget):
             self.enter_down()
             self.switch = False
         check = assets.open_art("general/check"+assets.appendgba)[0]
-        chk = [sw-check.get_width(),sh-check.get_height()]
+        chk = [assets.sw-check.get_width(),assets.sh-check.get_height()]
         if mp[0]>=chk[0] and mp[1]>=chk[1]:
             self.do_check()
         #~ self.enter_down()
@@ -3189,7 +3192,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.z = zlayers.index(self.__class__.__name__)
         print "evidence z",self.z
         fadesprite.__init__(self,x=x,y=y)
-        gui.widget.__init__(self,[x,y],[sw,sh])
+        gui.widget.__init__(self,[x,y],[assets.sw,assets.sh])
         self.items = items
         self.load(assets.variables["ev_mode_bg_evidence"]+assets.appendgba)
         self.cursor = assets.open_art(assets.variables["ev_cursor_img"])[0]
@@ -3599,7 +3602,7 @@ class evidence_menu(fadesprite,gui.widget):
                 chk = assets.variables.get(self.chosen+"_check",None)
                 if chk:
                     check = assets.open_art(assets.variables["ev_check_img"]+assets.appendgba)[0]
-                    dest.blit(check,[pos[0]+sw-check.get_width(),pos[1]+sh-check.get_height()])
+                    dest.blit(check,[pos[0]+assets.sw-check.get_width(),pos[1]+assets.sh-check.get_height()])
             else:
                 self.mode = "overview"
         if self.canback():
@@ -3615,7 +3618,7 @@ class evidence_menu(fadesprite,gui.widget):
                     int(assets.variables["ev_z_textbox_y"])];
                 tbsize = [int(assets.variables["ev_z_textbox_w"]),
                     int(assets.variables["ev_z_textbox_h"])]
-            newsurf = assets.Surface([sw,sh]).convert_alpha()
+            newsurf = assets.Surface([assets.sw,assets.sh]).convert_alpha()
             newsurf.fill([0,0,0,0])
             if assets.gbamode:
                 pos[1]-=10
@@ -4115,7 +4118,7 @@ class guiBack(sprite,gui.widget):
             image = "general/back"
         self.image = image
         self.unhighlight()
-        self.pos = [0,192+sh-self.img.get_height()]
+        self.pos = [0,assets.sh+assets.sh-self.img.get_height()]
         if x is not None:
             self.pos[0] = x
         if y is not None:
@@ -4144,13 +4147,13 @@ class guiScroll(sprite,gui.widget):
         gui.widget.__init__(self)
         self.pri = ulayers.index(self.__class__.__name__)
         self.load("general/examine_scroll")
-        self.pos = [sw//2-self.img.get_width()//2,sh*2-self.img.get_height()]
+        self.pos = [assets.sw//2-self.img.get_width()//2,assets.sh*2-self.img.get_height()]
         gui.widget.__init__(self,self.pos,self.img.get_size())
         self.direction = direction
         self.screen_setting = "try_bottom"
     def k_z(self):
         self.delete()
-        self.parent.xscrolling = self.direction*sw
+        self.parent.xscrolling = self.direction*assets.sw
         subscript("sound_examine_scroll")
         #del self.parent.scrollbut
     def update(self):

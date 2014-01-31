@@ -16,7 +16,7 @@ def make_screen():
     ns = assets.num_screens
     if assets.cur_screen:
         ns = 2
-    pygame.screen = pygame.Surface([sw,sh*2]).convert()
+    pygame.screen = pygame.Surface([assets.sw,assets.sh*2]).convert()
     pygame.blank = pygame.screen.convert()
     pygame.blank.fill([0,0,0])
     pygame.js1 = None
@@ -41,8 +41,8 @@ def make_screen():
             pygame.js1 = pygame.joystick.Joystick(0)
             pygame.js1.init()
         if os.environ.get("SDL_VIDEODRIVER",0)=="dummy":
-            pygame.screen = pygame.Surface([sw,sh*2],0,32)
-            pygame.blank = pygame.Surface([sw,sh*2],0,32)
+            pygame.screen = pygame.Surface([assets.sw,assets.sh*2],0,32)
+            pygame.blank = pygame.Surface([assets.sw,assets.sh*2],0,32)
             pygame.blank.fill([0,0,0])
 
 def scale_relative_click(pos,rel):
@@ -50,8 +50,8 @@ def scale_relative_click(pos,rel):
     def col(pp,ss):
         if pos[0]>=pp[0] and pos[0]<=pp[0]+ss[0]\
             and pos[1]>=pp[1] and pos[1]<=pp[1]+ss[1]:
-            x = rel[0]/float(ss[0])*sw
-            y = rel[1]/float(ss[1])*sh
+            x = rel[0]/float(ss[0])*assets.sw
+            y = rel[1]/float(ss[1])*assets.sh
             return [x,y]
     if dim["top"]:
         r = col(*dim["top"][2:])
@@ -69,9 +69,9 @@ def translate_click(pos):
         if pos[0]>=pp[0] and pos[0]<=pp[0]+ss[0]\
             and pos[1]>=pp[1] and pos[1]<=pp[1]+ss[1]:
             x = pos[0]-pp[0]
-            x = x/float(ss[0])*sw
+            x = x/float(ss[0])*assets.sw
             y = pos[1]-pp[1]
-            y = y/float(ss[1])*sh
+            y = y/float(ss[1])*assets.sh
             return [int(x),int(y)]
     if dim["top"]:
         r = col(*dim["top"][2:])
@@ -80,7 +80,7 @@ def translate_click(pos):
     if dim["bottom"]:
         r = col(*dim["bottom"][2:])
         if r:
-            r[1]+=sh
+            r[1]+=assets.sh
             return r
     return [-100000,-100000]
 def fit(surf,size):
@@ -92,13 +92,13 @@ def fit(surf,size):
     return surf
 def draw_screen(showfps):
     scale = 0
-    if assets.sheight!=sh or assets.swidth!=sw: scale = 1
+    if assets.sheight!=assets.sh or assets.swidth!=assets.sw: scale = 1
     scaled = pygame.screen
-    top = scaled.subsurface([[0,0],[sw,sh]])
+    top = scaled.subsurface([[0,0],[assets.sw,assets.sh]])
     bottom = top
     mode,dim = settings.screen_format(assets)
     if mode == "two_screens" or mode == "horizontal" or mode == "show_one" or mode == "small_bottom_screen":
-        bottom = scaled.subsurface([[0,sh],[sw,sh]])
+        bottom = scaled.subsurface([[0,assets.sh],[assets.sw,assets.sh]])
     pygame.real_screen.fill([10,10,10])
     def draw_segment(dest,surf,pos,size):
         rp = [pos[0]*assets.swidth,pos[1]*assets.sheight]
