@@ -807,18 +807,20 @@ set _font_new_resume_size 14""".split("\n"):
             loaded.append(ob)
         keys = stack.keys()
         keys.sort()
-        for s in assets.stack[:]:
-            d = 1
-            for o in s.obs:
-                if isinstance(o,case_menu):
-                    d = 0
-                    break
-            if d:
-                assets.stack.remove(s)
         for k in keys:
             assets.stack.append(stack[k])
         for ob in loaded:
             ob.after_load()
+        #Clear stack, keep only the last root script and its children
+        d = 0
+        for s in reversed(assets.stack):
+            if d:
+                print "removing",s
+                assets.stack.remove(s)
+            else:
+                print "keeping",s
+            if not s.parent:
+                d = 1
         self.cur_script.obs.append(saved(text="Game restored",block=False))
         self.cur_script.execute_macro("load_defaults")
         self.cur_script.execute_macro("init_court_record_settings")
