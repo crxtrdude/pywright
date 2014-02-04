@@ -2765,7 +2765,7 @@ class case_menu(fadesprite,gui.widget):
         self.options = []
         order = assets.variables.get("_order_cases","alphabetical")
         if order=="alphabetical":
-            for d in os.listdir(path):
+            for d in assets.registry.list_dir(path):
                 full = os.path.join(path,d)
                 if os.path.isdir(full):
                     if self.get_script(full):
