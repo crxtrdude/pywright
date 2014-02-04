@@ -1,6 +1,6 @@
 import os,zipfile,StringIO
 
-filepaths = ["art","music","sfx","movies"]
+filepaths = ["art","art.zip","music","sfx","movies"]
 ignore = ".hg"
 priority = ["png","jpg","gif","bmp","mp3","ogg"]
 
@@ -42,6 +42,7 @@ global_registry_cache = {}
 class Registry:
     def __init__(self,root=None,use_cache=True):
         self.map = {}
+        self.listdir_map = {}
         self.ext_map = {}
         self.use_cache = use_cache
         if root:
@@ -55,14 +56,16 @@ class Registry:
     def clear_cache(self):
         global_registry_cache.clear()
     def build(self,root,progress_function=lambda:1):
+        print "building root"
         if self.use_cache and root in global_registry_cache:
             self.map,self.ext_map = global_registry_cache[root]
             return
         self.root = root
         for sub in filepaths:
-            if os.path.isdir(root+"/"+sub):
+            print "check",sub
+            if os.path.isdir(root+"/"+sub) or zipfile.is_zipfile(root+"/"+sub):
                 self.index(root+"/"+sub)
-		progress_function()
+            progress_function()
         global_registry_cache[root] = [self.map,self.ext_map]
     def list_files(self,path):
         if os.path.isdir(path):
@@ -72,6 +75,7 @@ class Registry:
     def index(self,path):
         in_zip = zipfile.is_zipfile(path)
         subdirs = []
+        self.mapfile(path+"/",in_zip)
         for sub in self.list_files(path):
             if sub==".hg":
                 continue
@@ -81,7 +85,15 @@ class Registry:
                 self.mapfile(path+"/"+sub,in_zip)
         for sub in subdirs:
             self.index(sub)
+    def list_dir(self,path):
+        path = self.cleanpath(path)
+        print self.listdir_map.keys()
+        return self.listdir_map["./"+path]
     def mapfile(self,path,in_zip=False):
+        parent,sub = path.rsplit("/",1)
+        parent = parent.split(".zip",1)
+        parent = "".join(parent)
+        
         file = File(path)
         tag = file.pathtag.split(self.root.lower()+"/",1)[1]
         if in_zip:
@@ -93,14 +105,22 @@ class Registry:
                 self.map[tag] = file
         else:
             self.map[tag] = file
+            
         tagext = file.pathtagext.split(self.root.lower()+"/",1)[1]
         if tagext in self.ext_map:
             if file.priority<=self.ext_map[tagext].priority:
                 self.ext_map[tagext] = file
         else:
             self.ext_map[tagext] = file
+            
+        if parent not in self.listdir_map:
+            self.listdir_map[parent] = []
+            print "create list map",parent
+        self.listdir_map[parent].append(sub)
+    def cleanpath(self,path):
+        return os.path.normpath(path).replace("\\","/").replace(".zip/","/")
     def lookup(self,thingie,ext=False):
-        thingie = os.path.normpath(thingie).replace("\\","/")
+        thingie = self.cleanpath(thingie)
         f = File(thingie)
         map = self.map
         tag = f.pathtag
@@ -137,6 +157,20 @@ def combine_registries(root,progress_function=lambda:1):
 
 def test():
     os.chdir("..")
+    
+    rec = Registry("./games/PW - The Contempt of Court - artzip")
+    print rec.listdir_map.keys()
+    print rec.list_dir("./games/PW - The Contempt of Court - artzip/art")
+    #print rec.map
+    print rec.lookup("art/port/White/twitch.txt")
+    return
+    
+    rec = Registry("./games/PW - The Contempt of Court.zip")
+    print rec.listdir_map.keys()
+    #print rec.map
+    #print rec.lookup("art/port/White/twitch.txt")
+    return
+    
     rec = Registry("./games/PW - The Contempt of Court/The Haunted Turnabout")
     assert rec.lookup("art/port/Maplethorpe/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maplethorpe/angry(blink).png"
     assert rec.lookup("art/port/Maris/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maris.zip/angry(blink).png"
