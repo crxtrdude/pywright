@@ -1862,7 +1862,7 @@ class textbox(gui.widget):
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
                 wrap = False
-        lines = textutil.wrap_text(lines,assets.get_image_font("tb"),250,wrap)
+        lines = textutil.wrap_text(lines,assets.get_image_font("tb"),assets.sw-6,wrap)
         self.pages = [lines[i:i+3] for i in xrange(0, len(lines), 3)]
         self._text = u"\n"
         self._markup = textutil.markup_text("")
@@ -2226,7 +2226,7 @@ class textbox(gui.widget):
         self.next = 0
         if self.next==0:
             self.img = self.base.copy()
-            y, stx, inc = 6, 6, 18
+            y, stx, inc = 6, 6, 18*(assets.sh/standard_sh)
             x = stx
             color = self.color
             center = False
