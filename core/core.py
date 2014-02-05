@@ -1271,6 +1271,7 @@ class surf3d(sprite):
         self.surf = self.context.draw()
         self.next = 5
         self.screen_setting = ""
+        self.primary = True
     def click_down_over(self,pos):
         print "click",pos
         if pos[0]>=self.pos[0] and pos[0]<=self.pos[0]+self.width and pos[1]>=self.pos[1] and pos[1]<=self.pos[1]+self.height:
@@ -2466,6 +2467,7 @@ class menu(fadesprite,gui.widget):
             x = 0
         self.oimgshigh = {"examine":imgs[0],"move":imgs[1],"talk":imgs[2],"present":imgs[3]}
         self.open_script = True
+        self.primary = True
     def init_normal(self):
         subscript("show_court_record_button")
     def delete(self):
@@ -2609,6 +2611,7 @@ class listmenu(fadesprite,gui.widget):
         self.choice_high = fadesprite().load("general/talkchoice_high")
         self.hidden = True
         self.tag = tag
+        self.primary = True
     def init_normal(self):
         subscript("show_court_record_button")
     def delete(self):
@@ -2809,6 +2812,9 @@ class case_menu(fadesprite,gui.widget):
         self.scrolling = False
         self.arr = assets.open_art("general/arrow_right")[0]
         self.tried_case = False
+        self.primary = True
+    def delete(self):
+        super(case_menu,self).delete()
     def init_options(self):
         self.option_imgs = []
         base = assets.open_art("general/selection_chapter")[0].convert()
@@ -2974,6 +2980,7 @@ class examine_menu(sprite,gui.widget):
         self.blocking = not vtrue(assets.variables.get("_examine_skipupdate","0"))
         self.klefth = self.krighth = self.kuph = self.kdownh = 0
         self.screen_setting = "try_bottom"
+        self.primary = True
     def init_normal(self):
         subscript("show_court_record_button")
     def delete(self):
@@ -3248,6 +3255,7 @@ class evidence_menu(fadesprite,gui.widget):
         
         self.screen_setting = "try_bottom"
         self.script = assets.cur_script
+        self.primary = True
     def delete(self):
         super(evidence_menu,self).delete()
         subscript("hide_present_button2")
