@@ -135,6 +135,7 @@ class Registry:
     def override(self,other_reg):
         self.map.update(other_reg.map)
         self.ext_map.update(other_reg.ext_map)
+        self.listdir_map.update(other_reg.listdir_map)
             
 def combine_registries(root,progress_function=lambda:1):
     spl = root.split("/")
