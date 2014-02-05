@@ -468,6 +468,12 @@ class Script(gui.widget):
                 o.draw(screen)
         if vtrue(assets.variables.get("_debug","false")):
             screen.blit(assets.get_font("nt").render("debug",1,[240,240,240]),[220,0])
+    def get_primary_switch(self):
+        """Returns if there are any objects that demand our attention which are on the second screen"""
+        for o in reversed(self.obs):
+            if getattr(o,"primary",False):
+                if hasattr(o,"pos"):
+                    return o.pos[1]>=192
     def state_test_true(self,test):
         if test is None:
             return True
