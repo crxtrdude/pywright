@@ -463,11 +463,15 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         for o in assets.cur_script.world.all[:]:
             if getattr(o,"kill",0):
                 assets.cur_script.world.all.remove(o)
+        if assets.next_screen < -2 and assets.cur_script:
+            assets.cur_script.buildmode = False
         if assets.next_screen < 0 and (not assets.cur_script or not assets.cur_script.buildmode):
             pygame.screen.blit(pygame.blank,[0,0])
             try:
                 assets.cur_script.draw(pygame.screen)
             except (art_error,script_error),e:
+                import traceback
+                traceback.print_exc()
                 assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             if assets.flash:
                 try:
@@ -477,6 +481,8 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     if hasattr(assets,"flashcolor"):
                         fl.color = assets.flashcolor
                 except (art_error,script_error),e:
+                    import traceback
+                    traceback.print_exc()
                     assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
                 assets.flash = 0
                 assets.flashcolor = [255,255,255]
@@ -664,7 +670,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
-        except (art_error,script_error), e:
+        except (art_error,script_error,markup_error), e:
             assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             import traceback
             traceback.print_exc()
