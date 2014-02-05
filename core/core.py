@@ -979,8 +979,14 @@ def subscript(macro):
     print "start subscript",macro,getattr(script,"scene","(no scene)")
     assets.subscripts[macro] = 1
     while script in assets.stack:
+        #~ print script.scriptlines,script.si
+        #~ print script.scriptlines[script.si]
+        oldb = script.buildmode
         e = script.update()
+        newb = script.buildmode
         if e:
+            break
+        if not oldb and not newb:
             break
     print "end subscript",macro,getattr(script,"scene","(no scene)")
     del assets.subscripts[macro]
