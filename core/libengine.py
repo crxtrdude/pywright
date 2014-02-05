@@ -99,7 +99,7 @@ class choose_game(gui.widget):
             if f.startswith("."): continue
             if f in ["art","music","sfx","fonts"]:
                 continue
-            if not os.path.isdir(path+"/"+f):
+            if not os.path.isdir(path+"/"+f) and not ".zip" in path+"/"+f:
                 continue
             games.append(f)
         try:
