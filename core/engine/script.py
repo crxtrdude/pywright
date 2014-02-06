@@ -554,7 +554,7 @@ class Script(gui.widget):
         self.si += 1
         assets.variables["_currentline"] = str(self.si)
         print "execute line:",repr(line)
-        return self.execute_line(line)
+        return self.safe_exec(self.execute_line,line)
     def _framerate(self,command,fr):
         assets.framerate = int(fr)
     @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
