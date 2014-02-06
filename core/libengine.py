@@ -447,6 +447,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
         assets.dt = min(assets.dt*.001*60,10.0)*assets.game_speed
         pygame.display.set_caption("PyWright "+VERSION)
         assets.cur_script.update()
+        script.interpret_scripts()
                 
         #~ if vtrue(assets.variables.get("_debug","false")):
             #~ ns = assets.get_stack()
@@ -465,7 +466,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 assets.cur_script.world.all.remove(o)
         if assets.next_screen < -2 and assets.cur_script:
             assets.cur_script.buildmode = False
-        if assets.next_screen < 0 and (not assets.cur_script or not assets.cur_script.buildmode):
+        if assets.next_screen < 0:
             pygame.screen.blit(pygame.blank,[0,0])
             try:
                 assets.cur_script.draw(pygame.screen)

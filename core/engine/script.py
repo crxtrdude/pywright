@@ -201,6 +201,15 @@ assert EVAL_EXPR(EXPR("5 <= 3"))=="false"
 assert EVAL_EXPR(EXPR("5 <= 5"))=="true"
 assert EVAL_EXPR(EXPR("5 <= 6"))=="true"
 
+def interpret_scripts():
+    """Process wrightscript until we should block and show action on the screen"""
+    while 1:
+        print "processing..."
+        block = assets.cur_script.interpret_line()
+        if block:
+            print "BLOCKING"
+            return
+
 class Script(gui.widget):
     save_me = True
     def __init__(self,parent=None):
@@ -415,6 +424,8 @@ class Script(gui.widget):
                         o.cur_script = assets.cur_script
                     if o.cur_script==self: 
                         add_exceptions()
+                        self.buildmode = False
+                        print "setting buildmode to false"
                         return False
             except (art_error,script_error),e:
                 exceptions.append(error_msg(e.value,self.lastline_value,self.si,self))
@@ -446,16 +457,12 @@ class Script(gui.widget):
             self.obs.append(error_msg("Undefined:"+e.message,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-        self.buildmode = False
         return e
     def update(self):
         if time.time()-assets.last_autosave>assets.autosave_interval*60:
             self.autosave()
         self.buildmode = True
-        interp = self.safe_exec(self.update_objects)
-        if interp==True:
-            return self.safe_exec(self.interpret)
-        self.buildmode = False
+        self.safe_exec(self.update_objects)
     def add_object(self,ob,single=False):
         if single:
             for o2 in self.obs[:]:
@@ -503,29 +510,43 @@ class Script(gui.widget):
             u.show_unclicked()
             u.showleft = False
             u.showright = False
-    def interpret(self):
-        print "ENTERING INTERPRET"
-        exit = False
-        while self.buildmode and not exit:
-            line = self.getline()
-            while not line:
-                if line is None: 
-                    return self._endscript()
-                self.si += 1
-                line = self.getline()
-            #print "exec(",repr(line),")"
+    #~ def interpret(self):
+        #~ print "ENTERING INTERPRET"
+        #~ exit = False
+        #~ while self.buildmode and not exit:
+            #~ line = self.getline()
+            #~ while not line:
+                #~ if line is None: 
+                    #~ return self._endscript()
+                #~ self.si += 1
+                #~ line = self.getline()
+            #~ #print "exec(",repr(line),")"
+            #~ self.si += 1
+            #~ assets.variables["_currentline"] = str(self.si)
+            #~ print "execute line:",repr(line)
+            #~ exit = self.execute_line(line)
+            #~ if assets.debugging == "step":
+                #~ self.obs.append(script_code(self))
+                #~ print "RETURNED VIA DEBUG"
+                #~ return True
+        #~ if exit:
+            #~ print "RETURNED VIA EXIT"
+        #~ else:
+            #~ print "RETURNED VIA BUILDMODE"
+    def interpret_line(self):
+        if not self.buildmode:
+            return True
+        line = self.getline()
+        while not line:
+            if line is None:
+                print "Reached end of script, end it"
+                return self._endscript()
             self.si += 1
-            assets.variables["_currentline"] = str(self.si)
-            print "execute line:",repr(line)
-            exit = self.execute_line(line)
-            if assets.debugging == "step":
-                self.obs.append(script_code(self))
-                print "RETURNED VIA DEBUG"
-                return True
-        if exit:
-            print "RETURNED VIA EXIT"
-        else:
-            print "RETURNED VIA BUILDMODE"
+            line = self.getline()
+        self.si += 1
+        assets.variables["_currentline"] = str(self.si)
+        print "execute line:",repr(line)
+        return self.execute_line(line)
     def _framerate(self,command,fr):
         assets.framerate = int(fr)
     @category([COMBINED("text","Text to be print in the textbox, with markup.","")],type="text")
@@ -566,7 +587,7 @@ char test
                 self.execute_macro("tboff")
         tbox.init_gui()
         tbox.update(0)
-        self.buildmode = True
+        return True
     def execute_line(self,line):
         if not line:
             return
@@ -594,11 +615,11 @@ char test
         #print repr(args)
         if self.execute_macro(args[0]," ".join(args[1:])):
             return True
-        self.call_func(args[0],args)
+        return self.call_func(args[0],args)
     def call_func(self,command,args):
         func = getattr(self,"_"+command,None)
         if func:
-            func(*args)
+            return func(*args)
         elif vtrue(assets.variables.get("_debug","false")): 
             self.obs.append(error_msg("Invalid command:"+command,line,self.si,self))
             return True
@@ -615,7 +636,6 @@ char test
         nscript.scene = self.scene+"/"+macroname
         nscript.macros = self.macros
         assets.stack.append(nscript)
-        self.buildmode = False
         nscript.buildmode = True
         return nscript
     def next_statement(self):
@@ -631,7 +651,6 @@ char test
                 break
         if which is not None:
             self.si = which
-        self.buildmode = True
     def prev_statement(self):
         if not assets.variables.get("_statements",[]):
             return
@@ -646,7 +665,6 @@ char test
             self.si = which
         else:
             self.si -= 1
-        self.buildmode = True
     def goto_result(self,name,wrap=False,backup="none"):
         for o in self.obs:
             if isinstance(o,guiWait): o.delete()
@@ -697,7 +715,7 @@ char test
         """Ends the currently running script and pops it off the stack. Multiple scripts
         may be running in PyWright, in which case the next script on the stack will
         resume running."""
-        self.buildmode = False
+        print "ending script",self
         if self in assets.stack:
             assets.stack.remove(self)
             if "enter" in self.held: self.held.remove("enter")
@@ -740,6 +758,7 @@ char test
             cm.close_button(True)
         self.add_object(cm,True)
         self._gui("gui","Wait")
+        return True
     @category([COMBINED("destination","The destination label to move to"),
                     KEYWORD("fail","A label to jump to if the destination can't be found")],type="logic")
     def _goto(self,command,place,*args):
@@ -1185,7 +1204,6 @@ KEYWORD('priority','Fine tune what gets paused and what doesnt.','10000 (such a 
 ],type="animation")
     def _pause(self,command,*args):
         """This command will pause execution of various things. It's main use is to pause the script to let an animation finish before continuing."""
-        self.buildmode = False
         ticks = None
         pri = 10000  #Will pause the script but nothing else
         for a in args:
@@ -1201,6 +1219,7 @@ KEYWORD('priority','Fine tune what gets paused and what doesnt.','10000 (such a 
         do = delay(ticks)
         do.pri=pri
         self.add_object(do)
+        return True
     @category([
 VALUE('ticks','How many ticks (1/60 of a second) before the command will be run'),
 VALUE('command','The name of a macro to be run after the timer runs out'),
@@ -1222,8 +1241,8 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
     def _waitenter(self,command):
         """The script will pause until the user presses the enter key. Ok for demos but not recommended for real games, as
         it won't be obvious to users that they must press enter. gui Button or showing a normal textbox is preferred."""
-        self.buildmode = False
         self.add_object(waitenter())
+        return True
     @category([],type="gameflow")
     def _exit(self,command):
         """Deletes the currently running scene/script from execution. If there are any scenes underneath, they will
@@ -1233,7 +1252,7 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
     def _showrecord(self,command,*args):
         print "show ev menu"
         assets.addevmenu()
-        self.buildmode = False
+        return True
     @category([],type="interface")
     def _callpress(self,command,*args):
         #FIXME - this makes callpress only work from a macro executing one level above current script
@@ -1250,7 +1269,6 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
             if isinstance(o,textbox):
                 o.k_x()
                 break
-        self.buildmode = False
     @category([],type="interface")
     def _callpresent(self,command,*args):
         #FIXME - this makes callpress only work from a macro executing one level above current script
@@ -1259,6 +1277,7 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
             if isinstance(o,evidence_menu):
                 o.k_x()
                 break
+        return True
     @category([VALUE("scene_name","Menu scene name. Scripts for each action should be named 'scene_name.examine.txt', 'scene_name.talk.txt', 'scene_name.present.txt', and 'scene_name.move.txt'"),
     KEYWORD('examine','whether to show the examine button','true'),
     KEYWORD('talk','whether to show the talk button','true'),
@@ -1272,7 +1291,6 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
         [scene_name].txt which loads the background and shows the menu. Then, any external script can
         instantly load the proper scene with "script [scene_name]". You can control which options
         are shown through the keywords described."""
-        self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
                 o.delete()
@@ -1292,6 +1310,7 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
         print "MENU DEFAULTS"
         self.execute_macro("defaults")
         m.init_normal()
+        return True
     @category([KEYWORD('examine','whether to show the examine button','false'),
     KEYWORD('talk','whether to show the talk button','false'),
     KEYWORD('present','whether to show the present button','false'),
@@ -1301,7 +1320,6 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
         """Show an investigation menu of options. Should be run after the background of a scene is loaded. When an option
         is clicked, PyWright will jump to the label of the action, such as "label examine" or "label talk". You can control which options
         are shown through the keywords described."""
-        self.buildmode = False
         for o in self.obs:
             if o.__class__ in delete_on_menu:
                 o.delete()
@@ -1316,6 +1334,7 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
         m.open_script = False
         self.add_object(m,True)
         m.init_normal()
+        return True
     @category([KEYWORD('pri','What priority to update the case menu','Default casemenu priority listed in core/sorting.txt')],type="interface/case_menu")
     def _casemenu(self,command,*args):
         """Shows the phoenix wright styled case selection menu, allowing players to navigate available cases in a game folder
@@ -1323,11 +1342,11 @@ and choose one to play. The priority might need to be adjusted if you have any s
 you know you need it. This command should be the last command run from an intro.txt placed in a game's folder. PyWright will also
 run the case menu by default if there is NO intro.txt in a game's folder. Single case games may opt to have the "case" folder and "game"
 folder be the same, and not show a case menu at all."""
-        self.buildmode = False
         kwargs = {}
         pri = ([x[4:] for x in args if x.startswith("pri=")] or [None])[0]
         if pri is not None: kwargs["pri"] = pri
         self.add_object(case_menu(assets.game,**kwargs),True)
+        return True
     @category(
     [VALUE('script_name',"name of the new script to load. Will look for 'script_name.script.txt', 'script_name.txt', or simple 'script_name', in the current case folder."),
 KEYWORD('label','A label in the loading script to jump to after it loads.','Execution starts at the top of the script instead of a label'),
@@ -1503,6 +1522,7 @@ TOKEN("fade","Object will fade in instead of popping in")],type="objects")
         """Creates a generic graphics object and places it in the scene. It will be drawn on a layer according to it's z value.
 graphics objects may or may not be animated, which is defined in metadata files stored along with the graphics. ball.png will
 have a ball.txt describing it's animation qualities, if it has any."""
+        block = False
         func = {"bg":bg,"fg":fg,"ev":evidence,"obj":graphic}[command]
         wait = {"fg":1}.get(command,0)
         clear = 1
@@ -1553,7 +1573,9 @@ have a ball.txt describing it's animation qualities, if it has any."""
         else:
             o.id_name = args[0]
         self.add_object(o)
-        if "fade" in args: self._fade("fade","wait","name="+o.id_name,"speed=5")
+        if "fade" in args: 
+            self._fade("fade","wait","name="+o.id_name,"speed=5")
+            block = True
         if loops is not None:
             o.loops = int(loops)
         if wait:
@@ -1562,14 +1584,13 @@ have a ball.txt describing it's animation qualities, if it has any."""
             elif o.loops == 1:
                 pass
             else:
-                self.buildmode = False
-        return o
+                block = True
+        return block
     @category("blah")
     def _movie(self,command,file,sound=None):
-        self.buildmode = False
         m = movie(file,sound)
         self.add_object(m,True)
-        return m
+        return True
     @category([VALUE("bg_path","Path to the graphics file relative to case/art/bg and without extension; such as scene1 for games/mygame/mycase/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
 KEYWORD("y","set the y value",0),
@@ -1619,7 +1640,7 @@ addev housekey
 ev housekey
 "House key added to court record"
 }}}"""
-        self._obj(command,*args)
+        return self._obj(command,*args)
     @category([VALUE("character_name","Name of character folder in art/port. If the character is to be hidden, the character_name doesn't need to match up to any actual directory. Graphics will be loaded from that directory according to the visible emotion"),
 KEYWORD("nametag","The name to actually display to the player as this character's name.","character_name"),
 KEYWORD("e","The character's starting emotion","normal"),
@@ -1654,6 +1675,7 @@ setting the variable 'char_defsound': 'set char_defsound [sound file]'
 
 The best place to set these variables is in a separate file included in intro.txt, so that the settings will remain
 throughout the game."""
+        block = False
         assets.character = character
         z = None
         e = "normal(blink)"
@@ -1685,12 +1707,13 @@ throughout the game."""
         if "fade" in args: 
             self._fade("fade","wait","name="+p.id_name,"speed=5")
             p.extrastr = " fade"
+            block = True
         assets.variables["_speaking_name"] = p.nametag.split("\n")[0]
         if be:
             p.set_blink_emotion(be)
         if "noauto" in args:
             p.set_single()
-        return p
+        return block
     @category([VALUE("emotion","Emotion animation to set character to"),VALUE("name","Object name of character to change emotion of","Chooses currently speaking character (value of _speaking)")],type="objects")
     def _emo(self,command,*args):
         """Sets a current char object to a specific emotion animation."""
@@ -1773,7 +1796,6 @@ The four types of gui you can create are:
             if y>=192 and assets.num_screens == 1 and assets.screen_compress:
                 y -= 192
             self.add_object(guiBack(x=x,y=y,z=z,name=name))
-            self.buildmode = False
         if guitype.lower()=="button":
             macroname=args[0]; del args[0]
             graphic = None
@@ -1869,7 +1891,8 @@ The four types of gui you can create are:
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
             self.add_object(guiWait(run=run))
-            self.buildmode = False
+            print "adding gui wait object and returning true"
+            return True
     @category([VALUE('x','x value to place text'),VALUE('y','y value to place text'),VALUE('width','width of text block'),
     VALUE('height','height of text block (determines rows but the value is in pixels)'),
     KEYWORD('color','color of the text'),
@@ -1946,7 +1969,8 @@ The four types of gui you can create are:
         pen = penalty(end,var,flash_amount=flash_amount)
         pen.delay = delay
         self.add_object(pen,True)
-        #self.buildmode = False
+        if delay:
+            return True
     @category([KEYWORD("degrees","How many degrees to rotate"),KEYWORD("speed","How many degrees to rotate per frame"),
     KEYWORD("axis","which axis to rotate on, z is the only valid value","z"),
     KEYWORD("name","Name a specific object to rotate","Will try to rotate all objects (not what you might expect)"),
@@ -1958,7 +1982,8 @@ The four types of gui you can create are:
                                                 defaults={"axis":"z",'wait':1},
                                                 setzero={"nowait":"wait"})
         self.add_object(rotateanim(obs=self.obs,**kwargs))
-        if kwargs['wait']: self.buildmode = False
+        if kwargs['wait']:
+            return True
     @category([KEYWORD("start","What fade level to start at",0),
     KEYWORD("end","What fade level to end at",100),
     KEYWORD("speed","How many fade steps per frame",1),
@@ -1969,16 +1994,17 @@ The four types of gui you can create are:
         kwargs,args = parseargs(args,intvals=["start","end","speed","wait"],
                                                 defaults={"start":0,"end":100,"speed":1,"wait":1},
                                                 setzero={"nowait":"wait","in":"in","out":"out"})
-	if "in" in kwargs:
-	    kwargs['start']=0
-	    kwargs['end']=100
-	    del kwargs["in"]
-	if "out" in kwargs:
-	    kwargs['start']=100
-	    kwargs['end']=0
-	    del kwargs["out"]
+        if "in" in kwargs:
+            kwargs['start']=0
+            kwargs['end']=100
+            del kwargs["in"]
+        if "out" in kwargs:
+            kwargs['start']=100
+            kwargs['end']=0
+            del kwargs["out"]
         self.add_object(fadeanim(obs=self.obs,**kwargs))
-        if kwargs['wait']: self.buildmode = False
+        if kwargs['wait']:
+            return True
     @category([KEYWORD("start","Color tint to start at","'ffffff' or no tint (full color)"),
     KEYWORD("end","Color tint to end at","'000000' or full black tint"),
     KEYWORD("speed","How many color steps per frame",1),
@@ -1992,7 +2018,8 @@ The four types of gui you can create are:
                                                 defaults={"start":"ffffff","end":"000000","speed":1,"wait":1},
                                                 setzero={"nowait":"wait"})
         self.add_object(tintanim(obs=self.obs,**kwargs))
-        if kwargs['wait']: self.buildmode = False
+        if kwargs['wait']:
+            return True
     @category([KEYWORD("value","Whether an object should be inverted or not: 1=inverted 0=not","1"),
     KEYWORD("name","Name a specific object to tint","Will try to tint all objects")],type="effect")
     def _invert(self,command,*args):
@@ -2034,6 +2061,8 @@ The four types of gui you can create are:
             raise script_error("Shake text macro needs an integer")
             return
         self.add_object(sh)
+        if sh.wait:
+            return True
     @category([KEYWORD("mag","How many times to magnify","1 (will magnify 1 time, which is 2x magnification)"),
     KEYWORD("frames","how many frames for the zoom to take","1"),
     KEYWORD("name","Which object to magnify","tries to magnify everything"),
@@ -2070,7 +2099,8 @@ zoom mag=-0.5 frames=10
         if name:
             zzzooom.control(name)
         self.add_object(zzzooom)
-        if wait: self.buildmode = False
+        if wait: 
+            return True
     @category([KEYWORD("name","Name of object to scroll","scrolls everything"),
     KEYWORD("filter","select only objects on the 'top' screen or 'bottom' screen, leave blank for either","'top'"),
     KEYWORD("x","amount to scroll horizontally","0"),
@@ -2115,7 +2145,8 @@ the speed would divide evenly over the distance)."""
             scr.control_last()
         if name:
             scr.control(name)
-        #if wait: self.buildmode = False
+        if wait: 
+            return True
     @category([COMBINED("filename","Filename of song, searches game/case/music, game/music, and PyWright/music","If no path is listed, music will stop")],type="music")
     def _mus(self,command,*song):
         """Stops currently playing music file, and if 'filename' is given, starts playing a new one. If you want to queue up a song to play when the current
@@ -2252,7 +2283,7 @@ exit}}}
                 o.hidden = False
                 if fail:
                     o.fail = fail
-        self.buildmode = False
+        return True
     @category([VALUE("tag","list tag to forget")],type="gameflow")
     def _forgetlist(self,command,tag):
         """Clears the memory of which options player has chosen from a specific list. Normally, chosen options from a list
@@ -2354,7 +2385,7 @@ exit}}}
             elif a=="noback":
                 ob.noback = True
         self.add_object(ob,True)
-        self.buildmode = False
+        return True
     @category([TOKEN("hide","Hides the labels for the examine regions from the player"),KEYWORD("fail","label to jump to when a specific evidence label is not found.","none")],type="interface")
     def _examine(self,command,*args):
         """Displays the examine cursor to allow the player to choose a spot on the screen, and jump to different labels
@@ -2374,13 +2405,13 @@ exit}}}
             em.addregion(*line.replace("region ","").strip().split(" "))
             self.si+=1
         self.si-=1
-        self.buildmode = False
         for a in args:
             if "=" in a:
                 k,v = a.split("=",1)
                 if k == "fail":
                     em.fail = v
         em.init_normal()
+        return True
     @category([VALUE("x","x value of rectangular region on the texture"),VALUE("y","y value of rectangular region on the texture"),
     VALUE("width","width of rectangular region on texture"),VALUE("height","height of rectangular region on texture"),
     VALUE("label","label to jump to when region is clicked")],type="interface")
