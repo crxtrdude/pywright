@@ -976,6 +976,7 @@ def subscript(macro):
     if macro in assets.subscripts:
         return
     script = assets.cur_script.execute_macro(macro)
+    return
     print "start subscript",macro,getattr(script,"scene","(no scene)")
     assets.subscripts[macro] = 1
     while script in assets.stack:
@@ -2008,7 +2009,6 @@ class textbox(gui.widget):
             self.delete()
         if sound:
             assets.play_sound("bloop.ogg",volume=0.7)
-        assets.cur_script.buildmode = True
     def draw(self,dest):
         self.children = []
         if not self.go or self.kill:
