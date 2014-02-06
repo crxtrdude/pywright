@@ -1930,9 +1930,9 @@ class textbox(gui.widget):
         self.made_gui = False
         
         self.id_name = "_textbox_"
+        self.is_cross = False
     def init_cross(self):
-        subscript("show_press_button")
-        subscript("show_present_button")
+        self.is_cross = True
     def init_normal(self):
         subscript("show_court_record_button")
     def init_gui(self):
@@ -1986,12 +1986,14 @@ class textbox(gui.widget):
     def k_z(self):
         if self.statement:
             assets.cur_script.cross = "pressed"
+            assets.cur_script.clear_arrows()
             assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
             self.delete()
     def k_x(self):
         if self.statement:
             em = assets.addevmenu()
             em.fail = assets.variables.get("_court_fail_label",None)
+            assets.cur_script.clear_arrows()
     def forward(self,sound=True):
         """Set last written text to the contents of the textbox
         turn off testimony blinking
@@ -2281,6 +2283,10 @@ class textbox(gui.widget):
                     y+=inc
                     x = stx
             self.next = self.num_lines
+        if self.is_cross and self.nextline():
+            self.is_cross = False
+            subscript("show_press_button")
+            subscript("show_present_button")
         if self.blocking: 
             return True
         return
