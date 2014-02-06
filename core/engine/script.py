@@ -205,6 +205,8 @@ def interpret_scripts():
     """Process wrightscript until we should block and show action on the screen"""
     while 1:
         print "processing..."
+        if not assets.cur_script:
+            return
         block = assets.cur_script.interpret_line()
         if block:
             print "BLOCKING"
@@ -226,6 +228,9 @@ class Script(gui.widget):
         self.buildmode = True    #Do not refresh the screen while we are executing stuff
         self.si = None
         self.macros = {}
+        
+        self.running_macro = None  #A macro we are currently waiting for
+        self.last_buildmode = True
     def __repr__(self):
         return "Script object, scene=%s id=%s line_no=%s"%(self.scene,id(self),self.si)
     obs = property(lambda self: self.world.render_order(),lambda self,val: setattr(self,"world",World(val)))
@@ -534,6 +539,9 @@ class Script(gui.widget):
         #~ else:
             #~ print "RETURNED VIA BUILDMODE"
     def interpret_line(self):
+        if self.running_macro:
+            self.running_macro = None
+            self.buildmode = self.last_buildmode
         if not self.buildmode:
             return True
         line = self.getline()
@@ -594,8 +602,8 @@ char test
         if line[0] in [u'"',u'\u201C'] and len(line)>1:
             if not (line.endswith('"') or line.endswith(u'\u201C')):
                 line = line+u'"'
-            self.call_func("textbox",["textbox",line[1:-1]])
-            return True
+            print "Got textbox returning true"
+            return self.call_func("textbox",["textbox",line[1:-1]])
         def repvar(x):
             if x.startswith("$") and not x[1].isdigit():
                 return assets.variables[x[1:]]
@@ -637,6 +645,8 @@ char test
         nscript.macros = self.macros
         assets.stack.append(nscript)
         nscript.buildmode = True
+        self.running_macro = nscript
+        self.last_buildmode = False
         return nscript
     def next_statement(self):
         if not assets.variables.get("_statements",[]):
@@ -1796,6 +1806,7 @@ The four types of gui you can create are:
             if y>=192 and assets.num_screens == 1 and assets.screen_compress:
                 y -= 192
             self.add_object(guiBack(x=x,y=y,z=z,name=name))
+            return True
         if guitype.lower()=="button":
             macroname=args[0]; del args[0]
             graphic = None
