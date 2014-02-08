@@ -1,11 +1,16 @@
+Changed cross exam left and right to wait for text - but no way to skip through cross exam text. It also shows misleading arrows.
+
+
+
+
+
+
+
+
+
 court record over menu = control menu not court record
 
 psyche lock macro covers ugly arrow
-custom resolution
 apng
 characters show up in menu
 custom back button w/sound
-
-
-Other macros running too slowly? Well, here's an example. Take a look at the Cross Examination Tests > Full Cross Examination Sequence. I'm using the court macros, e.g. {judge},{defense},{prosecutor},{witness}. On v0.987, I found a perfect way to not have them change poses every time they appear. On 0.988, they default back to normal and don't go into their newest pose instantly.
-Another example, do a bad objection. I have two custom macros: {health} and {threat} The second one takes too long to execute, even though there's just two lines of code on it. In fact, take a look at the General Macros.mcro and look at threat. I believe the "delay" part is causing trouble. I put it to 1 and it's taking a whole second to finish when it should be 0.015 sec (1 frame) to finish.
