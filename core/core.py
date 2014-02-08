@@ -1977,20 +1977,20 @@ class textbox(gui.widget):
         else:
             self.forward()
     def k_left(self):
-        if self.statement:
+        if self.statement and self.nextline():
             assets.cur_script.prev_statement()
             self.forward()
     def k_right(self):
-        if self.statement:
+        if self.statement and self.nextline():
             self.forward()
     def k_z(self):
-        if self.statement:
+        if self.statement and self.nextline():
             assets.cur_script.cross = "pressed"
             assets.cur_script.clear_arrows()
             assets.cur_script.goto_result("press "+self.statement,backup=assets.variables.get("_court_fail_label",None))
             self.delete()
     def k_x(self):
-        if self.statement:
+        if self.statement and self.nextline():
             em = assets.addevmenu()
             em.fail = assets.variables.get("_court_fail_label",None)
             assets.cur_script.clear_arrows()
