@@ -23,7 +23,7 @@ set px 1040
 addvar px 256
 set jx 1296
 addvar jx 256
-set hx 1551
+set hx 1552
 addvar hx 256
 
 isempty court_dbench?
