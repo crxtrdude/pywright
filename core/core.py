@@ -3586,7 +3586,7 @@ class evidence_menu(fadesprite,gui.widget):
                         continue
                     dest.blit(icon.small,[x,y])
                     if not self.back and not self.switch and self.sx == cx and self.sy == cy:
-                        dest.blit(self.cursor,[x-4,y-4])
+                        dest.blit(self.cursor,[x-3,y-3])
                     x+=w
                     cx+=1
                 x=sx
