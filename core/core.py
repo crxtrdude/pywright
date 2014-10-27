@@ -3063,7 +3063,7 @@ class examine_menu(sprite,gui.widget):
         if vtrue(assets.variables.get("_examine_showbars", "true")):
             dest.blit(self.fg,[0,self.getpos()[1]])
         if self.selected != [None] and not self.hide:
-            dest.blit(self.check,[assets.sw-self.check.get_width()+3,self.getpos()[1]+assets.sh-self.check.get_height()])
+            dest.blit(self.check,[assets.sw-self.check.get_width(),self.getpos()[1]+assets.sh-self.check.get_height()])
     def k_left(self,*args):
         self.klefth = 1
     def k_right(self,*args):
