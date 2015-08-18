@@ -2265,7 +2265,7 @@ class textbox(gui.widget):
                             ncolor = color_str(ncolor)
                         else:
                             ncolor = color
-                        nt_image = assets.get_font("nt").render(line.capitalize().replace(u"_",u" "),1,ncolor)
+                        nt_image = assets.get_font("nt").render(line.replace(u"_",u" "),1,ncolor)
                         self.nt_text_image = nt_image
                     title = False
                 else:
