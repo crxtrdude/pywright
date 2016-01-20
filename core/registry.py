@@ -1,6 +1,6 @@
 import os,zipfile,StringIO
 
-filepaths = ["art","art.zip","music","sfx","movies"]
+filepaths = ["data/art","art.zip","data/music","data/sfx","movies"]
 ignore = ".hg"
 priority = ["png","jpg","gif","bmp","mp3","ogg"]
 

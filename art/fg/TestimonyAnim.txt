@@ -1,3 +1,0 @@
-horizontal 20
-loops 0
-sfx 0 testimony.ogg

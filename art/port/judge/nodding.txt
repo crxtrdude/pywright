@@ -1,4 +1,0 @@
-horizontal 3
-vertical 3
-length 9
-loops 0

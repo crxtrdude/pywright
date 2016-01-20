@@ -1,6 +1,0 @@
-horizontal 2
-vertical 1
-length 2
-loops 1
-framedelay 0 6
-framedelay 1 6

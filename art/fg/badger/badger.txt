@@ -1,5 +1,0 @@
-horizontal 10
-vertical 28
-length 272
-loops 1
-globaldelay 2.5
