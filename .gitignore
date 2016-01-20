@@ -1,0 +1,22 @@
+*.pyc
+*.pyo
+.svn/*
+last
+0.95Patch/*
+*.zip
+0.970/*
+0.974/*
+PyWright.src/*
+PyWright/*
+PyWright_t/*
+build/*
+core/cache/*
+scriptdist/*
+tools/tools.ini
+dist/*
+downloads/*
+games/*
+tools/tmp/*
+PyWright - 0.981/*
+PyWright - 0986update/*
+tools/roomedit/*
