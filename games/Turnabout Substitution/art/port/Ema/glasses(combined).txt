@@ -1,6 +1,0 @@
-horizontal 2
-vertical 3
-length 6
-loops 1
-framecompress 0
-blipsound blipfemale.ogg

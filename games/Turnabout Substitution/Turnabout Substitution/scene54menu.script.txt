@@ -1,6 +1,0 @@
-#-version-1
-bg ts/1stringsoffice fade
-char Ema e=normal
-mus 138 - Apollo Justice - Investigation Core.ogg
-set _music_loop 138 - Apollo Justice - Investigation Coreloop.ogg
-menu scene54Ema

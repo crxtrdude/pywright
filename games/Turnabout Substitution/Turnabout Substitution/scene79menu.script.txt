@@ -1,5 +1,0 @@
-#-version-1
-label top
-bg ts/1clooneyprisonasylumentrancewithoutwig
-
-menu scene79

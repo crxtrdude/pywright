@@ -1,4 +1,0 @@
-horizontal 1
-vertical 1
-length 1
-loops 1

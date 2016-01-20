@@ -1,4 +1,0 @@
-#-version-1
-bg ts/1stringsoffice fade
-char rhea
-menu scene13

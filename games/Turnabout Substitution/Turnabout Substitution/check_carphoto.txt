@@ -1,2 +1,0 @@
-bg ts/carinsidephoto y=192 fade
-gui Back x=96 y=350

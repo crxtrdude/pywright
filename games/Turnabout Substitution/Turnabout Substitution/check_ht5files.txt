@@ -1,3 +1,0 @@
-bg ht5file1 fade y=192
-gui Button {page2} x=115 y=200 Next
-gui Back x=96 y=350

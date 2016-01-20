@@ -1,4 +1,0 @@
-#-version-1
-mus
-bg ts/1clooneyprisonasylumentrance fade
-menu scene8

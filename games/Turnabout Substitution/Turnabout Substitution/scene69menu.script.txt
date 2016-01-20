@@ -1,6 +1,0 @@
-#-version-1
-label top
-bg ts/2cemeterycrimescene
-mus 123 - Apollo Justice - Search Opening.ogg
-menu scene69
-

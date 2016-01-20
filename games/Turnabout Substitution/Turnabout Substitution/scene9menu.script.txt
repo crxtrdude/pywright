@@ -1,4 +1,0 @@
-#-version-1
-bg ts/1clooneyprisonasylumcell fade
-mus 123 - Apollo Justice - Search Opening.ogg
-menu scene9

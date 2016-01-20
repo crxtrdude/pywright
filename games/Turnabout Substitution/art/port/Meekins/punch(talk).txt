@@ -1,5 +1,0 @@
-horizontal 11
-vertical 12
-length 125
-loops 1
-

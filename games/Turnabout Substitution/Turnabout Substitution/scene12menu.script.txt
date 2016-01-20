@@ -1,5 +1,0 @@
-#-version-1
-bg aj/detentioncenter fade
-char Judge y=22
-mus 124 - Apollo Justice - Police Cell.ogg
-menu scene12judge

@@ -1,5 +1,0 @@
-#-version-1
-label top
-mus
-bg ts/2cemetery
-menu scene68

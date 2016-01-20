@@ -1,3 +1,0 @@
-horizontal 21
-loops 0
-sfx 0 crossexam.ogg

@@ -1,3 +1,0 @@
-bg preport1 fade y=192
-gui Button {ppage2} x=115 y=200 Next
-gui Back x=96 y=350

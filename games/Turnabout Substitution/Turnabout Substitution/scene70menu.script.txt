@@ -1,3 +1,0 @@
-bg policehq fade
-mus 122 - Apollo Justice - Ema.ogg
-menu scene70ema

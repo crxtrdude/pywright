@@ -1,6 +1,0 @@
-#-version-1
-bg ts/1deekayandcooffice
-char rhea
-mus 141 - Turnabout Substitution - Rhea Wits - Under Six Feet.ogg
-set _music_loop 141 - Turnabout Substitution - Rhea Wits - Under Six Feetloop.ogg
-menu scene15rhea
