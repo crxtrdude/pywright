@@ -1,7 +1,5 @@
 *.pyc
 *.pyo
-.svn/*
-last
 0.95Patch/*
 *.zip
 0.970/*
@@ -20,3 +18,6 @@ tools/tmp/*
 PyWright - 0.981/*
 PyWright - 0986update/*
 tools/roomedit/*
+settings.ini
+logfile.txt
+lastgame

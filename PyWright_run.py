@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env/python
 import sys,os
 abspath = os.path.abspath(os.curdir)
 print abspath

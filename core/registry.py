@@ -25,14 +25,14 @@ class File:
         return self.path
             
 def testfile():
-    a = File("../art/port/kristoph2/normal(talk).txt")
-    b = File("../art/port/kristoph2/normal(talk).png")
-    c = File("../art/port/kristoph12/normal(talk).jpg")
-    d = File("../art/port/kristoph2/normal(talk)")
-    assert a.path=="../art/port/kristoph2/normal(talk).txt"
-    assert b.path=="../art/port/kristoph2/normal(talk).png"
-    assert c.path=="../art/port/kristoph12/normal(talk).jpg"
-    assert d.path=="../art/port/kristoph2/normal(talk)"
+    a = File("../data/art/port/kristoph2/normal(talk).txt")
+    b = File("../data/art/port/kristoph2/normal(talk).png")
+    c = File("../data/art/port/kristoph12/normal(talk).jpg")
+    d = File("../data/art/port/kristoph2/normal(talk)")
+    assert a.path=="../data/art/port/kristoph2/normal(talk).txt"
+    assert b.path=="../data/art/port/kristoph2/normal(talk).png"
+    assert c.path=="../data/art/port/kristoph12/normal(talk).jpg"
+    assert d.path=="../data/art/port/kristoph2/normal(talk)"
     assert a.filetag==b.filetag==c.filetag==d.filetag
     assert a.pathtag==b.pathtag!=c.pathtag
     assert b.priority<c.priority,"bpri:%s cpri:%s"%(b.priority,c.priority)
@@ -161,9 +161,9 @@ def test():
     
     rec = Registry("./games/PW - The Contempt of Court - artzip")
     print rec.listdir_map.keys()
-    print rec.list_dir("./games/PW - The Contempt of Court - artzip/art")
+    print rec.list_dir("./games/PW - The Contempt of Court - artzip/data/art")
     #print rec.map
-    print rec.lookup("art/port/White/twitch.txt")
+    print rec.lookup("data/art/port/White/twitch.txt")
     return
     
     rec = Registry("./games/PW - The Contempt of Court.zip")
@@ -173,31 +173,31 @@ def test():
     return
     
     rec = Registry("./games/PW - The Contempt of Court/The Haunted Turnabout")
-    assert rec.lookup("art/port/Maplethorpe/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maplethorpe/angry(blink).png"
-    assert rec.lookup("art/port/Maris/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maris.zip/angry(blink).png"
-    assert rec.lookup("art/port/Maris/hand1(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/art/port/Maris.zip/hand1(blink).png"
+    assert rec.lookup("data/art/port/Maplethorpe/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/data/art/port/Maplethorpe/angry(blink).png"
+    assert rec.lookup("data/art/port/Maris/angry(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/data/art/port/Maris.zip/angry(blink).png"
+    assert rec.lookup("data/art/port/Maris/hand1(blink).png")=="games/PW - The Contempt of Court/The Haunted Turnabout/data/art/port/Maris.zip/hand1(blink).png"
     
     reg = Registry("./games/Turnabout Substitution")
-    assert not reg.lookup("art/port/kristoph2/normal(talk)")
-    assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
+    assert not reg.lookup("data/art/port/kristoph2/normal(talk)")
+    assert reg.lookup("data/art/port/apollo/normal(talk)")=="games/Turnabout Substitution/data/art/port/Apollo/normal(talk).png",reg.lookup("data/art/port/apollo/normal(talk)")
     
     base = Registry(".")
-    assert base.lookup("art/port/kristoph2/normal(talk).txt",True)=="art/port/kristoph2/normal(talk).txt",base.lookup("art/port/kristoph2/normal(talk).txt",True)
-    assert base.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png",base.lookup("art/port/kristoph2/normal(talk)")
-    assert base.lookup("art/port/apollo/normal(talk)")=="art/port/apollo/normal(talk).png",base.lookup("art/port/apollo/normal(talk)")
-    assert base.lookup("art/fg/../general/logosmall")=="art/general/logosmall.png"
+    assert base.lookup("data/art/port/kristoph2/normal(talk).txt",True)=="data/art/port/kristoph2/normal(talk).txt",base.lookup("data/art/port/kristoph2/normal(talk).txt",True)
+    assert base.lookup("data/art/port/kristoph2/normal(talk)")=="data/art/port/kristoph2/normal(talk).png",base.lookup("data/art/port/kristoph2/normal(talk)")
+    assert base.lookup("data/art/port/apollo/normal(talk)")=="data/art/port/apollo/normal(talk).png",base.lookup("data/art/port/apollo/normal(talk)")
+    assert base.lookup("data/art/fg/../general/logosmall")=="data/art/general/logosmall.png"
 
     base.override(reg)
-    assert base.lookup("art/port/kristoph2/normal(talk)")=="art/port/kristoph2/normal(talk).png",base.lookup("art/port/kristoph2/normal(talk)")
-    assert reg.lookup("art/port/apollo/normal(talk)")=="games/Turnabout Substitution/art/port/Apollo/normal(talk).png",reg.lookup("art/port/apollo/normal(talk)")
+    assert base.lookup("data/art/port/kristoph2/normal(talk)")=="data/art/port/kristoph2/normal(talk).png",base.lookup("data/art/port/kristoph2/normal(talk)")
+    assert reg.lookup("data/art/port/apollo/normal(talk)")=="games/Turnabout Substitution/data/art/port/Apollo/normal(talk).png",reg.lookup("data/art/port/apollo/normal(talk)")
 
     
     rec = Registry("examples/rectangles")
-    assert rec.lookup("art/fg/lilmiles-walkeast.txt")=="examples/rectangles/art/fg/lilmiles-walkeast.png"
-    assert rec.lookup("art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/art/fg/lilmiles-walkeast.txt"
+    assert rec.lookup("data/art/fg/lilmiles-walkeast.txt")=="examples/rectangles/data/art/fg/lilmiles-walkeast.png"
+    assert rec.lookup("data/art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/data/art/fg/lilmiles-walkeast.txt"
     base.override(rec)
-    assert rec.lookup("art/fg/lilmiles-walkeast.txt")=="examples/rectangles/art/fg/lilmiles-walkeast.png"
-    assert rec.lookup("art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/art/fg/lilmiles-walkeast.txt"
+    assert rec.lookup("data/art/fg/lilmiles-walkeast.txt")=="examples/rectangles/data/art/fg/lilmiles-walkeast.png"
+    assert rec.lookup("data/art/fg/lilmiles-walkeast.txt",True)=="examples/rectangles/data/art/fg/lilmiles-walkeast.txt"
 
 if __name__=="__main__":
     testfile()

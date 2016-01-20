@@ -1,7 +1,4 @@
-
 from errors import script_error
-
-
 
 import pickle
 import zlib
@@ -97,7 +94,7 @@ class choose_game(gui.widget):
         games = []
         for f in os.listdir(path):
             if f.startswith("."): continue
-            if f in ["art","music","sfx","fonts"]:
+            if f in ["data/art","data/music","data/sfx","fonts"]:
                 continue
             if not os.path.isdir(path+"/"+f) and not ".zip" in path+"/"+f:
                 continue

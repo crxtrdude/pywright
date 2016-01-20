@@ -33,7 +33,7 @@ def make_screen():
     pygame.jsup = gu
     pygame.jsdown = gd
     if not android:
-        pygame.display.set_icon(pygame.image.load("art/general/bb.png"))
+        pygame.display.set_icon(pygame.image.load("data/art/general/bb.png"))
         if pygame.joystick.get_init():
             pygame.joystick.quit()
         pygame.joystick.init()

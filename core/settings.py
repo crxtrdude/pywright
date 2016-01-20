@@ -480,9 +480,9 @@ class settings_menu(gui.pane):
         self.mv_line = gui.label("MusicVolume: %d"%assets.music_volume)
         line.children.append(self.mv_line)
         line.children.append(gui.button(None,"less"))
-        line.children[-1].less = mod(-10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
+        line.children[-1].less = mod(-10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="data/sfx/",reset_track=False))
         line.children.append(gui.button(None,"more"))
-        line.children[-1].more = mod(10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="sfx/",reset_track=False))
+        line.children[-1].more = mod(10,0,100,"music_volume",lambda:assets.play_music("Ding.ogg",loop=1,pre="data/sfx/",reset_track=False))
 
         self.children.append(ermsg)
     def display(self):

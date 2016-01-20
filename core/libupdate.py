@@ -39,13 +39,13 @@ import md5
 from gui import *
 
 def createfiles(dir="port"):
-    for f in os.listdir("art/"+dir):
+    for f in os.listdir("data/art/"+dir):
         if f == ".svn": continue
         if not os.path.isdir(f): continue
         myzip = ZipFile("zip_"+dir+"/"+f+".zip","w",ZIP_DEFLATED)
-        for sub in os.listdir("art/"+dir+"/"+f):
+        for sub in os.listdir("data/art/"+dir+"/"+f):
             if sub == ".svn": continue
-            myzip.write("art/"+dir+"/"+f+"/"+sub,sub)
+            myzip.write("data/art/"+dir+"/"+f+"/"+sub,sub)
         myzip.close()
         print "wrote","zips/"+f+".zip"
         
@@ -55,10 +55,10 @@ def create_path(dir):
         pathfull+=pathpart+"/"
         if not os.path.exists(pathfull):
             os.mkdir(pathfull)
-for required_path in ["art/3d","art/bg","art/ev","art/fg","art/general","art/port","music","games","fonts","sfx"]:
+for required_path in ["data/art/3d","data/art/bg","data/art/ev","data/art/fg","data/art/general","data/art/port","data/music","data/sfx","games","fonts"]:
     create_path(required_path)
 
-def mynames(dir="art/port"):
+def mynames(dir="data/art/port"):
     files = {}
     for file in [x for x in os.listdir(dir) if x != ".svn"]:
         files[file] = get_data_from_folder(dir+"/"+file)
@@ -99,7 +99,7 @@ def names(url):
         files[x["zipname"]]=x
     return files
 
-def build_list(e,dir="art/port",url="zip_port_info",check_folder=None):
+def build_list(e,dir="data/art/port",url="zip_port_info",check_folder=None):
     list = e.list
     list.pane.children = [list.status_box]
     fnd = 0
@@ -222,15 +222,15 @@ class Engine(pane):
             self.root.children[self.root.start_index].rpos = rpos
         threading.Thread(target=t).start()
     def Characters(self):
-        self.Download_X("port","art/port",get_url%("port",))
+        self.Download_X("port","data/art/port",get_url%("port",))
     def Backgrounds(self):
-        self.Download_X("bg","art/bg",get_url%("bg",))
+        self.Download_X("bg","data/art/bg",get_url%("bg",))
     def Foreground(self):
-        self.Download_X("fg","art/fg",get_url%("fg",))
+        self.Download_X("fg","data/art/fg",get_url%("fg",))
     def Games(self):
         self.Download_X("games","games",get_url%("games",))
     def Music(self):
-        self.Download_X("music","music",get_url%("music",))
+        self.Download_X("music","data/music",get_url%("music",))
     def Update_PyWright(self,thread=True):
         self.path = "."
         self.Download_X("engine",".",get_url%("engine",),check_folder=".")

@@ -1,6 +1,7 @@
 from errors import *
 import sys
 sys.path.append("core/include")
+sys.path.append("core/include/simplejson")
 sys.path.append("include")
 import time
 import gui
@@ -470,7 +471,7 @@ set _font_new_resume_size 14""".split("\n"):
             self.real_path = img.real_path
             return img
         self.meta = meta()
-        pre = "art/"
+        pre = "data/art/"
         textpath = self.registry.lookup(pre+name+".txt",True)
         if not textpath:
             textpath = self.registry.lookup(pre+name.rsplit(".",1)[0]+".txt",True)
@@ -569,7 +570,7 @@ set _font_new_resume_size 14""".split("\n"):
             if os.path.exists(pre[1:]+t):
                 return pre[1:]+t
         return pre+track
-    def open_music(self,track,pre="music"):
+    def open_music(self,track,pre="data/music"):
         p = self.get_path(track,"music",pre)
         if not p:
             return False
@@ -600,7 +601,7 @@ set _font_new_resume_size 14""".split("\n"):
             if time.time()-self.sound_repeat_timer[name]<self.min_sound_time:
                 return
         self.sound_repeat_timer[name] = time.time()
-        path = self.get_path(name,"sound","sfx")
+        path = self.get_path(name,"sound","data/sfx")
         if self.snds.get(path,None):
             snd = self.snds[path]
         else:
@@ -1033,7 +1034,7 @@ def trans_y(y):
     return y
         
 class ws_button(gui.button):
-    """A button created from wrightscript"""
+    """A button created from WrightScript"""
     screen_setting = ""
     id_name = "_ws_button_"
     def delete(self):
@@ -1057,7 +1058,7 @@ class ws_button(gui.button):
         self.rpos = orpos
         
 class ws_editbox(gui.editbox):
-    """An editbox created from wrightscript"""
+    """An editbox created from WrightScript"""
     screen_setting = ""
     id_name = "_ws_button_"
     def delete(self):
@@ -1117,12 +1118,9 @@ class sprite(gui.button):
     def delete(self):
         self.kill = 1
     def makestr(self):
-        """A wrightscript string to recreate the object"""
+        """A WrightScript string to recreate the object"""
         if not getattr(self,"name",None): return ""
-        xs = ""
-        ys = ""
-        zs = ""
-        id = ""
+        xs = ys = zs = id = ""
         if self.pos[0]: xs = "x="+str(self.pos[0])+" "
         if self.pos[1]: ys = "y="+str(self.pos[1])+" "
         #Make this better (maybe only allow layer name for z?)
@@ -1320,7 +1318,7 @@ class mesh(sprite):
         if not con:
             return
         self.con = con
-        path = assets.game+"/art/models/"
+        path = assets.game+"/data/art/models/"
         self.ob = ob = con.context.load_object(self.meshfile,path)
         ob.trans(z=-100)
         ob.rot(90,0,0)
@@ -1401,7 +1399,7 @@ class fadesprite(sprite):
                 self.mockimg = ximg
         if (getattr(self,"tint",None) or getattr(self,"invert",None)) and not getattr(self,"origc_base",None) and pygame.use_numpy:
             self.origc_base = [pygame.surfarray.array3d(x) for x in self.mockimg_base]
-            print "set base foo",self.origc_base
+            # print "set base foo",self.origc_base
         try:
             self.draw_func(dest)
         except Exception:
@@ -1410,7 +1408,7 @@ class fadesprite(sprite):
                 self.mockimg = None
                 import traceback
                 traceback.print_exc()
-                raise art_error("Problem with fading code, switching to older fade technology")
+                raise art_error("Problem with fading code, switching to older fade technology. Did you install NumPy?")
     def numpydraw(self,dest):
         if not self.mockimg_base:
             return
@@ -1424,7 +1422,10 @@ class fadesprite(sprite):
                 px[:] = 255-px[:]
             self.linvert = self.invert
             if self.tint:
-                px*=self.tint
+                # NumPy 0.10 same_kind cast fix.
+                px[:,:,0] = px[:,:,0] * self.tint[0]
+                px[:,:,1] = px[:,:,1] * self.tint[1]
+                px[:,:,2] = px[:,:,2] * self.tint[2]
             self.lt = self.tint
         del px
         img = self.img
@@ -1473,12 +1474,8 @@ class portrait(sprite):
             return self.cur_sprite.img
     img = property(get_self_image)
     def makestr(self):
-        """A wrightscript string to recreate the object"""
-        xs = ""
-        ys = ""
-        zs = ""
-        id = ""
-        emo = ""
+        """A WrightScript string to recreate the object"""
+        xs = ys = zs = id = emo = ""
         if self.emoname != "normal": emo = "e="+self.emoname+" "
         nt = ""
         if self.pos[0]: xs = "x="+str(self.pos[0])+" "
@@ -1559,7 +1556,7 @@ class portrait(sprite):
         def shrink(t):
             if not t.startswith("/"):
                 t = "/"+t
-            return t[t.rfind("/art/")+5:-4]
+            return t[t.rfind("/data/art/")+5:-4]
             
         def loadfrom(path):
             if not path.endswith("/"):path+="/"
@@ -1568,15 +1565,15 @@ class portrait(sprite):
             print path+blinkemo+"(blink)"
             blink = assets.registry.lookup(path+blinkemo+"(blink)")
             if blink and not hasattr(self.blink_sprite,"img"):
-                self.blink_sprite.load(blink.rsplit("art/",1)[1][:-4])
+                self.blink_sprite.load(blink.rsplit("data/art/",1)[1][:-4])
                 
             talk = assets.registry.lookup(path+emo+"(talk)")
             if talk and not hasattr(self.talk_sprite,"img"):
-                self.talk_sprite.load(talk.rsplit("art/",1)[1][:-4])
+                self.talk_sprite.load(talk.rsplit("data/art/",1)[1][:-4])
                 
             combined = assets.registry.lookup(path+emo+"(combined)")
             if combined and not hasattr(self.combined,"img"):
-                self.combined.load(combined.rsplit("art/",1)[1][:-4])
+                self.combined.load(combined.rsplit("data/art/",1)[1][:-4])
                 if not self.combined.split:
                     self.combined.split = len(self.combined.base)//2
                 self.talk_sprite.load(self.combined.base[:self.combined.split])
@@ -1596,7 +1593,7 @@ class portrait(sprite):
             
             available = assets.registry.lookup(path+emo)
             if available and not hasattr(self.blink_sprite,"img"):
-                self.blink_sprite.load(available.rsplit("art/",1)[1][:-4])
+                self.blink_sprite.load(available.rsplit("data/art/",1)[1][:-4])
                 if self.blink_sprite.blinkmode=="blinknoset": self.blink_sprite.blinkmode = "stop"
             
             print blink,talk,combined,available
@@ -1604,7 +1601,7 @@ class portrait(sprite):
                 return True
             raise art_error("Character folder %s not found"%charname)
 
-        loadfrom("art/port/"+charname)
+        loadfrom("data/art/port/"+charname)
         if hasattr(self.talk_sprite,"img") and not hasattr(self.blink_sprite,"img"):
             self.blink_sprite.img = i = self.talk_sprite.img
             self.blink_sprite.base = [i]
@@ -1748,7 +1745,7 @@ class penalty(fadesprite):
         if end<0: end = 0
         self.end = end
         self.delay = 50
-        self.flash_amount = flash_amount
+        self.flash_amount = min(flash_amount, self.gv()) if flash_amount else flash_amount
         self.flash_color = [255,242,129,150]
         self.flash_dir = 1
         self.change = 0
