@@ -70,14 +70,14 @@ data = []
 if bexe:
     add_files(data,os.walk('fonts'))
     add_files(data,os.walk('sfx'))
-    add_files(data,os.walk('art/general'))
+    add_files(data,os.walk('data/art/general'))
     add_files(data,os.walk("core"),["cache"])
     data+=["core/cache"]
     data+=["games/","music/","movies/","downloads/"]
     data+=["doc.txt","changelog.txt","data.txt"]
-    data+=["art/ev/","art/port/","art/fg/","art/bg/"]
-    data+=["art/bg/"+x for x in os.listdir("art/bg/") if x.endswith(".png")]
-    data+=["art/fg/"+x for x in os.listdir("art/fg/") if x.endswith(".png") or x.endswith(".gif") or x.endswith(".txt")]
+    data+=["data/art/ev/","data/art/port/","data/art/fg/","data/art/bg/"]
+    data+=["data/art/bg/"+x for x in os.listdir("data/art/bg/") if x.endswith(".png")]
+    data+=["data/art/fg/"+x for x in os.listdir("data/art/fg/") if x.endswith(".png") or x.endswith(".gif") or x.endswith(".txt")]
 
 # build the sdist target
 if cmd == 'sdist' and bexe:
@@ -159,7 +159,7 @@ if cmd in ('py2exe',) and bexe:
             }},
         windows=[{
             'script':"PyWright.py",
-            'icon_resources':[(1,"art/general/bb.ico")],
+            'icon_resources':[(1,"data/art/general/bb.ico")],
             },
             {
             "script":"updater.py"}],
