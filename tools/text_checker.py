@@ -4,8 +4,8 @@ pygame.display.set_mode([5,5])
 import os
 os.chdir("..")
 import sys
-sys.path.append("core")
-import core,libengine
+sys.path.insert(0,os.getcwd())
+from core import core,libengine
 
 def check_text(game):
     core.assets.game = game
@@ -27,9 +27,9 @@ def check_dirs(path):
             check_file(p)
             
 def check_file(path):
-    f = open(path)
+    f = open(path,encoding="ascii",errors="ignore")
     for i,line in enumerate(f):
-        line = line.strip().decode("ascii","ignore")
+        line = line.strip()
         if line.startswith('"') and line.endswith('"'):
             check_line(path,i,line)
             
@@ -40,10 +40,10 @@ def check_line(path,i,line):
     try:
         tb.update()
     except:
-        print path,i
+        print(path,i)
         import traceback
         traceback.print_exc()
     if getattr(tb,"OVERAGE",0)>1:
-        print path,i,tb.written
+        print(path,i,tb.written)
     
 check_text("Turnabout Substitution")

@@ -14,7 +14,7 @@ LINUX_REG = {"gifsicle":"gifsicle",
 DIR = os.path.split(os.path.abspath(__file__))[0]
 def get_registry():
     reg = LINUX_REG
-    if "win" in sys.platform:
+    if sys.platform == "win32":
         reg = WIN_REG
     tool_config = os.path.join(DIR,"tools.ini")
     if os.path.exists(tool_config):
@@ -51,14 +51,14 @@ class ExternalProgramRunner:
             #~ self.use_shell = False
 
     def run(self, d):
-        print d,d["command"],self.commands[d["command"]]
+        print(d,d["command"],self.commands[d["command"]])
         command = d["command"]
         d["command"] = self.make_command(command)
         operation = operations["%s_%s"%(command,d["operation"])]
         sh = operation%d
         sh.replace("/",os.path.sep)
-        print sh
-        proc = subprocess.Popen(sh,stdout=subprocess.PIPE,shell=self.use_shell,bufsize=-1)
+        print(sh)
+        proc = subprocess.Popen(sh,stdout=subprocess.PIPE,shell=self.use_shell,bufsize=-1,universal_newlines=True)
         return proc.communicate()
         
     def make_command(self, command):
@@ -72,4 +72,4 @@ class ExternalProgramRunner:
 runner = ExternalProgramRunner()
 
 if __name__=="__main__":
-    print runner.run(eval(sys.argv[1]))
+    print(runner.run(eval(sys.argv[1])))

@@ -1,10 +1,10 @@
-from script import Script
+from .script import Script
 from core.core import *
 
 class TextScript(Script):
     def __init__(self,*args):
         super(TextScript,self).__init__(*args)
-        print "initialized TextScript"
+        print("initialized TextScript")
     def enter_text(self,text):
         return True
     def enter_list(self,text):
@@ -27,7 +27,7 @@ class TextScript(Script):
             #tb.skipping = len(txt)
             tb.enter_down()
             tb.update()
-            print tb.text.encode("utf8")
+            print(tb.text)
             x = self.get_input(self.enter_text)
         elif command == "showlist":
             super(TextScript,self).call_func(command,args)
@@ -35,13 +35,13 @@ class TextScript(Script):
                 if isinstance(o,listmenu):
                     self.list_ob = o
             for i,opt in enumerate(self.list_ob.options):
-                print i,opt[0]
+                print(i,opt["label"])
             x = self.get_input(self.enter_list)
         else:
             super(TextScript,self).call_func(command,args)
     def get_input(self,func):
         while 1:
-            x = raw_input()
+            x = input()
             if x=="quit":
                 sys.exit()
             if func(x):
@@ -132,19 +132,19 @@ class DebugScript(Script):
         for scene in scenes:
             if scope=="all" and not scene.endswith(".txt"):
                 continue
-            print scene
+            print(scene)
             if method=="run":
                 self.world.all = []
                 self.init(scene)
                 #self.scriptlines = assets.cur_script.scriptlines
                 assets.stack.append(self)
                 errors = self.run_it()
-                print errors
+                print(errors)
                 aerrors.extend(errors)
             elif method=="quote":
                 lines = assets.raw_lines(scene,use_unicode=True)
                 aerrors.extend(self.run_lines(scene,lines,self._no_quote))
-        print aerrors
+        print(aerrors)
         if scope == "current":
             for err in reversed(aerrors):
                 assets.cur_script.obs.append(err)

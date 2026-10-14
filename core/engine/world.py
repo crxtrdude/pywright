@@ -1,9 +1,15 @@
 from core.core import assets
 
+def py2_order(v):
+    """Sort key reproducing python 2 mixed type ordering: None < numbers < everything else"""
+    if v is None:
+        return (0,0)
+    if isinstance(v,(int,float)):
+        return (1,v)
+    return (2,str(v))
+
 def argsort(list,arg="pri",get=getattr):
-    def _cmp(a,b):
-        return cmp(get(a,arg),get(b,arg))
-    list.sort(_cmp)
+    list.sort(key=lambda a: py2_order(get(a,arg)))
 
 class mylist(list): pass
 class World:

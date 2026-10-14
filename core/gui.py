@@ -1,6 +1,6 @@
 import pygame
 import sys,os
-import core
+from . import core
 
 try:
     import android
@@ -194,12 +194,12 @@ class widget(object):
                         self.repeat[evt.key] = {"func":t,"val":0,"del":True,"unicode":evt.unicode}
                         self.start_repeat(evt.key)
                 elif evt.key in [pygame.K_LSHIFT,pygame.K_RSHIFT]:
-                    for k in self.repeat.keys():
+                    for k in list(self.repeat.keys()):
                         if "unicode" in self.repeat[k]:
                             del self.repeat[k]
             elif evt.type == pygame.KEYUP:
                 if evt.key in [pygame.K_LSHIFT,pygame.K_RSHIFT]:
-                    for k in self.repeat.keys():
+                    for k in list(self.repeat.keys()):
                         if "unicode" in self.repeat[k]:
                             del self.repeat[k]
                 if evt.key in self.repeat:
@@ -255,7 +255,7 @@ class editbox(widget):
         self.draw_back = True
         self.carat = 0
         self.force_width = None
-	self.password=False
+        self.password=False
     def click_up(self,pos):
         pass
     def click_down_over(self,mp):
@@ -286,9 +286,9 @@ class editbox(widget):
             return self.target_ob.get(self.target_attr,"").replace("\n","")
         else:
             return getattr(self.target_ob,self.target_attr).replace("\n","")
-    def insert(self,unicode):
+    def insert(self,str):
         try:
-            u = str(unicode)
+            u = str(str)
         except:
             return
         if not u:
@@ -297,11 +297,11 @@ class editbox(widget):
             return
         v = self.val()
         if self.carat == 0:
-            v = str(unicode)+v
+            v = str(str)+v
         elif self.carat == len(v):
-            v = v+str(unicode)
+            v = v+str(str)
         else:
-            v = v[:self.carat]+str(unicode)+v[self.carat:]
+            v = v[:self.carat]+str(str)+v[self.carat:]
         self.set(v)
         self.carat += 1
     def backspace(self):
@@ -336,8 +336,8 @@ class editbox(widget):
         if not self.visible: return
         pos = self.rpos
         val = self.val()
-	if self.password:
-	    val = "*"*len(val)
+        if self.password:
+            val = "*"*len(val)
         textcol = self.textcol
         bgcol = self.bgcol
         bgcol2 = self.bgcol2
@@ -518,7 +518,7 @@ class button(widget):
         if not bg:
             txt = self.font.render(self.text,1,self.textcolor)
             ts = txt.get_size()
-            bg = pygame.Surface([ts[0]+4,ts[1]+4])
+            bg = pygame.Surface([ts[0]+4,ts[1]+4],0,32)
             bgcolor = self.bgcolor
             if window.over == self: bgcolor = self.highlightcolor
             bg.fill(bgcolor)
@@ -542,7 +542,7 @@ class pane(widget):
         if not self.visible: return
         if not hasattr(self,"offset"):
             self.offset = [0,0]
-        surf = pygame.Surface([self.width,self.height])
+        surf = pygame.Surface([self.width,self.height],0,32)
         if self.background:
             surf.fill(self.bgcolor)
         else:
@@ -595,7 +595,7 @@ class scrollbar(widget):
     def draw(self,dest):
         if not self.visible: return
         x,y = self.rpos
-        surf = pygame.Surface([self.width,self.height])
+        surf = pygame.Surface([self.width,self.height],0,32)
         pygame.draw.rect(surf,defcol["sbarbg"],[[0,0],[self.width,self.height]])
         pygame.draw.rect(surf,defcol["sbarfg"],[[1,1],[self.width-2,self.height-2]])
         
@@ -685,13 +685,13 @@ class directory(pane):
             ld = "./"
         else:
             ld = dir+"/"
-        print "listing",ld
+        print("listing",ld)
         for file in os.listdir(ld):
-            if os.path.isdir(ld+file) or filter(file):
+            if os.path.isdir(ld+file) or list(filter(file)):
                 class myb(button):
                     def click_down_over(s,*args):
                         if os.path.isdir(s.path):
-                            import settings
+                            from . import settings
                             core.assets.tool_path = s.path
                             settings.wini(core.assets)
                             self.populate(s.path,variabledest,variablename,filter,close_on_choose)

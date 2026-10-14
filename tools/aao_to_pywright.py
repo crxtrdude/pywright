@@ -28,9 +28,8 @@ to more natural pywright code might be a good idea, such as using the specialize
 menu."""
 
 import os
-from BeautifulSoup import BeautifulSoup
-import urllib
-import urllib2
+from bs4 import BeautifulSoup
+import urllib.request, urllib.parse, urllib.error
 import socket
 socket.setdefaulttimeout(5)
 import time
@@ -123,22 +122,22 @@ class Resources:
                 threads.append(t)
         [t.run() for t in threads]
         while [1 for x in threads if x.conversions]:
-            print x.conversions
+            print(x.conversions)
         
 
 res = Resources("../games/aao_%s"%game_id,temppath="tmp")
 
 if os.path.exists(res.rootpath+"/%s.html"%game_id):
-    f = open(res.rootpath+"/%s.html"%game_id)
+    f = open(res.rootpath+"/%s.html"%game_id,encoding="utf8")
     html = f.read()
     f.close()
 else:
-    print "opening url"
-    f = urllib.urlopen(game_url)
-    print "reading"
-    html = f.read()
+    print("opening url")
+    f = urllib.request.urlopen(game_url)
+    print("reading")
+    html = f.read().decode("utf8","ignore")
     f.close()
-    f = open(res.rootpath+"/%s.html"%game_id,"w")
+    f = open(res.rootpath+"/%s.html"%game_id,"w",encoding="utf8")
     f.write(html)
     f.close()
 
@@ -179,7 +178,7 @@ for line in lines:
     line = js2py(line,context)
     if line:
         exec(line,namespace,namespace)
-print namespace["donnees_messages"][1]
+print(namespace["donnees_messages"][1])
 
 colors = {"red": "{c900}", "white":"{c999}", 
 "green":"{c090}","blue":"{c009}","skyblue":"{c339}",
@@ -210,17 +209,18 @@ def cent_to_frame(t):
 assert cent_to_frame("300")==180
 
 def tencode(t):
-    return t.replace("&nbsp;"," ").replace("&quot;","'")
+    #bs4 decodes entities itself, so also handle the decoded non-breaking space
+    return t.replace("&nbsp;"," ").replace("\xa0"," ").replace("&quot;","'")
 def textify(contentlist,colorize=False,replace_line_end=None):
     t = ""
     for c in contentlist:
-        if isinstance(c,unicode) or isinstance(c,str):
+        if isinstance(c,str):
             t += c
         elif c.name == "em":
             t += textify(c.contents,colorize)
         elif c.name == "span":
             if colorize:
-                s = c._getAttrMap().get("style","").split(";")
+                s = c.get("style","").split(";")
                 for arg in s:
                     if arg.startswith("color:"):
                         col = arg.split(":")[1].strip()
@@ -238,27 +238,27 @@ def textify(contentlist,colorize=False,replace_line_end=None):
 
 def wget(url,saveto):
     saveto = saveto.replace("\\","sl")
-    print "get",url,"to",saveto
-    import urllib
+    print("get",url,"to",saveto)
+    import urllib.request, urllib.parse, urllib.error
     if url.endswith(".gif"):
-        print "convert gif"
+        print("convert gif")
         prefix=saveto.rsplit(".",1)[0]
         saveto = prefix+".png"
         txt_name = prefix+".txt"
         if not (os.path.exists(txt_name) or os.path.exists(saveto)):
             try:
                 gif2strip.go(url,saveto)
-            except (urllib2.HTTPError,urllib2.URLError,IndexError):
+            except (urllib.error.HTTPError,urllib.error.URLError,IndexError):
                 pass
     elif url.endswith(".mp3"):
         if not os.path.exists(saveto):
             def progress(a,b,c):
-                print int(a)*int(b)/float(c)
+                print(int(a)*int(b)/float(c))
             for t in range(5):
                 try:
-                    urllib.urlretrieve(url.replace(" ","%20"),"input.mp3",reporthook=progress)
-                except socket.error,urllib.ContentTooShortError:
-                    print "retrying"
+                    urllib.request.urlretrieve(url.replace(" ","%20"),"input.mp3",reporthook=progress)
+                except (socket.error,urllib.error.ContentTooShortError):
+                    print("retrying")
                     time.sleep(2)
                     continue
                 break
@@ -274,9 +274,9 @@ def wget(url,saveto):
             os.remove("output.wav")
             os.remove("output.ogg")
     elif not os.path.exists(saveto):
-        print "retrieving"
-        urllib.urlretrieve(url.replace(" ","%20"),saveto)
-    print "returning"
+        print("retrieving")
+        urllib.request.urlretrieve(url.replace(" ","%20"),saveto)
+    print("returning")
     return saveto
 def nice_name(t):
     return t.replace("/","_").replace(":","").replace(" ","_")
@@ -300,7 +300,7 @@ def fg(t):
 def makeev(t):
     return add_art(t,"ev")
 def setupchar(id, name, talk, blink):
-    print char_id_name,"ev"+id+"$"
+    print(char_id_name,"ev"+id+"$")
     charname = char_id_name["ev"+id+"$"].replace(" ","_").replace("?","_qu_")
     talkname = nice_name(talk).rsplit(".",1)[0]+"(talk).png"
     blinkname = nice_name(talk).rsplit(".",1)[0]+"(blink).png"
@@ -329,27 +329,27 @@ all_evidence = {}  #True for each evidence id that should be revealed at the sta
 def get_ev_id(element):
     return "ev%s"%element["id"].split("_")[1]
 f = res.evidence
-print "search for ev"
-soup = BeautifulSoup(html)
-for ev in soup.findAll(id=re.compile("(preuve|profil)_\d+")):
+print("search for ev")
+soup = BeautifulSoup(html,"html.parser")
+for ev in soup.findAll(id=re.compile(r"(preuve|profil)_\d+")):
     evid = get_ev_id(ev)
     if ev["id"].startswith("profil"):
         evid+="$"
     all_evidence[evid] = True
-    for img in ev.findAll(id=re.compile("(preuve|profil)_\d+_image")):
+    for img in ev.findAll(id=re.compile(r"(preuve|profil)_\d+_image")):
         src = img["src"]
-        print src
+        print(src)
         imname = makeev(src)
         f.write("set %s_pic %s\n"%(evid,imname))
-    for name in ev.findAll(id=re.compile("(preuve|profil)_\d+_nom")):
+    for name in ev.findAll(id=re.compile(r"(preuve|profil)_\d+_nom")):
         name = textify(name.contents,replace_line_end="")
         if evid.endswith("$"):
             char_id_name[evid] = name
         f.write("set %s_name %s\n"%(evid,name))
-    for desc in ev.findAll(id=re.compile("(preuve|profil)_\d+_description")):
-        print desc.contents,textify(desc.contents)
+    for desc in ev.findAll(id=re.compile(r"(preuve|profil)_\d+_description")):
+        print(desc.contents,textify(desc.contents))
         f.write("set %s_desc %s\n"%(evid,textify(desc.contents,replace_line_end="{n}")))
-    for check in ev.findAll(id=re.compile("(preuve|profil)_\d+_verifier")):
+    for check in ev.findAll(id=re.compile(r"(preuve|profil)_\d+_verifier")):
         page_output = ""
         for page in check.contents[1:]:
             page_type,page_content = [textify(x,replace_line_end="{n}") for x in page.contents[:2]]
@@ -448,7 +448,7 @@ def PointerImage(vals,elements):
     def make_region(x1,y1,x2,y2,success):
         w = int(x2)-int(x1)
         h = int(y2)-int(y1)
-        print x1,y1,w,h,success
+        print(x1,y1,w,h,success)
         return "region %s %s %s %s line_%s\n"%(x1,y1,w,h,success)
     regions = ""
     if xes:
@@ -497,7 +497,7 @@ label_none = {}
 
 def LancerCI(vals,elements):
     """Begin cross exam"""
-    print elements
+    print(elements)
     crossexam[0] = True
     vals["postcode"] = "cross"
     from_statement,ev_type,ev_id,to_statement,failure_msg = (elements + [[],[],[]])[:5]
@@ -528,7 +528,7 @@ def TesterVar(vals,elements):
     indexes_jump = elements[2]
     fail = elements[3]
     code = "\n"
-    keys = indexes_values.keys()
+    keys = list(indexes_values.keys())
     keys.sort()
     for i in keys:
         valid = indexes_values[i]
@@ -564,7 +564,7 @@ def pauseCI(vals,elements):
     """Pause cross exam"""
     if crossexam[0]:
         crossexam[0] = None
-        vals["postcode"] = u"endcross\n"
+        vals["postcode"] = "endcross\n"
     
 def RetourCI(vals,elements):
     """Return to cross exam"""
@@ -685,54 +685,54 @@ def apply_event(vals,code):
         if i!=0:
             l.append(code[i])
     if func.strip():
-        print "calling",func.strip(),l
+        print("calling",func.strip(),l)
         func = eval(func.strip())
         func(vals,l)
 def end_cross_exam(vals):
     t = ""
-    for id_num in jumpto_when_press.keys():
-        t+=u"\nlabel press st_"+jumpto_when_press[id_num]
-        t+=u"\ngoto line_%s\n"%id_num
+    for id_num in list(jumpto_when_press.keys()):
+        t+="\nlabel press st_"+jumpto_when_press[id_num]
+        t+="\ngoto line_%s\n"%id_num
         del jumpto_when_press[id_num]
-    for id_num in jumpto_when_present.keys():
-        t+=u"\nlabel "+jumpto_when_present[id_num]
-        t+=u"\ngoto line_%s\n"%id_num
+    for id_num in list(jumpto_when_present.keys()):
+        t+="\nlabel "+jumpto_when_present[id_num]
+        t+="\ngoto line_%s\n"%id_num
         del jumpto_when_present[id_num]
-    for id_num in label_none.keys():
-        t+=u"\nlabel "+label_none[id_num]
-        t+=u"\ngoto line_%s\n"%id_num
+    for id_num in list(label_none.keys()):
+        t+="\nlabel "+label_none[id_num]
+        t+="\ngoto line_%s\n"%id_num
         del label_none[id_num]
     return t
 
 def make_textbox(t):
-    print "make textbox of",repr(t)
+    print("make textbox of",repr(t))
     #pauses, flashes, shakes, and spaces
-    t = textify(BeautifulSoup(t),True)
+    t = textify(BeautifulSoup(t,"html.parser"),True)
     t = t.replace("\n","{n}")
     while 1:
-        match = re.search("\[#.*?\]",t)
+        match = re.search(r"\[#.*?\]",t)
         if not match:
             break
         found = t[match.start():match.end()]
-        print "found",found
+        print("found",found)
         if found == "[#]":
             repl = "{p60}"
         elif found == "[#f]":
             repl = "{f}"
         elif found == "[#s]":
             repl = "{s}"
-        elif re.match("\[#p\d*\]",found):
+        elif re.match(r"\[#p\d*\]",found):
             repl = "{"+found[2:-1]+"}"
-        elif re.match("\[#\d*\]",found):
+        elif re.match(r"\[#\d*\]",found):
             repl = "{p"+found[2:-1]+"}"
         t = t[:match.start()]+repl+t[match.end():]
     return t
-st = u'Those two years...[#30] <span style="color: red;">that trial</span>they\nwere the happiest moments\nof my life but also the saddest.'
-en = u'Those two years...{p30} {c900}that trial{c}they{n}were the happiest moments{n}of my life but also the saddest.'
+st = 'Those two years...[#30] <span style="color: red;">that trial</span>they\nwere the happiest moments\nof my life but also the saddest.'
+en = 'Those two years...{p30} {c900}that trial{c}they{n}were the happiest moments{n}of my life but also the saddest.'
 tr = make_textbox(st)
 assert tr==en,repr(tr)
-st = u' [#] January 20, [#p10]8:40 AM[#p5]\nDistrict Court[#p5]\nDefendant Lobby No. 6'
-en = u' {p60} January 20, {p10}8:40 AM{p5}{n}District Court{p5}{n}Defendant Lobby No. 6'
+st = ' [#] January 20, [#p10]8:40 AM[#p5]\nDistrict Court[#p5]\nDefendant Lobby No. 6'
+en = ' {p60} January 20, {p10}8:40 AM{p5}{n}District Court{p5}{n}Defendant Lobby No. 6'
 tr = make_textbox(st)
 assert tr==en,repr(tr)
     
@@ -755,8 +755,8 @@ def w(t):
 def wp(t):
     res.presets.write(t.encode("utf8"))
     res.presets.flush()
-w(u"include evidence\ninclude presets")
-wp(u"""
+w("include evidence\ninclude presets")
+wp("""
 macro intro_logic
 is intro_hidden_$1 = true?
 set aao_line_hide_$2 false
@@ -773,7 +773,7 @@ linked = False
 globals = {"can_be_hidden":{}}
 all_lines = []
 for id in sorted(namespace["donnees_messages"].keys()):
-    print id
+    print(id)
     id_num = str(id)
     vals = {"id_num":id_num,"char":None,"charblink":None,
                 "text":"","color":"",
@@ -854,33 +854,33 @@ for vals in all_lines:
         vals["precode"] = "is aao_line_hide_%s?\ngoto line_%s\n"%(vals["id_num"],int(vals["id_num"])+1)+vals["precode"]
     if id_num in label_none or id_num in jumpto_when_press or id_num in jumpto_when_present:
         w(end_cross_exam(vals))
-    w(u"\nlabel line_%s\n"%id_num)
+    w("\nlabel line_%s\n"%id_num)
     if "mus" in vals and vals['mus']:
         path = {"0":"sfx","1":"music"}[vals['mus_type']]
         mus_name = song(vals['mus'],path)
         if mus_name == -1:
-            w(u"\nmus\n")
+            w("\nmus\n")
         elif path=="music":
-            w(u"\nmus "+mus_name+"\n")
+            w("\nmus "+mus_name+"\n")
         elif path=="sfx":
-            w(u"\nsfx "+mus_name+"\n")
+            w("\nsfx "+mus_name+"\n")
     if vals["precode"]:
-        w(u"\n"+vals["precode"]+"\n")
+        w("\n"+vals["precode"]+"\n")
     if vals["bg"]:
-        w(u"\nbg "+vals["bg"])
+        w("\nbg "+vals["bg"])
     if not vals["char"]:
-        w(u"\nchar "+vals["nametag"]+u" hide")
+        w("\nchar "+vals["nametag"]+" hide")
     else:
         charname,ename = setupchar(vals["char_id"], vals["nametag"], vals["char"], vals["charblink"])
-        w(u"\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
+        w("\nchar %s nametag=%s e=%s"%(charname, vals["nametag"], ename))
     if had_fg and not vals["bg"]:
-        w(u"\ndelete name=fg")
+        w("\ndelete name=fg")
     had_fg = False
     if vals["fg"]:
         had_fg = True
-        w(u"\nfg "+vals["fg"]+u" nowait name=fg")
+        w("\nfg "+vals["fg"]+" nowait name=fg")
     if vals["pretextcode"]:
-        w(u"\n"+vals["pretextcode"]+u"\n")
+        w("\n"+vals["pretextcode"]+"\n")
     if vals["text"].strip():
         if linked:
             vals["text"] = "{spd0}{$_last_written_text}{spd1}"+vals["text"]
@@ -889,12 +889,12 @@ for vals in all_lines:
         if vals["linked"]:
             vals["text"] += "{next}"
             linked = True
-        w(u'\n"%s"'%vals["text"])
+        w('\n"%s"'%vals["text"])
     if vals["postcode"]:
-        w(u"\n"+vals["postcode"]+u"\n")
+        w("\n"+vals["postcode"]+"\n")
     if vals["presets"]:
         wp(vals["presets"])
-w(u'\nlabel line_%s\nset _speaking NO_ONE\n"THE END"\n'%(int(id_num)+1))
+w('\nlabel line_%s\nset _speaking NO_ONE\n"THE END"\n'%(int(id_num)+1))
 
 for evid in all_evidence:
     if all_evidence[evid]:
@@ -903,4 +903,4 @@ for evid in all_evidence:
 res.saveall()
 res.close()
 
-print cleanup
+print(cleanup)

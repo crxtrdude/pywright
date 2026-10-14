@@ -52,20 +52,20 @@ def get_anim_ext(f,d):
     app_sub_len = read_int(f,1)
     app_sub = f.read(app_sub_len)
     term = f.read(1)
-    if app_block == "NETSCAPE2.0":
-        d.loops = ord(app_sub[1])+ord(app_sub[2])
-        print app_block,repr(app_sub),repr(term)
+    if app_block == b"NETSCAPE2.0":
+        d.loops = app_sub[1]+app_sub[2]
+        print(app_block,repr(app_sub),repr(term))
 disposals = ["undefined","leave","restorecolor","restoreimage",0,0,0,0]
 def unpack_gce(f):
     packed = pbin(ord(f.read(1)))
-    print repr(packed)
+    print(repr(packed))
     reserved = packed[:3]
     disposal = disposals[int(packed[3:6],2)]
     user = int(packed[6],2)
     transp_flag = int(packed[7],2)
     return disposal,user,transp_flag
 def get_graphic_control_ext(f,d):
-    print "getting graphic control"
+    print("getting graphic control")
     d = gif_d()
     block_size = read_int(f,1)
     d.disposal,d.userinput,d.transpflag = unpack_gce(f)
@@ -100,10 +100,10 @@ def init_table(code_size,char_size):
     return string_table
 def decompress(f,d):
     npages=d.lzw_min_code
-    print "npage",npages,d.color_fmt.cres
+    print("npage",npages,d.color_fmt.cres)
     code_size=(npages+1)
     char_size=(2**(npages))
-    print "decomp",npages,char_size,code_size
+    print("decomp",npages,char_size,code_size)
     string_table = init_table(code_size,char_size)
     code = None
     lastcode = None
@@ -116,7 +116,7 @@ def decompress(f,d):
     while 1:
         amt = ord(f.read(1))
         if not amt:
-            print "finished",code_size
+            print("finished",code_size)
             return charstream
             break
         chunk = f.read(amt)
@@ -127,12 +127,12 @@ def decompress(f,d):
         #print "charstream:",len(charstream)
         #print len(chunk)
         for byte in chunk:
-            p+=pbin(ord(byte))
+            p+=pbin(byte)
         #for i in range(len(p)//code_size):
         #    print p[i*code_size:i*code_size+code_size]
         for byte in chunk:
             #print "byte",pbin(ord(byte)),code_size#,charstream
-            bits = pbin(ord(byte))+lastbits
+            bits = pbin(byte)+lastbits
             if len(bits)<code_size:
                 lastbits = bits
                 continue
@@ -141,7 +141,7 @@ def decompress(f,d):
             code = int(bits,2)
             #print bits,code,lastcode
             if code==char_size+1:
-                print "end"
+                print("end")
                 return charstream
             elif code==char_size:
                 #print "clear"
@@ -185,7 +185,7 @@ def get_image(f,d,frame):
         get_lct(f,image)
     d.lzw_min_code = read_int(f,1)
     raster = decompress(f,d)
-    print len(raster)
+    print(len(raster))
     surf = pygame.Surface([image.width,image.height])
     x=image.left
     y=image.top
@@ -208,7 +208,7 @@ def get_images(f,d):
     if not len(next):
         return True
     control = ord(next)
-    print "control",control
+    print("control",control)
     if control == 0x2C:
         d.frames.append(get_image(f,d,len(d.frames)))
         #return True
@@ -226,13 +226,13 @@ def load_gif(path):
     d = gif_d()
     d.frames = []
     f = open(path,"rb")
-    if get_gifhead(f)!="GIF89a":
+    if get_gifhead(f)!=b"GIF89a":
         return "not a gif file"
     get_screen(f,d)
     get_colors(f,d)
     while 1:
         if get_images(f,d):
             break
-    print d
+    print(d)
 
-print load_gif("earth.gif")
+print(load_gif("earth.gif"))

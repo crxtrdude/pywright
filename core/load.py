@@ -1,4 +1,4 @@
-from core import *
+from .core import *
 
 def load(script,olist):
     f = None
@@ -29,21 +29,21 @@ def load(script,olist):
             for k in props["bsprite"]:
                 setattr(o.blink_sprite,k,props["bsprite"][k])
     if cls == "mesh":
-        print "load mesh",args
+        print("load mesh",args)
         o = mesh(*args)
-        print "mesh loaded",o
+        print("mesh loaded",o)
         def f(o=o,props=props):
             o.load(script)
     if cls == "surf3d":
-        print "load surf3d"
+        print("load surf3d")
         o = surf3d(*args)
     if cls == "ev_menu":
         items = []
-	for x in props["items"]:
-	    if isinstance(x,dict):
-	        items.append(evidence(x["id"],page=x["page"]))
-	    else:
-	        items.append(evidence(x))
+        for x in props["items"]:
+            if isinstance(x,dict):
+                items.append(evidence(x["id"],page=x["page"]))
+            else:
+                items.append(evidence(x))
         del props["items"]
         o = evidence_menu(items)
         for p in props:
@@ -71,7 +71,7 @@ def load(script,olist):
                 if getattr(o2,"id_name",None) in props["ob_ids"]:
                     o.obs.append(o2)
     if cls in ["fadeanim","tintanim"]:
-        print cls
+        print(cls)
         o = {"fadeanim":fadeanim,"tintanim":tintanim}[cls]()
         def f(o=o,props=props):
             o.obs = []

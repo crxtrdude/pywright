@@ -1,7 +1,7 @@
 #!/usr/bin/env/python
 import sys,os
 abspath = os.path.abspath(os.curdir)
-print abspath
+print(abspath)
 while "PyWright_run.app" in abspath:
     abspath = os.path.split(abspath)[0]
 os.chdir(abspath)

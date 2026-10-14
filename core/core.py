@@ -1,20 +1,17 @@
-from errors import *
+from .errors import *
 import sys
-sys.path.append("core/include")
-sys.path.append("core/include/simplejson")
-sys.path.append("include")
 import time
-import gui
+from . import gui
 import os
 import pygame
 pygame.font.init()
 import random
 import pickle
 import re
-import textutil
-import registry
+from . import textutil
+from . import registry
 import zipfile
-import simplejson as json
+import json
 ImgFont = textutil.ImgFont
 try:
     import pygame.movie as pymovie
@@ -34,7 +31,7 @@ if android:
 else:
     import pygame.mixer as mixer
     
-from pwvlib import *
+from .pwvlib import *
 
 d = get_data_from_folder(".")
 __version__ = cver_s(d["version"])
@@ -108,7 +105,7 @@ class meta:
     def load_from(self,f):
         text = f.read()
         text = text.decode("utf8","ignore")
-        text = text.replace(u'\ufeff',u'')
+        text = text.replace('\ufeff','')
         lines = text.replace("\r\n","\n").split("\n")
         setlength = False
         for l in lines:
@@ -152,7 +149,7 @@ class meta:
         
 class layer(dict):
     def index(self,ob):
-        for i in self.keys():
+        for i in list(self.keys()):
             if ob in self[i]:
                 return i
 zlayers = layer()
@@ -209,7 +206,7 @@ class Variables(dict):
         if key=="_debug":
             return
         if key=="_sw":
-            print "SETTING SW"
+            print("SETTING SW")
             assets.sw = int(value)
             assets.make_screen()
             return
@@ -299,14 +296,16 @@ class Assets(object):
         if name.endswith(".txt"):
             ext = ""
         try:
-            file = open(start+name+ext,"rU")
+            file = open(start+name+ext,"rb")
         except IOError:
             raise file_error("File named "+start+name+ext+" could not be read. Make sure you spelled it properly and check case.")
         text = file.read()
-        if use_unicode:
-            text = text.decode("utf8","ignore")
-            #Replace the BOM
-            text = text.replace(u'\ufeff',u'')
+        file.close()
+        text = text.decode("utf8","ignore")
+        #Replace the BOM
+        text = text.replace('\ufeff','')
+        #Universal newlines
+        text = text.replace("\r\n","\n").replace("\r","\n")
         return text.split("\n")
     def parse_macros(self,lines):
         """Alters lines to not include macro definitions, and returns macros"""
@@ -449,7 +448,7 @@ set _font_new_resume_size 14""".split("\n"):
         self.fonts[full] = imgfont
         return imgfont
     def Surface(self,size,flags=0):
-        return pygame.Surface(size,flags)
+        return pygame.Surface(size,flags,32)
     def search_locations(self,search_path,name):
         self.game = self.game.replace("\\","/")
         case = self.game
@@ -465,7 +464,7 @@ set _font_new_resume_size 14""".split("\n"):
             return search_path+"/"+name
     def _open_art_(self,name,key=None):
         """Returns list of frame images"""
-        if self.cur_script and self.cur_script.imgcache.has_key(name):
+        if self.cur_script and name in self.cur_script.imgcache:
             img = self.cur_script.imgcache[name]
             self.meta = img._meta
             self.real_path = img.real_path
@@ -475,9 +474,9 @@ set _font_new_resume_size 14""".split("\n"):
         textpath = self.registry.lookup(pre+name+".txt",True)
         if not textpath:
             textpath = self.registry.lookup(pre+name.rsplit(".",1)[0]+".txt",True)
-        print "lookup",pre+name
+        print("lookup",pre+name)
         artpath = self.registry.lookup((pre+name).replace(".zip/","/"))
-        print pre+name+".txt",artpath,textpath
+        print(pre+name+".txt",artpath,textpath)
         if textpath:
             try:
                 f = self.registry.open(textpath)
@@ -486,7 +485,7 @@ set _font_new_resume_size 14""".split("\n"):
                 import traceback
                 traceback.print_exc()
                 raise art_error("Art textfile corrupt:"+pre+name[:-4]+".txt")
-        print self.registry.open(artpath)
+        print(self.registry.open(artpath))
         texture = pygame.image.load(self.registry.open(artpath),artpath)
         if texture.get_flags()&pygame.SRCALPHA:
             texture = texture.convert_alpha()
@@ -524,11 +523,11 @@ set _font_new_resume_size 14""".split("\n"):
             try:
                 return self._open_art_(t,key)
             except (IOError,ImportError,pygame.error,TypeError):
-                print "there was a typeerror"
+                print("there was a typeerror")
                 pass
         import traceback
         traceback.print_exc()
-        print "raising corrupt or missing art file"
+        print("raising corrupt or missing art file")
         raise art_error("Art file corrupt or missing:"+name)
     def init_sound(self,reset=False):
         self.sound_repeat_timer = {}
@@ -623,8 +622,8 @@ set _font_new_resume_size 14""".split("\n"):
             snd.volume = (self.sound_volume/100.0)*volume
         channel = snd.play()
         return channel
-    def play_music(self,track=None,loop=0,pre="music",reset_track=True):
-        print self.music_volume,self.variables.get("_music_fade",None)
+    def play_music(self,track=None,loop=0,pre="data/music",reset_track=True):
+        print(self.music_volume,self.variables.get("_music_fade",None))
         if reset_track:
             assets.variables["_music_loop"] = track
         self.init_sound()
@@ -785,7 +784,11 @@ set _font_new_resume_size 14""".split("\n"):
         self.load_game_from_string(save_text)
     def convert_save_string_to_ob(self,text):
         def read_oldsave(s):
-            return eval(s)
+            try:
+                return eval(s)
+            except SyntaxError:
+                #Saves written by python 2 may contain long literals like 10L
+                return eval(re.sub(r"\b(\d+)L\b",r"\1",s))
         def read_newsave(s):
             return json.loads(s)
         def read_save(s):
@@ -814,7 +817,7 @@ set _font_new_resume_size 14""".split("\n"):
                 else:
                     stack[index].obs.append(ob)
             loaded.append(ob)
-        keys = stack.keys()
+        keys = list(stack.keys())
         keys.sort()
         for k in keys:
             assets.stack.append(stack[k])
@@ -824,10 +827,10 @@ set _font_new_resume_size 14""".split("\n"):
         d = 0
         for s in reversed(assets.stack):
             if d:
-                print "removing",s
+                print("removing",s)
                 assets.stack.remove(s)
             else:
-                print "keeping",s
+                print("keeping",s)
             if not s.parent:
                 d = 1
         self.cur_script.obs.append(saved(text="Game restored",block=False))
@@ -851,12 +854,12 @@ set _font_new_resume_size 14""".split("\n"):
             if f.startswith(save):
                 autosaves.append((f,float(f.split("_")[1])))
         autosaves.sort(key=lambda s:s[1])
-        print len(autosaves)+1,self.autosave_keep
+        print(len(autosaves)+1,self.autosave_keep)
         while len(autosaves)+1>self.autosave_keep:
             p,t = autosaves.pop(0)
-            print "delete",p
+            print("delete",p)
             os.remove(path+"/save_backup/"+p)
-        print "autosaves",autosaves
+        print("autosaves",autosaves)
     def save_game(self,filename="save",hide=False):
         if not vtrue(self.variables.get("_allow_saveload","true")) and not vtrue(self.variables.get("_debug","false")):
             return
@@ -922,14 +925,14 @@ set _font_new_resume_size 14""".split("\n"):
         gamename = game
         if "/" in game:
             gamename = game.rsplit("/",1)[1]
-        print "starting game",game,gamename,script,mode
+        print("starting game",game,gamename,script,mode)
         if not script:
-            print "not script",game+"/"+gamename+".txt"
+            print("not script",game+"/"+gamename+".txt")
             if os.path.exists(game+"/"+gamename+".txt"):
                 script = gamename
             else:
                 script = "intro"
-        print "starting game",game,script,mode
+        print("starting game",game,script,mode)
         game = os.path.normpath(game).replace("\\","/")
         self.last_autosave = time.time()
         self.clear()
@@ -940,7 +943,7 @@ set _font_new_resume_size 14""".split("\n"):
             self.cur_script.obs = [bg("main"),bg("main"),case_menu(game)]
             self.cur_script.obs[1].pos = [0,192]
             return
-        print "set game to",assets.game
+        print("set game to",assets.game)
         self.cur_script.init(script)
         self.cur_script.execute_macro("init_defaults")
         self.cur_script.execute_macro("font_defaults")
@@ -951,7 +954,7 @@ set _font_new_resume_size 14""".split("\n"):
             em = evidence_menu(self.items)
             self.cur_script.add_object(em,True)
             em.update()
-        except art_error,e:
+        except art_error as e:
             self.cur_script.obs.append(error_msg(e.value,"",0,self.cur_script))
             import traceback
             traceback.print_exc()
@@ -977,8 +980,8 @@ def subscript(macro):
     if macro in assets.subscripts:
         return
     script = assets.cur_script.execute_macro(macro)
-    print "start subscript",macro,getattr(script,"scene","(no scene)")
-    from engine.script import interpret_scripts
+    print("start subscript",macro,getattr(script,"scene","(no scene)"))
+    from .engine.script import interpret_scripts
     interpret_scripts()
     return
     assets.subscripts[macro] = 1
@@ -992,7 +995,7 @@ def subscript(macro):
             break
         if not oldb and not newb:
             break
-    print "end subscript",macro,getattr(script,"scene","(no scene)")
+    print("end subscript",macro,getattr(script,"scene","(no scene)"))
     del assets.subscripts[macro]
     
 
@@ -1038,7 +1041,7 @@ class ws_button(gui.button):
     screen_setting = ""
     id_name = "_ws_button_"
     def delete(self):
-        print "deleting ws_button"
+        print("deleting ws_button")
         self.kill = 1
     def getrpos(self):
         rpos = self.rpos[:]
@@ -1062,7 +1065,7 @@ class ws_editbox(gui.editbox):
     screen_setting = ""
     id_name = "_ws_button_"
     def delete(self):
-        print "deleting ws_button"
+        print("deleting ws_button")
         self.kill = 1
     def getrpos(self):
         rpos = self.rpos[:]
@@ -1103,8 +1106,8 @@ class sprite(gui.button):
             return self.pos["xy".index(p)]
         if p == "frame":
             return self.x
-	if p == "screen_setting":
-	    return self.screen_setting
+        if p == "screen_setting":
+            return self.screen_setting
         return getattr(self,p,"")
     def setprop(self,p,v):
         if p in "xy":
@@ -1113,8 +1116,8 @@ class sprite(gui.button):
             self.z = int(v)
         if p == "frame":
             self.x = int(v)
-	if p == "screen_setting":
-	    self.screen_setting = v
+        if p == "screen_setting":
+            self.screen_setting = v
     def delete(self):
         self.kill = 1
     def makestr(self):
@@ -1156,7 +1159,7 @@ class sprite(gui.button):
             self.blinkspeed = [int(x) for x in assets.variables["_blinkspeed_global"].split(" ")]
     def load(self,name,key=[255,0,255]):
         self.key = key
-        if type(name)==type("") or type(name)==type(u""):
+        if type(name)==type("") or type(name)==type(""):
             path = ""
             self.base = assets.open_art(name,key)
             self.load_extra(assets.meta)
@@ -1258,7 +1261,7 @@ class sprite(gui.button):
             if self.x<len(self.base):
                 self.img = self.base[self.x]
 
-from soft3d import context
+from .soft3d import context
 
 class surf3d(sprite):
     def __init__(self,pos,sw,sh,rw,rh):
@@ -1274,7 +1277,7 @@ class surf3d(sprite):
         self.screen_setting = ""
         self.primary = True
     def click_down_over(self,pos):
-        print "click",pos
+        print("click",pos)
         if pos[0]>=self.pos[0] and pos[0]<=self.pos[0]+self.width and pos[1]>=self.pos[1] and pos[1]<=self.pos[1]+self.height:
             for o in assets.cur_script.obs:
                 if isinstance(o,mesh):
@@ -1391,7 +1394,7 @@ class fadesprite(sprite):
                 self.draw_func = self.numpydraw
             else:
                 self.draw_func = self.mockdraw
-                ximg = pygame.Surface(self.img.get_size())
+                ximg = pygame.Surface(self.img.get_size(),0,32)
                 ximg.fill([255,0,255])
                 ximg.blit(self.img,[0,0])
                 ximg = ximg.convert()
@@ -1432,7 +1435,7 @@ class fadesprite(sprite):
         self.img = self.mockimg_base[self.x]
         if self.greyscale:
             self.lgs = self.greyscale
-            ximg = pygame.Surface(self.img.get_size())
+            ximg = pygame.Surface(self.img.get_size(),0,32)
             ximg.fill([255,0,255])
             ximg.blit(self.img,[0,0])
             ximg = ximg.convert(8)
@@ -1561,8 +1564,8 @@ class portrait(sprite):
         def loadfrom(path):
             if not path.endswith("/"):path+="/"
 
-            print ">",blinkemo
-            print path+blinkemo+"(blink)"
+            print(">",blinkemo)
+            print(path+blinkemo+"(blink)")
             blink = assets.registry.lookup(path+blinkemo+"(blink)")
             if blink and not hasattr(self.blink_sprite,"img"):
                 self.blink_sprite.load(blink.rsplit("data/art/",1)[1][:-4])
@@ -1596,7 +1599,7 @@ class portrait(sprite):
                 self.blink_sprite.load(available.rsplit("data/art/",1)[1][:-4])
                 if self.blink_sprite.blinkmode=="blinknoset": self.blink_sprite.blinkmode = "stop"
             
-            print blink,talk,combined,available
+            print(blink,talk,combined,available)
             if blink or talk or combined or available:
                 return True
             raise art_error("Character folder %s not found"%charname)
@@ -1697,9 +1700,9 @@ class portrait(sprite):
 class evidence(fadesprite):
     autoclear = True
     def __init__(self,name="ev",**kwargs):
-        if not kwargs.has_key("x"): kwargs["x"]=5
-        if not kwargs.has_key("y"): kwargs["y"]=5
-        if not kwargs.has_key("pri"): kwargs["pri"]=50
+        if "x" not in kwargs: kwargs["x"]=5
+        if "y" not in kwargs: kwargs["y"]=5
+        if "pri" not in kwargs: kwargs["pri"]=50
         if not kwargs.get("page",None):
             pages = assets.variables.get("_ev_pages","evidence profiles").split(" ")
             if len(pages)==1:
@@ -1801,7 +1804,7 @@ class penalty(fadesprite):
             return True
     def die(self):
         if self.gv()<=0:
-            print "bad penalty about to die"
+            print("bad penalty about to die")
             ps = assets.variables.get("_penalty_script","")
             if ps:
                 args = []
@@ -1823,7 +1826,7 @@ class fg(fadesprite):
         super(fg,self).__init__(**kwargs)
         if name:
             self.load("fg/"+name)
-            self.pos = [(assets.sw-self.img.get_width())/2+self.pos[0],(assets.sh-self.img.get_height())/2+self.pos[1]]
+            self.pos = [(assets.sw-self.img.get_width())//2+self.pos[0],(assets.sh-self.img.get_height())//2+self.pos[1]]
         self.wait = kwargs.get("wait",1)
         self.spd = int(assets.variables.get("_default_fg_frame_delay",self.spd))
     def update(self):
@@ -1855,9 +1858,9 @@ class textbox(gui.widget):
         if getattr(self,"hidden",0): return
         if self.statement:
             if pos[1]>=self.rpos[1] and pos[1]<=self.rpos1[1]+self.height1:
-                if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width/2:
+                if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width//2:
                     self.k_left()
-                if pos[0]>=self.rpos1[0]+self.width/2 and pos[0]<=self.rpos1[0]+self.width:
+                if pos[0]>=self.rpos1[0]+self.width//2 and pos[0]<=self.rpos1[0]+self.width:
                     self.k_right()
         if pos[0]>=self.rpos1[0] and pos[0]<=self.rpos1[0]+self.width1 and pos[1]>=self.rpos1[1] and pos[1]<=self.rpos1[1]+self.height1:
             self.enter_down()
@@ -1866,14 +1869,14 @@ class textbox(gui.widget):
         text = textutil.markup_text(text)
         #print "marked up text:",repr(text)
         text.m_replace(lambda c:hasattr(c,"variable"),lambda c:assets.variables[c.variable])
-        lines = text.fulltext().split(u"\n")
+        lines = text.fulltext().split("\n")
         wrap = vtrue(assets.variables.get("_textbox_wrap","true"))
         if vtrue(assets.variables.get("_textbox_wrap_avoid_controlled","true")):
             if len(lines)>1:
                 wrap = False
         lines = textutil.wrap_text(lines,assets.get_image_font("tb"),assets.sw-6,wrap)
-        self.pages = [lines[i:i+3] for i in xrange(0, len(lines), 3)]
-        self._text = u"\n"
+        self.pages = [lines[i:i+3] for i in range(0, len(lines), 3)]
+        self._text = "\n"
         self._markup = textutil.markup_text("")
         for page in self.pages:
             for line in page:
@@ -1947,7 +1950,7 @@ class textbox(gui.widget):
         if vtrue(assets.variables.get("_tb_on","off")):
             subscript("tboff")
         assets.cur_script.refresh_arrows(self)
-        print "TEXTBOX DELETED"
+        print("TEXTBOX DELETED")
         assets.cur_script.build_mode = True
     def gsound(self):
         if hasattr(self,"_clicksound"): return self._clicksound
@@ -2017,7 +2020,7 @@ class textbox(gui.widget):
         #For the widget
         x = assets.variables.get("_textbox_x","")
         y = assets.variables.get("_textbox_y","")
-        self.rpos1 = [(assets.sw-self.img.get_width())/2,
+        self.rpos1 = [(assets.sw-self.img.get_width())//2,
             assets.sh-self.img.get_height()]
         if x!="":
             self.rpos1[0] = int(x)
@@ -2072,7 +2075,7 @@ class textbox(gui.widget):
         if isinstance(char,textutil.markup_command):
             command,args = char.command,char.args
             if assets.cur_script.macros.get(command,None):
-                print "RUNNING A MACRO"
+                print("RUNNING A MACRO")
                 assets.variables["_return"] = ""
                 this = assets.cur_script
                 ns = assets.cur_script.execute_macro(command,args)
@@ -2082,7 +2085,7 @@ class textbox(gui.widget):
                 self._markup._text = self.mwritten
                 def back(*args):
                     old()
-                    print "MWRIT",s,self.mwritten
+                    print("MWRIT",s,self.mwritten)
                     t0=[]
                     t1=[]
                     for i,c in enumerate(mt):
@@ -2091,17 +2094,17 @@ class textbox(gui.widget):
                         if i>s:
                             t1.append(c)
                     t2 = [textutil.markup_command("_fullspeed","")]+t0+[textutil.markup_command("_endfullspeed","")]+list(assets.variables["_return"])+t1[:-1]
-                    print "t0","".join([str(x) for x in t0])
-                    print "t1","".join([str(x) for x in t1])
+                    print("t0","".join([str(x) for x in t0]))
+                    print("t1","".join([str(x) for x in t1]))
                     t = textutil.markup_text()
                     t._text = t2
-                    print repr(t.fulltext())
+                    print(repr(t.fulltext()))
                     self.set_text(t.fulltext())
                     self.mwritten = []
                     self.next_char = 0
                 ns._endscript = back
             else:
-                print "no macro for",command
+                print("no macro for",command)
                 commands = ["sfx","sound","delay","spd","_fullspeed","_endfullspeed",
                 "wait","center","type","next",
                 "tbon","tboff",
@@ -2114,7 +2117,7 @@ class textbox(gui.widget):
                         if nargs and not nargs.startswith(" "):
                             command,args = cm,nargs
                         break
-                print "new command:",command,args
+                print("new command:",command,args)
                 if command == "sfx":
                     assets.play_sound(args)
                 elif command == "sound":
@@ -2189,7 +2192,7 @@ class textbox(gui.widget):
             if char in [")"]:
                 self.in_paren = 0
             if assets.portrait:
-                punctuation = [x for x in assets.variables.get("_punctuation",u".,?!")]
+                punctuation = [x for x in assets.variables.get("_punctuation",".,?!")]
                 if not self.in_paren and not char in punctuation:
                     assets.portrait.set_talking()
                 if self.in_paren:
@@ -2236,7 +2239,7 @@ class textbox(gui.widget):
         self.next = 0
         if self.next==0:
             self.img = self.base.copy()
-            y, stx, inc = 6, 6, 18*(assets.sh/standard_sh)
+            y, stx, inc = 6, 6, 18*(assets.sh//standard_sh)
             x = stx
             color = self.color
             center = False
@@ -2262,7 +2265,7 @@ class textbox(gui.widget):
                             ncolor = color_str(ncolor)
                         else:
                             ncolor = color
-                        nt_image = assets.get_font("nt").render(line.replace(u"_",u" "),1,ncolor)
+                        nt_image = assets.get_font("nt").render(line.replace("_"," "),1,ncolor)
                         self.nt_text_image = nt_image
                     title = False
                 else:
@@ -2377,10 +2380,10 @@ class uglyarrow(fadesprite):
                 return True
         if self.double:
             if mp[0]>=self.double.pos[0] and mp[1]>=self.double.pos[1]\
-            and mp[0]<=self.double.pos[0]+self.iwidth/2\
+            and mp[0]<=self.double.pos[0]+self.iwidth//2\
             and mp[1]<=self.double.pos[1]+self.iheight:
                 return "left"
-            if mp[0]>=self.double.pos[0]+self.iwidth/2 and mp[1]>=self.double.pos[1]\
+            if mp[0]>=self.double.pos[0]+self.iwidth//2 and mp[1]>=self.double.pos[1]\
             and mp[0]<=self.double.pos[0]+self.iwidth\
             and mp[1]<=self.double.pos[1]+self.iheight:
                 return "right"
@@ -2446,12 +2449,12 @@ class menu(fadesprite,gui.widget):
         self.options = []
         self.selected = ""
         self.opt = assets.open_art("general/talkbuttons",key=[255,0,255])[0]
-        stx,sty = (assets.sw-self.opt.get_width())/2,(assets.sh-self.opt.get_height())/2
+        stx,sty = (assets.sw-self.opt.get_width())//2,(assets.sh-self.opt.get_height())//2
         self.opos_c = {"examine":[0,0],"move":[1,0],
             "talk":[0,1],"present":[1,1]}
         self.opos_l = [["examine","move"],["talk","present"]]
-        self.opos = {"examine":[stx,sty],"move":[stx+self.opt.get_width()/2,sty],
-            "talk":[stx,sty+self.opt.get_height()/2],"present":[stx+self.opt.get_width()/2,sty+self.opt.get_height()/2]}
+        self.opos = {"examine":[stx,sty],"move":[stx+self.opt.get_width()//2,sty],
+            "talk":[stx,sty+self.opt.get_height()//2],"present":[stx+self.opt.get_width()//2,sty+self.opt.get_height()//2]}
         imgs = []
         x=y=0
         while y<self.opt.get_height():
@@ -2527,10 +2530,10 @@ class menu(fadesprite,gui.widget):
         subscript("sound_investigate_menu_select")
     def enter_down(self):
         if self.open_script:
-            print "INITIALIZE MENU SCENE"
+            print("INITIALIZE MENU SCENE")
             assets.cur_script.init(self.scene+"."+self.selected)
         else:
-            print "TRY TO JUMP TO LABEL"
+            print("TRY TO JUMP TO LABEL")
             assets.cur_script.goto_result(self.selected,backup=self.fail)
         self.delete()
         subscript("sound_investigate_menu_confirm")
@@ -2566,7 +2569,7 @@ class listmenu(fadesprite,gui.widget):
     def over(self,mp):
         if getattr(self,"kill",0):
             return False
-        x = (assets.sw-self.choice.img.get_width())/2
+        x = (assets.sw-self.choice.img.get_width())//2
         y = self.getpos()[1]+30
         si = None
         i = 0
@@ -2635,7 +2638,7 @@ class listmenu(fadesprite,gui.widget):
             def k_space(b=self.bck):
                 self.delete()
                 subscript("sound_list_menu_cancel")
-                print "kill back button and self"
+                print("kill back button and self")
                 assets.variables["_selected"] = "Back"
             self.bck.k_space = k_space
             assets.cur_script.obs.append(self.bck)
@@ -2686,7 +2689,7 @@ class listmenu(fadesprite,gui.widget):
             self.selected = self.options[self.si]
             self.change_selected()
         fadesprite.draw(self,dest)
-        x = (assets.sw-self.choice.img.get_width())/2
+        x = (assets.sw-self.choice.img.get_width())//2
         y = self.getpos()[1]+30
         #self.choice.setfade(200)
         #self.choice_high.setfade(200)
@@ -2706,8 +2709,8 @@ class listmenu(fadesprite,gui.widget):
             if (not (checkmark and checkmark.width)) and self.tag and assets.lists[self.tag].get(rt,None):
                 rt = "("+rt+")"
             txt = assets.get_image_font("list").render(rt,[110,20,20])
-            img.blit(txt,[(img.get_width()-txt.get_width())/2,
-                (img.get_height()-txt.get_height())/2])
+            img.blit(txt,[(img.get_width()-txt.get_width())//2,
+                (img.get_height()-txt.get_height())//2])
             dest.blit(img,[x,y])
             if self.selected == c:
                 lwi = 2
@@ -2787,7 +2790,7 @@ class case_menu(fadesprite,gui.widget):
             self.options.sort()
         elif order=="variable":
             opts = {}
-            for v in assets.variables.keys():
+            for v in list(assets.variables.keys()):
                 if v.startswith("_case_"):
                     try:
                         num = int(v[6:])
@@ -2795,7 +2798,7 @@ class case_menu(fadesprite,gui.widget):
                     except:
                         continue
             self.options = []
-            keys = opts.keys()
+            keys = list(opts.keys())
             keys.sort()
             for k in keys:
                 self.options.append(opts[k])
@@ -2823,8 +2826,8 @@ class case_menu(fadesprite,gui.widget):
     def init_options(self):
         self.option_imgs = []
         base = assets.open_art("general/selection_chapter")[0].convert()
-        x = self.pos[0]+assets.sw/2-base.get_width()/2
-        y = self.pos[1]+assets.sh/2-base.get_height()/2
+        x = self.pos[0]+assets.sw//2-base.get_width()//2
+        y = self.pos[1]+assets.sh//2-base.get_height()//2
         for o in self.options:
             spr = base.copy()
             
@@ -2839,7 +2842,7 @@ class case_menu(fadesprite,gui.widget):
             wd_y = spr.get_height()//2-(len(lines)*16)//2
             for line in lines:
                 w = sum([wd.get_width() for wd in line])+wd_sp*len(line)
-                wd_x = (spr.get_width()-w)/2
+                wd_x = (spr.get_width()-w)//2
                 for word in line:
                     spr.blit(word,[wd_x,wd_y])
                     wd_x += word.get_width()+wd_sp
@@ -2849,22 +2852,22 @@ class case_menu(fadesprite,gui.widget):
             fnt = assets.get_font("new_resume")
             txt = fnt.render("New game",1,[200,100,100])
             spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
-            spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
+            spr.blit(txt,[(spr.get_width()-txt.get_width())//2,(spr.get_height()-txt.get_height())//2])
             self.option_imgs.append([spr,[x,y+60]])
             if os.path.exists(self.path+"/"+o+"/save.ns"):
                 txt = fnt.render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
-                spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
+                spr.blit(txt,[(spr.get_width()-txt.get_width())//2,(spr.get_height()-txt.get_height())//2])
                 self.option_imgs.append([spr,[x,y+90]])
             elif os.path.exists(self.path+"/"+o+"/save"):
                 txt = fnt.render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
-                spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
+                spr.blit(txt,[(spr.get_width()-txt.get_width())//2,(spr.get_height()-txt.get_height())//2])
                 self.option_imgs.append([spr,[x,y+90]])
             elif os.path.exists(self.path+"/"+o+"/autosave.ns"):
                 txt = fnt.render("Resume Game",1,[200,100,100])
                 spr = pygame.transform.scale(base,[base.get_width(),base.get_height()//2])
-                spr.blit(txt,[(spr.get_width()-txt.get_width())/2,(spr.get_height()-txt.get_height())/2])
+                spr.blit(txt,[(spr.get_width()-txt.get_width())//2,(spr.get_height()-txt.get_height())//2])
                 self.option_imgs.append([spr,[x,y+90]])
             else:
                 self.option_imgs.append([None,None])
@@ -2905,10 +2908,14 @@ class case_menu(fadesprite,gui.widget):
         if os.path.exists(os.path.join(self.path,self.options[self.choice],"case_screen.txt")):
             scr = assets.Script()
             scr.parent = assets.cur_script
+            #The parent intro is paused by the case menu. Keep it paused when the
+            #case screen finishes, otherwise it runs out of lines and the game
+            #falls back to the title screen.
+            scr.parent.buildmode = False
             assets.stack.append(scr)
             assets.game=self.curgame+"/"+self.options[self.choice]
             assets.registry = registry.combine_registries("./"+assets.game,assets.show_load)
-            print "init: g:%s choice:%s"%(assets.game,self.options[self.choice])
+            print("init: g:%s choice:%s"%(assets.game,self.options[self.choice]))
             assets.cur_script.init("case_screen")
             assets.cur_script.world = scr.parent.world
     def enter_down(self):
@@ -2963,10 +2970,10 @@ class examine_menu(sprite,gui.widget):
         gui.widget.__init__(self,self.pos,[assets.sw,assets.sh])
         self.img = assets.Surface([64,64])
         self.regions = []
-        self.mouse = pygame.Surface([10,10])
+        self.mouse = pygame.Surface([10,10],0,32)
         self.mouse.fill([100,100,100])
         self.selected = [None]
-        self.mx,self.my = assets.sw/2,assets.sh/2
+        self.mx,self.my = assets.sw//2,assets.sh//2
         self.check = assets.open_art("general/check"+assets.appendgba,key=[255,0,255])[0]
         self.hide = hide
         self.bg = []
@@ -3079,7 +3086,7 @@ class examine_menu(sprite,gui.widget):
             return self.blocking
         keys = pygame.key.get_pressed()
         spd = 3*assets.dt
-        print spd
+        print(spd)
         d = [0,0]
         if keys[pygame.K_LEFT] or pygame.jsleft():
             d[0]-=spd
@@ -3134,14 +3141,14 @@ class examine_menu(sprite,gui.widget):
         assets.variables["_xscroll_"+self.name] = self.xscroll
         return self.blocking
     def enter_down(self):
-        print self.selected,self.regions,self.mx,self.my
+        print(self.selected,self.regions,self.mx,self.my)
         assets.variables["_examine_clickx"] = str(self.mx)
         assets.variables["_examine_clicky"] = str(self.my)
-        print "FAIL ",self.fail
+        print("FAIL ",self.fail)
         go = self.selected[-1]
         if go == None:
             go = self.fail
-        print assets.cur_script,"goto",go
+        print(assets.cur_script,"goto",go)
         assets.cur_script.goto_result(go,backup=self.fail)
         self.delete()
     def k_space(self):
@@ -3163,8 +3170,8 @@ class evidence_menu(fadesprite,gui.widget):
             rx = (218-36)//4
             ry = (145-62)//2
             sx,sy = self.sx,self.sy
-            self.sx = (mp[0]-36)/rx
-            self.sy = (mp[1]-62)/ry
+            self.sx = (mp[0]-36)//rx
+            self.sy = (mp[1]-62)//ry
             try:
                 self.choose()
             except:
@@ -3210,7 +3217,7 @@ class evidence_menu(fadesprite,gui.widget):
         self.pri = ulayers.index(self.__class__.__name__)
         x,y = 0,192
         self.z = zlayers.index(self.__class__.__name__)
-        print "evidence z",self.z
+        print("evidence z",self.z)
         fadesprite.__init__(self,x=x,y=y)
         gui.widget.__init__(self,[x,y],[assets.sw,assets.sh])
         self.items = items
@@ -3748,24 +3755,24 @@ class scroll(effect):
         self.ramp = ramp
         self.dx=self.dy=self.dz=0
         if amtx==0 and amty: 
-            self.dy=amty/abs(amty)
+            self.dy=amty//abs(amty)
         elif amty==0 and amtx:
-            self.dx = amtx/abs(amtx)
+            self.dx = amtx//abs(amtx)
         elif amty==amtx==0:
             pass
         else:
             slope = amty/float(amtx)
             if abs(amtx)>abs(amty):
-                self.dx = amtx/abs(amtx)
+                self.dx = amtx//abs(amtx)
                 self.dy = amty/float(abs(amtx))
             elif abs(amty)>abs(amtx):
                 self.dx = amtx/float(abs(amty))
-                self.dy = amty/abs(amty)
+                self.dy = amty//abs(amty)
             else:
-                self.dx=amtx/abs(amtx)
-                self.dy=amty/abs(amty)
+                self.dx=amtx//abs(amtx)
+                self.dy=amty//abs(amty)
         if amtz:
-            self.dz = (amtz)/abs(amtz)*speed
+            self.dz = (amtz)//abs(amtz)*speed
         self.dx*=speed
         self.dy*=speed
         self.pri = ulayers.index(self.__class__.__name__)
@@ -3802,7 +3809,7 @@ class scroll(effect):
         #print "after self.amtx:",self.amtx
         if self.amtx<0:
             ndx+=self.amtx*(self.dx/abs(self.dx))
-            print "self.amtx<0 ndx:",ndx
+            print("self.amtx<0 ndx:",ndx)
             self.amtx=0
         self.amty-=abs(ndy)
         if self.amty<0:
@@ -3978,9 +3985,9 @@ class tintanim(effect):
         self.wait = wait
         self.kill = 0
         if name:
-            print name
+            print(name)
             self.obs = [o for o in self.obs if getattr(o,"id_name",None)==name]
-            print self.obs
+            print(self.obs)
             if not self.obs and vtrue(assets.variables.get("_debug","false")):
                 raise missing_object("tint: no object named "+str(name)+" found")
         self.update()
@@ -4094,7 +4101,7 @@ class flash(effect):
         self.pri = ulayers.index(self.__class__.__name__)
         self.ttl = 5
         self.color = [255,255,255]
-        self.surf = pygame.Surface(pygame.screen.get_size())
+        self.surf = pygame.Surface(pygame.screen.get_size(),0,32)
         if vtrue(assets.variables.get("_flash_sound","false")):
             assets.play_sound("Slash.ogg")
     def draw(self,dest):

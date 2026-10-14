@@ -1,7 +1,7 @@
 import math
 import pygame
-import euclid
-from util import *
+from . import euclid
+from .util import *
 
 def rot(x,y,z,rx,ry,rz,c):
     cx,cy,cz = c[:3]
@@ -74,7 +74,7 @@ class Mesh:
             q.normal = [p[0]-c[0],p[1]-c[1],p[2]-c[2]]
             q.normalize_normal()
             
-import obj
+from . import obj
 def load_obj(fn,path):
     quads = []
     o = obj.OBJ(fn,path)

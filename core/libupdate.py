@@ -1,13 +1,9 @@
 import os,sys
-sys.path.append("core/include")
-sys.path.append("include")
-if sys.platform=="win32":
-    os.environ['SDL_VIDEODRIVER']='windib'
 import zlib
-from core import pygame
-import threading,time,urllib,urllib2
+from .core import pygame
+import threading,time,urllib.request,urllib.parse,urllib.error
 from zipfile import ZipFile,ZIP_DEFLATED
-from pwvlib import *
+from .pwvlib import *
 
 ERROR_STR= """Error removing %(path)s, %(error)s """
 ROOT_URL = "http://74.207.230.140/"
@@ -16,9 +12,9 @@ ROOT_URL = "http://pywright.dawnsoft.org/"
 def rmgeneric(path, __func__):
     try:
         __func__(path)
-        print 'Removed ', path
-    except OSError, (errno, strerror):
-        print ERROR_STR % {'path' : path, 'error': strerror }
+        print('Removed ', path)
+    except OSError as e:
+        print(ERROR_STR % {'path' : path, 'error': e.strerror })
             
 def removeall(path):
     if not os.path.isdir(path):
@@ -34,9 +30,7 @@ def removeall(path):
             f=os.rmdir
             rmgeneric(fullpath, f)
 
-import md5
-
-from gui import *
+from .gui import *
 
 def createfiles(dir="port"):
     for f in os.listdir("data/art/"+dir):
@@ -47,7 +41,7 @@ def createfiles(dir="port"):
             if sub == ".svn": continue
             myzip.write("data/art/"+dir+"/"+f+"/"+sub,sub)
         myzip.close()
-        print "wrote","zips/"+f+".zip"
+        print("wrote","zips/"+f+".zip")
         
 def create_path(dir):
     pathfull = ""
@@ -64,14 +58,14 @@ def mynames(dir="data/art/port"):
         files[file] = get_data_from_folder(dir+"/"+file)
     return files
 
-import cStringIO
+import io
 iconcache = {}
 def load_image(path):
     if path not in iconcache:
-        f = urllib2.urlopen(path.replace(" ","%20"))
+        f = urllib.request.urlopen(path.replace(" ","%20"))
         txt = f.read()
         f.close()
-        f = cStringIO.StringIO(txt)
+        f = io.BytesIO(txt)
         icon = pygame.image.load(f,path)
         iconcache[path] = icon
     return iconcache[path]
@@ -81,11 +75,11 @@ class my_o_dict(dict):
 def names(url):
     url = url.replace("(","%28").replace(")","%29").replace(" ","%20")
     if 1:#try:
-        f = urllib2.urlopen(ROOT_URL+url)
+        f = urllib.request.urlopen(ROOT_URL+url)
     else:#except:
-        print "fail"
+        print("fail")
         return {}
-    txt = f.read()
+    txt = f.read().decode("utf8","ignore")
     lines = eval(txt)
     f.close()
     files = my_o_dict()
@@ -122,7 +116,7 @@ def build_list(e,dir="data/art/port",url="zip_port_info",check_folder=None):
             status = "INSTALLED"
         fnd = 1
         cb = checkbox(an[n].get("title",an[n]["zipname"]))
-	cb.editbox.font = core.assets.get_font("update")
+        cb.editbox.font = core.assets.get_font("update")
         cb.name = n
         cb.file = an[n]["zipfile"]
         cb.filename = an[n]["zipname"]
@@ -188,9 +182,9 @@ def build_list(e,dir="data/art/port",url="zip_port_info",check_folder=None):
     else:
         list.status_box.text = "Download "+dir+"! Click check boxes to select."
 
-import libengine
+from . import libengine
 get_url = "updates3/games.cgi?content_type=%s&ver_type=tuple&fullurl=true&version="+str(libengine.__version__)
-print get_url
+print(get_url)
 class Engine(pane):
     mode = "port"
     quit_threads = 0
@@ -215,7 +209,7 @@ class Engine(pane):
             self.mode = mode
             self.path = path
             self.url = url
-            print "try download",self.url
+            print("try download",self.url)
             build_list(self,path,url,check_folder)
             rpos = self.root.children[self.root.start_index].rpos
             self.root.children[self.root.start_index] = button(self,"download")
@@ -244,7 +238,7 @@ class Engine(pane):
                 pass
         return path,filename,url,seek
     def do_downloads(self,checkfolder=True,output=None):
-        print "doing downloads"
+        print("doing downloads")
         for x in self.list.pane.children[1:]:
             check = x.children[1].children[0]
             if check.checked:
@@ -265,26 +259,26 @@ class Engine(pane):
         self.progress.progress = 0
         headers = {"User-Agent":"pywright downloader"}
         size = None
-        print "download with seek",seek,url
+        print("download with seek",seek,url)
         if seek:
             try:
                 f = open("downloads/"+filename,"rb")
                 old = f.read()
                 f.close()
-                cli = open("downloads/"+filename,"w")
+                cli = open("downloads/"+filename,"wb")
                 cli.write(old)
                 seek = len(old)
-                print "seeked",seek,"bytes"
-                serv = urllib2.urlopen(url.replace(" ","%20"))
+                print("seeked",seek,"bytes")
+                serv = urllib.request.urlopen(url.replace(" ","%20"))
                 size = int(serv.info()["Content-Length"])
                 if seek>size:
-                    print "resetting download"
+                    print("resetting download")
                     seek = 0
                     os.remove("downloads/"+filename+"_url")
-                    cli = open("downloads/"+filename,"w")
+                    cli = open("downloads/"+filename,"wb")
                 headers["Range"] = "bytes=%d-%d"%(seek,size)
                 serv.close()
-                print "headers:",headers
+                print("headers:",headers)
             except:
                 import traceback
                 traceback.print_exc()
@@ -292,19 +286,19 @@ class Engine(pane):
         if not seek:
             seek = 0
             cli = open("downloads/"+filename,"wb")
-            print "opened new file"
+            print("opened new file")
         
-        req = urllib2.Request(url.replace(" ","%20"),None,headers)
+        req = urllib.request.Request(url.replace(" ","%20"),None,headers)
         try:
-            serv = urllib2.urlopen(req)
-            print "opened resume"
+            serv = urllib.request.urlopen(req)
+            print("opened resume")
         except:
             seek = 0
-            serv = urllib2.urlopen(url)
-            print "opened new"
+            serv = urllib.request.urlopen(url)
+            print("opened new")
         if not size:
             size = int(serv.info()["Content-Length"])
-        print "size of document:",size
+        print("size of document:",size)
         read = seek
         bytes = seek
         prog = open("downloads/"+filename+"_url","w")
@@ -323,7 +317,7 @@ class Engine(pane):
             read += len(r)
             bytes += len(r)
             self.progress.progress = read/float(size)
-            print self.progress.progress
+            print(self.progress.progress)
             if time.time()-s>1:
                 bps = bytes/(time.time()-s)
                 s = time.time()
@@ -336,16 +330,16 @@ class Engine(pane):
                 output[1]()
                 for evt in pygame.event.get():
                     if evt.type == pygame.QUIT: raise SystemExit
-        print "closing server"
+        print("closing server")
         serv.close()
-        print "closing download file"
+        print("closing download file")
         cli.close()
-        print "extract zip?"
+        print("extract zip?")
         if read==size:
             self.progress.text = self.extract_zip(path,filename)
-        print "delete progress bar"
+        print("delete progress bar")
         del self.progress
-        print "switch modes"
+        print("switch modes")
         if self.mode == "games":
             self.Games()
         self.num_threads -= 1
@@ -375,7 +369,7 @@ class Engine(pane):
         for name in z.namelist():
             if hasattr(self,"progress"):
                 self.progress.text = "extracting:"+name[-30:]
-            print "extract:",name
+            print("extract:",name)
             try:
                 txt = z.read(name)
             except:

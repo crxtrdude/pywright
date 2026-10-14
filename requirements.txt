@@ -1,0 +1,4 @@
+pygame>=2.6
+numpy
+# Only needed for tools/aao_to_pywright.py
+beautifulsoup4

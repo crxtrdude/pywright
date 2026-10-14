@@ -32,7 +32,8 @@ def compare_versions(v1,v2):
         v1.append(0)
     while len(v2)<len(v1):
         v2.append(0)
-    return cmp(tuple(v1),tuple(v2))
+    v1,v2 = tuple(v1),tuple(v2)
+    return (v1>v2)-(v1<v2)
 
 def read_pwv(txt):
     d = {}
@@ -60,7 +61,7 @@ def shortest_pwv_path(zip):
 
 def extract_pwv(zip,name):
     pth = shortest_pwv_path(zip)
-    txt = zip.read(pth)
+    txt = zip.read(pth).decode("utf8","ignore")
     f = open(name+".pwv","w")
     f.write(txt)
     f.close()

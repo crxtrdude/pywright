@@ -19,7 +19,7 @@ class markup_color(markup):
         else:
             return "{c "+self.color+"}"
     def getcolor(self):
-        import core
+        from . import core
         if not self._color:
             self._color = core.color_str(self.color)
         return self._color
@@ -95,10 +95,10 @@ class markup_text:
         return self._text
     def text(self):
         """Returns full text without markup"""
-        return u"".join([x for x in self._text if not hasattr(x,"addcharsto")])
+        return "".join([x for x in self._text if not hasattr(x,"addcharsto")])
     def fulltext(self):
         """Return full text markup included"""
-        return u"".join([unicode(x) for x in self._text])
+        return "".join([str(x) for x in self._text])
     def strip(self):
         t = markup_text("")
         l = self._text[:]
@@ -161,7 +161,7 @@ class ImgFont(object):
             self.fnt = assets.get_font("tb")
     def get_char(self,t,color=[255,255,255]):
         if not self.colors.get(tuple(color),None):
-            self.colors[tuple(color)] = pygame.Surface(self.img.get_size())
+            self.colors[tuple(color)] = pygame.Surface(self.img.get_size(),0,32)
             self.colors[tuple(color)].fill(color)
             self.colors[tuple(color)].blit(self.img,[0,0])
         if (t,tuple(color)) in self.colors:
@@ -223,7 +223,7 @@ class ImgFont(object):
                 width+=self.width.get(c,8)
         if return_size:
             return width
-        surf = pygame.Surface([width,20])
+        surf = pygame.Surface([width,20],0,32)
         x = 0
         for c,img in chars:
             if not img:
@@ -265,7 +265,7 @@ def wrap_text(lines,font,width,wrap=True):
         page.append(left)
         if right.strip():
             if not lines: lines.append(markup_text(""))
-            lines[0] = markup_text_list([right,markup_text(u" "),lines[0]])
+            lines[0] = markup_text_list([right,markup_text(" "),lines[0]])
     return page
 
 markup_text("This is a test")

@@ -24,8 +24,8 @@ s_w,s_h = LOW
 r_w,r_h = 640,480
 clock = pygame.time.Clock()
 
-from models import *
-from util import *
+from .models import *
+from .util import *
 
 class SoftContext:
     def __init__(self,s_w,s_h,r_w,r_h):
@@ -314,8 +314,8 @@ def main():
                 softcontext.s_h*=2
                 softcontext.make_screen()
             if e.type==pygame.KEYDOWN and e.key==pygame.K_m:
-                softcontext.s_w/=2
-                softcontext.s_h/=2
+                softcontext.s_w//=2
+                softcontext.s_h//=2
                 softcontext.make_screen()
             if e.type==pygame.MOUSEMOTION:
                 if e.buttons[0]:
@@ -334,7 +334,7 @@ def main():
                         u,v = point
                         for rect in [[122,256,55,199],[178,239,88,215],[277,357,25,77]]:
                             if u>=rect[0] and u<=rect[0]+rect[2] and v>=rect[1] and v<=rect[1]+rect[3]:
-                                print "handle of gun clicked"
+                                print("handle of gun clicked")
                                 break
         keys = pygame.key.get_pressed()
         spd = 5

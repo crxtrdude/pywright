@@ -1,4 +1,4 @@
-import os,sys,subprocess,pygame,math,urllib2
+import os,sys,subprocess,pygame,math,urllib.request,urllib.error,urllib.parse
 import re
 try:
     pygame.display.set_mode([1,1])
@@ -10,7 +10,7 @@ MAX_SURFACE_WIDTH=1024
 
 def go(path_to_gif,saveto=None,delete=False):
     if path_to_gif.startswith("http://"):
-        f = urllib2.urlopen(path_to_gif)
+        f = urllib.request.urlopen(path_to_gif)
         path_to_gif = path_to_gif.rsplit("/",1)[1]
         out = open(path_to_gif,"wb")
         out.write(f.read())
@@ -23,9 +23,9 @@ def go(path_to_gif,saveto=None,delete=False):
     strip_name = root+".png"
     txt_name = root+".txt"
 
-    proc = subprocess.Popen('gifsicle -I "%s"'%(path_to_gif),stdout=subprocess.PIPE)
+    proc = subprocess.Popen('gifsicle -I "%s"'%(path_to_gif),stdout=subprocess.PIPE,shell=True,universal_newlines=True)
     stdout,stderr = proc.communicate()
-    print stdout,stderr
+    print(stdout,stderr)
     loop = "loop forever" in stdout
     delays = []
     for x in stdout.split("  + ")[1:]:
@@ -33,15 +33,15 @@ def go(path_to_gif,saveto=None,delete=False):
         if delay==-1:
             delays.append(None)
             continue
-        s = re.findall("(\d+(\.\d+))s",x)
+        s = re.findall(r"(\d+(\.\d+))s",x)
         if s:
-            print s
+            print(s)
             delays.append(float(s[0][0]))
     #delays are seconds: need frames, 60frames = 1 second
     delays = [x*60.0 for x in delays if x]
-    print loop,delays
+    print(loop,delays)
     
-    proc = subprocess.Popen('gifsicle --no-background -U -e "%s" -o "%s"'%(path_to_gif,path_to_gif))
+    proc = subprocess.Popen('gifsicle --no-background -U -e "%s" -o "%s"'%(path_to_gif,path_to_gif),shell=True)
     proc.wait()
     if delete:
         os.remove(path_to_gif)

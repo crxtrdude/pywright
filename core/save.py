@@ -4,7 +4,7 @@
 #instance attributes which are based on assets.variables: one object created, change variable, create another -
 #   need to save the actual variable and not rely on assets.variables entry to be accurate
 
-from core import *
+from .core import *
 
 
 def cp(l,o,p):
@@ -30,7 +30,7 @@ def save(ob):
         return ["fg",[],oprops]
     elif isinstance(ob,evidence):
         oprops["id"] = ob.id
-	oprops["page"] = ob.page
+        oprops["page"] = ob.page
         return ["evidence",[],oprops]
     elif isinstance(ob,portrait):
         cp(["clicksound","nametag","charname","emoname","modename","blinkemo","supermode"],ob,oprops)

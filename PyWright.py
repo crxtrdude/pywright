@@ -3,11 +3,8 @@ android = None
 try:
     import android
 except:
-    #This is really only for py2exe anyway, which I'm not using right now
-    import urllib2,webbrowser,__future__,pygame,pygame.font,zipfile,traceback
-
-if android:
-    android.init()
+    pass
+import urllib.request, urllib.error, urllib.parse,webbrowser,__future__,pygame,pygame.font,zipfile,traceback
     
 def is_exe():
     return sys.argv and sys.argv[0].endswith(".exe")
@@ -40,6 +37,13 @@ class Logger(object):
             self.log.write(message)
         if self.now:
             self.now.write(message)
+
+    def flush(self):
+        self.terminal.flush()
+        if self.log:
+            self.log.flush()
+        if self.now:
+            self.now.flush()
 #~ import gc
 #~ gc.enable()
 #~ gc.set_debug(gc.DEBUG_LEAK)
@@ -54,5 +58,5 @@ except:
         raise
     type, value, sys.last_traceback = sys.exc_info()
     lines = traceback.format_exception(type, value,sys.last_traceback)
-    print("".join(lines))
+    print(("".join(lines)))
     show_popup("Oh no, there's been an error:\nMore detailed info available in lastlog.txt."+"".join(lines))

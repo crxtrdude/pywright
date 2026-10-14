@@ -1,18 +1,18 @@
-import os,sys,pygame,math,urllib2,urllib,socket,time
+import os,sys,pygame,math,urllib.request,urllib.error,urllib.parse,socket,time
 sys.path.append("tools")
 import runner
 external = runner.runner
 import re
 
 def recog(file):
-    f = open(file)
+    f = open(file,"rb")
     beg = f.read(15)
     f.close()
-    if "PNG" in beg:
+    if b"PNG" in beg:
         return "png"
-    if "GIF" in beg:
+    if b"GIF" in beg:
         return "gif"
-    if "JFIF" in beg:
+    if b"JFIF" in beg:
         return "jpg"
 
 if __name__=="__main__":
@@ -28,24 +28,24 @@ def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
     if path_to_gif.startswith("http://"):
         for t in range(5):
             try:
-                print "open"
-                f = urllib2.urlopen("http://"+urllib.quote(path_to_gif.split("http://",1)[1]),timeout=5)
+                print("open")
+                f = urllib.request.urlopen("http://"+urllib.parse.quote(path_to_gif.split("http://",1)[1]),timeout=5)
                 path_to_gif = giffolder+path_to_gif.rsplit("/",1)[1]
             except socket.timeout:
-                print "need sleep"
+                print("need sleep")
                 time.sleep(2)
                 continue
             try:
-                print "ready to write"
+                print("ready to write")
                 out = open(path_to_gif,"wb")
                 out.write(f.read())
             except socket.timeout:
-                print "need sleep"
+                print("need sleep")
                 time.sleep(2)
                 f.close()
                 out.close()
                 continue
-            print "writ"
+            print("writ")
             f.close()
             out.close()
             break
@@ -72,13 +72,13 @@ def go(path_to_gif,saveto=None,delete=False,giffolder="tmp/"):
         if delay==-1:
             delays.append(None)
             continue
-        s = re.findall("(\d+(\.\d+))s",x)
+        s = re.findall(r"(\d+(\.\d+))s",x)
         if s:
-            print s
+            print(s)
             delays.append(float(s[0][0]))
     #delays are seconds: need frames, 60frames = 1 second
     delays = [x*60.0 for x in delays if x]
-    print loop,delays
+    print(loop,delays)
     
     stdout,stderr = external.run({"command":"gifsicle","operation":"explode","path":path_to_gif})
     if delete:

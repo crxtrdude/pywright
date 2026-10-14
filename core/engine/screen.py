@@ -4,7 +4,7 @@ from core.core import *
 def make_screen():
     if assets.swidth<256:
         assets.swidth=256
-    if assets.sheight/assets.num_screens<192:
+    if assets.sheight//assets.num_screens<192:
         assets.sheight = 192*assets.num_screens
     if not hasattr(assets,"cur_screen"):
         assets.cur_screen = 0
@@ -16,8 +16,10 @@ def make_screen():
     ns = assets.num_screens
     if assets.cur_screen:
         ns = 2
-    pygame.screen = pygame.Surface([assets.sw,assets.sh*2]).convert()
-    pygame.blank = pygame.screen.convert()
+    #With SDL2 the display format can carry an alpha channel (it does on macOS), and
+    #blitting translucent art onto such a surface clears it. Keep the canvas alpha-free.
+    pygame.screen = pygame.Surface([assets.sw,assets.sh*2],0,32)
+    pygame.blank = pygame.screen.copy()
     pygame.blank.fill([0,0,0])
     pygame.js1 = None
     def gl():

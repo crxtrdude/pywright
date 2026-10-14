@@ -4,7 +4,7 @@ try:
 except:
     android = None
 
-import gui
+from . import gui
 
 
 def wini(assets):
@@ -39,7 +39,8 @@ assets.tool_path,assets.screen_mode))
     
 def load(assets):
     assets.fullscreen = 0
-    assets.swidth,assets.sheight = pygame.display.list_modes()[0]
+    #Default to a 3x size for the two 256x192 screens, shrunk to fit the desktop
+    assets.swidth,assets.sheight = fit_to_desktop(256*3,384*3)
     assets.filter = 0
     assets.screen_mode = "not_set"
     assets.num_screens = 2
@@ -81,6 +82,18 @@ def load(assets):
                 setattr(assets,fl_val[spl[0]],float(spl[1]))
             elif spl[0] in s_val:
                 setattr(assets,s_val[spl[0]],spl[1].strip())
+    assets.swidth,assets.sheight = fit_to_desktop(assets.swidth,assets.sheight)
+
+def fit_to_desktop(w,h):
+    """Shrink a window size to fit on the desktop, keeping its aspect ratio.
+    display modes are in physical pixels on Retina screens, so the largest
+    mode can be twice as big as the screen in points."""
+    try:
+        dw,dh = pygame.display.get_desktop_sizes()[0]
+    except Exception:
+        return w,h
+    scale = min(1.0, dw*0.9/float(w), dh*0.9/float(h))
+    return int(w*scale), int(h*scale)
 
 def old_get_screen_mode(assets):
     mode="two_screens"
@@ -185,7 +198,7 @@ class settings_menu(gui.pane):
             b.bgcolor = [50,50,50]
             b.highlightcolor = [50,50,50]
             b.textcolor = [255,255,255]
-            print "changed settings for",text
+            print("changed settings for",text)
         self.children.append(b)
         return b
     def base(self):
@@ -243,10 +256,10 @@ class settings_menu(gui.pane):
         self.children.append(line)
         class myb(gui.button):
             def click_down_over(s,*args):
-                print "debugging game"
+                print("debugging game")
                 s = assets.DebugScript()
                 s.debug_game("current","run")
-                print "finished"
+                print("finished")
         line.children.append(myb(None,"Debug current script"))
         
         line = gui.pane([0,70],[sw,20])
@@ -254,10 +267,10 @@ class settings_menu(gui.pane):
         self.children.append(line)
         class myb(gui.button):
             def click_down_over(s,*args):
-                print "debugging game"
+                print("debugging game")
                 s = assets.DebugScript()
                 s.debug_game("all","run")
-                print "finished"
+                print("finished")
         line.children.append(myb(None,"Debug entire game (slow)"))
         
         line = gui.pane([0,90],[sw,20])
@@ -265,10 +278,10 @@ class settings_menu(gui.pane):
         self.children.append(line)
         class myb(gui.button):
             def click_down_over(s,*args):
-                print "debugging game"
+                print("debugging game")
                 s = assets.DebugScript()
                 s.debug_game("all","quote")
-                print "finished"
+                print("finished")
         line.children.append(myb(None,"Find quote errors"))
         
         line = gui.pane([0,110],[sw,20])
@@ -312,7 +325,7 @@ class settings_menu(gui.pane):
         line.children.append(gui.label("Minutes between autosave"))
         class mymin(gui.editbox):
             def insert(self,val):
-                if val not in u"0123456789":
+                if val not in "0123456789":
                     return
                 super(mymin,self).insert(val)
             def set(self,val):
@@ -330,7 +343,7 @@ class settings_menu(gui.pane):
         line.children.append(gui.label("Autosave backups"))
         class mye(gui.editbox):
             def insert(self,val):
-                if val not in u"0123456789":
+                if val not in "0123456789":
                     return
                 super(mye,self).insert(val)
             def set(self,val):

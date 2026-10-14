@@ -1,9 +1,9 @@
 import pygame,sys,os
 
-import core
-import textutil
+from . import core
+from . import textutil
 
-import gui
+from . import gui
 
 class msg(gui.pane):
     def __init__(self,m,assets):
@@ -84,7 +84,7 @@ class tools_menu(gui.pane):
         line.children.append(gui.label("Minutes between autosave"))
         class mymin(gui.editbox):
             def insert(self,val):
-                if val not in u"0123456789":
+                if val not in "0123456789":
                     return
                 super(mymin,self).insert(val)
             def set(self,val):
@@ -102,7 +102,7 @@ class tools_menu(gui.pane):
         line.children.append(gui.label("Autosave backups"))
         class mye(gui.editbox):
             def insert(self,val):
-                if val not in u"0123456789":
+                if val not in "0123456789":
                     return
                 super(mye,self).insert(val)
             def set(self,val):

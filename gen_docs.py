@@ -8,25 +8,26 @@ tracking everything just doesn't cut it!
 import os,sys
 engine = open("core/libengine.py").read().split("\n")
 core = open("core/core.py").read().split("\n")
-sys.path.insert(0,"core")
-import libengine
-import core
+sys.path.insert(0,os.getcwd())
+from core import libengine
+from core import core
+from core.engine import document
 import inspect
 import re
 
 def write_cat(c):
     s = ""
-    if isinstance(c,libengine.VALUE):
+    if isinstance(c,document.VALUE):
         s = c.name
-    if isinstance(c,libengine.COMBINED):
+    if isinstance(c,document.COMBINED):
         s = "["+c.name+"]"
-    if isinstance(c,libengine.KEYWORD):
+    if isinstance(c,document.KEYWORD):
         s = c.name+"=VALUE"
-    if isinstance(c,libengine.TOKEN):
+    if isinstance(c,document.TOKEN):
         s = "<i>"+c.name+"</i>"
-    if isinstance(c,libengine.ETC):
+    if isinstance(c,document.ETC):
         s = "("+c.name+")"
-    if isinstance(c,libengine.CHOICE):
+    if isinstance(c,document.CHOICE):
         s = "&lt;"+" OR ".join([write_cat(c) for c in c.options])+"&gt;"
     s += " "
     return s
@@ -34,7 +35,7 @@ def write_cat(c):
 def expand_cat(cats):
     options = []
     for c in cats:
-        if isinstance(c,libengine.CHOICE):
+        if isinstance(c,document.CHOICE):
             options.extend(expand_cat(c.options))
         else:
             options.append(c)
@@ -42,7 +43,7 @@ def expand_cat(cats):
     
 def make_doc(txt):
     while 1:
-        m = re.search("<\w*?>",txt)
+        m = re.search(r"<\w*?>",txt)
         if not m:
             break
         ot = txt[m.start():m.end()]
@@ -104,7 +105,7 @@ def desig(line):
     code = "{%s}"%line[5:].strip() 
     d = eval(code)
     if d.get('args',None):
-        d['args'] = [libengine.VALUE(*x) for x in d['args']]
+        d['args'] = [document.VALUE(*x) for x in d['args']]
     return d
 def addmfunc(d):
     class x:
@@ -148,7 +149,7 @@ p pause
 c sets the color"""
 for line in textmacros.split("\n"):
     if not line.strip(): continue
-    print line.strip()
+    print(line.strip())
     command,desc = line.strip().split(" ",1)
     d = {"type":"text/commands","args":[],"desc":desc,"name":command}
     addmfunc(d)
@@ -202,8 +203,8 @@ def find_variables():
                 continue
             tab_level = l.rsplit(" ",1)[0].count(" ")
             if l.strip().startswith("class "):
-                cur_class = re.findall("class \w*",l)[0]
-                print cur_class
+                cur_class = re.findall(r"class \w*",l)[0]
+                print(cur_class)
                 class_tab_level = tab_level
             else:
                 if cur_class and tab_level <= class_tab_level:

@@ -21,3 +21,8 @@ tools/roomedit/*
 settings.ini
 logfile.txt
 lastgame
+__pycache__/
+.venv/
+lastlog.txt
+loghistory.txt
+.DS_Store

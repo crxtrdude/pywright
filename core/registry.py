@@ -1,4 +1,4 @@
-import os,zipfile,StringIO
+import os,zipfile,io
 
 filepaths = ["data/art","art.zip","data/music","data/sfx","movies"]
 ignore = ".hg"
@@ -51,18 +51,18 @@ class Registry:
         if ".zip/" in path:
             normal,zip = path.split(".zip/",1)
             zf = zipfile.ZipFile(normal+".zip")
-            return StringIO.StringIO(zf.open(zip,"r").read())
+            return io.BytesIO(zf.open(zip,"r").read())
         return open(path,mode)
     def clear_cache(self):
         global_registry_cache.clear()
     def build(self,root,progress_function=lambda:1):
-        print "building root"
+        print("building root")
         if self.use_cache and root in global_registry_cache:
             self.map,self.ext_map = global_registry_cache[root]
             return
         self.root = root
         for sub in filepaths:
-            print "check",sub
+            print("check",sub)
             if os.path.isdir(root+"/"+sub) or zipfile.is_zipfile(root+"/"+sub):
                 self.index(root+"/"+sub)
             progress_function()
@@ -87,7 +87,7 @@ class Registry:
             self.index(sub)
     def list_dir(self,path):
         path = self.cleanpath(path)
-        print self.listdir_map.keys()
+        print(list(self.listdir_map.keys()))
         return self.listdir_map["./"+path]
     def mapfile(self,path,in_zip=False):
         parent,sub = path.rsplit("/",1)
@@ -115,7 +115,7 @@ class Registry:
             
         if parent not in self.listdir_map:
             self.listdir_map[parent] = []
-            print "create list map",parent
+            print("create list map",parent)
         self.listdir_map[parent].append(sub)
     def cleanpath(self,path):
         return os.path.normpath(path).replace("\\","/").replace(".zip/","/")
@@ -149,7 +149,7 @@ def combine_registries(root,progress_function=lambda:1):
         order.append(last)
     cur_reg = Registry()
     for root in order:
-        print "building registry for",root
+        print("building registry for",root)
         reg = Registry()
         reg.build(root,progress_function)
         cur_reg.override(reg)
@@ -160,14 +160,14 @@ def test():
     os.chdir("..")
     
     rec = Registry("./games/PW - The Contempt of Court - artzip")
-    print rec.listdir_map.keys()
-    print rec.list_dir("./games/PW - The Contempt of Court - artzip/data/art")
+    print(list(rec.listdir_map.keys()))
+    print(rec.list_dir("./games/PW - The Contempt of Court - artzip/data/art"))
     #print rec.map
-    print rec.lookup("data/art/port/White/twitch.txt")
+    print(rec.lookup("data/art/port/White/twitch.txt"))
     return
     
     rec = Registry("./games/PW - The Contempt of Court.zip")
-    print rec.listdir_map.keys()
+    print(list(rec.listdir_map.keys()))
     #print rec.map
     #print rec.lookup("art/port/White/twitch.txt")
     return

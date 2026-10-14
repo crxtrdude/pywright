@@ -57,5 +57,5 @@ def decompress(codestream,code_size,char_size):
         lastcode = code
     
 if __name__=="__main__":
-    print compress("ABACABA",12,256)
-    print decompress([65, 66, 65, 67, 256, 65],12,256)
+    print(compress("ABACABA",12,256))
+    print(decompress([65, 66, 65, 67, 256, 65],12,256))

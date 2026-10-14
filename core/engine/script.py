@@ -1,7 +1,7 @@
 from core.core import *
-from document import *
-from screen import translate_click,scale_relative_click
-from world import World
+from .document import *
+from .screen import translate_click,scale_relative_click
+from .world import World
 
 #FIXME - users cant configure this list at all
 delete_on_menu = [evidence,portrait,fg]
@@ -22,7 +22,7 @@ def parseargs(arglist,intvals=[],defaults = {},setzero = {}):
                     kwargs[str(a[0])] = float(a[1])
             else: 
                 kwargs[str(a[0])]=a[1]
-        elif setzero.has_key(a):
+        elif a in setzero:
             kwargs[str(setzero[a])]=0
         else:
             kwargs[str(a)] = 1
@@ -81,7 +81,11 @@ def MUL(statements):
 def MINUS(statements):
     return GV(statements[0])-GV(statements[1])
 def DIV(statements):
-    return GV(statements[0])/GV(statements[1])
+    a,b = GV(statements[0]),GV(statements[1])
+    #Integer division between whole numbers, as scripts were written against python 2
+    if isinstance(a,int) and isinstance(b,int):
+        return a//b
+    return a/b
 def EQ(statements):
     return str(GV(statements[0])==GV(statements[1])).lower()
 def GTEQ(statements):
@@ -204,12 +208,12 @@ assert EVAL_EXPR(EXPR("5 <= 6"))=="true"
 def interpret_scripts():
     """Process wrightscript until we should block and show action on the screen"""
     while 1:
-        print "processing..."
+        print("processing...")
         if not assets.cur_script:
             return
         block = assets.cur_script.interpret_line()
         if block:
-            print "BLOCKING"
+            print("BLOCKING")
             return
 
 class Script(gui.widget):
@@ -307,13 +311,13 @@ class Script(gui.widget):
                 traceback.print_exc()
                 continue
             if o:
-                print "append",o
+                print("append",o)
                 obs.append(o)
             if later:
                 after_after.append(later)
-        print obs
+        print(obs)
         self.world.all = obs
-        print [getattr(x,"id_name",None) for x in self.world.all]
+        print([getattr(x,"id_name",None) for x in self.world.all])
         for of in after_after:
             of()
     def load(self,s):
@@ -345,7 +349,7 @@ class Script(gui.widget):
         if scene:
             try:
                 self.scriptlines = assets.open_script(scene,macros,ext)
-            except Exception,e:
+            except Exception as e:
                 import traceback
                 traceback.print_exc()
                 #@self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
@@ -373,7 +377,7 @@ class Script(gui.widget):
             if line.startswith("endcross"):
                 state = "none"
             if line.startswith("statement") and state!="cross":
-                print "append",line
+                print("append",line)
                 self.obs.append(error_msg("'statement' command may only be used between 'cross' and 'endcross'.",line,i,self))
         
         return True
@@ -430,13 +434,13 @@ class Script(gui.widget):
                     if o.cur_script==self: 
                         add_exceptions()
                         self.buildmode = False
-                        print "setting buildmode to false"
+                        print("setting buildmode to false")
                         return False
-            except (art_error,script_error),e:
+            except (art_error,script_error) as e:
                 exceptions.append(error_msg(e.value,self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
-            except Exception,e:
+            except Exception as e:
                 exceptions.append(error_msg("undefined",self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
@@ -445,24 +449,28 @@ class Script(gui.widget):
     def safe_exec(self,method,*args):
         try:
             return method(*args)
-        except script_error,e:
+        except script_error as e:
+            err = e
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-        except art_error,e:
+        except art_error as e:
+            err = e
             if vtrue(assets.variables.get("_debug","false")):
                 self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
                 import traceback
                 traceback.print_exc()
-        except markup_error,e:
+        except markup_error as e:
+            err = e
             self.obs.append(error_msg(e.value,self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-        except Exception,e:
-            self.obs.append(error_msg("Undefined:"+e.message,self.lastline_value,self.si,self))
+        except Exception as e:
+            err = e
+            self.obs.append(error_msg("Undefined:"+str(e),self.lastline_value,self.si,self))
             import traceback
             traceback.print_exc()
-        return e
+        return err
     def update(self):
         if time.time()-assets.last_autosave>assets.autosave_interval*60:
             self.autosave()
@@ -547,13 +555,13 @@ class Script(gui.widget):
         line = self.getline()
         while not line:
             if line is None:
-                print "Reached end of script, end it"
+                print("Reached end of script, end it")
                 return self._endscript()
             self.si += 1
             line = self.getline()
         self.si += 1
         assets.variables["_currentline"] = str(self.si)
-        print "execute line:",repr(line)
+        print("execute line:",repr(line))
         return self.safe_exec(self.execute_line,line)
     def _framerate(self,command,fr):
         assets.framerate = int(fr)
@@ -599,24 +607,24 @@ char test
     def execute_line(self,line):
         if not line:
             return
-        if line[0] in [u'"',u'\u201C'] and len(line)>1:
-            if not (line.endswith(('"',u'\u201C'))):
-                line = line+u'"'
-            print "Got textbox returning true"
+        if line[0] in ['"','\u201C'] and len(line)>1:
+            if not (line.endswith(('"','\u201C'))):
+                line = line+'"'
+            print("Got textbox returning true")
             return self.call_func("textbox",["textbox",line[1:-1]])
         def repvar(x):
             if x.startswith("$") and not x[1].isdigit():
                 return assets.variables[x[1:]]
             elif x.startswith("$"):
-                return u""
-            if u"=" in x:
-                spl = x.split(u"=",1)
-                if spl[1].startswith(u"$"):
-                    return spl[0]+u"="+assets.variables[spl[1][1:]]
+                return ""
+            if "=" in x:
+                spl = x.split("=",1)
+                if spl[1].startswith("$"):
+                    return spl[0]+"="+assets.variables[spl[1][1:]]
             return x
         args = []
         try:
-            args = [repvar(x) for x in line.split(u" ")]
+            args = [repvar(x) for x in line.split(" ")]
         except KeyError:
             self.obs.append(error_msg("Variable not defined:",line,self.si,self))
             return True
@@ -634,7 +642,7 @@ char test
     def execute_macro(self,macroname,args="",obs=None):
         mlines = self.macros.get(macroname,None)
         if not mlines: return
-        print "     EXECUTE MACRO:    ",macroname,"from",self.scene
+        print("     EXECUTE MACRO:    ",macroname,"from",self.scene)
         if args: args = " "+args
         nscript = assets.Script(self)
         nscript.world = self.world
@@ -706,18 +714,18 @@ char test
         try:
             name = int(name)-1
         except:
-            raise script_error,"no label \"%s\" to go to in %s"%(name,self.labels)
+            raise script_error("no label \"%s\" to go to in %s"%(name,self.labels))
         if name>=len(self.scriptlines) or name<0:
-            raise script_error,"Trying to go to invalid line number"
+            raise script_error("Trying to go to invalid line number")
         self.si = name+1
     @category([COMBINED("text","Some text to print")],type="debug")
     def _print(self,*args):
         """Prints some text to the logfile. Only useful for debugging purposes."""
-        print " ".join(args[1:])
+        print(" ".join(args[1:]))
     @category([],type="debug")
     def _step(self,*args):
         """Begins stepping each line of code. Only works in debug mode."""
-        print "STEP MODE BEGINS"
+        print("STEP MODE BEGINS")
         if assets.debugging != 'step':
             assets.debugging = "step"
     @category([],type="gameflow")
@@ -725,7 +733,7 @@ char test
         """Ends the currently running script and pops it off the stack. Multiple scripts
         may be running in PyWright, in which case the next script on the stack will
         resume running."""
-        print "ending script",self
+        print("ending script",self)
         if self in assets.stack:
             assets.stack.remove(self)
             if "enter" in self.held: self.held.remove("enter")
@@ -845,7 +853,7 @@ char test
     @category([VALUE("variable","variable name to set"),COMBINED("value","Text to assign to the variable. Can include $x to replace words of the text with the value of other variables.")],type="logic")
     def _set(self,command,variable,*args):
         """Sets a variable to some value."""
-        value = u" ".join(args)
+        value = " ".join(args)
         assets.variables[variable]=value
     @category([VALUE("variable","variable name to set"),COMBINED("expression2","The results of the expression will be stored in the variable.")],type="logic")
     def _set_ex(self,command,variable,*args):
@@ -855,7 +863,7 @@ char test
     @category([VALUE("variable","The variable to save the value into"),COMBINED("source variable","The variable to get the value from. Can use $x to use another variable to point to which variable to copy from, like a signpost.")],type="logic")
     def _getvar(self,command,variable,*args):
         """Copies the value of one variable into another."""
-        value = u"".join(args)
+        value = "".join(args)
         assets.variables[variable]=assets.variables.get(value,"")
     _setvar = _set
     _setvar_ex = _set_ex
@@ -926,7 +934,7 @@ would set 'x' to 5."""
         try:
             oldvalue = INT(assets.variables[variable])
             oldvalue += INT(value)
-        except ValueError,TypeError:
+        except (ValueError,TypeError):
             raise script_error("Invalid non-number to add")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to subtract from and save to"),VALUE("amount","amount to subtract from the variable")],type="logic")
@@ -937,7 +945,7 @@ would set 'x' to 30."""
         try:
             oldvalue = INT(assets.variables[variable])
             oldvalue -= INT(value)
-        except ValueError,TypeError:
+        except (ValueError,TypeError):
             raise script_error("Invalid non-number to subtract")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to"),VALUE("amount","amount to multiply the variable by")],type="logic")
@@ -948,7 +956,7 @@ would set 'x' to 15."""
         try:
             oldvalue = INT(assets.variables[variable])
             oldvalue *= INT(value)
-        except ValueError,TypeError:
+        except (ValueError,TypeError):
             raise script_error("Invalid non-number to multiply")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to"),VALUE("amount","amount to divide the variable by")],type="logic")
@@ -959,7 +967,7 @@ would set 'x' to 5."""
         try:
             oldvalue = INT(assets.variables[variable])
             oldvalue /= float(value)
-        except ValueError,TypeError:
+        except (ValueError,TypeError):
             raise script_error("Invalid number to divide")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("variable","variable to save to")])
@@ -970,7 +978,7 @@ would set 'x' to 12."""
         try:
             oldvalue = INT(assets.variables.get(variable,0))
             oldvalue = abs(INT(oldvalue))
-        except ValueError,TypeError:
+        except (ValueError,TypeError):
             raise script_error("Invalid number to absolute")
         assets.variables[variable] = str(oldvalue)
     @category([VALUE("filename","file to export variables into, relative to the case folder"),
@@ -982,7 +990,7 @@ would set 'x' to 12."""
         ad-hoc saving systems, be a way to store achievements separate from saved games, or other uses."""
         d = {}
         if not vars:
-            vars = assets.variables.keys()
+            vars = list(assets.variables.keys())
         for k in vars:
             d[k] = assets.variables.get(k,"")
         filename = filename.replace("..","").replace(":","")
@@ -1057,7 +1065,7 @@ would set 'x' to 12."""
         root = assets.game.replace("\\","/").rsplit("/",1)[0]
         if root == "games" or root == "games":
             root = assets.game
-        image = pygame.screen.convert()
+        image = pygame.screen.copy()
         self.draw(image)
         resize = list(image.get_size())
         subrect = image.get_rect()
@@ -1260,7 +1268,7 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
         del assets.stack[-1]
     @category([],type="interface")
     def _showrecord(self,command,*args):
-        print "show ev menu"
+        print("show ev menu")
         assets.addevmenu()
         return True
     @category([],type="interface")
@@ -1317,7 +1325,7 @@ KEYWORD('name','The name of this timer so it can later be controlled. Only one t
         self.scriptlines = []
         self.si = 0
         self.add_object(m,True)
-        print "MENU DEFAULTS"
+        print("MENU DEFAULTS")
         self.execute_macro("defaults")
         m.init_normal()
         return True
@@ -1366,8 +1374,8 @@ type="gameflow")
     def _script(self,command,scriptname,*args):
         """Stops or pauses execution of the current script and loads a new script. If the token stack is included, then the current script will
 resume when the new script exits, otherwise, the current script will vanish."""
-        print "RUNNING SCRIPT:",scriptname
-        print assets.stack
+        print("RUNNING SCRIPT:",scriptname)
+        print(assets.stack)
         label = None
         for a in args:
             if a.startswith("label="):
@@ -1386,7 +1394,7 @@ resume when the new script exits, otherwise, the current script will vanish."""
             p = self.parent
             self.init(name)
             self.parent = p
-        print "New stack:",assets.stack
+        print("New stack:",assets.stack)
         while assets.cur_script.parent:
             parent = assets.cur_script.parent
             assets.cur_script.parent = parent.parent
@@ -1395,10 +1403,10 @@ resume when the new script exits, otherwise, the current script will vanish."""
                 assets.stack.remove(parent)
         if label:
             self.goto_result(label,backup=None)
-        print "Stack after clean up:",assets.stack
-        print "cur script",assets.cur_script
-        print "buildmode",assets.cur_script.buildmode
-        print "SCRIPT DEFAULTS"
+        print("Stack after clean up:",assets.stack)
+        print("cur script",assets.cur_script)
+        print("buildmode",assets.cur_script.buildmode)
+        print("SCRIPT DEFAULTS")
         self.execute_macro("defaults")
     @category([],type="logic")
     def _top(self,command):
@@ -1512,12 +1520,12 @@ as having a non looping animation play several times, or only playing a portion 
             raise missing_object("controlanim: No valid objects found by key name "+name)
     def _surf3d(self,command,x,y,sw,sh,rw,rh):
         s = surf3d([int(x),int(y)],int(sw),int(sh),int(rw),int(rh))
-        print "made surf",s
+        print("made surf",s)
         self.add_object(s)
     def _mesh(self,command,mname):
         m = mesh(mname)
         m.load()
-        print "made mesh",m
+        print("made mesh",m)
         self.add_object(m)
     @category([VALUE("graphic_path","Path to the graphics file relative to case/art and without extension; such as bg/scene1 for games/mygame/mycase/data/art/bg/scene1.png and scene1.txt"),
 KEYWORD("x","set the x value",0),
@@ -1557,7 +1565,7 @@ have a ball.txt describing it's animation qualities, if it has any."""
                 flipx=1
             if a.startswith("name="):
                 name = a[5:]
-            if a.split("=")[0] in more.keys():
+            if a.split("=")[0] in list(more.keys()):
                 more[str(a.split("=")[0])] = a.split("=")[1]
             if a=="stack":
                 clear = 0
@@ -1703,7 +1711,7 @@ throughout the game."""
             if a.startswith("y="): y = int(a[2:])
             if a.startswith("priority="): pri = int(a[9:])
             if a.startswith("name="): name = a[5:]
-            if a.startswith("nametag="): nametag = a[8:]+u"\n"
+            if a.startswith("nametag="): nametag = a[8:]+"\n"
         assets.px = x
         assets.py = y
         assets.pz = z
@@ -1762,8 +1770,7 @@ throughout the game."""
     @category([VALUE("emotion","Blinking emotion animation to set character to"),VALUE("name","Object name of character to change blinking emotion of","Chooses currently speaking character (value of _speaking)")],type="objects")
     def _bemo(self,command,*args):
         """Sets a current char object to a specific blinking emotion animation."""
-        args.append("mode=blink")
-        self._emo("bemo",*args)
+        self._emo("bemo",*(args+("mode=blink",)))
     @category([VALUE('type','type of gui to create. (Back, Button, Input, or Wait)'),
 VALUE('macro','First argument after Button is the name of the macro to run when the button is pressed, valid for (Button)'),
 VALUE('var_name','Variable name to save input text into, valid for (Input)'),
@@ -1833,7 +1840,7 @@ The four types of gui you can create are:
             btn = ws_button(None,text)
             if try_bottom:
                 btn.screen_setting = "try_bottom"
-            print btn.screen_setting
+            print(btn.screen_setting)
             btn.s_text = text
             if graphic:
                 btn.s_graphic = graphic
@@ -1848,7 +1855,7 @@ The four types of gui you can create are:
             btn.pri = 0
             btn.s_macroname = macroname
             def func(*args):
-                print "exec",macroname
+                print("exec",macroname)
                 self.goto_result(macroname)
             setattr(btn,text.replace(" ","_"),func)
             btn.hold_func = None
@@ -1902,7 +1909,7 @@ The four types of gui you can create are:
             run = ""
             if args and args[0].startswith("run="): run = args[0].replace("run=","",1)
             self.add_object(guiWait(run=run))
-            print "adding gui wait object and returning true"
+            print("adding gui wait object and returning true")
             return True
     @category([VALUE('x','x value to place text'),VALUE('y','y value to place text'),VALUE('width','width of text block'),
     VALUE('height','height of text block (determines rows but the value is in pixels)'),
@@ -2342,7 +2349,7 @@ exit}}}
                 o.delete()
                 break
         if not suppress and name and not any and vtrue(assets.variables.get("_debug","false")):
-            print "error"
+            print("error")
             raise missing_object("Delete: cannot find "+name)
     @category([KEYWORD("fail","label to jump to when a specific evidence label is not found.","none"),
     TOKEN("noback","Don't show back button")],type="interface")
@@ -2570,7 +2577,7 @@ useful to use 'resume' in the 'fail' case, because you won't know where the play
         "This is just a test. Jumping elsewhere in the code..."
         "Here we have jumped, but now we go back..."
         "And now we are back."}}}"""
-        print assets.variables["_statements"],self.statement
+        print(assets.variables["_statements"],self.statement)
         if self.statement:
             for x in assets.variables["_statements"]:
                 if x["words"]==self.statement:

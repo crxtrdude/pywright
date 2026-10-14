@@ -30,7 +30,7 @@ cfg = {
 #
 # the goods are placed in the dist dir for you to .zip up or whatever...
 
-from distutils.core import setup, Extension
+from setuptools import setup
 try:
     import py2exe
 except:
@@ -44,7 +44,7 @@ import shutil
 try:
     cmd = sys.argv[1]
 except IndexError:
-    print 'Usage: setup.py py2exe|py2app|cx_freeze'
+    print('Usage: setup.py py2exe|py2app|cx_freeze')
     raise SystemExit
 
 # utility for adding subdirectories
@@ -69,15 +69,15 @@ bmusic = 0
 data = []
 if bexe:
     add_files(data,os.walk('fonts'))
-    add_files(data,os.walk('sfx'))
-    add_files(data,os.walk('art/general'))
+    add_files(data,os.walk('data/sfx'))
+    add_files(data,os.walk('data/art/general'))
     add_files(data,os.walk("core"),["cache"])
     data+=["core/cache"]
-    data+=["games/","music/","movies/","downloads/"]
+    data+=["games/","data/music/","movies/","downloads/"]
     data+=["doc.txt","changelog.txt","data.txt"]
-    data+=["art/ev/","art/port/","art/fg/","art/bg/"]
-    data+=["art/bg/"+x for x in os.listdir("art/bg/") if x.endswith(".png")]
-    data+=["art/fg/"+x for x in os.listdir("art/fg/") if x.endswith(".png") or x.endswith(".gif") or x.endswith(".txt")]
+    data+=["data/art/ev/","data/art/port/","data/art/fg/","data/art/bg/"]
+    data+=["data/art/bg/"+x for x in os.listdir("data/art/bg/") if x.endswith(".png")]
+    data+=["data/art/fg/"+x for x in os.listdir("data/art/fg/") if x.endswith(".png") or x.endswith(".gif") or x.endswith(".txt")]
 
 # build the sdist target
 if cmd == 'sdist' and bexe:
@@ -120,8 +120,8 @@ class Py2exe(py2exe):
         if not self.dry_run:
             if not os.system('upx -qt "%s" >nul' % dll_name):
                 if self.verbose:
-                    print "Skipping setting sys.winver for '%s' (UPX'd)" % \
-                          dll_name
+                    print("Skipping setting sys.winver for '%s' (UPX'd)" % \
+                          dll_name)
             else:
                 py2exe.patch_python_dll_winver(self, dll_name, new_winver)
                 # We UPX this one file here rather than in copy_file so
@@ -159,7 +159,7 @@ if cmd in ('py2exe',) and bexe:
             }},
         windows=[{
             'script':"PyWright.py",
-            'icon_resources':[(1,"art/general/bb.ico")],
+            'icon_resources':[(1,"data/art/general/bb.ico")],
             },
             {
             "script":"updater.py"}],
@@ -204,11 +204,11 @@ def make_dirs(dname_):
 if cmd in ('py2exe','cx_freeze','script', 'py2app'):
     dest = data_dir
     for fname in data:
-        print fname
+        print(fname)
         dname = os.path.join(dest,os.path.dirname(fname))
         make_dirs(dname)
-        if not os.path.isdir(fname):
-            print "copy",fname,dname
+        if os.path.isfile(fname):
+            print("copy",fname,dname)
             shutil.copy(fname,dname)
 if cmd == "py2exe":
     os.mkdir("library")
@@ -226,7 +226,7 @@ if cmd=="py2exe":
             if "\\" in inno:
                 dest = inno[:inno.rfind("\\")]
             d = (inno,dest)
-            files.append("Source: dist\%s; DestDir: {app}\%s; Flags: overwritereadonly\n"%d)
+            files.append("Source: dist\\%s; DestDir: {app}\\%s; Flags: overwritereadonly\n"%d)
     #~ inno = open("setup.iss","w")
     #~ inno.write("""[Setup]
 #~ AppName=PyWright

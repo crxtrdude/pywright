@@ -1,19 +1,16 @@
-from errors import script_error
+from .errors import script_error
 
 import pickle
 import zlib
 import os,sys
-sys.path.append("core/include")
-sys.path.append("include")
-if sys.platform=="win32":
-    os.environ['SDL_VIDEODRIVER']='windib'
+import importlib
 import random
-from core import *
-import gui
-import save
-from pwvlib import *
-import settings
-import tools_menu
+from .core import *
+from . import gui
+from . import save
+from .pwvlib import *
+from . import settings
+from . import tools_menu
 
 try:
     import android
@@ -26,7 +23,7 @@ VERSION = "Version "+cver_s(d["version"])
 clock = pygame.time.Clock()
 
 #FIXME - these are temporary until moved
-from engine import script,screen,debug_script
+from .engine import script,screen,debug_script
 Script = script.Script
 assets.Script = Script
 assets.clock = clock
@@ -114,7 +111,7 @@ class choose_game(gui.widget):
         for f in games:
             item = ws_button(self,f)
             d = get_data_from_folder(self.path+"/"+f)
-            graphic = pygame.Surface([1,1])
+            graphic = pygame.Surface([1,1],0,32)
             if d.get("icon",""):
                 try:
                     graphic = pygame.image.load(self.path+"/"+f+"/"+d["icon"])
@@ -124,7 +121,7 @@ class choose_game(gui.widget):
             if d.get("author",""):
                 title += " by "+d["author"]
             lines = [l.text() for l in textutil.wrap_text([title],assets.get_image_font("nt"),190)]
-            req = d.get("min_pywright_version","0")
+            req = d.get("min_pywright_version",(0,))
             reqs = cver_s(req)
             if __version__ < req:
                 lines.append("Requires PyWright "+reqs)
@@ -138,7 +135,7 @@ class choose_game(gui.widget):
                 lines[i] = txt
                 w,h = txt.get_size()
                 height += h
-            image = pygame.Surface([width+2,height+2])
+            image = pygame.Surface([width+2,height+2],0,32)
             image.fill([0,0,0])
             pygame.draw.rect(image,gui.defcol["gamebg"],[[1,1],[width,height]])
             image.blit(graphic,[0,0])
@@ -178,7 +175,7 @@ def load_game_menu():
     list.add_child(ws_button(root,"cancel",pos=[200,0]))
     cb = list.children[-1]
     def cancel(*args):
-        print "canceling"
+        print("canceling")
         root.delete()
     setattr(root,"cancel",cancel)
     cb.bgcolor = [0, 0, 0]
@@ -210,7 +207,7 @@ def load_game_menu():
         fullpath=s[0]
         def do_load(filename=filename,fullpath=fullpath):
             root.delete()
-            print "loading",filename,fullpath
+            print("loading",filename,fullpath)
             assets.clear()
             assets.show_load()
             assets.load_game_from_string(open(fullpath).read())
@@ -232,8 +229,8 @@ def make_start_script(logo=True):
     assets.cur_script.draw(pygame.screen)
     assets.draw_screen(False)
     try:
-        import urllib2
-        online_script = urllib2.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro_0977.txt",timeout=2)
+        import urllib.request, urllib.error, urllib.parse
+        online_script = urllib.request.urlopen("http://pywright.dawnsoft.org/updates3/stream/intro_0977.txt",timeout=2)
         introlines = online_script.read().split("\n")
         online_script.close()
         scenename = "web://intro_0977.txt"
@@ -247,8 +244,8 @@ def make_start_script(logo=True):
     assets.stack = [bottomscript]  #So that the root object gets tagged as in bottomscript
 
     def run_updater(*args):
-        import libupdate
-        reload(libupdate)
+        from . import libupdate
+        importlib.reload(libupdate)
         assets.cur_script.world.all.append(libupdate.run(pygame.screen))
         #assets.make_start_script()
     setattr(make_start_script,"UPDATES",run_updater)
@@ -322,14 +319,14 @@ def run(checkupdate=False):
     import sys,os
 
     if "--help" in sys.argv or "-h" in sys.argv or "-?" in sys.argv or "/?" in sys.argv:
-        print "%s -run 'path/to/game'  :  run a game directly"%(sys.argv[0],)
-        print "%s -text : text mode, no graphics created, must use -run"%(sys.argv[0],)
+        print("%s -run 'path/to/game'  :  run a game directly"%(sys.argv[0],))
+        print("%s -text : text mode, no graphics created, must use -run"%(sys.argv[0],))
         sys.exit()
     
     #Check for updates!
     newengine = None
     if checkupdate:
-        import libupdate
+        from . import libupdate
         eng = libupdate.Engine()
         libupdate.screen.blit(arial14.render("Checking for Updates...",1,[255,255,255]),[0,0])
         pygame.display.flip()
@@ -364,13 +361,13 @@ operator,encodings,os.path,encodings.encodings,encodings.cp437,errno,\
 encodings.codecs,sre_constants,re,ntpath,UserDict,nt,stat,zipimport,warnings,\
 encodings.types,_codecs,encodings.cp1252,sys,codecs,types,_types,_locale,signal,\
 linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".split(",")
-                    for k in sys.modules.keys():
+                    for k in list(sys.modules.keys()):
                         if k not in goodkeys:
                             del sys.modules[k]
-                    import core as core2
-                    reload(core2)
-                    import libengine as le2
-                    reload(le2)
+                    from . import core as core2
+                    importlib.reload(core2)
+                    from . import libengine as le2
+                    importlib.reload(le2)
                     newengine = le2.run
                     break
         except SystemExit:
@@ -406,7 +403,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
 
     if "-run" in sys.argv:
         def ms(*args):
-            print "make_start_script to exit"
+            print("make_start_script to exit")
             sys.exit()
         assets.make_start_script = ms
         assets.stack = []
@@ -465,7 +462,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             pygame.screen.blit(pygame.blank,[0,0])
             try:
                 assets.cur_script.draw(pygame.screen)
-            except (art_error,script_error),e:
+            except (art_error,script_error) as e:
                 import traceback
                 traceback.print_exc()
                 assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
@@ -476,7 +473,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                     fl.ttl = assets.flash
                     if hasattr(assets,"flashcolor"):
                         fl.color = assets.flashcolor
-                except (art_error,script_error),e:
+                except (art_error,script_error) as e:
                     import traceback
                     traceback.print_exc()
                     assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
@@ -485,7 +482,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             if assets.shakeargs != 0:
                 try:
                     assets.cur_script._shake("shake",*assets.shakeargs)
-                except (art_error,script_error),e:
+                except (art_error,script_error) as e:
                     import traceback
                     traceback.print_exc()
                     assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
@@ -537,13 +534,13 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
             for e in pygame.event.get():
                 if e.type==pygame.ACTIVEEVENT:
                     if e.gain==0 and (e.state==6 or e.state==2 or e.state==4):
-                        print "minimize"
+                        print("minimize")
                         gw = guiWait(mute=True)
                         gw.pri = -1000
                         gw.minimized = True
                         assets.cur_script.obs.append(gw)
                     if e.gain==1 and (e.state==6 or e.state==2 or e.state==4):
-                        print "maximize"
+                        print("maximize")
                         for ob in assets.cur_script.obs:
                             if hasattr(ob,"minimized"):
                                 ob.delete()
@@ -621,7 +618,7 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 def k_switch():
                     for o in assets.cur_script.upobs:
                         if hasattr(o,"k_tab") and not getattr(o,"kill",0) and not getattr(o,"hidden",0):
-                            print "tab on",o
+                            print("tab on",o)
                             o.k_tab()
                             break
                 def press():
@@ -668,13 +665,13 @@ linecache,encodings.aliases,exceptions,sre_parse,os,goodkeys,k,core,libengine".s
                 assets.cur_script.handle_events([e])
             #~ if pygame.js1:
                 #~ print pygame.js1.get_button(0)
-        except (art_error,script_error,markup_error), e:
+        except (art_error,script_error,markup_error) as e:
             assets.cur_script.obs.append(error_msg(e.value,assets.cur_script.lastline_value,assets.cur_script.si,assets.cur_script))
             import traceback
             traceback.print_exc()
     if hasattr(assets, "threads"):
         while [1 for thread in assets.threads if thread and thread.isAlive()]:
-            print "waiting"
+            print("waiting")
             pass
 if __name__=="__main__":
     run()
